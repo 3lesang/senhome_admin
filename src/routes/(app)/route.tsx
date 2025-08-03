@@ -1,15 +1,18 @@
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+  createFileRoute,
+  Link,
+  Outlet,
+  useRouterState,
+} from "@tanstack/react-router";
 import {
   ChartPieIcon,
+  ClipboardListIcon,
   GalleryVerticalEnd,
+  Home,
   LayoutGridIcon,
   PackageIcon,
-  SquareChartGanttIcon,
+  UserCircleIcon,
 } from "lucide-react";
 
 import { NavUser } from "@/components/nav-user";
@@ -26,26 +29,77 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
+
+const navigationMenuItems = [
+  { title: "Home", href: "/", icon: Home, isActive: true },
+  { title: "Product", href: "/product", icon: PackageIcon },
+  { title: "Order", href: "/order", icon: ClipboardListIcon },
+  { title: "Account", href: "#account", icon: UserCircleIcon },
+];
+
+export default function NavigationMenuMobile() {
+  return (
+    <NavigationMenu className="max-w-full bg-white">
+      <NavigationMenuList>
+        {navigationMenuItems.map((item) => (
+          <NavigationMenuItem key={item.title}>
+            <NavigationMenuLink
+              className={cn(
+                navigationMenuTriggerStyle(),
+                "flex flex-col h-auto items-center px-5 py-2.5"
+              )}
+              active={item.isActive}
+              asChild
+            >
+              <Link to={item.href}>
+                <item.icon className="mb-1.5 h-5 w-5" />
+                {item.title}
+              </Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        ))}
+      </NavigationMenuList>
+    </NavigationMenu>
+  );
+}
+
 export const Route = createFileRoute("/(app)")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const routerState = useRouterState();
+  const currentPathname = routerState.location.pathname;
+
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <>
+        <div className="h-[calc(100vh-66px)] overflow-auto no-scrollbar">
+          <Outlet />
+        </div>
+        <NavigationMenuMobile />
+      </>
+    );
+  }
+
   return (
     <SidebarProvider>
       <Sidebar collapsible="icon">
         <SidebarHeader>
-          <SidebarMenuButton
-            size="lg"
-            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-          >
-            <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-              <GalleryVerticalEnd className="size-4" />
-            </div>
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">Senhome</span>
-              <span className="truncate text-xs">Enterprise</span>
-            </div>
+          <SidebarMenuButton className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+            <GalleryVerticalEnd className="size-4" />
+            <span className="truncate font-medium">Senhome</span>
           </SidebarMenuButton>
         </SidebarHeader>
         <SidebarContent>
@@ -53,9 +107,15 @@ function RouteComponent() {
             <SidebarGroupLabel>Home</SidebarGroupLabel>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Dashboard">
-                  <ChartPieIcon />
-                  <span>Dashboard</span>
+                <SidebarMenuButton
+                  tooltip="Dashboard"
+                  asChild
+                  isActive={currentPathname == "/"}
+                >
+                  <Link to="/">
+                    <ChartPieIcon />
+                    <span>Dashboard</span>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -64,25 +124,43 @@ function RouteComponent() {
             <SidebarGroupLabel>Documents</SidebarGroupLabel>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Product">
-                  <SquareChartGanttIcon />
-                  <span>Product</span>
+                <SidebarMenuButton
+                  tooltip="Product"
+                  asChild
+                  isActive={currentPathname == "/product"}
+                >
+                  <Link to="/product">
+                    <PackageIcon />
+                    <span>Product</span>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Category">
-                  <LayoutGridIcon />
-                  <span>Category</span>
+                <SidebarMenuButton
+                  tooltip="Category"
+                  asChild
+                  isActive={currentPathname == "/category"}
+                >
+                  <Link to="/category">
+                    <LayoutGridIcon />
+                    <span>Category</span>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Order">
-                  <PackageIcon />
-                  <span>Order</span>
+                <SidebarMenuButton
+                  tooltip="Order"
+                  asChild
+                  isActive={currentPathname == "/order"}
+                >
+                  <Link to="/order">
+                    <ClipboardListIcon />
+                    <span>Order</span>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -100,12 +178,9 @@ function RouteComponent() {
         <SidebarRail />
       </Sidebar>
       <SidebarInset>
-        <header className="flex h-12 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-          <div className="px-4">
-            <SidebarTrigger className="-ml-1" />
-          </div>
-        </header>
-        <Outlet />
+        <main className="p-4">
+          <Outlet />
+        </main>
       </SidebarInset>
     </SidebarProvider>
   );

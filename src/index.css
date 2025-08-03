@@ -1,6 +1,22 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+html,
+body {
+  overflow: hidden;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 body {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
