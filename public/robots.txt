@@ -1,0 +1,17 @@
+# robots.txt
+
+# Allow all crawlers access to everything
+User-agent: *
+Allow: /
+
+# Prevent crawlers from accessing build system files
+Disallow: /node_modules/
+Disallow: /vite/
+Disallow: /@vite/
+Disallow: /@id/
+
+# Block internal API routes if applicable
+Disallow: /api/
+
+# Sitemap (update this with your actual domain)
+Sitemap: https://yourdomain.com/sitemap.xml

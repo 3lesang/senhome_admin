@@ -4,8 +4,8 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
+import { subscribeToPush } from "./push";
 import { routeTree } from "./routeTree.gen";
-
 const queryClient = new QueryClient();
 
 const router = createRouter({
@@ -23,6 +23,8 @@ declare module "@tanstack/react-router" {
     router: typeof router;
   }
 }
+
+subscribeToPush();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
