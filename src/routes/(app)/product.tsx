@@ -14,9 +14,5 @@ function RouteComponent() {
       </div>
     );
   }
-  return (
-    <div>
-      <p>product</p>
-    </div>
-  );
+  return <div className=""></div>;
 }

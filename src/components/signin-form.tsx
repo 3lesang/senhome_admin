@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -7,14 +6,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { pb } from "@/lib/pocketbase";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import { Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Button } from "./ui/button";
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  email: z.string().min(2, {
+    message: "Email must be at least 2 characters.",
   }),
   password: z.string().min(1, {
     message: "Password is required",
@@ -23,29 +26,43 @@ const formSchema = z.object({
 
 export type SigninType = z.infer<typeof formSchema>;
 
-function SignInForm() {
+function SigninForm() {
+  const navigate = useNavigate();
+  const { mutate, isPending } = useMutation({
+    mutationFn: (values: SigninType) =>
+      pb
+        .collection("_superusers")
+        .authWithPassword(values.email, values.password),
+    onSuccess: () => {
+      navigate({ to: "/" });
+    },
+  });
+  const handleSubmit = (values: SigninType) => {
+    mutate(values);
+  };
+
   const form = useForm<SigninType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      email: "",
     },
   });
 
-  function onSubmit(values: SigninType) {
-    console.log(values);
-  }
-
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <FormField
           control={form.control}
-          name="username"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="username" {...field} />
+                <input
+                  placeholder="@aaa@mail.com"
+                  {...field}
+                  className="px-4 py-2 border rounded-lg"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -56,20 +73,26 @@ function SignInForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Mật khẩu</FormLabel>
               <FormControl>
-                <Input placeholder="" {...field} type="password" />
+                <input
+                  placeholder="Mật khẩu"
+                  {...field}
+                  type="password"
+                  className="px-4 py-2 border rounded-lg"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          Submit
+        <Button type="submit" className="w-full" size="lg" disabled={isPending}>
+          {isPending && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
+          Đăng nhập
         </Button>
       </form>
     </Form>
   );
 }
 
-export default SignInForm;
+export default SigninForm;

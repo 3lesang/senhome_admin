@@ -30,15 +30,11 @@ function RouteComponent() {
   }
 
   return (
-    <div>
+    <>
       <title>Trang chủ</title>
       <meta name="author" content="Josh" />
       <link rel="author" href="https://twitter.com/joshcstory/" />
-      <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-      </div>
-    </div>
+      <div></div>
+    </>
   );
 }
