@@ -62,19 +62,10 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { pb, PRODUCT_COLLECTION } from "@/lib/pocketbase";
 import { convertToFileUrl, formatVND } from "@/lib/utils";
+import type { Product } from "@/types";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import type { ListResult } from "pocketbase";
 import z from "zod";
-
-export type Product = {
-  id: string;
-  name: number;
-  slug: string;
-  price: number;
-  expand: {
-    thumbnail: any;
-  };
-};
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -224,7 +215,7 @@ const FILTER = [
 function RouteComponent() {
   const isMobile = useIsMobile();
   const navigate = Route.useNavigate();
-  const { page = 1, limit = 20, filter } = Route.useSearch();
+  const { page = 1, limit = 20, filter = { state: "all" } } = Route.useSearch();
 
   const { data } = useSuspenseQuery(
     productQueryOptions(page, limit, buildFilter(filter))
@@ -318,7 +309,7 @@ function RouteComponent() {
           </ToggleGroupItem>
         </ToggleGroup>
       </div>
-      <div className="mt-4">
+      <div className="mt-4 rounded-lg overflow-hidden">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -338,7 +329,7 @@ function RouteComponent() {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody className="">
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
