@@ -14,9 +14,10 @@ import { Route as appRouteRouteImport } from './routes/(app)/route'
 import { Route as appIndexRouteImport } from './routes/(app)/index'
 import { Route as authSignupRouteImport } from './routes/(auth)/signup'
 import { Route as authSigninRouteImport } from './routes/(auth)/signin'
-import { Route as appProductRouteImport } from './routes/(app)/product'
 import { Route as appOrderRouteImport } from './routes/(app)/order'
 import { Route as appCategoryRouteImport } from './routes/(app)/category'
+import { Route as appProductIndexRouteImport } from './routes/(app)/product/index'
+import { Route as appProductIdRouteImport } from './routes/(app)/product/$id'
 
 const authRouteRoute = authRouteRouteImport.update({
   id: '/(auth)',
@@ -41,11 +42,6 @@ const authSigninRoute = authSigninRouteImport.update({
   path: '/signin',
   getParentRoute: () => authRouteRoute,
 } as any)
-const appProductRoute = appProductRouteImport.update({
-  id: '/product',
-  path: '/product',
-  getParentRoute: () => appRouteRoute,
-} as any)
 const appOrderRoute = appOrderRouteImport.update({
   id: '/order',
   path: '/order',
@@ -56,22 +52,34 @@ const appCategoryRoute = appCategoryRouteImport.update({
   path: '/category',
   getParentRoute: () => appRouteRoute,
 } as any)
+const appProductIndexRoute = appProductIndexRouteImport.update({
+  id: '/product/',
+  path: '/product/',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appProductIdRoute = appProductIdRouteImport.update({
+  id: '/product/$id',
+  path: '/product/$id',
+  getParentRoute: () => appRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof appIndexRoute
   '/category': typeof appCategoryRoute
   '/order': typeof appOrderRoute
-  '/product': typeof appProductRoute
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
+  '/product/$id': typeof appProductIdRoute
+  '/product': typeof appProductIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof appIndexRoute
   '/category': typeof appCategoryRoute
   '/order': typeof appOrderRoute
-  '/product': typeof appProductRoute
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
+  '/product/$id': typeof appProductIdRoute
+  '/product': typeof appProductIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -79,26 +87,42 @@ export interface FileRoutesById {
   '/(auth)': typeof authRouteRouteWithChildren
   '/(app)/category': typeof appCategoryRoute
   '/(app)/order': typeof appOrderRoute
-  '/(app)/product': typeof appProductRoute
   '/(auth)/signin': typeof authSigninRoute
   '/(auth)/signup': typeof authSignupRoute
   '/(app)/': typeof appIndexRoute
+  '/(app)/product/$id': typeof appProductIdRoute
+  '/(app)/product/': typeof appProductIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/category' | '/order' | '/product' | '/signin' | '/signup'
+  fullPaths:
+    | '/'
+    | '/category'
+    | '/order'
+    | '/signin'
+    | '/signup'
+    | '/product/$id'
+    | '/product'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/category' | '/order' | '/product' | '/signin' | '/signup'
+  to:
+    | '/'
+    | '/category'
+    | '/order'
+    | '/signin'
+    | '/signup'
+    | '/product/$id'
+    | '/product'
   id:
     | '__root__'
     | '/(app)'
     | '/(auth)'
     | '/(app)/category'
     | '/(app)/order'
-    | '/(app)/product'
     | '/(auth)/signin'
     | '/(auth)/signup'
     | '/(app)/'
+    | '/(app)/product/$id'
+    | '/(app)/product/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -143,13 +167,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authSigninRouteImport
       parentRoute: typeof authRouteRoute
     }
-    '/(app)/product': {
-      id: '/(app)/product'
-      path: '/product'
-      fullPath: '/product'
-      preLoaderRoute: typeof appProductRouteImport
-      parentRoute: typeof appRouteRoute
-    }
     '/(app)/order': {
       id: '/(app)/order'
       path: '/order'
@@ -164,21 +181,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appCategoryRouteImport
       parentRoute: typeof appRouteRoute
     }
+    '/(app)/product/': {
+      id: '/(app)/product/'
+      path: '/product'
+      fullPath: '/product'
+      preLoaderRoute: typeof appProductIndexRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/product/$id': {
+      id: '/(app)/product/$id'
+      path: '/product/$id'
+      fullPath: '/product/$id'
+      preLoaderRoute: typeof appProductIdRouteImport
+      parentRoute: typeof appRouteRoute
+    }
   }
 }
 
 interface appRouteRouteChildren {
   appCategoryRoute: typeof appCategoryRoute
   appOrderRoute: typeof appOrderRoute
-  appProductRoute: typeof appProductRoute
   appIndexRoute: typeof appIndexRoute
+  appProductIdRoute: typeof appProductIdRoute
+  appProductIndexRoute: typeof appProductIndexRoute
 }
 
 const appRouteRouteChildren: appRouteRouteChildren = {
   appCategoryRoute: appCategoryRoute,
   appOrderRoute: appOrderRoute,
-  appProductRoute: appProductRoute,
   appIndexRoute: appIndexRoute,
+  appProductIdRoute: appProductIdRoute,
+  appProductIndexRoute: appProductIndexRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(

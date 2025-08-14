@@ -133,7 +133,7 @@ function RouteComponent() {
 
   return (
     <SidebarProvider>
-      <Sidebar className="border-none bg-white">
+      <Sidebar className="border-none">
         <SidebarHeader>
           <SidebarMenuButton>
             <GalleryVerticalEnd className="size-4" />
@@ -149,7 +149,7 @@ function RouteComponent() {
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton>
                       <PackageIcon />
-                      <span>Quản lý sản phẩm</span>
+                      <span className="font-medium">Quản lý sản phẩm</span>
                       <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
@@ -178,7 +178,7 @@ function RouteComponent() {
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton>
                       <ClipboardListIcon />
-                      <span>Quản lý đơn hàng</span>
+                      <span className="font-medium">Quản lý đơn hàng</span>
                       <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
@@ -207,7 +207,7 @@ function RouteComponent() {
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton>
                       <ChartPieIcon />
-                      <span>Dữ liệu</span>
+                      <span className="font-medium">Dữ liệu</span>
                       <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
@@ -293,7 +293,7 @@ function RouteComponent() {
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <main>
+        <main className="min-h-screen bg-sidebar">
           <Outlet />
         </main>
       </SidebarInset>
