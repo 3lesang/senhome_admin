@@ -12,10 +12,9 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import {
   ChartPieIcon,
-  ChevronRight,
   ClipboardListIcon,
   ImageIcon,
   PackageIcon,
@@ -30,6 +29,8 @@ import {
 } from "@/components/ui/collapsible";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const location = useLocation();
+
   return (
     <Sidebar
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
@@ -45,21 +46,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <SidebarMenuButton>
                     <PackageIcon />
                     <span>Quản lý sản phẩm</span>
-                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton asChild>
+                      <SidebarMenuSubButton
+                        asChild
+                        isActive={location.pathname == "/product"}
+                      >
                         <Link to="/product">
                           <span>Tất cả sản phẩm</span>
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton asChild>
-                        <Link to="/product">
+                      <SidebarMenuSubButton
+                        asChild
+                        isActive={location.pathname == "/product/create"}
+                      >
+                        <Link to="/product/create">
                           <span>Thêm sản phẩm</span>
                         </Link>
                       </SidebarMenuSubButton>
@@ -74,22 +80,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <SidebarMenuButton>
                     <ClipboardListIcon />
                     <span>Quản lý đơn hàng</span>
-                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton asChild>
+                      <SidebarMenuSubButton
+                        asChild
+                        isActive={location.pathname.includes("order")}
+                      >
                         <Link to="/order">
                           <span>Tất cả</span>
-                        </Link>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton asChild>
-                        <Link to="/product">
-                          <span>Thêm sản phẩm</span>
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
@@ -103,13 +104,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <SidebarMenuButton>
                     <ChartPieIcon />
                     <span>Dữ liệu</span>
-                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     <SidebarMenuSubItem>
-                      <SidebarMenuSubButton asChild>
+                      <SidebarMenuSubButton
+                        asChild
+                        isActive={location.pathname.includes("data")}
+                      >
                         <Link to="/order">
                           <span>Phân tích bán hàng</span>
                         </Link>
@@ -125,10 +128,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarGroupLabel>Hệ thống</SidebarGroupLabel>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton>
-                <ImageIcon />
-                <Link to="/">
-                  <span>Thư viện</span>
+              <SidebarMenuButton
+                asChild
+                isActive={location.pathname.includes("media")}
+              >
+                <Link to="/storage">
+                  <ImageIcon />
+                  <span>Lưu trữ</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

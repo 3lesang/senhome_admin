@@ -1,9 +1,15 @@
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 
-export default function Editor() {
+interface EditorProps {
+  defaultValue?: string;
+  onChange?: (content: string) => void;
+}
+export default function Editor({ defaultValue, onChange }: EditorProps) {
   return (
     <SunEditor
+      defaultValue={defaultValue}
+      onChange={onChange}
       setOptions={{
         buttonList: [
           // ["undo", "redo"],

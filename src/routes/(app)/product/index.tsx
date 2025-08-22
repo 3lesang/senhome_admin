@@ -2,7 +2,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
@@ -10,15 +10,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import {
   Table,
   TableBody,
@@ -38,9 +29,16 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { GridIcon, ListIcon, MoreHorizontal, PlusIcon } from "lucide-react";
+import {
+  GridIcon,
+  ListIcon,
+  MoreHorizontal,
+  PlusIcon,
+  SquarePenIcon,
+} from "lucide-react";
 import * as React from "react";
 
+import { DynamicPagination } from "@/components/dynamic-pagination";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -50,6 +48,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -61,8 +60,8 @@ import {
 } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { pb, PRODUCT_COLLECTION } from "@/lib/pocketbase";
-import { convertToFileUrl, formatVND } from "@/lib/utils";
-import type { Product } from "@/types";
+import { cn, convertToFileUrl, formatVND } from "@/lib/utils";
+import type { Product } from "@/type";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import type { ListResult } from "pocketbase";
 import z from "zod";
@@ -159,6 +158,25 @@ export const productQueryOptions = (
         .getList(page, limit, { expand: "thumbnail", filter }),
   });
 
+const countProductQueryOptions = () =>
+  queryOptions({
+    queryKey: ["COUNT_PRODUCT"],
+    queryFn: async () => {
+      const all = await pb.collection(PRODUCT_COLLECTION).getList(1, 1);
+      const publish = await pb.collection(PRODUCT_COLLECTION).getList(1, 1, {
+        filter: "deleted=null",
+      });
+      const unpublish = await pb.collection(PRODUCT_COLLECTION).getList(1, 1, {
+        filter: "deleted!=null",
+      });
+      return {
+        totalAll: all.totalItems,
+        totalPublish: publish.totalItems,
+        totalUnpublish: unpublish.totalItems,
+      };
+    },
+  });
+
 const filterSchema = z.object({
   state: z.enum(["all", "publish", "unpublish"]).optional().catch("all"),
 });
@@ -170,6 +188,7 @@ const schema = z.object({
   limit: z.number().catch(20).optional(),
   filter: filterSchema.catch({ state: "all" }).optional(),
   sort: z.enum(["newest", "oldest", "price"]).optional(),
+  layout: z.enum(["list", "grid"]).catch("list").optional(),
 });
 
 const buildFilter = (filter?: FilterType) => {
@@ -187,6 +206,7 @@ export const Route = createFileRoute("/(app)/product/")({
   component: RouteComponent,
   validateSearch: (search) => schema.parse(search),
   beforeLoad: ({ context, search }) => {
+    context.queryClient.ensureQueryData(countProductQueryOptions());
     return context.queryClient.ensureQueryData(
       productQueryOptions(
         search?.page ?? 1,
@@ -197,29 +217,41 @@ export const Route = createFileRoute("/(app)/product/")({
   },
 });
 
-const FILTER = [
-  {
-    name: "Tất cả",
-    state: "all" as "all",
-  },
-  {
-    name: "Đang hoạt động",
-    state: "publish" as "publish",
-  },
-  {
-    name: "Chưa được đăng",
-    state: "unpublish" as "unpublish",
-  },
-];
-
 function RouteComponent() {
   const isMobile = useIsMobile();
   const navigate = Route.useNavigate();
-  const { page = 1, limit = 20, filter = { state: "all" } } = Route.useSearch();
+  const {
+    page = 1,
+    limit = 20,
+    filter = { state: "all" },
+    layout = "list",
+  } = Route.useSearch();
 
   const { data } = useSuspenseQuery(
     productQueryOptions(page, limit, buildFilter(filter))
   );
+
+  const { data: dataCountProducts } = useSuspenseQuery(
+    countProductQueryOptions()
+  );
+
+  const PRODUCT_FILTER = [
+    {
+      name: "Tất cả",
+      state: "all" as "all",
+      count: dataCountProducts?.totalAll,
+    },
+    {
+      name: "Đang hoạt động",
+      state: "publish" as "publish",
+      count: dataCountProducts?.totalPublish,
+    },
+    {
+      name: "Chưa được đăng",
+      state: "unpublish" as "unpublish",
+      count: dataCountProducts?.totalUnpublish,
+    },
+  ];
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -271,14 +303,14 @@ function RouteComponent() {
       <div className="flex justify-between items-center mt-4">
         <h3 className="font-bold text-2xl">Sản phẩm</h3>
         <div>
-          <Button>
+          <Link to="/product/create" className={cn(buttonVariants())}>
             Thêm 1 sản phẩm mới
             <PlusIcon />
-          </Button>
+          </Link>
         </div>
       </div>
       <div className="flex mt-4">
-        {FILTER?.map((item) => (
+        {PRODUCT_FILTER?.map((item) => (
           <Button
             variant={filter?.state == item.state ? "secondary" : "ghost"}
             onClick={() => {
@@ -289,8 +321,10 @@ function RouteComponent() {
                 }),
               });
             }}
+            className="space-x-1"
           >
-            {item.name}
+            <span>{item.name}</span>
+            <span>{item.count}</span>
           </Button>
         ))}
       </div>
@@ -301,64 +335,105 @@ function RouteComponent() {
         </div>
 
         <ToggleGroup type="single">
-          <ToggleGroupItem value="bold" aria-label="Toggle bold">
+          <ToggleGroupItem
+            value="bold"
+            aria-label="Toggle bold"
+            onClick={() => {
+              navigate({
+                search: (prev) => ({ ...prev, layout: "list" }),
+              });
+            }}
+          >
             <ListIcon />
           </ToggleGroupItem>
-          <ToggleGroupItem value="italic" aria-label="Toggle italic">
+          <ToggleGroupItem
+            value="italic"
+            aria-label="Toggle italic"
+            onClick={() => {
+              navigate({
+                search: (prev) => ({ ...prev, layout: "grid" }),
+              });
+            }}
+          >
             <GridIcon className="h-4 w-4" />
           </ToggleGroupItem>
         </ToggleGroup>
       </div>
-      <div className="mt-4 rounded-lg overflow-hidden">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody className="">
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+      {layout == "list" ? (
+        <div className="mt-4 rounded-lg overflow-hidden">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  Không có sản phẩm.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              ))}
+            </TableHeader>
+            <TableBody className="">
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    Không có sản phẩm.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      ) : (
+        <div className="grid grid-cols-12 gap-4 mt-4">
+          {data?.items?.map((item) => (
+            <div className="col-span-2">
+              <Card className="pt-0">
+                <img
+                  src={convertToFileUrl(item.expand.thumbnail)}
+                  alt=""
+                  className="aspect-square h-44 object-cover rounded-t-xl"
+                />
+                <CardContent>
+                  <p className="line-clamp-2">{item?.name}</p>
+                  <p className="font-bold">{formatVND(item.price)}</p>
+                </CardContent>
+                <CardFooter>
+                  <Button variant="ghost" size="icon">
+                    <SquarePenIcon />
+                  </Button>
+                </CardFooter>
+              </Card>
+            </div>
+          ))}
+        </div>
+      )}
       <div className="flex items-center justify-between space-x-2 py-4">
         <div className="flex items-center gap-2">
           <Label>Số lượng</Label>
@@ -383,30 +458,14 @@ function RouteComponent() {
           </Select>
         </div>
         <div className="flex space-x-2">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious href="#" />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">1</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#" isActive>
-                  2
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">3</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext href="#" />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          <DynamicPagination
+            page={page}
+            totalItems={data?.totalItems ?? 0}
+            perPage={limit}
+            onPageChange={(page) =>
+              navigate({ search: (prev) => ({ ...prev, page }) })
+            }
+          />
         </div>
       </div>
     </div>
