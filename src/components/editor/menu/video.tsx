@@ -18,19 +18,20 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import VideoPlayer from "@/components/video-player";
+import type { Editor } from "@tiptap/react";
 
 import { PlayIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 
-export default () => {
+interface Props {
+  editor: Editor;
+}
+export default ({ editor }: Props) => {
   const form = useForm({
     defaultValues: {
-      url: "youtube/EvPEXA2iH4g",
+      url: "",
     },
   });
-  const onSubmit = (data: any) => {
-    console.log(data);
-  };
 
   const src = form.watch("url");
 
@@ -47,7 +48,7 @@ export default () => {
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form>
             <FormField
               control={form.control}
               name="url"
@@ -65,11 +66,20 @@ export default () => {
         </Form>
         <VideoPlayer src={src} />
         <DialogFooter>
-          <DialogClose>
+          <DialogClose asChild>
             <Button variant="outline">Hủy</Button>
           </DialogClose>
-          <DialogClose>
-            <Button>Chèn Video</Button>
+          <DialogClose asChild>
+            <Button
+              type="button"
+              onClick={() =>
+                editor?.commands.setVideoComponent({
+                  src,
+                })
+              }
+            >
+              Chèn Video
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

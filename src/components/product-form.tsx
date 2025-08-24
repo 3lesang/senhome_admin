@@ -28,7 +28,6 @@ import { PlusIcon, XIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import z from "zod";
-import VideoPlayer from "./video-player";
 
 const OptionInputSchema = z.object({
   attribute: z
@@ -54,6 +53,7 @@ const schema = z.object({
   name: z.string(),
   slug: z.string(),
   description: z.string().optional(),
+  content: z.string().optional(),
   price: z.string().optional(),
   category: z.string().optional(),
   variants: z.array(OptionInputSchema).optional(),
@@ -105,12 +105,9 @@ function ProductForm({ defaultValues }: ProductProps) {
                       />
                     </div>
                     <div className="col-span-12">
-                      <VideoPlayer src="youtube/3L1iQSPP_0I" />
-                    </div>
-                    <div className="col-span-12">
                       <FormField
                         control={form.control}
-                        name="description"
+                        name="content"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Mô tả sản phẩm</FormLabel>

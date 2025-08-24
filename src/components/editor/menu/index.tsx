@@ -54,7 +54,7 @@ export default ({ editor }: { editor: Editor }) => {
           }
         }}
       />
-      <Video />
+      <Video editor={editor} />
       <More editor={editor} />
     </div>
   );

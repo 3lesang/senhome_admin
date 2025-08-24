@@ -52,6 +52,7 @@ function RouteComponent() {
           id: "",
           name: data?.name,
           description: data?.description,
+          content: data?.content,
           price: "",
           slug: "",
           category: "",

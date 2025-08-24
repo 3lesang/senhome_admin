@@ -1,6 +1,6 @@
+import { extensions } from "@/components/editor/extensions";
 import Menu from "@/components/editor/menu";
 import { EditorContent, useEditor } from "@tiptap/react";
-import { extensions } from "./extensions";
 
 interface EditorProps {
   content?: string;

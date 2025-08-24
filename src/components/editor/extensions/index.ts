@@ -4,6 +4,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import { TextStyleKit } from "@tiptap/extension-text-style";
 import { Dropcursor, Placeholder } from "@tiptap/extensions";
 import StarterKit from "@tiptap/starter-kit";
+import Video from "./video";
 
 export const extensions = [
   Placeholder.configure({
@@ -23,4 +24,5 @@ export const extensions = [
     },
   }),
   Dropcursor,
+  Video,
 ];
