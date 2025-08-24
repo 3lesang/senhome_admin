@@ -21,11 +21,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CATEGORY_COLLECTION, pb } from "@/lib/pocketbase";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
+import { PlusIcon, XIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import z from "zod";
+import VideoPlayer from "./video-player";
 
 const OptionInputSchema = z.object({
   attribute: z
@@ -102,6 +105,9 @@ function ProductForm({ defaultValues }: ProductProps) {
                       />
                     </div>
                     <div className="col-span-12">
+                      <VideoPlayer src="youtube/3L1iQSPP_0I" />
+                    </div>
+                    <div className="col-span-12">
                       <FormField
                         control={form.control}
                         name="description"
@@ -109,10 +115,7 @@ function ProductForm({ defaultValues }: ProductProps) {
                           <FormItem>
                             <FormLabel>Mô tả sản phẩm</FormLabel>
                             <FormControl>
-                              <Editor
-                                onChange={field.onChange}
-                                defaultValue={field.value}
-                              />
+                              <Editor content={field.value} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -128,12 +131,24 @@ function ProductForm({ defaultValues }: ProductProps) {
                   <CardHeader>
                     <CardTitle>Media</CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <FileInput mode="multiple">
-                      <span className="text-sm text-gray-600 flex justify-center items-center h-32 w-full border border-dashed rounded-lg hover:border-gray-400">
-                        Hình ảnh sản phẩm
-                      </span>
-                    </FileInput>
+                  <CardContent className="flex items-center gap-2">
+                    <FileInput
+                      mode="multiple"
+                      render={({ files, handleOpen }) => {
+                        return (
+                          <Button
+                            variant="ghost"
+                            className={cn(
+                              "border border-dashed h-32 min-w-32",
+                              files.length == 0 && "flex-1"
+                            )}
+                            onClick={handleOpen}
+                          >
+                            <PlusIcon />
+                          </Button>
+                        );
+                      }}
+                    />
                   </CardContent>
                 </Card>
               </div>
@@ -284,11 +299,40 @@ function ProductForm({ defaultValues }: ProductProps) {
                     <CardTitle>Ảnh bìa</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <FileInput mode="single">
-                      <div className="flex justify-center items-center border border-dashed rounded-lg h-32 hover:border-gray-400">
-                        <span className="text-sm text-gray-600">Ảnh bìa</span>
-                      </div>
-                    </FileInput>
+                    <FileInput
+                      mode="single"
+                      render={({ files, handleOpen, handleRemove }) => {
+                        if (files.length > 0) {
+                          return (
+                            <div className="relative group flex items-center justify-center w-full aspect-square rounded-md overflow-hidden">
+                              <img
+                                src={files[0].url}
+                                alt=""
+                                className="w-full h-full object-cover"
+                              />
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="absolute top-2 right-2 rounded-full opacity-0 group-hover:opacity-100 bg-white size-6"
+                                onClick={() => handleRemove?.(files[0].id)}
+                              >
+                                <XIcon />
+                              </Button>
+                            </div>
+                          );
+                        }
+                        return (
+                          <Button
+                            variant="ghost"
+                            className="w-full border border-dashed h-80"
+                            onClick={handleOpen}
+                          >
+                            <span>Ảnh bìa</span>
+                            <PlusIcon />
+                          </Button>
+                        );
+                      }}
+                    ></FileInput>
                   </CardContent>
                 </Card>
               </div>

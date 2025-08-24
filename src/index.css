@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
 body {
   font-family: "Inter", sans-serif;
@@ -126,5 +127,31 @@ button {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .ProseMirror p.is-editor-empty:first-child::before {
+    @apply text-gray-400;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+  }
+  .ProseMirror img {
+    @apply w-full h-auto block rounded-lg;
+  }
+  .ProseMirror img.ProseMirror-selectednode {
+    @apply outline outline-2 outline-blue-400;
+  }
+
+  .vds-youtube {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    transform: translate(-50%, -50%) scale(1.01);
+    background: transparent;
   }
 }

@@ -71,17 +71,15 @@ function SortableImage({
 
 interface FileInputProps {
   mode?: "single" | "multiple";
-  children: ReactNode;
-  imgClass?: string;
   onChange?: (file: FileMap[]) => void;
+  render?: (data: {
+    files: FileMap[];
+    handleRemove?: (key: string) => void;
+    handleOpen?: () => void;
+  }) => ReactNode;
 }
 
-function FileInput({
-  mode = "multiple",
-  children,
-  imgClass,
-  onChange,
-}: FileInputProps) {
+function FileInput({ mode = "multiple", onChange, render }: FileInputProps) {
   const [open, setOpen] = useState(false);
   const [files, setFiles] = useState(new Map<string, FileMap>());
 
@@ -89,14 +87,11 @@ function FileInput({
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
 
-  const firstKeyMap = Array.from(files.keys()).at(0);
-
   const handleChange = () => {
     const values = Array.from(files.values());
     onChange?.(values);
   };
 
-  // Add new files
   const handleAddFile = (newFiles: Map<string, FileMap>) => {
     if (mode == "single") {
       setFiles(() => {
@@ -120,7 +115,6 @@ function FileInput({
     setOpen(false);
   };
 
-  // Remove file
   const handleRemoveFile = (key: string) => {
     setFiles((prev) => {
       const updated = new Map(prev);
@@ -129,7 +123,6 @@ function FileInput({
     });
   };
 
-  // Reorder files
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
     if (over && active.id !== over.id) {
@@ -141,41 +134,16 @@ function FileInput({
     }
   };
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
   useEffect(() => {
     handleChange();
   }, [files]);
 
   return (
     <>
-      <button
-        type="button"
-        className="hover:cursor-pointer w-full"
-        onClick={() => setOpen(true)}
-      >
-        {mode == "multiple" && <>{children}</>}
-        {mode == "single" && !firstKeyMap && <>{children}</>}
-      </button>
-      {mode == "single" && firstKeyMap && (
-        <div className={imgClass}>
-          <div className="relative group aspect-square border rounded-lg overflow-hidden">
-            <img
-              src={files.get(firstKeyMap)?.url}
-              alt=""
-              className="w-full h-full object-cover"
-            />
-            <Button
-              type="button"
-              size="icon"
-              className="hidden group-hover:flex absolute top-1 right-1 rounded-full bg-white/80 hover:bg-white size-6"
-              variant="ghost"
-              onClick={() => handleRemoveFile(firstKeyMap)}
-            >
-              <XIcon />
-            </Button>
-          </div>
-        </div>
-      )}
-
       {mode == "multiple" && (
         <DndContext
           sensors={sensors}
@@ -186,7 +154,7 @@ function FileInput({
             items={Array.from(files.keys())}
             strategy={rectSortingStrategy}
           >
-            <div className="flex my-4 flex-wrap gap-2">
+            <div className="inline-flex my-4 flex-wrap gap-2 w-full">
               {Array.from(files.entries()).map((entry) => (
                 <SortableImage
                   key={entry[0]}
@@ -194,9 +162,24 @@ function FileInput({
                   onRemove={handleRemoveFile}
                 />
               ))}
+              {render?.({
+                files: Array.from(files.values()),
+                handleRemove: handleRemoveFile,
+                handleOpen,
+              })}
             </div>
           </SortableContext>
         </DndContext>
+      )}
+
+      {mode == "single" && (
+        <>
+          {render?.({
+            files: Array.from(files.values()),
+            handleRemove: handleRemoveFile,
+            handleOpen,
+          })}
+        </>
       )}
 
       <FileModal

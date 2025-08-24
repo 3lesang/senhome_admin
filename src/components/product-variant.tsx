@@ -115,11 +115,17 @@ function ProductVariant({ value }: ProductVariantProps) {
                   onChange={(files) => {
                     handleValueChange(id, "image", files[0]);
                   }}
-                >
-                  <div className="flex items-center justify-center size-20 border border-dashed rounded-lg bg-white">
-                    <span className="text-sm text-gray-600">Hình ảnh</span>
-                  </div>
-                </FileInput>
+                  render={({ handleOpen }) => {
+                    return (
+                      <button
+                        className="text-sm text-gray-600 flex items-center justify-center size-20 border border-dashed rounded-lg bg-white"
+                        onClick={handleOpen}
+                      >
+                        <span>Hình ảnh</span>
+                      </button>
+                    );
+                  }}
+                />
               </TableCell>
               <TableCell>
                 <NumericFormat
