@@ -11,6 +11,7 @@ import Text from "@tiptap/extension-text";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
 import { Placeholder } from "@tiptap/extensions";
+import { BulletList, OrderedList } from "@tiptap/extension-list";
 
 export const extensions = [
   Document,
@@ -32,4 +33,6 @@ export const extensions = [
     autolink: true,
   }),
   Video,
+  BulletList,
+  OrderedList,
 ];

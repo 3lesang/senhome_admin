@@ -2424,6 +2424,11 @@
   dependencies:
     linkifyjs "^4.3.2"
 
+"@tiptap/extension-list@^3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-list/-/extension-list-3.3.0.tgz#53ef6adcca9511ce25c0ea6a32b87c1fb2d4f858"
+  integrity sha512-nxmmkmGm2Zz+ar3+vke7/UVsea64z6tNdhC0c0aucII0JzZF1ZhTCBTYhINdkXxFrGegqatAI1fcO1T1LXRVAw==
+
 "@tiptap/extension-paragraph@^3.3.0":
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-paragraph/-/extension-paragraph-3.3.0.tgz#9898e880e06df5e7a4bf1a47c27579c17a977717"

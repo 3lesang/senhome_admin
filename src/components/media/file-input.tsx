@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { XIcon } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 
-import type { FileType } from "@/components/product-form";
 import {
   closestCenter,
   DndContext,
@@ -19,6 +18,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 
 import FileModal from "@/components/media/file-modal";
+import type { FileType } from "./schema";
 
 function SortableImage({
   file,
