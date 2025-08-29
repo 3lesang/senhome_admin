@@ -15,7 +15,8 @@ import {
 } from "@/components/ui/table";
 import { Trash2Icon, XIcon } from "lucide-react";
 import { nanoid } from "nanoid";
-import { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useDebounce, useDebouncedCallback } from "use-debounce";
 
 // ----------------- Types -----------------
 interface OptionType {
@@ -23,7 +24,7 @@ interface OptionType {
   name: string;
 }
 
-interface SectionType {
+export interface SectionType {
   id: string;
   name: string;
   options: OptionType[];
@@ -36,9 +37,10 @@ interface ComboItem {
 
 type ComboKey = string; // e.g. "opt1|opt2|opt3"
 
-type CombinationDetails = Record<
+export type CombinationDetails = Record<
   ComboKey,
   {
+    id?: string;
     price?: string;
     stock?: string;
     discount?: string;
@@ -60,6 +62,7 @@ const OptionInput = ({
   <div className="flex items-center gap-2">
     <Input
       value={value}
+      autoFocus
       onChange={(e) => onChange(e.target.value)}
       placeholder="Nhập tùy chọn"
     />
@@ -236,156 +239,169 @@ const getComboKey = (combo: ComboItem[]): ComboKey =>
   combo.map((c) => c.id).join("|");
 
 // ----------------- Main Component -----------------
-const ProductVariantSection = () => {
-  const [sections, setSections] = useState<SectionType[]>([
-    {
-      id: "size",
-      name: "Kích thước",
-      options: [{ id: "39cm", name: "39cm" }],
-    },
-    {
-      id: "color",
-      name: "Màu sắc",
-      options: [{ id: "red", name: "Đỏ" }],
-    },
-  ]);
+interface ProductVariantSectionData {
+  sections: SectionType[];
+  combinationDetails: CombinationDetails;
+}
+interface ProductVariantSectionProps {
+  data?: ProductVariantSectionData;
+  onChange?: (data: ProductVariantSectionData) => void;
+}
 
-  const [combinationDetails, setCombinationDetails] =
-    useState<CombinationDetails>({
-      "39cm|red": {
-        price: "100000",
-        stock: "10",
-        discount: "0",
-        sku: "SKU-39CM-RED",
-      },
-    });
-
-  const combinations = useMemo(
-    () => generateCombinations(sections),
-    [sections]
-  );
-
-  // ---------- Handlers ----------
-  const handleUpdateSection = (
-    index: number,
-    updater: (s: SectionType) => SectionType
-  ) => {
-    setSections((prev) => prev.map((s, i) => (i === index ? updater(s) : s)));
-  };
-
-  const handleUpdateValue = (sectionIdx: number, value: string) =>
-    handleUpdateSection(sectionIdx, (s) => ({ ...s, name: value }));
-
-  const handleUpdateOption = (
-    sectionIdx: number,
-    optIdx: number,
-    value: string
-  ) => {
-    handleUpdateSection(sectionIdx, (s) => ({
-      ...s,
-      options: s.options.map((o, j) =>
-        j === optIdx ? { ...o, name: value } : o
-      ),
-    }));
-  };
-
-  const handleAddOption = (sectionIdx: number) =>
-    handleUpdateSection(sectionIdx, (s) => ({
-      ...s,
-      options: [...s.options, { id: nanoid(4), name: "" }],
-    }));
-
-  const handleRemoveOption = (sectionIdx: number, optIdx: number) =>
-    handleUpdateSection(sectionIdx, (s) => ({
-      ...s,
-      options:
-        s.options.length > 1
-          ? s.options.filter((_, j) => j !== optIdx)
-          : [{ id: nanoid(4), name: "" }],
-    }));
-
-  const handleAddSection = () =>
-    setSections((prev) => [
-      ...prev,
-      {
-        id: nanoid(4),
-        name: "",
-        options: [{ id: nanoid(4), name: "" }],
-      },
-    ]);
-
-  const handleRemoveSection = (sectionIdx: number) =>
-    setSections((prev) =>
-      prev.length > 1
-        ? prev.filter((_, i) => i !== sectionIdx)
-        : [
-            {
-              id: nanoid(4),
-              name: "",
-              options: [{ id: nanoid(4), name: "" }],
-            },
-          ]
+const ProductVariantSection = React.memo(
+  ({ data, onChange }: ProductVariantSectionProps) => {
+    const [sections, setSections] = useState<SectionType[]>(
+      data?.sections ?? [
+        {
+          id: nanoid(4),
+          name: "",
+          options: [{ id: nanoid(4), name: "" }],
+        },
+      ]
     );
 
-  const handleUpdateCombinationDetails = useCallback(
-    (comboKey: ComboKey, details: CombinationDetails[string]) => {
-      setCombinationDetails((prev) => ({ ...prev, [comboKey]: details }));
-    },
-    []
-  );
+    const [combinationDetails, setCombinationDetails] =
+      useState<CombinationDetails>(data?.combinationDetails ?? {});
 
-  return (
-    <div className="space-y-6">
-      {sections.map((section, idx) => (
-        <SectionCard
-          key={section.id}
-          value={section.name}
-          options={section.options}
-          onValueChange={(val) => handleUpdateValue(idx, val)}
-          onOptionChange={(optIdx, val) => handleUpdateOption(idx, optIdx, val)}
-          onAddOption={() => handleAddOption(idx)}
-          onRemoveOption={(optIdx) => handleRemoveOption(idx, optIdx)}
-          onRemoveSection={() => handleRemoveSection(idx)}
-        />
-      ))}
+    const [debouncedSections] = useDebounce(sections, 500);
 
-      <Button onClick={handleAddSection} variant="ghost" type="button">
-        + Thêm phân loại
-      </Button>
+    const combinations = useMemo(
+      () => generateCombinations(debouncedSections),
+      [debouncedSections]
+    );
 
-      <Card className="shadow-none border-0">
-        <CardHeader>
-          <CardTitle>Danh sách phân loại</CardTitle>
-        </CardHeader>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-40">Phân loại</TableHead>
-              <TableHead>Ảnh</TableHead>
-              <TableHead>Giá</TableHead>
-              <TableHead>Tồn kho</TableHead>
-              <TableHead>Giảm giá</TableHead>
-              <TableHead>SKU</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {combinations.map((combo) => {
-              const comboKey = getComboKey(combo);
-              return (
-                <CombinationRow
-                  key={comboKey}
-                  combo={combo}
-                  comboKey={comboKey}
-                  data={combinationDetails[comboKey]}
-                  onChange={handleUpdateCombinationDetails}
-                />
-              );
-            })}
-          </TableBody>
-        </Table>
-      </Card>
-    </div>
-  );
-};
+    // ---------- Handlers ----------
+    const handleUpdateSection = (
+      index: number,
+      updater: (s: SectionType) => SectionType
+    ) => {
+      setSections((prev) => prev.map((s, i) => (i === index ? updater(s) : s)));
+    };
+
+    const handleUpdateValue = (sectionIdx: number, value: string) =>
+      handleUpdateSection(sectionIdx, (s) => ({ ...s, name: value }));
+
+    const handleUpdateOption = (
+      sectionIdx: number,
+      optIdx: number,
+      value: string
+    ) => {
+      handleUpdateSection(sectionIdx, (s) => ({
+        ...s,
+        options: s.options.map((o, j) =>
+          j === optIdx ? { ...o, name: value } : o
+        ),
+      }));
+    };
+
+    const handleAddOption = (sectionIdx: number) =>
+      handleUpdateSection(sectionIdx, (s) => ({
+        ...s,
+        options: [...s.options, { id: nanoid(4), name: "" }],
+      }));
+
+    const handleRemoveOption = (sectionIdx: number, optIdx: number) =>
+      handleUpdateSection(sectionIdx, (s) => ({
+        ...s,
+        options:
+          s.options.length > 1
+            ? s.options.filter((_, j) => j !== optIdx)
+            : [{ id: nanoid(4), name: "" }],
+      }));
+
+    const handleAddSection = () =>
+      setSections((prev) => [
+        ...prev,
+        {
+          id: nanoid(4),
+          name: "",
+          options: [{ id: nanoid(4), name: "" }],
+        },
+      ]);
+
+    const handleRemoveSection = (sectionIdx: number) =>
+      setSections((prev) =>
+        prev.length > 1
+          ? prev.filter((_, i) => i !== sectionIdx)
+          : [
+              {
+                id: nanoid(4),
+                name: "",
+                options: [{ id: nanoid(4), name: "" }],
+              },
+            ]
+      );
+
+    const handleUpdateCombinationDetails = useCallback(
+      (comboKey: ComboKey, details: CombinationDetails[string]) => {
+        setCombinationDetails((prev) => ({ ...prev, [comboKey]: details }));
+      },
+      []
+    );
+
+    const debouncedOnChange = useDebouncedCallback((data) => {
+      onChange?.(data);
+    }, 500);
+
+    useEffect(() => {
+      debouncedOnChange({ sections, combinationDetails });
+    }, [sections, combinationDetails, debouncedOnChange]);
+
+    return (
+      <div className="space-y-6">
+        {sections.map((section, idx) => (
+          <SectionCard
+            key={section.id}
+            value={section.name}
+            options={section.options}
+            onValueChange={(val) => handleUpdateValue(idx, val)}
+            onOptionChange={(optIdx, val) =>
+              handleUpdateOption(idx, optIdx, val)
+            }
+            onAddOption={() => handleAddOption(idx)}
+            onRemoveOption={(optIdx) => handleRemoveOption(idx, optIdx)}
+            onRemoveSection={() => handleRemoveSection(idx)}
+          />
+        ))}
+
+        <Button onClick={handleAddSection} variant="ghost" type="button">
+          + Thêm phân loại
+        </Button>
+
+        <Card className="shadow-none border-0">
+          <CardHeader>
+            <CardTitle>Danh sách phân loại</CardTitle>
+          </CardHeader>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-40">Phân loại</TableHead>
+                <TableHead>Ảnh</TableHead>
+                <TableHead>Giá</TableHead>
+                <TableHead>Tồn kho</TableHead>
+                <TableHead>Giảm giá</TableHead>
+                <TableHead>SKU</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {combinations.map((combo) => {
+                const comboKey = getComboKey(combo);
+                return (
+                  <CombinationRow
+                    key={comboKey}
+                    combo={combo}
+                    comboKey={comboKey}
+                    data={combinationDetails[comboKey]}
+                    onChange={handleUpdateCombinationDetails}
+                  />
+                );
+              })}
+            </TableBody>
+          </Table>
+        </Card>
+      </div>
+    );
+  }
+);
 
 export default ProductVariantSection;

@@ -49,7 +49,16 @@ function ProductForm({
                 <ProductPriceSection />
               </div>
               <div className="col-span-12">
-                <ProductVariantSection />
+                <ProductVariantSection
+                  data={{
+                    sections: defaultValues?.attributes ?? [],
+                    combinationDetails: defaultValues?.variants ?? {},
+                  }}
+                  onChange={(data) => {
+                    form.setValue("attributes", data.sections);
+                    form.setValue("variants", data.combinationDetails);
+                  }}
+                />
               </div>
             </div>
           </div>

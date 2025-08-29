@@ -50,7 +50,7 @@ function RouteComponent() {
     formatProduct(data, media, variants, attributes)
   );
 
-  const { mutate, isPending } = useMutation({
+  const {  isPending } = useMutation({
     mutationFn: async (values: ProductFormType) => {
       batchMedia(media, values?.media ?? [], id);
       const defaultProductData = formatPayloadProduct(defaultProduct);
@@ -66,7 +66,8 @@ function RouteComponent() {
   });
 
   const handleSubmit = async (values: ProductFormType) => {
-    mutate(values);
+    // mutate(values);
+    console.log(values);
   };
 
   return (

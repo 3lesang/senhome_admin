@@ -1,19 +1,19 @@
 import type { FileType } from "@/components/media/schema";
+import type { ProductFormType } from "@/components/product-form/schema";
 import type {
-  ProductAttributeFormType,
-  ProductFormType,
-  ProductVariantFormType,
-} from "@/components/product-form/schema";
+  CombinationDetails,
+  SectionType,
+} from "@/components/product-form/variant";
 import { convertToFileUrl } from "@/lib/utils";
 import type { ProductDataType, UpdateProductDataType } from "@/type";
 
 export const formatProductVariantData = (
   data: any[]
 ): {
-  attributes: ProductAttributeFormType[];
-  variants: Record<string, ProductVariantFormType>;
+  attributes: SectionType[];
+  variants: CombinationDetails;
 } => {
-  const attributeMap = new Map<string, ProductAttributeFormType>();
+  const attributeMap = new Map<string, SectionType>();
   const variantGroups = new Map<string, any[]>();
 
   data.forEach((record) => {
@@ -49,7 +49,7 @@ export const formatProductVariantData = (
   });
 
   // 🔹 Build variant map
-  const variantMap: Record<string, ProductVariantFormType> = {};
+  const variantMap: CombinationDetails = {};
   for (const [id, rows] of variantGroups) {
     const key = rows.map((r) => r.attrValue.id).join("|");
 
@@ -86,8 +86,8 @@ export const formatPayloadProduct = (
 export const formatProduct = (
   data: ProductDataType,
   media?: FileType[],
-  variants?: Record<string, ProductVariantFormType>,
-  attributes?: ProductAttributeFormType[]
+  variants?: CombinationDetails,
+  attributes?: SectionType[]
 ): ProductFormType => {
   return {
     id: data?.id,
