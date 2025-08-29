@@ -32,8 +32,9 @@ export default ({ editor }: Props) => {
     },
   });
 
-  const handleSubmit = (data: any) => {
-    const { url } = data;
+  const url = form.watch("url");
+
+  const handleSubmit = (url: string) => {
     try {
       editor
         .chain()
@@ -48,6 +49,7 @@ export default ({ editor }: Props) => {
     <Dialog>
       <DialogTrigger asChild>
         <Button
+          type="button"
           variant="ghost"
           size="icon"
           onClick={() => {
@@ -62,10 +64,7 @@ export default ({ editor }: Props) => {
           <DialogTitle>Chèn link</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-4"
-          >
+          <form className="space-y-4">
             <FormField
               control={form.control}
               name="url"
@@ -81,16 +80,20 @@ export default ({ editor }: Props) => {
                 </FormItem>
               )}
             />
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Hủy</Button>
-              </DialogClose>
-              <DialogClose asChild>
-                <Button type="submit">Chèn Link</Button>
-              </DialogClose>
-            </DialogFooter>
           </form>
         </Form>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="outline">
+              Hủy
+            </Button>
+          </DialogClose>
+          <DialogClose asChild>
+            <Button type="button" onClick={() => handleSubmit(url)}>
+              Chèn Link
+            </Button>
+          </DialogClose>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

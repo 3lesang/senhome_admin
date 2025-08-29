@@ -23,13 +23,14 @@ export default ({ editor }: { editor: Editor }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
+        <Button type="button" variant="ghost" size="icon">
           <MoreHorizontalIcon />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-0">
         <DropdownMenuItem asChild>
           <Button
+            type="button"
             variant="ghost"
             size="icon"
             onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -40,6 +41,7 @@ export default ({ editor }: { editor: Editor }) => {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Button
+            type="button"
             variant="ghost"
             size="icon"
             onClick={() => editor.chain().focus().toggleOrderedList().run()}

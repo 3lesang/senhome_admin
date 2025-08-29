@@ -16,7 +16,7 @@ export default ({ editor }: Props) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="select-none">
+        <Button variant="ghost" className="select-none" type="button">
           Paragraph
           <ChevronDownIcon />
         </Button>
@@ -24,6 +24,7 @@ export default ({ editor }: Props) => {
       <DropdownMenuContent>
         <DropdownMenuItem asChild>
           <Button
+            type="button"
             className="w-full justify-start px-4"
             variant="ghost"
             onClick={() => editor.chain().focus().setParagraph().run()}
@@ -33,6 +34,7 @@ export default ({ editor }: Props) => {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Button
+            type="button"
             className="w-full justify-start px-4"
             variant="ghost"
             onClick={() =>
@@ -46,6 +48,7 @@ export default ({ editor }: Props) => {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Button
+            type="button"
             className="w-full justify-start px-4"
             variant="ghost"
             onClick={() =>
@@ -57,6 +60,7 @@ export default ({ editor }: Props) => {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Button
+            type="button"
             className="w-full justify-start px-4"
             variant="ghost"
             onClick={() =>
@@ -70,6 +74,7 @@ export default ({ editor }: Props) => {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Button
+            type="button"
             className="w-full justify-start px-4"
             variant="ghost"
             onClick={() =>
@@ -83,6 +88,7 @@ export default ({ editor }: Props) => {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Button
+            type="button"
             className="w-full justify-start px-4"
             variant="ghost"
             onClick={() =>
@@ -94,6 +100,7 @@ export default ({ editor }: Props) => {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Button
+            type="button"
             className="w-full justify-start px-4"
             variant="ghost"
             onClick={() =>

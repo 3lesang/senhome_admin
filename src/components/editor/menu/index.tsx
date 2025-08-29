@@ -1,18 +1,20 @@
-import FileInput from "@/components/file-input";
+import Align from "@/components/editor/menu/align";
+import Image from "@/components/editor/menu/image";
+import Link from "@/components/editor/menu/link";
+import More from "@/components/editor/menu/more";
+import Paragraph from "@/components/editor/menu/paragraph";
+import Video from "@/components/editor/menu/video";
+
 import { Button } from "@/components/ui/button";
 import type { Editor } from "@tiptap/react";
-import { Bold, ImagePlusIcon, Italic, UnderlineIcon } from "lucide-react";
-import Align from "./align";
-import Link from "./link";
-import More from "./more";
-import Paragraph from "./paragraph";
-import Video from "./video";
+import { Bold, Italic, UnderlineIcon } from "lucide-react";
 
 export default ({ editor }: { editor: Editor }) => {
   return (
     <div className="flex items-center flex-wrap">
       <Paragraph editor={editor} />
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         aria-label="Toggle bold"
@@ -21,6 +23,7 @@ export default ({ editor }: { editor: Editor }) => {
         <Bold />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         aria-label="Toggle italic"
@@ -29,6 +32,7 @@ export default ({ editor }: { editor: Editor }) => {
         <Italic />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         aria-label="Toggle strikethrough"
@@ -38,22 +42,7 @@ export default ({ editor }: { editor: Editor }) => {
       </Button>
       <Align editor={editor} />
       <Link editor={editor} />
-      <FileInput
-        mode="single"
-        render={({ handleOpen }) => {
-          return (
-            <Button variant="ghost" size="icon" onClick={handleOpen}>
-              <ImagePlusIcon />
-            </Button>
-          );
-        }}
-        onChange={(files) => {
-          const url = files?.[0]?.url;
-          if (url) {
-            editor.chain().focus().setImage({ src: url }).run();
-          }
-        }}
-      />
+      <Image editor={editor} />
       <Video editor={editor} />
       <More editor={editor} />
     </div>

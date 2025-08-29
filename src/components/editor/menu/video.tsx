@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import VideoPlayer from "@/components/video-player";
+import VideoPlayer from "@/components/media/video-player";
 import type { Editor } from "@tiptap/react";
 
 import { PlayIcon } from "lucide-react";
@@ -38,7 +38,7 @@ export default ({ editor }: Props) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" type="button">
           <PlayIcon />
         </Button>
       </DialogTrigger>

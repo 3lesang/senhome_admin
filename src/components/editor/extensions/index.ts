@@ -1,28 +1,35 @@
+import Video from "@/components/editor/extensions/video";
+
+import Bold from "@tiptap/extension-bold";
+import Document from "@tiptap/extension-document";
+import Heading from "@tiptap/extension-heading";
 import Image from "@tiptap/extension-image";
+import Italic from "@tiptap/extension-italic";
 import Link from "@tiptap/extension-link";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from "@tiptap/extension-text";
 import TextAlign from "@tiptap/extension-text-align";
-import { TextStyleKit } from "@tiptap/extension-text-style";
-import { Dropcursor, Placeholder } from "@tiptap/extensions";
-import StarterKit from "@tiptap/starter-kit";
-import Video from "./video";
+import Underline from "@tiptap/extension-underline";
+import { Placeholder } from "@tiptap/extensions";
 
 export const extensions = [
+  Document,
+  Paragraph,
+  Text,
+  Bold,
+  Italic,
+  Underline,
+  Heading.configure({ levels: [1, 2, 3, 4, 5, 6] }),
   Placeholder.configure({
     placeholder: "Nhập nội dung…",
   }),
   TextAlign.configure({
     types: ["heading", "paragraph"],
   }),
-  TextStyleKit,
-  StarterKit,
   Image,
   Link.configure({
     openOnClick: false,
     autolink: true,
-    HTMLAttributes: {
-      class: "text-blue-600 underline hover:text-blue-800",
-    },
   }),
-  Dropcursor,
   Video,
 ];

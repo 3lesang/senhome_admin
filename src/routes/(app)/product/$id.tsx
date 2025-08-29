@@ -1,4 +1,6 @@
+import { batchMedia, updateProduct } from "@/api/product";
 import ProductForm from "@/components/product-form";
+import { type ProductFormType } from "@/components/product-form/schema";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,29 +8,66 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { pb, PRODUCT_COLLECTION } from "@/lib/pocketbase";
-import type { Product } from "@/type";
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  formatPayloadProduct,
+  formatProduct,
+  formatProductVariantData,
+} from "@/lib/format";
+import {
+  productCategoryQueryOptions,
+  productFilesQueryOptions,
+  productQueryOptions,
+  productVariantQueryOptions,
+} from "@/lib/pocketbase";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-
-export const productQueryOptions = (id: string) =>
-  queryOptions<Product>({
-    queryKey: [PRODUCT_COLLECTION, id],
-    queryFn: () => pb.collection(PRODUCT_COLLECTION).getOne(id),
-  });
+import { useState } from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/(app)/product/$id")({
   component: RouteComponent,
   beforeLoad(ctx) {
-    return ctx.context.queryClient.ensureQueryData(
-      productQueryOptions(ctx.params.id)
-    );
+    const id = ctx.params.id;
+    ctx.context.queryClient.ensureQueryData(productVariantQueryOptions(id));
+    ctx.context.queryClient.ensureQueryData(productQueryOptions(id));
+    ctx.context.queryClient.ensureQueryData(productFilesQueryOptions(id));
+    ctx.context.queryClient.ensureQueryData(productCategoryQueryOptions());
   },
 });
 
 function RouteComponent() {
   const { id } = Route.useParams();
+
+  const { data: media } = useSuspenseQuery(productFilesQueryOptions(id));
+  const { data: variantData } = useSuspenseQuery(
+    productVariantQueryOptions(id)
+  );
   const { data } = useSuspenseQuery(productQueryOptions(id));
+
+  const { attributes, variants } = formatProductVariantData(variantData);
+
+  const [defaultProduct, setDefaultProduct] = useState<ProductFormType>(
+    formatProduct(data, media, variants, attributes)
+  );
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (values: ProductFormType) => {
+      batchMedia(media, values?.media ?? [], id);
+      const defaultProductData = formatPayloadProduct(defaultProduct);
+      const formProductData = formatPayloadProduct(values);
+      updateProduct(defaultProductData, formProductData, id);
+      setDefaultProduct(values);
+
+      return;
+    },
+    onSuccess: () => {
+      toast("Cập nhật sản phẩm thành công.");
+    },
+  });
+
+  const handleSubmit = async (values: ProductFormType) => {
+    mutate(values);
+  };
 
   return (
     <div className="max-w-7xl mx-auto p-4 space-y-4">
@@ -46,17 +85,13 @@ function RouteComponent() {
             </BreadcrumbList>
           </Breadcrumb>
         </div>
+        <div></div>
       </div>
       <ProductForm
-        defaultValues={{
-          id: "",
-          name: data?.name,
-          description: data?.description,
-          content: data?.content,
-          price: "",
-          slug: "",
-          category: "",
-        }}
+        onSubmit={handleSubmit}
+        isUpdate
+        isPending={isPending}
+        defaultValues={defaultProduct}
       />
     </div>
   );

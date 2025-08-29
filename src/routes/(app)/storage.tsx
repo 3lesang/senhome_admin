@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { SquareCheckIcon, TrashIcon, UploadIcon } from "lucide-react";
 
 import { DynamicPagination } from "@/components/dynamic-pagination";
+import type { FileType } from "@/components/media/schema";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -23,7 +24,6 @@ import {
 } from "@/components/ui/select";
 import { FILE_COLLECTION, pb } from "@/lib/pocketbase";
 import { cn, convertToFileUrl } from "@/lib/utils";
-import type { FileType } from "@/type";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import type { ListResult } from "pocketbase";
 import { useEffect, useState } from "react";

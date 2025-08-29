@@ -1,4 +1,3 @@
-import type { OptionInputType } from "@/components/product-form";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { API_URL } from "./pocketbase";
@@ -19,21 +18,13 @@ export const convertToFileUrl = (record: any) => {
   return `${API_URL}/api/files/${record?.collectionName}/${record?.id}/${record?.file}`;
 };
 
-function cartesian<T>(arrays?: T[][]) {
-  return arrays?.reduce<T[][]>(
-    (acc, curr) => acc.flatMap((a) => curr.map((c) => [...a, c])),
-    [[]]
-  );
-}
-
-export function generateVariants(groups?: OptionInputType[]) {
-  const optionArrays = groups?.map(
-    (group) =>
-      group?.options?.map((option) => ({
-        attribute: group.attribute,
-        option,
-      })) ?? []
-  );
-
-  return cartesian(optionArrays);
-}
+export const slugify = (str: string) => {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+};

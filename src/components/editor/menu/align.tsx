@@ -18,7 +18,7 @@ export default ({ editor }: { editor: Editor }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost">
+        <Button type="button" variant="ghost">
           <AlignLeftIcon />
           <ChevronDownIcon />
         </Button>
@@ -26,6 +26,7 @@ export default ({ editor }: { editor: Editor }) => {
       <DropdownMenuContent className="min-w-0">
         <DropdownMenuItem asChild>
           <Button
+            type="button"
             variant="ghost"
             size="icon"
             onClick={() => editor.chain().focus().setTextAlign("left").run()}
@@ -35,6 +36,7 @@ export default ({ editor }: { editor: Editor }) => {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Button
+            type="button"
             variant="ghost"
             size="icon"
             onClick={() => editor.chain().focus().setTextAlign("center").run()}
@@ -47,6 +49,7 @@ export default ({ editor }: { editor: Editor }) => {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Button
+            type="button"
             variant="ghost"
             size="icon"
             onClick={() => editor.chain().focus().setTextAlign("right").run()}
@@ -59,6 +62,7 @@ export default ({ editor }: { editor: Editor }) => {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Button
+            type="button"
             variant="ghost"
             size="icon"
             onClick={() => editor.chain().focus().setTextAlign("justify").run()}

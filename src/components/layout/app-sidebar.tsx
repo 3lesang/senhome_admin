@@ -1,10 +1,16 @@
-import { SettingsIcon } from "lucide-react";
+import {
+  BellIcon,
+  ChevronsUpDown,
+  GalleryVerticalEnd,
+  SettingsIcon,
+} from "lucide-react";
 import * as React from "react";
 
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -22,20 +28,38 @@ import {
 
 import { SidebarGroup, SidebarGroupLabel } from "@/components/ui/sidebar";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { pb } from "@/lib/pocketbase";
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
-
+  const user = {
+    name: pb.authStore.record?.name,
+    email: pb.authStore.record?.email,
+    avatar: "https://github.com/shadcn.png",
+  };
   return (
-    <Sidebar
-      className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
-      {...props}
-    >
+    <Sidebar {...props}>
+      <SidebarHeader>
+        <SidebarMenuButton
+          size="lg"
+          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+        >
+          <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+            <GalleryVerticalEnd />
+          </div>
+          <div className="grid flex-1 text-left text-sm leading-tight">
+            <span className="truncate font-medium">Senhome</span>
+            <span className="truncate text-xs">Enterprise</span>
+          </div>
+          <ChevronsUpDown className="ml-auto" />
+        </SidebarMenuButton>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Quản lý</SidebarGroupLabel>
@@ -149,8 +173,32 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               Cài đặt
             </SidebarMenuButton>
           </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <BellIcon />
+              Thông báo
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+              </Avatar>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate text-xs">{user.email}</span>
+              </div>
+              <ChevronsUpDown className="ml-auto size-4" />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   );
 }
+
+export default AppSidebar;

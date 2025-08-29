@@ -12,8 +12,7 @@ import {
   UserCircleIcon,
 } from "lucide-react";
 
-import { AppSidebar } from "@/components/app-sidebar";
-import { SiteHeader } from "@/components/site-header";
+import AppSidebar from "@/components/layout/app-sidebar";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -84,18 +83,13 @@ function RouteComponent() {
   }
 
   return (
-    <div className="[--header-height:calc(--spacing(14))]">
-      <SidebarProvider className="flex flex-col">
-        <SiteHeader />
-        <div className="flex flex-1">
-          <AppSidebar />
-          <SidebarInset className="bg-sidebar">
-            <main>
-              <Outlet />
-            </main>
-          </SidebarInset>
-        </div>
-      </SidebarProvider>
-    </div>
+    <SidebarProvider>
+      <AppSidebar className="border-none" />
+      <SidebarInset className="bg-gray-50">
+        <main>
+          <Outlet />
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
