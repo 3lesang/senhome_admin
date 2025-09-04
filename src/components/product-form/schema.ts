@@ -1,6 +1,6 @@
 import { FileSchema } from "@/components/media/schema";
+import type { AttributeDataList, VariantDataList } from "@/type";
 import z from "zod";
-import type { CombinationDetails, SectionType } from "./variant";
 
 export const ProductFormSchema = z.object({
   id: z.string().optional(),
@@ -11,14 +11,14 @@ export const ProductFormSchema = z.object({
   content: z.string().optional(),
   price: z.string().optional(),
   category: z.string().optional(),
-  attributes: z.array(z.any()).optional(),
-  variants: z.record(z.string(), z.any()).optional(),
   media: z.array(FileSchema).optional(),
   thumbnail: z.array(FileSchema).optional(),
   state: z.string().optional().catch("draft"),
+  attributesChange: z.any().optional(),
+  variantsChange: z.any().optional(),
 });
 
 export type ProductFormType = z.infer<typeof ProductFormSchema> & {
-  attributes?: SectionType[];
-  variants?: CombinationDetails;
+  attributes?: AttributeDataList;
+  variants?: VariantDataList;
 };

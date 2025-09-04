@@ -51,13 +51,15 @@ function ProductForm({
               <div className="col-span-12">
                 <ProductVariantSection
                   data={{
-                    sections: defaultValues?.attributes ?? [],
-                    combinationDetails: defaultValues?.variants ?? {},
+                    attributes: defaultValues?.attributes ?? {},
+                    variants: defaultValues?.variants ?? {},
                   }}
-                  onChange={(data) => {
-                    form.setValue("attributes", data.sections);
-                    form.setValue("variants", data.combinationDetails);
-                  }}
+                  onAttributesChange={(data) =>
+                    form.setValue("attributesChange", data)
+                  }
+                  onVariantsChange={(data) =>
+                    form.setValue("variantsChange", data)
+                  }
                 />
               </div>
             </div>

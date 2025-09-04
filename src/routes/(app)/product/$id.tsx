@@ -1,4 +1,4 @@
-import { batchMedia, updateProduct } from "@/api/product";
+import { batchVariant } from "@/api/product/batchVariant";
 import ProductForm from "@/components/product-form";
 import { type ProductFormType } from "@/components/product-form/schema";
 import {
@@ -8,11 +8,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {
-  formatPayloadProduct,
-  formatProduct,
-  formatProductVariantData,
-} from "@/lib/format";
+import { formatProduct, formatProductVariantData } from "@/lib/format";
 import {
   productCategoryQueryOptions,
   productFilesQueryOptions,
@@ -46,18 +42,14 @@ function RouteComponent() {
 
   const { attributes, variants } = formatProductVariantData(variantData);
 
-  const [defaultProduct, setDefaultProduct] = useState<ProductFormType>(
+  const [defaultProduct, _] = useState<ProductFormType>(
     formatProduct(data, media, variants, attributes)
   );
 
-  const {  isPending } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (values: ProductFormType) => {
-      batchMedia(media, values?.media ?? [], id);
-      const defaultProductData = formatPayloadProduct(defaultProduct);
-      const formProductData = formatPayloadProduct(values);
-      updateProduct(defaultProductData, formProductData, id);
-      setDefaultProduct(values);
-
+      const { attributesChange, variantsChange } = values;
+      batchVariant({ attributesChange, variantsChange, productId: id });
       return;
     },
     onSuccess: () => {
@@ -66,8 +58,7 @@ function RouteComponent() {
   });
 
   const handleSubmit = async (values: ProductFormType) => {
-    // mutate(values);
-    console.log(values);
+    mutate(values);
   };
 
   return (

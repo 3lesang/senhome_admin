@@ -1,20 +1,23 @@
 import type { FileType } from "@/components/media/schema";
 import type { ProductFormType } from "@/components/product-form/schema";
-import type {
-  CombinationDetails,
-  SectionType,
-} from "@/components/product-form/variant";
+
 import { convertToFileUrl } from "@/lib/utils";
-import type { ProductDataType, UpdateProductDataType } from "@/type";
+import type {
+  AttributeDataList,
+  ProductDataType,
+  UpdateProductDataType,
+  VariantData,
+  VariantDataList,
+} from "@/type";
 
 export const formatProductVariantData = (
   data: any[]
 ): {
-  attributes: SectionType[];
-  variants: CombinationDetails;
+  attributes: AttributeDataList;
+  variants: VariantDataList;
 } => {
-  const attributeMap = new Map<string, SectionType>();
-  const variantGroups = new Map<string, any[]>();
+  const attributeMap = new Map<string, AttributeDataList[string]>();
+  const variantGroups = new Map<string, VariantData>();
 
   data.forEach((record) => {
     const attr = record.expand?.attribute;
@@ -27,45 +30,39 @@ export const formatProductVariantData = (
       attributeMap.set(attr.id, {
         id: attr.id,
         name: attr.name,
-        options: [],
+        options: {},
       });
     }
     const pa = attributeMap.get(attr.id)!;
-    if (!pa.options?.some((o) => o.id === attrValue.id)) {
-      pa.options?.push({
-        id: attrValue.id,
-        name: attrValue.name,
-      });
-    }
+
+    pa.options[attrValue.id] = {
+      id: attrValue.id,
+      name: attrValue.name,
+    };
 
     // 🔹 Group rows by variant.id
     if (!variantGroups.has(variant.id)) {
-      variantGroups.set(variant.id, []);
+      variantGroups.set(variant.id, {});
     }
-    variantGroups.get(variant.id)!.push({
-      attrValue,
-      variant,
-    });
+
+    variantGroups.get(variant.id)![attrValue.id] = {
+      option: {
+        id: attrValue.id,
+        name: attrValue.name,
+      },
+      variant: {
+        id: variant.id,
+        price: variant.price,
+        discount: variant.discount,
+        stock: variant.stock,
+        sku: variant.sku,
+      },
+    };
   });
 
-  // 🔹 Build variant map
-  const variantMap: CombinationDetails = {};
-  for (const [id, rows] of variantGroups) {
-    const key = rows.map((r) => r.attrValue.id).join("|");
-
-    const variant = rows[0].variant;
-    variantMap[key] = {
-      id: id,
-      price: variant.price?.toString() ?? "",
-      stock: variant.stock?.toString() ?? "",
-      discount: variant.discount?.toString() ?? "",
-      sku: variant.sku ?? "",
-    };
-  }
-
   return {
-    attributes: Array.from(attributeMap.values()),
-    variants: variantMap,
+    attributes: Object.fromEntries(attributeMap),
+    variants: Object.fromEntries(variantGroups),
   };
 };
 
@@ -86,8 +83,8 @@ export const formatPayloadProduct = (
 export const formatProduct = (
   data: ProductDataType,
   media?: FileType[],
-  variants?: CombinationDetails,
-  attributes?: SectionType[]
+  variants?: VariantDataList,
+  attributes?: AttributeDataList
 ): ProductFormType => {
   return {
     id: data?.id,
