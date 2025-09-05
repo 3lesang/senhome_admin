@@ -50,16 +50,8 @@ function ProductForm({
               </div>
               <div className="col-span-12">
                 <ProductVariantSection
-                  data={{
-                    attributes: defaultValues?.attributes ?? {},
-                    variants: defaultValues?.variants ?? {},
-                  }}
-                  onAttributesChange={(data) =>
-                    form.setValue("attributesChange", data)
-                  }
-                  onVariantsChange={(data) =>
-                    form.setValue("variantsChange", data)
-                  }
+                  data={form.getValues("variantData")}
+                  onChange={(data) => form.setValue("variantData", data)}
                 />
               </div>
             </div>

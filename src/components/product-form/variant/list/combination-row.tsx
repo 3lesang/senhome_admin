@@ -1,21 +1,24 @@
+import type {
+  VariantDataType,
+  VariantType,
+} from "@/components/product-form/schema";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TableCell, TableRow } from "@/components/ui/table";
-import type { VariantData } from "@/type";
 import { ChevronDownIcon } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import ImageInput from "./image-input";
 
 type CombinationRowProps = {
-  data?: VariantData;
-  onChange?: (data: VariantData[string]["variant"]) => void;
+  data?: VariantDataType;
+  onChange?: (data: VariantType) => void;
 };
 
-const CombinationRow = ({ data, onChange }: CombinationRowProps) => {
+const CombinationRow = ({ data = {}, onChange }: CombinationRowProps) => {
   const [open, setOpen] = useState(false);
 
-  const optionItems = Object.values(data ?? {});
+  const optionItems = Object.values(data);
 
   const [variant, setVariant] = useState(optionItems[0]?.variant);
 

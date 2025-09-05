@@ -1,73 +1,49 @@
+import type {
+  AttributeType,
+  OptionsType,
+} from "@/components/product-form/schema";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { AttributeDataList } from "@/type";
 import { XIcon } from "lucide-react";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import Options from "./options";
 
-type Attribute = AttributeDataList[string];
-
-export interface AttributeDataChanges {
-  id?: string;
-  name?: string;
-  options?: {
-    added?: Attribute["options"];
-    updated?: Attribute["options"];
-    removed?: Record<string, string>;
-    removedAdded?: Record<string, string>;
-  };
-}
 interface AttributeCardProps {
-  data: Attribute;
+  data: AttributeType;
   onRemove?: (id: string) => void;
-  onChange?: (data: AttributeDataChanges) => void;
+  onChange?: (data: AttributeType) => void;
 }
 
 function AttributeCard({ data, onRemove, onChange }: AttributeCardProps) {
-  const [display, setDisplay] = useState(true);
-  const { id, name: nameData, options } = data;
-  const [name, setName] = useState<string>(nameData);
+  const [hide, setHide] = useState(false);
+  const [attr, setAttr] = useState<AttributeType>(data);
 
   const handleRemove = () => {
-    onRemove?.(id);
-    setDisplay(false);
+    setHide(true);
+    onRemove?.(attr.id);
   };
 
-  const handleNameChange = useCallback((value: string) => {
-    setName(value);
-    onChange?.({
-      id,
-      name: value,
-    });
-  }, []);
+  const handleChange = (
+    type: "name" | "options",
+    value: string | OptionsType
+  ) => {
+    const next: AttributeType =
+      type === "name"
+        ? { ...attr, name: value as string }
+        : { ...attr, options: value as OptionsType };
 
-  const handleOptionsChange = useCallback(
-    (changes: {
-      updated: Attribute["options"];
-      added: Attribute["options"];
-      removed: Record<string, string>;
-      removedAdded?: Record<string, string>;
-    }) => {
-      onChange?.({
-        id,
-        options: {
-          added: changes.added,
-          removed: changes.removed,
-          updated: changes.updated,
-          removedAdded: changes.removedAdded,
-        },
-      });
-    },
-    []
-  );
+    setAttr(next);
+    onChange?.(next);
+  };
 
-  if (!display) return null;
+  if (hide) return null;
+
   return (
     <Card className="shadow-none border-0">
       <CardHeader className="flex justify-between items-center">
-        <CardTitle>{name}</CardTitle>
+        <CardTitle>{attr.name}</CardTitle>
         <Button
           variant="ghost"
           size="icon"
@@ -81,12 +57,15 @@ function AttributeCard({ data, onRemove, onChange }: AttributeCardProps) {
         <div className="grid w-full max-w-sm items-center gap-3">
           <Label>Tên loại</Label>
           <Input
-            value={name}
-            onChange={(e) => handleNameChange(e.currentTarget.value)}
+            value={attr.name}
+            onChange={(e) => handleChange("name", e.currentTarget.value)}
             placeholder="Tên loại (vd: Kích thước, Màu sắc)"
           />
         </div>
-        <Options data={options} onChange={handleOptionsChange} />
+        <Options
+          data={attr.options}
+          onChange={(data) => handleChange("options", data)}
+        />
       </CardContent>
     </Card>
   );

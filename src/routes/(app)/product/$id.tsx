@@ -1,4 +1,3 @@
-import { batchVariant } from "@/api/product/batchVariant";
 import ProductForm from "@/components/product-form";
 import { type ProductFormType } from "@/components/product-form/schema";
 import {
@@ -40,16 +39,15 @@ function RouteComponent() {
   );
   const { data } = useSuspenseQuery(productQueryOptions(id));
 
-  const { attributes, variants } = formatProductVariantData(variantData);
+  const productVariantData = formatProductVariantData(variantData);
 
   const [defaultProduct, _] = useState<ProductFormType>(
-    formatProduct(data, media, variants, attributes)
+    formatProduct(data, media, productVariantData)
   );
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: ProductFormType) => {
-      const { attributesChange, variantsChange } = values;
-      batchVariant({ attributesChange, variantsChange, productId: id });
+      console.log(values);
       return;
     },
     onSuccess: () => {

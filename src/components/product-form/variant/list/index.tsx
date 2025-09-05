@@ -1,3 +1,7 @@
+import type {
+  VariantDataListType,
+  VariantType,
+} from "@/components/product-form/schema";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -6,16 +10,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { VariantData, VariantDataList } from "@/type";
 import React from "react";
 import CombinationRow from "./combination-row";
 
 interface VariantProps {
-  data?: VariantDataList;
-  onChange?: (data: VariantData[string]["variant"]) => void;
+  data?: VariantDataListType;
+  onChange?: (data: VariantType) => void;
 }
 
-const Variant = ({ data, onChange }: VariantProps) => {
+const Variant = ({ data = {}, onChange }: VariantProps) => {
   return (
     <Card className="shadow-none border-0">
       <CardHeader>
@@ -33,7 +36,7 @@ const Variant = ({ data, onChange }: VariantProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {Object.entries(data ?? {}).map(([id, item]) => (
+          {Object.entries(data).map(([id, item]) => (
             <CombinationRow key={id} data={item} onChange={onChange} />
           ))}
         </TableBody>

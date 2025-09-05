@@ -1,23 +1,19 @@
 import type { FileType } from "@/components/media/schema";
-import type { ProductFormType } from "@/components/product-form/schema";
+import type {
+  AttributeType,
+  ProductFormType,
+  ProductVariantDataType,
+  VariantDataType,
+} from "@/components/product-form/schema";
 
 import { convertToFileUrl } from "@/lib/utils";
-import type {
-  AttributeDataList,
-  ProductDataType,
-  UpdateProductDataType,
-  VariantData,
-  VariantDataList,
-} from "@/type";
+import type { ProductDataType, UpdateProductDataType } from "@/type";
 
 export const formatProductVariantData = (
   data: any[]
-): {
-  attributes: AttributeDataList;
-  variants: VariantDataList;
-} => {
-  const attributeMap = new Map<string, AttributeDataList[string]>();
-  const variantGroups = new Map<string, VariantData>();
+): ProductVariantDataType => {
+  const attributeMap = new Map<string, AttributeType>();
+  const variantGroups = new Map<string, VariantDataType>();
 
   data.forEach((record) => {
     const attr = record.expand?.attribute;
@@ -83,8 +79,7 @@ export const formatPayloadProduct = (
 export const formatProduct = (
   data: ProductDataType,
   media?: FileType[],
-  variants?: VariantDataList,
-  attributes?: AttributeDataList
+  productVariantData?: ProductVariantDataType
 ): ProductFormType => {
   return {
     id: data?.id,
@@ -102,8 +97,7 @@ export const formatProduct = (
     ],
     state: data?.deleted ? "draft" : "published",
     media,
-    variants,
-    attributes,
+    variantData: productVariantData,
   };
 };
 

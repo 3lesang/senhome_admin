@@ -1,36 +1,40 @@
+import type { OptionType } from "@/components/product-form/schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { AttributeDataList } from "@/type";
 import { Trash2Icon } from "lucide-react";
 import React, { useState } from "react";
 
-type Option = AttributeDataList[string]["options"][string];
-
 interface OptionInputProps {
-  data?: Option;
+  value?: OptionType;
   onRemove?: (id: string) => void;
-  onChange?: (option: Option) => void;
+  onChange?: (option: OptionType) => void;
 }
 
-const OptionInput = ({ data, onRemove, onChange }: OptionInputProps) => {
-  const [name, setName] = useState<string>(data?.name!);
-  const [display, setDisplay] = useState(true);
+const OptionInput = ({
+  value = { id: "", name: "" },
+  onRemove,
+  onChange,
+}: OptionInputProps) => {
+  const [hide, setHide] = useState(false);
+  const [option, setOption] = useState<OptionType>(value);
 
   const handleRemove = () => {
-    data?.id && onRemove?.(data.id);
-    setDisplay(false);
+    setHide(true);
+    onRemove?.(option.id);
   };
 
   const handleChange = (value: string) => {
-    setName(value);
-    onChange?.({ id: data?.id!, name: value });
+    const newOption = { ...option, name: value };
+    setOption(newOption);
+    onChange?.(newOption);
   };
 
-  if (!display) return null;
+  if (hide) return null;
+
   return (
     <div className="flex items-center gap-2">
       <Input
-        value={name}
+        value={option.name}
         onChange={(e) => handleChange(e.currentTarget.value)}
         placeholder="Nhập tùy chọn"
       />

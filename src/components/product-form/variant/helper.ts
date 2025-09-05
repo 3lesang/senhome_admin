@@ -1,6 +1,10 @@
-import type { AttributeDataList, VariantData, VariantDataList } from "@/type";
+import type {
+  AttributeDataListType,
+  VariantDataListType,
+  VariantDataType,
+  VariantType,
+} from "@/components/product-form/schema";
 import _ from "lodash";
-import type { AttributesDataChange } from "./attributes";
 
 const cartesian = <T>(arrays: T[][]): T[][] =>
   arrays.reduce<T[][]>(
@@ -9,81 +13,125 @@ const cartesian = <T>(arrays: T[][]): T[][] =>
   );
 
 export function buildVariants(
-  attributes: AttributeDataList,
-  defaultVariants: VariantDataList = {}
-): Record<string, VariantData> {
+  attributes: AttributeDataListType,
+  defaultVariants: VariantDataListType = {}
+): VariantDataListType {
+  const defaultMap: VariantDataListType = {};
+  _.forEach(defaultVariants, (variant) => {
+    const comboIds = Object.keys(variant).sort();
+    const key = comboIds.join("|");
+    defaultMap[key] = variant;
+  });
+
   const attrList = _(attributes)
     .values()
-    .map((attr) => _.values(attr.options))
+    .filter((attr) => attr.status !== "removed")
+    .map((attr) =>
+      _.values(attr.options).filter((opt) => opt.status !== "removed")
+    )
     .filter((opts) => opts.length > 0)
     .value();
 
   if (attrList.length === 0) return {};
 
   const combos = cartesian(attrList);
-  const variantsExit = _.values(defaultVariants);
 
-  return combos.reduce<Record<string, VariantData>>((acc, combo) => {
-    const comboMap = combo.map((opt) => opt.id);
-    const key = comboMap.join("|");
+  const result: VariantDataListType = {};
 
-    const foundVariant = _.chain(variantsExit)
-      .map((obj) => _.pick(obj, comboMap))
-      .find((obj) => !_.isEmpty(obj))
-      .thru((obj) => obj && _.values(obj)[0]?.variant)
-      .value() ?? {
-      id: key,
-      price: 0,
-      discount: 0,
-      stock: 0,
-      sku: "",
-    };
+  combos.forEach((combo) => {
+    const comboIds = combo.map((opt) => opt.id).sort();
+    const key = comboIds.join("|");
 
-    acc[key] = combo.reduce<VariantData>((map, opt) => {
-      map[opt.id] = { option: opt, variant: foundVariant };
+    const existing = defaultMap[key];
+    let variantData: VariantType;
+
+    if (existing) {
+      const baseVariant = existing[comboIds[0]].variant;
+      const same = _.isEqual(baseVariant, existing[comboIds[0]].variant);
+
+      variantData = { ...baseVariant, status: same ? "unchanged" : "updated" };
+    } else {
+      variantData = {
+        id: key,
+        price: 0,
+        discount: 0,
+        stock: 0,
+        sku: "",
+        status: "new",
+      };
+    }
+
+    result[key] = combo.reduce<VariantDataType>((map, opt) => {
+      map[opt.id] = { option: opt, variant: variantData };
       return map;
     }, {});
+  });
 
-    return acc;
-  }, {});
-}
+  Object.keys(defaultMap).forEach((key) => {
+    if (!result[key]) {
+      const removedVariant = {
+        ...defaultMap[key][Object.keys(defaultMap[key])[0]].variant,
+        status: "removed" as const,
+      };
 
-export function buildAttributes(
-  attributes: AttributeDataList,
-  values: AttributesDataChange
-) {
-  let next = { ...attributes };
-
-  next = _.omit(next, [
-    ...Object.keys(values.removedAttributes ?? {}),
-    ...Object.keys(values.removedAddedAttributes ?? {}),
-  ]);
-
-  next = { ...next, ...(values.addedAttributes ?? {}) };
-
-  Object.values(values.updatedAttributes ?? {}).forEach((attr) => {
-    const { id, options } = attr;
-    const target = next[id as string];
-    if (!target) return;
-
-    Object.entries(options?.updated ?? {}).forEach(([optId, optData]) => {
-      if (target.options?.[optId]) {
-        target.options[optId] = { ...target.options[optId], ...optData };
-      }
-    });
-
-    if (options?.added) {
-      target.options = { ...target.options, ...options.added };
-    }
-
-    const removeKeys = [
-      ...Object.keys(options?.removed ?? {}),
-      ...Object.keys(options?.removedAdded ?? {}),
-    ];
-    if (removeKeys.length > 0) {
-      target.options = _.omit(target.options, removeKeys);
+      result[key] = Object.keys(defaultMap[key]).reduce<VariantDataType>(
+        (map, id) => {
+          map[id] = {
+            option: defaultMap[key][id].option,
+            variant: removedVariant,
+          };
+          return map;
+        },
+        {}
+      );
     }
   });
+
+  return result;
+}
+
+export function filterRemovedVariants(
+  variants: VariantDataListType
+): VariantDataListType {
+  return Object.fromEntries(
+    Object.entries(variants).filter(([_, variantData]) => {
+      const first = Object.values(variantData)[0];
+      return first?.variant.status !== "removed";
+    })
+  );
+}
+
+export function updateVariant(
+  variants: VariantDataListType = {},
+  updated: VariantType
+): VariantDataListType {
+  const next = { ...variants };
+
+  const entry = Object.entries(next).find(([_, variantData]) => {
+    const first = Object.values(variantData)[0];
+    return first?.variant.id === updated.id;
+  });
+
+  if (!entry) return variants;
+
+  const [key, variantData] = entry;
+
+  next[key] = Object.fromEntries(
+    Object.entries(variantData).map(([optId, variantOption]) => {
+      const prevStatus = variantOption.variant.status;
+
+      return [
+        optId,
+        {
+          ...variantOption,
+          variant: {
+            ...updated,
+            status: prevStatus === "new" ? "new" : "updated",
+          },
+        },
+      ];
+    })
+  );
 
   return next;
 }
