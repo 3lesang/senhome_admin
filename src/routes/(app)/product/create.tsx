@@ -1,5 +1,5 @@
-import ProductForm from "@/components/product-form";
-import { type ProductFormType } from "@/components/product-form/schema";
+import ProductForm from "@/features/product/components/product-form";
+import { type ProductFormType } from "@/features/product/components/product-form/schema";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,28 +7,36 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { pb, PRODUCT_COLLECTION } from "@/lib/pocketbase";
-import { slugify } from "@/lib/utils";
+import { variantData } from "@/data/variantData";
+import { createProductHandler } from "@/features/product/handler/create";
 import { useMutation } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/(app)/product/create")({
   component: RouteComponent,
 });
 
+const defaultValues: ProductFormType = {
+  name: "",
+  price: "",
+  discount: "",
+  slug: "",
+  content: "",
+  thumbnail: [],
+  category: "",
+  state: "draft",
+  media: [],
+  variantData: variantData,
+};
+
 function RouteComponent() {
+  const navigate = useNavigate();
   const { mutate, isPending } = useMutation({
-    mutationFn: async (values: ProductFormType) => {
-      const payload = {
-        name: values?.name,
-        price: Number(values?.price),
-        discount: Number(values?.discount) / 100,
-        slug: slugify(values?.name || ""),
-        content: JSON.parse(values?.content || ""),
-        category: values?.category,
-        thumbnail: values?.thumbnail?.[0]?.id,
-      };
-      return pb.collection(PRODUCT_COLLECTION).create(payload);
+    mutationFn: createProductHandler,
+    onSuccess: (data) => {
+      navigate({ to: "/product/$id", params: { id: data.id } });
+      toast.success("Thêm sản phẩm thành công");
     },
   });
   const handleSubmit = (values: ProductFormType) => {
@@ -54,9 +62,7 @@ function RouteComponent() {
       <ProductForm
         isPending={isPending}
         onSubmit={handleSubmit}
-        defaultValues={{
-          state: "draft",
-        }}
+        defaultValues={defaultValues}
       />
     </div>
   );

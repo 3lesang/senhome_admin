@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { SquareCheckIcon, TrashIcon, UploadIcon } from "lucide-react";
 
 import { DynamicPagination } from "@/components/dynamic-pagination";
-import type { FileType } from "@/components/media/schema";
+import type { FileType } from "@/features/media/components/schema";
 import {
   Breadcrumb,
   BreadcrumbItem,

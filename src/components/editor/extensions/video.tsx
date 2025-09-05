@@ -1,4 +1,4 @@
-import VideoPlayer from "@/components/media/video-player";
+import VideoPlayer from "@/features/media/components/video-player";
 import { Node, mergeAttributes } from "@tiptap/core";
 import { NodeViewWrapper, ReactNodeViewRenderer } from "@tiptap/react";
 

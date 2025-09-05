@@ -1,5 +1,5 @@
-import ProductForm from "@/components/product-form";
-import { type ProductFormType } from "@/components/product-form/schema";
+import ProductForm from "@/features/product/components/product-form";
+import { type ProductFormType } from "@/features/product/components/product-form/schema";
 import {
   Breadcrumb,
   BreadcrumbItem,

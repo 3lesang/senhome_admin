@@ -29,7 +29,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { MoreHorizontal, PlusIcon } from "lucide-react";
+import { InfoIcon, MoreHorizontal, PlusIcon, Trash2Icon } from "lucide-react";
 import * as React from "react";
 
 import { DynamicPagination } from "@/components/dynamic-pagination";
@@ -53,7 +53,7 @@ import {
 } from "@/components/ui/select";
 import { pb, PRODUCT_COLLECTION } from "@/lib/pocketbase";
 import { cn, convertToFileUrl, formatVND } from "@/lib/utils";
-import type { ProductDataType } from "@/type";
+import type { ProductDataType } from "@/shared/types";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import type { ListResult } from "pocketbase";
 import z from "zod";
@@ -129,7 +129,14 @@ export const columns: ColumnDef<ProductDataType>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>Chi tiết sản phẩm</DropdownMenuItem>
+            <DropdownMenuItem>
+              <InfoIcon />
+              Chi tiết sản phẩm
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Trash2Icon />
+              Xóa sản phẩm
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -145,9 +152,11 @@ export const productQueryOptions = (
   queryOptions<ListResult<ProductDataType>>({
     queryKey: [PRODUCT_COLLECTION, page, limit, filter],
     queryFn: () =>
-      pb
-        .collection(PRODUCT_COLLECTION)
-        .getList(page, limit, { expand: "thumbnail", filter }),
+      pb.collection(PRODUCT_COLLECTION).getList(page, limit, {
+        sort: "-created",
+        expand: "thumbnail",
+        filter,
+      }),
   });
 
 const countProductQueryOptions = () =>

@@ -1,13 +1,13 @@
-import type { FileType } from "@/components/media/schema";
+import type { FileType } from "@/features/media/components/schema";
 import type {
   AttributeType,
   ProductFormType,
   ProductVariantDataType,
   VariantDataType,
-} from "@/components/product-form/schema";
+} from "@/features/product/components/product-form/schema";
 
 import { convertToFileUrl } from "@/lib/utils";
-import type { ProductDataType, UpdateProductDataType } from "@/type";
+import type { ProductDataType, UpdateProductDataType } from "@/shared/types";
 
 export const formatProductVariantData = (
   data: any[]
@@ -95,7 +95,7 @@ export const formatProduct = (
         url: convertToFileUrl(data?.expand?.thumbnail) ?? "",
       },
     ],
-    state: data?.deleted ? "draft" : "published",
+    state: data?.deleted ? "draft" : "publish",
     media,
     variantData: productVariantData,
   };

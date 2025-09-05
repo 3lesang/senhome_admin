@@ -1,4 +1,4 @@
-import FileInput from "@/components/media/file-input";
+import FileInput from "@/features/media/components/file-input";
 import { Button } from "@/components/ui/button";
 import type { Editor } from "@tiptap/react";
 import { ImagePlusIcon } from "lucide-react";

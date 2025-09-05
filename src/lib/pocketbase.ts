@@ -1,4 +1,4 @@
-import type { ProductDataType } from "@/type";
+import type { ProductDataType } from "@/shared/types";
 import { queryOptions } from "@tanstack/react-query";
 import PocketBase from "pocketbase";
 import { formatToMedia } from "./format";

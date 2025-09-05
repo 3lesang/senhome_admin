@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import VideoPlayer from "@/components/media/video-player";
+import VideoPlayer from "@/features/media/components/video-player";
 import type { Editor } from "@tiptap/react";
 
 import { PlayIcon } from "lucide-react";
