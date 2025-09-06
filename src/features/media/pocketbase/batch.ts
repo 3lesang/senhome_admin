@@ -1,12 +1,13 @@
 import type { FileType } from "@/features/media/components/schema";
-import { FILE_GRAPH_COLLECTION, pb } from "@/lib/pocketbase";
+import pocketClient from "@/lib/pocketbase";
+import { FILE_GRAPH_COLLECTION } from "@/shared/constants/pocketbase";
 
 async function batchMediaHttp(
   added: FileType[],
   removed: FileType[],
   productId: string
 ) {
-  const batch = pb.createBatch();
+  const batch = pocketClient.createBatch();
   for (const item of removed) {
     if (item.record) {
       batch.collection(FILE_GRAPH_COLLECTION).delete(item.record);

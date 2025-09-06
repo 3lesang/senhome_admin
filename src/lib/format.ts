@@ -4,7 +4,7 @@ import type {
   ProductFormType,
   ProductVariantDataType,
   VariantDataType,
-} from "@/features/product/components/product-form/schema";
+} from "@/features/product/components/product-form/product-schema";
 
 import { convertToFileUrl } from "@/lib/utils";
 import type { ProductDataType, UpdateProductDataType } from "@/shared/types";

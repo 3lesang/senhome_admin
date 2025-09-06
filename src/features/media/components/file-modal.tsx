@@ -1,5 +1,4 @@
 import { DynamicPagination } from "@/components/dynamic-pagination";
-import type { FileType } from "@/features/media/components/schema";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -11,8 +10,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { FILE_COLLECTION, pb } from "@/lib/pocketbase";
+import type { FileType } from "@/features/media/components/schema";
+import pocketClient from "@/lib/pocketbase";
 import { convertToFileUrl } from "@/lib/utils";
+import { FILE_COLLECTION } from "@/shared/constants/pocketbase";
 import { useQuery } from "@tanstack/react-query";
 import { UploadIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -38,7 +39,7 @@ function FileModal({
   const { data } = useQuery({
     queryKey: [FILE_COLLECTION, page],
     queryFn: () =>
-      pb.collection(FILE_COLLECTION).getList(page, 18, {
+      pocketClient.collection(FILE_COLLECTION).getList(page, 18, {
         sort: "-created",
       }),
   });

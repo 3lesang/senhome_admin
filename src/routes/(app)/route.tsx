@@ -21,7 +21,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { pb } from "@/lib/pocketbase";
+import pocketClient from "@/lib/pocketbase";
 import { cn } from "@/lib/utils";
 
 const navigationMenuItems = [
@@ -60,7 +60,7 @@ export default function NavigationMenuMobile() {
 export const Route = createFileRoute("/(app)")({
   component: RouteComponent,
   beforeLoad: async () => {
-    if (!pb.authStore.isValid) {
+    if (!pocketClient.authStore.isValid) {
       throw redirect({
         to: "/signin",
       });

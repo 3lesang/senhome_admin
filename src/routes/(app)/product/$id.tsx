@@ -1,23 +1,9 @@
-import ProductForm from "@/features/product/components/product-form";
-import { type ProductFormType } from "@/features/product/components/product-form/schema";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { formatProduct, formatProductVariantData } from "@/lib/format";
-import {
-  productCategoryQueryOptions,
-  productFilesQueryOptions,
-  productQueryOptions,
-  productVariantQueryOptions,
-} from "@/lib/pocketbase";
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { toast } from "sonner";
+import { productCategoryQueryOptions } from "@/features/category/handler/query/productCategory";
+import { productQueryOptions } from "@/features/product/handler/query/getOne";
+import { productFilesQueryOptions } from "@/features/product/handler/query/productMedia";
+import { productVariantQueryOptions } from "@/features/product/handler/query/productVariant";
+import ProductUpdatePage from "@/features/product/pages/product-update-page";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(app)/product/$id")({
   component: RouteComponent,
@@ -32,57 +18,5 @@ export const Route = createFileRoute("/(app)/product/$id")({
 
 function RouteComponent() {
   const { id } = Route.useParams();
-
-  const { data: media } = useSuspenseQuery(productFilesQueryOptions(id));
-  const { data: variantData } = useSuspenseQuery(
-    productVariantQueryOptions(id)
-  );
-  const { data } = useSuspenseQuery(productQueryOptions(id));
-
-  const productVariantData = formatProductVariantData(variantData);
-
-  const [defaultProduct, _] = useState<ProductFormType>(
-    formatProduct(data, media, productVariantData)
-  );
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (values: ProductFormType) => {
-      console.log(values);
-      return;
-    },
-    onSuccess: () => {
-      toast("Cập nhật sản phẩm thành công.");
-    },
-  });
-
-  const handleSubmit = async (values: ProductFormType) => {
-    mutate(values);
-  };
-
-  return (
-    <div className="max-w-7xl mx-auto p-4 space-y-4">
-      <div className="flex justify-between items-end">
-        <div>
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link to="/product">Sản phẩm</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>{data?.name}</BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </div>
-        <div></div>
-      </div>
-      <ProductForm
-        onSubmit={handleSubmit}
-        isUpdate
-        isPending={isPending}
-        defaultValues={defaultProduct}
-      />
-    </div>
-  );
+  return <ProductUpdatePage id={id} />;
 }

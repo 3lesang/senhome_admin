@@ -34,13 +34,13 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { pb } from "@/lib/pocketbase";
+import pocketClient from "@/lib/pocketbase";
 
 function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
   const user = {
-    name: pb.authStore.record?.name,
-    email: pb.authStore.record?.email,
+    name: pocketClient.authStore.record?.name,
+    email: pocketClient.authStore.record?.email,
     avatar: "https://github.com/shadcn.png",
   };
   return (
@@ -156,7 +156,7 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 asChild
                 isActive={location.pathname.includes("media")}
               >
-                <Link to="/storage">
+                <Link to="/media">
                   <ImageIcon />
                   <span>Lưu trữ</span>
                 </Link>

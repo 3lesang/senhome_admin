@@ -1,4 +1,4 @@
-import type { ProductVariantDataType } from "@/features/product/components/product-form/schema";
+import type { ProductVariantDataType } from "@/features/product/components/product-form/product-schema";
 
 const variantData: ProductVariantDataType = {
   attributes: {
