@@ -9,9 +9,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import React from "react";
 
-const ProductInfoSection = React.memo(() => {
+function ProductInfo() {
   return (
     <Card className="shadow-none border-0">
       <CardContent className="grid grid-cols-12 gap-8">
@@ -46,6 +45,6 @@ const ProductInfoSection = React.memo(() => {
       </CardContent>
     </Card>
   );
-});
+}
 
-export default ProductInfoSection;
+export default ProductInfo;

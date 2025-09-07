@@ -1,19 +1,17 @@
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
 import {
   ProductFormSchema,
   type ProductFormType,
-} from "@/features/product/components/product-form/product-schema";
-
-import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
+} from "@/features/product/components/product-form/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircleIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-
-import ProductInfoSection from "./product-info";
-import ProductMediaSection from "./product-media";
-import ProductPriceSection from "./product-price";
+import ProductInfo from "./product-info";
+import ProductMedia from "./product-media";
+import ProductPrice from "./product-price";
 import ProductSidebar from "./product-sidebar";
-import ProductVariantSection from "./product-variant";
+import ProductVariant from "./variant";
 
 interface ProductProps {
   isPending?: boolean;
@@ -40,16 +38,16 @@ function ProductForm({
           <div className="col-span-8">
             <div className="grid grid-cols-12 gap-8">
               <div className="col-span-12">
-                <ProductInfoSection />
+                <ProductInfo />
               </div>
               <div className="col-span-12">
-                <ProductMediaSection />
+                <ProductMedia />
               </div>
               <div className="col-span-12">
-                <ProductPriceSection />
+                <ProductPrice />
               </div>
               <div className="col-span-12">
-                <ProductVariantSection
+                <ProductVariant
                   data={form.getValues("variantData")}
                   onChange={(data) => form.setValue("variantData", data)}
                 />
@@ -62,7 +60,7 @@ function ProductForm({
           <div className="col-span-12 text-right">
             <Button type="submit" disabled={isPending}>
               {isPending && <LoaderCircleIcon className="animate-spin" />}
-              {isUpdate ? "Cập nhật" : "Lưu"}
+              {isUpdate ? "Cập nhật" : "Thêm"}
             </Button>
           </div>
         </div>

@@ -3,7 +3,7 @@ import type {
   VariantDataListType,
   VariantDataType,
   VariantType,
-} from "@/features/product/components/product-form/product-schema";
+} from "@/features/product/components/product-form/schema";
 import _ from "lodash";
 
 const cartesian = <T>(arrays: T[][]): T[][] =>

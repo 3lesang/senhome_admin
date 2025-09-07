@@ -5,7 +5,7 @@ import type { FileType } from "@/features/media/components/schema";
 import type {
   VariantDataType,
   VariantType,
-} from "@/features/product/components/product-form/product-schema";
+} from "@/features/product/components/product-form/schema";
 import { ChevronDownIcon } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import ImageInput from "./image-input";

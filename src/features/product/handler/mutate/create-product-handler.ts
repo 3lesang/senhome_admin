@@ -1,4 +1,4 @@
-import type { ProductFormType } from "@/features/product/components/product-form/product-schema";
+import type { ProductFormType } from "@/features/product/components/product-form/schema";
 import { createProductPocket } from "@/features/product/pocketbase/create-product-pocket";
 import { formatCreateProductPayload } from "./format-create-product";
 

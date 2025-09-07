@@ -1,4 +1,4 @@
-import type { OptionType } from "@/features/product/components/product-form/product-schema";
+import type { OptionType } from "@/features/product/components/product-form/schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Trash2Icon } from "lucide-react";

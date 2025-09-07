@@ -7,10 +7,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import React from "react";
 import { NumericFormat } from "react-number-format";
 
-const ProductPriceSection = React.memo(() => {
+function ProductPrice() {
   return (
     <Card className="shadow-none border-0">
       <CardHeader>
@@ -66,6 +65,6 @@ const ProductPriceSection = React.memo(() => {
       </CardContent>
     </Card>
   );
-});
+}
 
-export default ProductPriceSection;
+export default ProductPrice;

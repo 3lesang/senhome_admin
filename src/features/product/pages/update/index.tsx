@@ -1,20 +1,13 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import ProductForm from "@/features/product/components/product-form/product-form";
-import { type ProductFormType } from "@/features/product/components/product-form/product-schema";
+import { type ProductFormType } from "@/features/product/components/product-form/schema";
 import { productQueryOptions } from "@/features/product/handler/query/getOne";
 import { productFilesQueryOptions } from "@/features/product/handler/query/productMedia";
 import { productVariantQueryOptions } from "@/features/product/handler/query/productVariant";
 import { formatProduct, formatProductVariantData } from "@/lib/format";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
+import UpdatePageHeader from "./header";
 
 interface ProductUpdatePageProps {
   id: string;
@@ -49,22 +42,7 @@ function ProductUpdatePage({ id }: ProductUpdatePageProps) {
 
   return (
     <div className="max-w-7xl mx-auto p-4 space-y-4">
-      <div className="flex justify-between items-end">
-        <div>
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link to="/product">Sản phẩm</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>{data?.name}</BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </div>
-        <div></div>
-      </div>
+      <UpdatePageHeader data={data} />
       <ProductForm
         onSubmit={handleSubmit}
         isUpdate

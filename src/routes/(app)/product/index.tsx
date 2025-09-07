@@ -1,4 +1,4 @@
-import ProductListPage from "@/features/product/pages/product-list-page";
+import ProductListPage from "@/features/product/pages/list";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(app)/product/")({

@@ -1,7 +1,7 @@
 import type {
   AttributeDataListType,
   AttributeType,
-} from "@/features/product/components/product-form/product-schema";
+} from "@/features/product/components/product-form/schema";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { nanoid } from "nanoid";

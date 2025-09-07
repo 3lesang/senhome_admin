@@ -84,7 +84,7 @@ function RouteComponent() {
 
   return (
     <SidebarProvider>
-      <AppSidebar className="border-none" />
+      <AppSidebar />
       <SidebarInset className="bg-gray-50">
         <main>
           <Outlet />

@@ -3,7 +3,7 @@ import type {
   ProductVariantDataType,
   VariantDataListType,
   VariantType,
-} from "@/features/product/components/product-form/product-schema";
+} from "@/features/product/components/product-form/schema";
 import React, { useState } from "react";
 import Attributes from "./attributes/attributes";
 import { buildVariants, filterRemovedVariants, updateVariant } from "./helper";
@@ -14,7 +14,7 @@ interface ProductVariantSectionProps {
   onChange?: (data?: ProductVariantDataType) => void;
 }
 
-function ProductVariantSection({ data, onChange }: ProductVariantSectionProps) {
+function ProductVariant({ data, onChange }: ProductVariantSectionProps) {
   const [attributes, setAttributes] = useState<
     AttributeDataListType | undefined
   >(data?.attributes);
@@ -46,4 +46,4 @@ function ProductVariantSection({ data, onChange }: ProductVariantSectionProps) {
   );
 }
 
-export default React.memo(ProductVariantSection);
+export default React.memo(ProductVariant);

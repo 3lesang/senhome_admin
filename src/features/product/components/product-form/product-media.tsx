@@ -11,9 +11,8 @@ import {
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { PlusIcon } from "lucide-react";
-import React from "react";
 
-const ProductMediaSection = React.memo(() => {
+function ProductMedia() {
   return (
     <Card className="shadow-none border-0">
       <CardHeader>
@@ -52,6 +51,6 @@ const ProductMediaSection = React.memo(() => {
       </CardContent>
     </Card>
   );
-});
+}
 
-export default ProductMediaSection;
+export default ProductMedia;

@@ -16,14 +16,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { productCategoryQueryOptions } from "@/features/category/handler/query/productCategory";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { PRODUCT_STATE } from "@/features/product/constants";
+import { slugify } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import { PlusIcon, XIcon } from "lucide-react";
-import React from "react";
+import { useFormContext } from "react-hook-form";
 
-const ProductSidebar = React.memo(() => {
-  const { data: categories } = useSuspenseQuery(productCategoryQueryOptions());
-
+function ProductSidebar() {
+  const { data: categories } = useQuery(productCategoryQueryOptions());
+  const form = useFormContext();
   return (
     <div className="grid grid-cols-12 gap-8 sticky top-8">
       <div className="col-span-12">
@@ -41,8 +44,11 @@ const ProductSidebar = React.memo(() => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="published">Đang hoạt động</SelectItem>
-                      <SelectItem value="draft">Bản nháp</SelectItem>
+                      {Object.values(PRODUCT_STATE).map((item) => (
+                        <SelectItem value={item.value} key={item.value}>
+                          {item.text}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -139,8 +145,45 @@ const ProductSidebar = React.memo(() => {
           </CardContent>
         </Card>
       </div>
+      <div className="col-span-12">
+        <Card className="shadow-none border-0">
+          <CardHeader>
+            <CardTitle>SEO</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <FormField
+              name="slug"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    URL
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        form.setValue("slug", slugify(form.getValues("name")))
+                      }
+                    >
+                      Tự động tạo
+                    </Button>
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder=""
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
-});
+}
 
 export default ProductSidebar;

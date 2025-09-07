@@ -1,7 +1,7 @@
 import type {
   AttributeType,
   OptionsType,
-} from "@/features/product/components/product-form/product-schema";
+} from "@/features/product/components/product-form/schema";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";

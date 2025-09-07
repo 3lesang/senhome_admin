@@ -1,10 +1,11 @@
 import {
   BellIcon,
-  ChevronsUpDown,
   GalleryVerticalEnd,
+  LogOutIcon,
+  MoreVerticalIcon,
   SettingsIcon,
+  UserCircleIcon,
 } from "lucide-react";
-import * as React from "react";
 
 import {
   Sidebar,
@@ -35,8 +36,15 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import pocketClient from "@/lib/pocketbase";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
-function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+function AppSidebar() {
   const location = useLocation();
   const user = {
     name: pocketClient.authStore.record?.name,
@@ -44,20 +52,14 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     avatar: "https://github.com/shadcn.png",
   };
   return (
-    <Sidebar {...props}>
+    <Sidebar className="border-none">
       <SidebarHeader>
-        <SidebarMenuButton
-          size="lg"
-          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-        >
-          <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-            <GalleryVerticalEnd />
-          </div>
+        <SidebarMenuButton size="lg">
+          <GalleryVerticalEnd />
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-medium">Senhome</span>
             <span className="truncate text-xs">Enterprise</span>
           </div>
-          <ChevronsUpDown className="ml-auto" />
         </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent>
@@ -73,7 +75,7 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                  <SidebarMenuSub>
+                  <SidebarMenuSub className="border-l-0">
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         asChild
@@ -107,7 +109,7 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                  <SidebarMenuSub>
+                  <SidebarMenuSub className="border-l-0">
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         asChild
@@ -131,7 +133,7 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                  <SidebarMenuSub>
+                  <SidebarMenuSub className="border-l-0">
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         asChild
@@ -180,20 +182,30 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-            >
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-              </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
-              </div>
-              <ChevronsUpDown className="ml-auto size-4" />
-            </SidebarMenuButton>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton size="lg">
+                  <Avatar className="rounded-lg">
+                    <AvatarImage src={user.avatar} alt={user.name} />
+                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  </Avatar>
+                  <span className="truncate font-medium">{user.name}</span>
+                  <MoreVerticalIcon className="ml-auto size-4" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <UserCircleIcon />
+                    Tài khoản
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <LogOutIcon />
+                  Đăng xuất
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

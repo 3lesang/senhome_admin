@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import type { VariantType } from "@/features/product/components/product-form/product-schema";
+import type { VariantType } from "@/features/product/components/product-form/schema";
 import { NumericFormat } from "react-number-format";
 
 function VariantField({

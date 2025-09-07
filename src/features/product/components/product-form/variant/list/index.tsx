@@ -9,7 +9,7 @@ import {
 import type {
   VariantDataListType,
   VariantType,
-} from "@/features/product/components/product-form/product-schema";
+} from "@/features/product/components/product-form/schema";
 import React from "react";
 import ComboRow from "./combo-row";
 

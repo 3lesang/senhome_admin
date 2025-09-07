@@ -1,7 +1,11 @@
 import { FileSchema } from "@/features/media/components/schema";
+import { PRODUCT_STATE } from "@/features/product/constants";
 import z from "zod";
 
 export const StatusSchema = z.enum(["new", "updated", "removed", "unchanged"]);
+export const ProductStateSchema = z.enum(
+  Object.values(PRODUCT_STATE).map((s) => s.value) as [string, ...string[]]
+);
 
 export const withStatus = <T extends z.ZodRawShape>(schema: z.ZodObject<T>) =>
   schema.extend({ status: StatusSchema.optional() });
@@ -65,7 +69,7 @@ export const ProductFormSchema = z.object({
   media: z.array(FileSchema).optional(),
   thumbnail: z.array(FileSchema).optional(),
   variantData: ProductVariantDataSchema.optional(),
-  state: z.enum(["draft", "publish"]).optional().catch("draft"),
+  state: ProductStateSchema.optional().catch("draft"),
 });
 
 export type StatusType = z.infer<typeof StatusSchema>;

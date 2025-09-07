@@ -1,4 +1,4 @@
-import type { ProductVariantDataType } from "@/features/product/components/product-form/product-schema";
+import type { ProductVariantDataType } from "@/features/product/components/product-form/schema";
 import {
   createAttributePocket,
   type CreateAttributePayload,

@@ -1,32 +1,13 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { variantData } from "@/data/variantData";
 import { batchMediaHandler } from "@/features/media/handler";
 import ProductForm from "@/features/product/components/product-form/product-form";
-import { type ProductFormType } from "@/features/product/components/product-form/product-schema";
+import { type ProductFormType } from "@/features/product/components/product-form/schema";
 import { createProductHandler } from "@/features/product/handler/mutate/create-product-handler";
 import { createVariantHandler } from "@/features/product/handler/mutate/variant/create-variant-handler";
 import { useMutation } from "@tanstack/react-query";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-
-const defaultValues: ProductFormType = {
-  name: "",
-  price: "",
-  discount: "",
-  slug: "",
-  content: "",
-  thumbnail: [],
-  category: "",
-  state: "draft",
-  media: [],
-  variantData: variantData,
-};
+import { defaultValues } from "./data";
+import CreatePageHeader from "./header";
 
 function ProductCreatePage() {
   const navigate = useNavigate();
@@ -49,22 +30,8 @@ function ProductCreatePage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-4 space-y-4">
-      <div className="flex justify-between items-end">
-        <div>
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link to="/product">Sản phẩm</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>Thêm sản phẩm</BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </div>
-      </div>
+    <div className="max-w-7xl mx-auto space-y-4 p-4">
+      <CreatePageHeader />
       <ProductForm
         isPending={isPending}
         onSubmit={handleSubmit}

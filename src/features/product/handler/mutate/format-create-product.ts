@@ -1,4 +1,4 @@
-import type { ProductFormType } from "@/features/product/components/product-form/product-schema";
+import type { ProductFormType } from "@/features/product/components/product-form/schema";
 import type { CreateProductPayload } from "@/features/product/pocketbase/create-product-pocket";
 import { slugify } from "@/lib/utils";
 

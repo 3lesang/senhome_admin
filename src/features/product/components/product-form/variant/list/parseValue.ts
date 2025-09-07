@@ -1,4 +1,4 @@
-import type { VariantType } from "../../product-schema";
+import type { VariantType } from "../../schema";
 
 const numberFields = new Set<keyof VariantType>(["price", "discount", "stock"]);
 
