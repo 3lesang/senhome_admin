@@ -4,7 +4,7 @@ import { SearchIcon } from "lucide-react";
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
-function PageListSearchInput({ onSearch }: { onSearch?: (q: string) => void }) {
+function SearchInput({ onSearch }: { onSearch?: (q: string) => void }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
 
@@ -40,4 +40,4 @@ function PageListSearchInput({ onSearch }: { onSearch?: (q: string) => void }) {
   );
 }
 
-export default PageListSearchInput;
+export default SearchInput;

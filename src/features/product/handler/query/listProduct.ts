@@ -1,4 +1,4 @@
-import { getListProductPocket } from "@/features/product/pocketbase/list-product-pocket";
+import { getListProductPocket } from "@/features/product/pocketbase/list";
 import { PRODUCT_COLLECTION } from "@/shared/constants/pocketbase";
 import { queryOptions } from "@tanstack/react-query";
 

@@ -2,21 +2,21 @@ import type { ProductVariantDataType } from "@/features/product/components/produ
 import {
   createAttributePocket,
   type CreateAttributePayload,
-} from "@/features/product/pocketbase/attribute/create-attribute-pocket";
+} from "@/features/product/pocketbase/attribute/create";
 import {
   createOptionPocket,
   type CreateOptionPayload,
-} from "@/features/product/pocketbase/option/create-option-pocket";
+} from "@/features/product/pocketbase/option/create";
 import {
   createVariantAttributePocket,
   type CreateVariantAttributePayload,
-} from "@/features/product/pocketbase/variant/create-variant-attribute-pocket";
-import { createVariantImagePocket } from "@/features/product/pocketbase/variant/create-variant-image-pocket";
+} from "@/features/product/pocketbase/variant/create-attribute";
+import { createVariantImagePocket } from "@/features/product/pocketbase/variant/create-image";
 import {
   createVariantPocket,
   type CreateVariantPayload,
-} from "@/features/product/pocketbase/variant/create-variant-pocket";
-import { normalizeVariantProductFormData } from "./normalize-form-data";
+} from "@/features/product/pocketbase/variant/create";
+import { normalizeVariantProductFormData } from "./normalize";
 
 async function createVariantHandler(
   data: ProductVariantDataType,
@@ -33,6 +33,7 @@ async function createVariantHandler(
   for (const attr of attributes) {
     const payload: CreateAttributePayload = {
       name: attr.name,
+      product: productId,
     };
     const res = await createAttributePocket(payload);
     attributeIdMap[attr.id] = res.id;
@@ -59,7 +60,7 @@ async function createVariantHandler(
     const res = await createVariantPocket(payload);
     const variantIdDB = res.id;
     variantIdMap[variant.id] = variantIdDB;
-    const fileId = variant.image?.[0].id;
+    const fileId = variant.image?.[0]?.id;
 
     if (fileId) {
       createVariantImagePocket({

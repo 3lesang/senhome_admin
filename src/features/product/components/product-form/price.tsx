@@ -52,7 +52,12 @@ function ProductPrice() {
                       className="bg-white"
                       prefix="% "
                       customInput={Input}
+                      allowNegative={false}
                       placeholder="% "
+                      isAllowed={({ floatValue }) =>
+                        floatValue == null ||
+                        (floatValue >= 0 && floatValue <= 100)
+                      }
                       onValueChange={(v) => field.onChange(v.value)}
                     />
                   </FormControl>

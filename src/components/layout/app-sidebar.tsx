@@ -39,8 +39,8 @@ import pocketClient from "@/lib/pocketbase";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
@@ -56,7 +56,7 @@ function AppSidebar() {
       <SidebarHeader>
         <SidebarMenuButton size="lg">
           <GalleryVerticalEnd />
-          <div className="grid flex-1 text-left text-sm leading-tight">
+          <div className="grid flex-1 text-left text-sm leading-tight select-none">
             <span className="truncate font-medium">Senhome</span>
             <span className="truncate text-xs">Enterprise</span>
           </div>
@@ -64,14 +64,14 @@ function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Quản lý</SidebarGroupLabel>
+          <SidebarGroupLabel className="select-none">Quản lý</SidebarGroupLabel>
           <SidebarMenu>
             <Collapsible asChild className="group/collapsible" defaultOpen>
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton>
                     <PackageIcon />
-                    <span>Quản lý sản phẩm</span>
+                    <span className="select-none">Quản lý sản phẩm</span>
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
@@ -82,7 +82,7 @@ function AppSidebar() {
                         isActive={location.pathname == "/product"}
                       >
                         <Link to="/product">
-                          <span>Tất cả sản phẩm</span>
+                          <span className="select-none">Tất cả sản phẩm</span>
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
@@ -92,7 +92,7 @@ function AppSidebar() {
                         isActive={location.pathname == "/product/create"}
                       >
                         <Link to="/product/create">
-                          <span>Thêm sản phẩm</span>
+                          <span className="select-none">Thêm sản phẩm</span>
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
@@ -105,7 +105,7 @@ function AppSidebar() {
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton>
                     <ClipboardListIcon />
-                    <span>Quản lý đơn hàng</span>
+                    <span className="select-none">Quản lý đơn hàng</span>
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
@@ -116,7 +116,7 @@ function AppSidebar() {
                         isActive={location.pathname.includes("order")}
                       >
                         <Link to="/order">
-                          <span>Tất cả</span>
+                          <span className="select-none">Tất cả</span>
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
@@ -129,7 +129,7 @@ function AppSidebar() {
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton>
                     <ChartPieIcon />
-                    <span>Dữ liệu</span>
+                    <span className="select-none">Dữ liệu</span>
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
@@ -140,7 +140,9 @@ function AppSidebar() {
                         isActive={location.pathname.includes("data")}
                       >
                         <Link to="/order">
-                          <span>Phân tích bán hàng</span>
+                          <span className="select-none">
+                            Phân tích bán hàng
+                          </span>
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
@@ -151,7 +153,9 @@ function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Hệ thống</SidebarGroupLabel>
+          <SidebarGroupLabel className="select-none">
+            Hệ thống
+          </SidebarGroupLabel>
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
@@ -160,7 +164,7 @@ function AppSidebar() {
               >
                 <Link to="/media">
                   <ImageIcon />
-                  <span>Lưu trữ</span>
+                  <span className="select-none">Lưu trữ</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -172,37 +176,40 @@ function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton>
               <SettingsIcon />
-              Cài đặt
+              <span className="select-none">Cài đặt</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton>
               <BellIcon />
-              Thông báo
+              <span className="select-none">Thông báo</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg">
-                  <Avatar className="rounded-lg">
+                  <Avatar className="rounded-lg select-none">
                     <AvatarImage src={user.avatar} alt={user.name} />
                     <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                   </Avatar>
-                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate font-medium select-none">
+                    {user.name}
+                  </span>
                   <MoreVerticalIcon className="ml-auto size-4" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <UserCircleIcon />
-                    Tài khoản
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <UserCircleIcon />
+                  <span className="text-muted-foreground truncate text-xs">
+                    {user.email}
+                  </span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <LogOutIcon />
-                  Đăng xuất
+                  <span className="select-none">Đăng xuất</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

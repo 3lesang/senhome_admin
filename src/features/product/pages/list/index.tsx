@@ -1,6 +1,5 @@
 import { PageListProvider } from "@/features/product/provider/list";
 import ListPageBody from "./body";
-import ListPageFooter from "./footer";
 import ListPageHeader from "./header";
 
 function ProductListPage() {
@@ -8,7 +7,6 @@ function ProductListPage() {
     <PageListProvider>
       <ListPageHeader />
       <ListPageBody />
-      <ListPageFooter />
     </PageListProvider>
   );
 }

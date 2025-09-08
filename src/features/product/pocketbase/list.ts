@@ -1,6 +1,6 @@
+import type { ProductDataType } from "@/features/product/types";
 import pocketClient from "@/lib/pocketbase";
 import { PRODUCT_COLLECTION } from "@/shared/constants/pocketbase";
-import type { ProductDataType } from "@/shared/types";
 import type { ListResult } from "pocketbase";
 
 export type GetListQueryPocketType = {

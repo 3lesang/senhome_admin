@@ -1,4 +1,4 @@
-import { deleteProductPocket } from "@/features/product/pocketbase/delete-product-pocket";
+import { deleteProductPocket } from "@/features/product/pocketbase/delete";
 
 async function deleteProductHandler(ids: string[]) {
   return deleteProductPocket(ids).send();

@@ -9,11 +9,11 @@ import {
 } from "@/components/ui/select";
 import { usePageList } from "@/features/product/provider/list";
 
-function ListPageFooter() {
+function ListPagePagination() {
   const { page, limit, data, setPage, setLimit } = usePageList();
 
   return (
-    <div className="max-w-7xl mx-auto flex justify-between py-8">
+    <div className="flex justify-between">
       <div className="flex w-full max-w-sm items-center gap-4">
         <Label htmlFor="limit" className="whitespace-nowrap">
           Số lượng
@@ -47,4 +47,4 @@ function ListPageFooter() {
   );
 }
 
-export default ListPageFooter;
+export default ListPagePagination;

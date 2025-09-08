@@ -5,9 +5,12 @@ import type {
   ProductVariantDataType,
   VariantDataType,
 } from "@/features/product/components/product-form/schema";
+import type {
+  ProductDataType,
+  UpdateProductDataType,
+} from "@/features/product/types";
 
 import { convertToFileUrl } from "@/lib/utils";
-import type { ProductDataType, UpdateProductDataType } from "@/shared/types";
 
 export const formatProductVariantData = (
   data: any[]

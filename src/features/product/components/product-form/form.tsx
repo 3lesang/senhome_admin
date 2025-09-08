@@ -7,10 +7,10 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircleIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-import ProductInfo from "./product-info";
-import ProductMedia from "./product-media";
-import ProductPrice from "./product-price";
-import ProductSidebar from "./product-sidebar";
+import ProductInfo from "./info";
+import ProductMedia from "./media";
+import ProductPrice from "./price";
+import ProductSidebar from "./sidebar";
 import ProductVariant from "./variant";
 
 interface ProductProps {

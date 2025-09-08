@@ -2,8 +2,6 @@ import { Button } from "@/components/ui/button";
 import { usePageList } from "@/features/product/provider/list";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import DeleteAction from "./delete-action";
-import PageListSearchInput from "./search-input";
 
 const FILTERS = [
   { key: 0, label: "Tất cả", query: "" },
@@ -20,14 +18,6 @@ function ListPageToolbar() {
     setQuery(filterQuery);
   };
 
-  const handleSearch = (search: string) => {
-    const baseQuery = FILTERS.find((f) => f.key === type)?.query ?? "";
-    const q = [baseQuery, search && `name~"${search}"`]
-      .filter(Boolean)
-      .join("&");
-    setQuery(q);
-  };
-
   return (
     <div className="space-y-4">
       <div className="flex">
@@ -42,10 +32,6 @@ function ListPageToolbar() {
             {filter.label}
           </Button>
         ))}
-      </div>
-      <div className="flex items-center justify-between">
-        <PageListSearchInput onSearch={handleSearch} />
-        <DeleteAction />
       </div>
     </div>
   );

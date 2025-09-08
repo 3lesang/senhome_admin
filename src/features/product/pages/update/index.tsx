@@ -1,5 +1,6 @@
-import ProductForm from "@/features/product/components/product-form/product-form";
+import ProductForm from "@/features/product/components/product-form/form";
 import { type ProductFormType } from "@/features/product/components/product-form/schema";
+import { updateProductHandler } from "@/features/product/handler/mutate/update";
 import { productQueryOptions } from "@/features/product/handler/query/getOne";
 import { productFilesQueryOptions } from "@/features/product/handler/query/productMedia";
 import { productVariantQueryOptions } from "@/features/product/handler/query/productVariant";
@@ -22,13 +23,14 @@ function ProductUpdatePage({ id }: ProductUpdatePageProps) {
 
   const productVariantData = formatProductVariantData(variantData);
 
-  const [defaultProduct, _] = useState<ProductFormType>(
+  const [defaultProduct, setDefaultProduct] = useState<ProductFormType>(
     formatProduct(data, media, productVariantData)
   );
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: ProductFormType) => {
-      console.log(values);
+      updateProductHandler(defaultProduct, values, id);
+      setDefaultProduct(values);
       return;
     },
     onSuccess: () => {

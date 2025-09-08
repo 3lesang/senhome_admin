@@ -3,6 +3,7 @@ import { PRODUCT_ATTRIBUTE_COLLECTION } from "@/shared/constants/pocketbase";
 
 export type CreateAttributePayload = {
   name: string;
+  product: string;
 };
 
 async function createAttributePocket(payload: CreateAttributePayload) {

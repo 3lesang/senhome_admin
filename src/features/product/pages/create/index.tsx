@@ -1,8 +1,8 @@
 import { batchMediaHandler } from "@/features/media/handler";
-import ProductForm from "@/features/product/components/product-form/product-form";
+import ProductForm from "@/features/product/components/product-form/form";
 import { type ProductFormType } from "@/features/product/components/product-form/schema";
-import { createProductHandler } from "@/features/product/handler/mutate/create-product-handler";
-import { createVariantHandler } from "@/features/product/handler/mutate/variant/create-variant-handler";
+import { createProductHandler } from "@/features/product/handler/mutate/create";
+import { createVariantHandler } from "@/features/product/handler/mutate/variant/create";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -14,15 +14,24 @@ function ProductCreatePage() {
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: ProductFormType) => {
       const resp = await createProductHandler(values);
-      const productId = resp.id;
       const { media = [], variantData = {} } = values;
-      await batchMediaHandler([], media, productId);
-      await createVariantHandler(variantData, productId);
-      return resp;
+      if (resp?.id) {
+        const productId = resp.id;
+        await batchMediaHandler([], media, productId);
+        await createVariantHandler(variantData, productId);
+        return productId;
+      }
+
+      return null;
     },
-    onSuccess: (data) => {
-      navigate({ to: "/product/$id", params: { id: data.id } });
-      toast.success("Thêm sản phẩm thành công");
+    onSuccess: (id) => {
+      if (id) {
+        navigate({ to: "/product/$id", params: { id } });
+        toast.success("Thêm sản phẩm thành công");
+      }
+    },
+    onError: () => {
+      toast.error("Không thể tạo sản phẩm");
     },
   });
   const handleSubmit = (values: ProductFormType) => {

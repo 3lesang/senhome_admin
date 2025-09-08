@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { ProductDataType } from "@/shared/types";
+import type { ProductDataType } from "@/features/product/types";
 import PageListTableRow from "./row";
 
 interface ListPageTableProps {
@@ -19,7 +19,7 @@ function ListPageTable({ data = [] }: ListPageTableProps) {
       <TableHeader className="bg-gray-50">
         <TableRow>
           <TableHead>
-            <Checkbox className="ml-7" />
+            <Checkbox />
           </TableHead>
           <TableHead>Tên sản phẩm</TableHead>
           <TableHead>Trạng thái</TableHead>

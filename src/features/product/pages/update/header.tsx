@@ -9,8 +9,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { PRODUCT_STATE } from "@/features/product/constants";
+import type { ProductDataType } from "@/features/product/types";
 import { cn } from "@/lib/utils";
-import type { ProductDataType } from "@/shared/types";
 import { Link } from "@tanstack/react-router";
 import {
   ChevronDownIcon,
