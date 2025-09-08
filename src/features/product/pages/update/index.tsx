@@ -1,13 +1,14 @@
-import ProductForm from "@/features/product/components/product-form/form";
-import { type ProductFormType } from "@/features/product/components/product-form/schema";
-import { updateProductHandler } from "@/features/product/handler/mutate/update";
-import { productQueryOptions } from "@/features/product/handler/query/getOne";
-import { productFilesQueryOptions } from "@/features/product/handler/query/productMedia";
-import { productVariantQueryOptions } from "@/features/product/handler/query/productVariant";
-import { formatProduct, formatProductVariantData } from "@/lib/format";
+import { batchProductMediaHandler } from "@/features/media/handler/mutation/product";
+import ProductForm from "@/features/product/components/form/form";
+import type { ProductFormType } from "@/features/product/components/form/schema";
+import { updateProductHandler } from "@/features/product/handler/mutation/update";
+import { productFilesQueryOptions } from "@/features/product/handler/query/media";
+import { productQueryOptions } from "@/features/product/handler/query/product";
+import { productVariantQueryOptions } from "@/features/product/handler/query/variant";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { toast } from "sonner";
+import { batchVariantHandler } from "../../handler/mutation/batch-variant";
+import { formatProduct } from "./format";
 import UpdatePageHeader from "./header";
 
 interface ProductUpdatePageProps {
@@ -15,25 +16,31 @@ interface ProductUpdatePageProps {
 }
 
 function ProductUpdatePage({ id }: ProductUpdatePageProps) {
-  const { data: media } = useSuspenseQuery(productFilesQueryOptions(id));
+  const { data: media, refetch: refetchMedia } = useSuspenseQuery(
+    productFilesQueryOptions(id)
+  );
   const { data: variantData } = useSuspenseQuery(
     productVariantQueryOptions(id)
   );
-  const { data } = useSuspenseQuery(productQueryOptions(id));
-
-  const productVariantData = formatProductVariantData(variantData);
-
-  const [defaultProduct, setDefaultProduct] = useState<ProductFormType>(
-    formatProduct(data, media, productVariantData)
+  const { data, refetch: refetchProduct } = useSuspenseQuery(
+    productQueryOptions(id)
   );
+  const defaultProduct = formatProduct(data, media, variantData);
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: ProductFormType) => {
       updateProductHandler(defaultProduct, values, id);
-      setDefaultProduct(values);
+      await batchProductMediaHandler(
+        defaultProduct.media ?? [],
+        values.media ?? [],
+        id
+      );
+      await batchVariantHandler(values.variantData ?? {}, id);
       return;
     },
     onSuccess: () => {
+      refetchProduct();
+      refetchMedia();
       toast("Cập nhật sản phẩm thành công.");
     },
   });
@@ -43,14 +50,16 @@ function ProductUpdatePage({ id }: ProductUpdatePageProps) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-4 space-y-4">
+    <div>
       <UpdatePageHeader data={data} />
-      <ProductForm
-        onSubmit={handleSubmit}
-        isUpdate
-        isPending={isPending}
-        defaultValues={defaultProduct}
-      />
+      <div className="max-w-7xl mx-auto pb-8">
+        <ProductForm
+          onSubmit={handleSubmit}
+          isUpdate
+          isPending={isPending}
+          defaultValues={defaultProduct}
+        />
+      </div>
     </div>
   );
 }

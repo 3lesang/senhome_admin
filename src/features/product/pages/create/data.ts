@@ -1,5 +1,4 @@
-import { variantData } from "@/data/variantData";
-import type { ProductFormType } from "@/features/product/components/product-form/schema";
+import type { ProductFormType } from "@/features/product/components/form/schema";
 
 export const defaultValues: ProductFormType = {
   name: "",
@@ -11,5 +10,5 @@ export const defaultValues: ProductFormType = {
   category: "",
   state: "draft",
   media: [],
-  variantData: variantData,
+  variantData: {},
 };

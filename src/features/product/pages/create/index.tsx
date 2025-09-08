@@ -1,8 +1,8 @@
-import { batchMediaHandler } from "@/features/media/handler";
-import ProductForm from "@/features/product/components/product-form/form";
-import { type ProductFormType } from "@/features/product/components/product-form/schema";
-import { createProductHandler } from "@/features/product/handler/mutate/create";
-import { createVariantHandler } from "@/features/product/handler/mutate/variant/create";
+import { batchProductMediaHandler } from "@/features/media/handler/mutation/product";
+import ProductForm from "@/features/product/components/form/form";
+import { type ProductFormType } from "@/features/product/components/form/schema";
+import { createProductHandler } from "@/features/product/handler/mutation/create";
+import { batchVariantHandler } from "@/features/product/handler/mutation/batch-variant";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -17,8 +17,8 @@ function ProductCreatePage() {
       const { media = [], variantData = {} } = values;
       if (resp?.id) {
         const productId = resp.id;
-        await batchMediaHandler([], media, productId);
-        await createVariantHandler(variantData, productId);
+        await batchProductMediaHandler([], media, productId);
+        await batchVariantHandler(variantData, productId);
         return productId;
       }
 

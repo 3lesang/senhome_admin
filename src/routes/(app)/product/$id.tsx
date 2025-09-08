@@ -1,7 +1,7 @@
 import { productCategoryQueryOptions } from "@/features/category/handler/query/productCategory";
-import { productQueryOptions } from "@/features/product/handler/query/getOne";
-import { productFilesQueryOptions } from "@/features/product/handler/query/productMedia";
-import { productVariantQueryOptions } from "@/features/product/handler/query/productVariant";
+import { productQueryOptions } from "@/features/product/handler/query/product";
+import { productFilesQueryOptions } from "@/features/product/handler/query/media";
+import { productVariantQueryOptions } from "@/features/product/handler/query/variant";
 import ProductUpdatePage from "@/features/product/pages/update";
 import { createFileRoute } from "@tanstack/react-router";
 

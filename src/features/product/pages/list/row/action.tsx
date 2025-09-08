@@ -14,7 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteProductHandler } from "@/features/product/handler/mutate/delete";
+import { deleteProductHandler } from "@/features/product/handler/mutation/delete";
 import { usePageList } from "@/features/product/provider/list";
 import { useMutation } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";

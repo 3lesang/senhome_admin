@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { PRODUCT_STATE } from "@/features/product/constants";
-import { categoryMapHandler } from "@/features/product/handler/query/categoryMap";
+import { categoryMapHandler } from "@/features/product/handler/query/categories";
 import { usePageList } from "@/features/product/provider/list";
 import type { ProductDataType } from "@/features/product/types";
 import { cn, convertToFileUrl } from "@/lib/utils";

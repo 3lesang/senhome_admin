@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { deleteProductHandler } from "@/features/product/handler/mutate/delete";
+import { deleteProductHandler } from "@/features/product/handler/mutation/delete";
 import { usePageList } from "@/features/product/provider/list";
 import { useMutation } from "@tanstack/react-query";
 import { Trash2Icon } from "lucide-react";
