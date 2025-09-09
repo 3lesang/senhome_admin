@@ -18,7 +18,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 
 import FileModal from "@/features/media/components/file-modal";
-import type { FileType } from "./schema";
+import type { FileType } from "@/features/media/types";
 
 function SortableImage({
   file,

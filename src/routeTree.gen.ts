@@ -16,7 +16,7 @@ import { Route as authSignupRouteImport } from './routes/(auth)/signup'
 import { Route as authSigninRouteImport } from './routes/(auth)/signin'
 import { Route as appProductIndexRouteImport } from './routes/(app)/product/index'
 import { Route as appOrderIndexRouteImport } from './routes/(app)/order/index'
-import { Route as appMediaIndexRouteImport } from './routes/(app)/media/index'
+import { Route as appFileIndexRouteImport } from './routes/(app)/file/index'
 import { Route as appCategoryIndexRouteImport } from './routes/(app)/category/index'
 import { Route as appProductCreateRouteImport } from './routes/(app)/product/create'
 import { Route as appProductIdRouteImport } from './routes/(app)/product/$id'
@@ -54,9 +54,9 @@ const appOrderIndexRoute = appOrderIndexRouteImport.update({
   path: '/order/',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appMediaIndexRoute = appMediaIndexRouteImport.update({
-  id: '/media/',
-  path: '/media/',
+const appFileIndexRoute = appFileIndexRouteImport.update({
+  id: '/file/',
+  path: '/file/',
   getParentRoute: () => appRouteRoute,
 } as any)
 const appCategoryIndexRoute = appCategoryIndexRouteImport.update({
@@ -82,7 +82,7 @@ export interface FileRoutesByFullPath {
   '/product/$id': typeof appProductIdRoute
   '/product/create': typeof appProductCreateRoute
   '/category': typeof appCategoryIndexRoute
-  '/media': typeof appMediaIndexRoute
+  '/file': typeof appFileIndexRoute
   '/order': typeof appOrderIndexRoute
   '/product': typeof appProductIndexRoute
 }
@@ -93,7 +93,7 @@ export interface FileRoutesByTo {
   '/product/$id': typeof appProductIdRoute
   '/product/create': typeof appProductCreateRoute
   '/category': typeof appCategoryIndexRoute
-  '/media': typeof appMediaIndexRoute
+  '/file': typeof appFileIndexRoute
   '/order': typeof appOrderIndexRoute
   '/product': typeof appProductIndexRoute
 }
@@ -107,7 +107,7 @@ export interface FileRoutesById {
   '/(app)/product/$id': typeof appProductIdRoute
   '/(app)/product/create': typeof appProductCreateRoute
   '/(app)/category/': typeof appCategoryIndexRoute
-  '/(app)/media/': typeof appMediaIndexRoute
+  '/(app)/file/': typeof appFileIndexRoute
   '/(app)/order/': typeof appOrderIndexRoute
   '/(app)/product/': typeof appProductIndexRoute
 }
@@ -120,7 +120,7 @@ export interface FileRouteTypes {
     | '/product/$id'
     | '/product/create'
     | '/category'
-    | '/media'
+    | '/file'
     | '/order'
     | '/product'
   fileRoutesByTo: FileRoutesByTo
@@ -131,7 +131,7 @@ export interface FileRouteTypes {
     | '/product/$id'
     | '/product/create'
     | '/category'
-    | '/media'
+    | '/file'
     | '/order'
     | '/product'
   id:
@@ -144,7 +144,7 @@ export interface FileRouteTypes {
     | '/(app)/product/$id'
     | '/(app)/product/create'
     | '/(app)/category/'
-    | '/(app)/media/'
+    | '/(app)/file/'
     | '/(app)/order/'
     | '/(app)/product/'
   fileRoutesById: FileRoutesById
@@ -205,11 +205,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appOrderIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/media/': {
-      id: '/(app)/media/'
-      path: '/media'
-      fullPath: '/media'
-      preLoaderRoute: typeof appMediaIndexRouteImport
+    '/(app)/file/': {
+      id: '/(app)/file/'
+      path: '/file'
+      fullPath: '/file'
+      preLoaderRoute: typeof appFileIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
     '/(app)/category/': {
@@ -241,7 +241,7 @@ interface appRouteRouteChildren {
   appProductIdRoute: typeof appProductIdRoute
   appProductCreateRoute: typeof appProductCreateRoute
   appCategoryIndexRoute: typeof appCategoryIndexRoute
-  appMediaIndexRoute: typeof appMediaIndexRoute
+  appFileIndexRoute: typeof appFileIndexRoute
   appOrderIndexRoute: typeof appOrderIndexRoute
   appProductIndexRoute: typeof appProductIndexRoute
 }
@@ -251,7 +251,7 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appProductIdRoute: appProductIdRoute,
   appProductCreateRoute: appProductCreateRoute,
   appCategoryIndexRoute: appCategoryIndexRoute,
-  appMediaIndexRoute: appMediaIndexRoute,
+  appFileIndexRoute: appFileIndexRoute,
   appOrderIndexRoute: appOrderIndexRoute,
   appProductIndexRoute: appProductIndexRoute,
 }

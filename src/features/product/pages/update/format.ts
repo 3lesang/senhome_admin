@@ -1,4 +1,4 @@
-import type { FileType } from "@/features/media/components/schema";
+import type { FileType } from "@/features/media/types";
 import type {
   ProductFormType,
   ProductVariantDataType,
@@ -7,7 +7,7 @@ import type { ProductDataType } from "@/features/product/types";
 
 import { convertToFileUrl } from "@/lib/utils";
 
-export const formatProduct = (
+export const formatProductDataForm = (
   data: ProductDataType,
   media?: FileType[],
   productVariantData?: ProductVariantDataType

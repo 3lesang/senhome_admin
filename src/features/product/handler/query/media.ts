@@ -1,10 +1,10 @@
-import type { FileType } from "@/features/media/components/schema";
+import type { FileType } from "@/features/media/types";
 import pocketClient from "@/lib/pocketbase";
 import { convertToFileUrl } from "@/lib/utils";
 import { FILE_GRAPH_COLLECTION } from "@/shared/constants/pocketbase";
 import { queryOptions } from "@tanstack/react-query";
 
-const formatToMedia = (files?: any): FileType[] => {
+const convertToFileList = (files?: any): FileType[] => {
   const formatted: FileType[] = files?.map((item: any) => {
     const file: FileType = {
       id: item?.expand?.file.id,
@@ -24,6 +24,6 @@ export const productFilesQueryOptions = (productId: string) =>
         expand: "file",
       }),
     select(data) {
-      return formatToMedia(data);
+      return convertToFileList(data);
     },
   });

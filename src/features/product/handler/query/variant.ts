@@ -45,7 +45,7 @@ const formatProductVariantData = (data: any[]): ProductVariantDataType => {
       variant: {
         id: variant.id,
         price: variant.price,
-        discount: variant.discount,
+        discount: Number(variant.discount) * 100,
         stock: variant.stock,
         sku: variant.sku,
       },

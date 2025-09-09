@@ -1,0 +1,17 @@
+import pocketClient from "@/lib/pocketbase";
+import { FILE_COLLECTION } from "@/shared/constants/pocketbase";
+
+async function createFilePocket(files: File[]) {
+  const batch = pocketClient.createBatch();
+  for (const file of files) {
+    const formData = new FormData();
+    formData.append("file", file);
+    batch.collection(FILE_COLLECTION).create(formData);
+  }
+  if (files.length) {
+    return batch.send();
+  }
+  return;
+}
+
+export { createFilePocket };

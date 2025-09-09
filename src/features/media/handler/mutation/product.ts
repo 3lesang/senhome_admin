@@ -1,6 +1,6 @@
-import type { FileType } from "@/features/media/components/schema";
 import { createProductFilePocket } from "@/features/media/pocketbase/product/create";
 import { removeProductFilePocket } from "@/features/media/pocketbase/product/remove";
+import type { FileType } from "@/features/media/types";
 import _ from "lodash";
 
 async function batchProductMediaHandler(

@@ -1,4 +1,4 @@
-import type { FileType } from "@/features/media/components/schema";
+import type { FileType } from "@/features/media/types";
 import type { ProductVariantDataType } from "@/features/product/components/form/schema";
 
 export type AttributeNormalizeType = {
@@ -52,7 +52,7 @@ function normalizeVariantProductFormData(formData: ProductVariantDataType) {
     const result: VariantNormalizeType = {
       id: oneVariant.id,
       price: oneVariant.price,
-      discount: oneVariant.discount,
+      discount: oneVariant.discount / 100,
       stock: oneVariant.stock,
       sku: oneVariant.sku,
       status: oneVariant.status,

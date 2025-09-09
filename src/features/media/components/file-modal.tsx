@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { FileType } from "@/features/media/components/schema";
+import type { FileType } from "@/features/media/types";
 import pocketClient from "@/lib/pocketbase";
 import { convertToFileUrl } from "@/lib/utils";
 import { FILE_COLLECTION } from "@/shared/constants/pocketbase";

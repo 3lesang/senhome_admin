@@ -160,9 +160,9 @@ function AppSidebar() {
             <SidebarMenuItem>
               <SidebarMenuButton
                 asChild
-                isActive={location.pathname.includes("media")}
+                isActive={location.pathname.includes("file")}
               >
-                <Link to="/media">
+                <Link to="/file">
                   <ImageIcon />
                   <span className="select-none">Lưu trữ</span>
                 </Link>
