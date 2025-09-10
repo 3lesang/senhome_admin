@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/dialog";
 import { UploadCloudIcon } from "lucide-react";
 import { useState } from "react";
-import UploadPreview from "./upload-preview";
+import Dropzone from "./dropzone";
+import UploadPreview from "./preview";
 
 interface UploadModalProps {
   onConfirm?: (files: File[]) => void;
@@ -37,11 +38,16 @@ function UploadModal({ onConfirm }: UploadModalProps) {
           <UploadCloudIcon />
         </Button>
       </DialogTrigger>
-      <DialogContent className="min-w-4xl">
+      <DialogContent className="min-w-5xl">
         <DialogHeader>
           <DialogTitle>Tải tệp lên</DialogTitle>
         </DialogHeader>
-        <FileDropzone onChange={(files) => setFiles(files)} />
+        <FileDropzone
+          onChange={(files) => setFiles(files)}
+          render={({ isDragActive }) => (
+            <Dropzone isDragActive={isDragActive} />
+          )}
+        />
         <UploadPreview files={files} onRemove={removeFile} />
         <DialogFooter>
           <DialogClose asChild>

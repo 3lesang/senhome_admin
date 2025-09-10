@@ -1,4 +1,4 @@
-import UploadModal from "@/features/media/components/upload-modal";
+import UploadModal from "@/features/media/components/upload/modal";
 import { createFileHandler } from "@/features/media/handler/mutation/create";
 import { usePageList } from "@/features/media/provider/list";
 import { useMutation } from "@tanstack/react-query";

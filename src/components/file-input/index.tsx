@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-import { XIcon } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 import {
@@ -13,78 +11,27 @@ import {
   arrayMove,
   rectSortingStrategy,
   SortableContext,
-  useSortable,
 } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 
-import FileModal from "@/features/media/components/file-modal";
+import FileModal from "@/features/media/components/select/modal";
 import type { FileType } from "@/features/media/types";
+import SortableItem from "./sortable-item";
 
-function SortableImage({
-  file,
-  onRemove,
-}: {
-  file: FileType;
-  onRemove: (id: string) => void;
-}) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: file.id });
-
-  const style: React.CSSProperties = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
-  };
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className="relative group w-32 aspect-square border rounded-lg overflow-hidden hover:cursor-move"
-    >
-      <img
-        src={file.url}
-        alt="preview"
-        className="w-full h-full object-cover"
-      />
-      <Button
-        type="button"
-        size="icon"
-        className="hidden group-hover:flex absolute top-1 right-1 rounded-full bg-white/80 hover:bg-white size-6"
-        variant="ghost"
-        onClick={() => onRemove(file.id)}
-      >
-        <XIcon />
-      </Button>
-    </div>
-  );
+interface RenderDataProps {
+  files: FileType[];
+  handleRemove?: (id: string) => void;
+  handleOpen?: () => void;
 }
 
 interface FileInputProps {
   value?: FileType[];
   mode?: "single" | "multiple";
   onChange?: (file: FileType[]) => void;
-  render?: (data: {
-    files: FileType[];
-    handleRemove?: (id: string) => void;
-    handleOpen?: () => void;
-  }) => ReactNode;
+  render?: (data: RenderDataProps) => ReactNode;
 }
 
-function FileInput({
-  value = [],
-  mode = "multiple",
-  onChange,
-  render,
-}: FileInputProps) {
+function FileInput(props: FileInputProps) {
+  const { value = [], mode = "multiple", onChange, render } = props;
   const [open, setOpen] = useState(false);
   const [files, setFiles] = useState<FileType[]>(value);
 
@@ -129,7 +76,7 @@ function FileInput({
           >
             <div className="inline-flex my-4 flex-wrap gap-2 w-full">
               {files.map((file) => (
-                <SortableImage
+                <SortableItem
                   key={file.id}
                   file={file}
                   onRemove={handleRemoveFile}

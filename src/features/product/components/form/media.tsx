@@ -1,4 +1,4 @@
-import FileInput from "@/features/media/components/file-input";
+import FileInput from "@/components/file-input";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

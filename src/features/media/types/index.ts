@@ -1,4 +1,4 @@
-import type { FileSchema } from "@/features/media/components/schema";
+import type { FileSchema } from "@/components/file-input/schema";
 import type z from "zod";
 
 export type FileDataType = {};

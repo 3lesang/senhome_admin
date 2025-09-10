@@ -1,4 +1,4 @@
-import { FileSchema } from "@/features/media/components/schema";
+import { FileSchema } from "@/components/file-input/schema";
 import { PRODUCT_STATE } from "@/features/product/constants";
 import z from "zod";
 

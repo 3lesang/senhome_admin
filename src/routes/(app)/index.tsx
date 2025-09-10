@@ -18,7 +18,7 @@ function RouteComponent() {
             <BellIcon />
           </Button>
         </header>
-        <main className="h-[calc(100vh-140px)] overflow-auto no-scrollbar p-2">
+        <main className="h-[calc(100vh-140px)] overflow-auto scrollbar-hide p-2">
           <div className="grid auto-rows-min gap-4 md:grid-cols-3">
             <div className="bg-muted/50 aspect-video rounded-xl" />
             <div className="bg-muted/50 aspect-video rounded-xl" />
