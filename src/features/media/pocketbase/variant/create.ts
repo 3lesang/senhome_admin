@@ -1,14 +1,27 @@
 import pocketClient from "@/lib/pocketbase";
 import { FILE_GRAPH_COLLECTION } from "@/shared/constants/pocketbase";
 
-async function createVariantFilePocket(variantId: string, fileId: string) {
-  const res = await pocketClient.collection(FILE_GRAPH_COLLECTION).create({
-    entity_type: "variant",
-    variant: variantId,
-    file: fileId,
-  });
+export type CreateVariantFilePayload = {
+  variantId: string;
+  fileId: string;
+};
 
-  return res;
+async function createVariantFilePocket(payload: CreateVariantFilePayload[]) {
+  const batch = pocketClient.createBatch();
+  for (const item of payload) {
+    const body = {
+      entity_type: "variant",
+      variant: item.variantId,
+      file: item.fileId,
+    };
+    batch.collection(FILE_GRAPH_COLLECTION).create(body);
+  }
+
+  if (payload.length) {
+    return batch.send();
+  }
+
+  return;
 }
 
 export { createVariantFilePocket };

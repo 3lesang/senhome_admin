@@ -1,7 +1,16 @@
+import { updateVariantFileProductHandler } from "@/features/media/handler/mutation/variant";
+import {
+  createVariantFilePocket,
+  type CreateVariantFilePayload,
+} from "@/features/media/pocketbase/variant/create";
 import type { ProductVariantDataType } from "@/features/product/components/form/schema";
 import { createAttributeHandler } from "@/features/product/handler/mutation/attribute/create";
 import { normalizeVariantProductFormData } from "@/features/product/handler/mutation/normalize";
 import { createOptionHandler } from "@/features/product/handler/mutation/option/create";
+import {
+  createVariantAttributePocket,
+  type CreateVariantAttributePayload,
+} from "@/features/product/pocketbase/variant/attribute/create";
 import { deleteAttributeHandler } from "./attribute/delete";
 import { updateAttributeHandler } from "./attribute/update";
 import { deleteOptionHandler } from "./option/delete";
@@ -40,6 +49,7 @@ async function batchVariantHandler(
   updateAttributeHandler(updatedAttributes);
   updateOptionHandler(updatedOptions);
   updateVariantHandler(updatedVariants);
+  updateVariantFileProductHandler(productId, updatedVariants);
 
   deleteAttributeHandler(deletedAttributeIds);
   deleteOptionHandler(deletedOptionIds);
@@ -55,13 +65,36 @@ async function batchVariantHandler(
     attributeIdMap
   );
 
-  await createVariantHandler(
-    addedVariants,
-    optionIdMap,
-    attributeIdMap,
-    attributeOptionIdMap,
-    productId
+  const variantIdMap = await createVariantHandler(addedVariants, productId);
+
+  const variantFilesPayload: CreateVariantFilePayload[] = addedVariants.map(
+    (v) => {
+      const payload: CreateVariantFilePayload = {
+        variantId: variantIdMap[v.id],
+        fileId: v.image?.[0]?.id ?? "",
+      };
+      return payload;
+    }
   );
+  createVariantFilePocket(variantFilesPayload);
+
+  const createVariantAttrPayload = addedVariants
+    .map((v) => {
+      const payload: CreateVariantAttributePayload[] = v.optionIds.map(
+        (optId) => {
+          const body: CreateVariantAttributePayload = {
+            variant: variantIdMap[v.id],
+            attribute_value: optionIdMap[optId],
+            attribute: attributeIdMap[attributeOptionIdMap[optId]],
+          };
+          return body;
+        }
+      );
+      return payload;
+    })
+    .flat();
+
+  createVariantAttributePocket(createVariantAttrPayload);
 }
 
 export { batchVariantHandler };

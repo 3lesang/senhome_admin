@@ -12,6 +12,10 @@ export const formatProductDataForm = (
   media?: FileType[],
   productVariantData?: ProductVariantDataType
 ): ProductFormType => {
+  const thumbnail = {
+    id: data?.expand?.thumbnail?.id,
+    url: convertToFileUrl(data?.expand?.thumbnail) ?? "",
+  };
   return {
     id: data?.id,
     name: data?.name,
@@ -20,12 +24,7 @@ export const formatProductDataForm = (
     discount: data?.discount > 0 ? (data?.discount * 100)?.toString() : "",
     slug: data?.slug || "",
     category: data?.category || "",
-    thumbnail: [
-      {
-        id: data?.expand?.thumbnail?.id,
-        url: convertToFileUrl(data?.expand?.thumbnail) ?? "",
-      },
-    ],
+    thumbnail: [thumbnail],
     state: data?.deleted ? "draft" : "publish",
     media,
     variantData: productVariantData,

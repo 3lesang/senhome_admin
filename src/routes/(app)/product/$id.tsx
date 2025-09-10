@@ -1,5 +1,5 @@
 import { productCategoryQueryOptions } from "@/features/category/handler/query/productCategory";
-import { productQueryOptions } from "@/features/product/handler/query/product";
+import { productQueryOptions } from "@/features/product/handler/query/one";
 import { productFilesQueryOptions } from "@/features/product/handler/query/media";
 import { productVariantQueryOptions } from "@/features/product/handler/query/variant";
 import ProductUpdatePage from "@/features/product/pages/update";

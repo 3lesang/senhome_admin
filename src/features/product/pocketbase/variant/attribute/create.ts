@@ -8,12 +8,16 @@ export type CreateVariantAttributePayload = {
 };
 
 async function createVariantAttributePocket(
-  payload: CreateVariantAttributePayload
+  payload: CreateVariantAttributePayload[]
 ) {
-  const res = await await pocketClient
-    .collection(PRODUCT_VARIANT_ATTRIBUTES_COLLECTION)
-    .create(payload);
-  return res;
+  const batch = pocketClient.createBatch();
+  for (const item of payload) {
+    batch.collection(PRODUCT_VARIANT_ATTRIBUTES_COLLECTION).create(item);
+  }
+  if (payload.length) {
+    return batch.send();
+  }
+  return;
 }
 
 export { createVariantAttributePocket };

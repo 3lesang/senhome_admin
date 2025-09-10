@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { XIcon } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 import {
   closestCenter,
@@ -94,11 +94,14 @@ function FileInput({
 
   const handleChange = (newFiles: FileType[]) => {
     setFiles(newFiles);
+    onChange?.(newFiles);
     setOpen(false);
   };
 
   const handleRemoveFile = (id: string) => {
-    setFiles((prev) => prev.filter((f) => f.id !== id));
+    const newFiles = files.filter((f) => f.id !== id);
+    setFiles(newFiles);
+    onChange?.(newFiles);
   };
 
   const handleDragEnd = (event: any) => {
@@ -111,10 +114,6 @@ function FileInput({
   };
 
   const handleOpen = () => setOpen(true);
-
-  useEffect(() => {
-    onChange?.(files);
-  }, [files]);
 
   return (
     <>

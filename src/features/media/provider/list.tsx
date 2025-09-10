@@ -1,4 +1,4 @@
-import { getListFileQueryOptions } from "@/features/media/handler/query/files";
+import { getListFileQueryOptions } from "@/features/media/handler/query/list";
 import type { FileType } from "@/features/media/types";
 import { useQuery } from "@tanstack/react-query";
 import type { ListResult } from "pocketbase";

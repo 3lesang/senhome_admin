@@ -13,7 +13,7 @@ export default ({ content, onChange }: EditorProps) => {
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm sm:prose-base focus:outline-none min-h-56 max-w-none w-full",
+          "prose !max-w-none text-sm focus:outline-none min-h-56 w-full mt-4",
       },
     },
     content: content ? JSON.parse(content) : undefined,

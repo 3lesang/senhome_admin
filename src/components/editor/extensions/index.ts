@@ -6,12 +6,12 @@ import Heading from "@tiptap/extension-heading";
 import Image from "@tiptap/extension-image";
 import Italic from "@tiptap/extension-italic";
 import Link from "@tiptap/extension-link";
+import { BulletList, ListItem, OrderedList } from "@tiptap/extension-list";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
-import { Placeholder } from "@tiptap/extensions";
-import { ListItem, BulletList, OrderedList } from "@tiptap/extension-list";
+import { Placeholder, UndoRedo } from "@tiptap/extensions";
 
 export const extensions = [
   Document,
@@ -36,4 +36,5 @@ export const extensions = [
   BulletList,
   OrderedList,
   ListItem,
+  UndoRedo,
 ];

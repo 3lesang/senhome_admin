@@ -1,6 +1,9 @@
-import type { OptionType, OptionsType } from "@/features/product/components/form/schema";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import type {
+  OptionType,
+  OptionsType,
+} from "@/features/product/components/form/schema";
 import { PlusIcon } from "lucide-react";
 import { nanoid } from "nanoid";
 import React, { useState } from "react";
@@ -51,18 +54,20 @@ const AttributeOptions = ({ data = {}, onChange }: AttributeOptionsProps) => {
   return (
     <div className="grid w-full items-center gap-3">
       <Label>Tùy chọn</Label>
-      {Object.entries(options).map(([id, opt]) => (
-        <OptionInput
-          key={id}
-          value={opt}
-          onRemove={handleRemove}
-          onChange={handleUpdate}
-        />
-      ))}
-      <Button type="button" variant="outline" onClick={handleAdd}>
-        <PlusIcon />
-        Thêm tùy chọn
-      </Button>
+      <div className="grid grid-cols-2 gap-4">
+        {Object.entries(options).map(([id, opt]) => (
+          <OptionInput
+            key={id}
+            value={opt}
+            onRemove={handleRemove}
+            onChange={handleUpdate}
+          />
+        ))}
+        <Button type="button" variant="outline" onClick={handleAdd}>
+          <PlusIcon />
+          Thêm tùy chọn
+        </Button>
+      </div>
     </div>
   );
 };

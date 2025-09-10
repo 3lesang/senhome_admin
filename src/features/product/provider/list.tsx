@@ -1,4 +1,4 @@
-import { getListProductQueryOptions } from "@/features/product/handler/query/products";
+import { getListProductQueryOptions } from "@/features/product/handler/query/list";
 import type { ProductDataType } from "@/features/product/types";
 import { useQuery } from "@tanstack/react-query";
 import type { ListResult } from "pocketbase";

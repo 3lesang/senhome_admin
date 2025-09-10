@@ -1,23 +1,28 @@
+import { getListVariantProductFilePocket } from "@/features/media/pocketbase/variant/list";
+import type { FileType } from "@/features/media/types";
 import type {
   AttributeType,
   ProductVariantDataType,
   VariantDataType,
 } from "@/features/product/components/form/schema";
-import pocketClient from "@/lib/pocketbase";
+import { listVariantAttributeProductPocket } from "@/features/product/pocketbase/variant/attribute/list";
+import { convertToFileUrl } from "@/lib/utils";
 import { PRODUCT_VARIANT_ATTRIBUTES_COLLECTION } from "@/shared/constants/pocketbase";
 import { queryOptions } from "@tanstack/react-query";
 
-const formatProductVariantData = (data: any[]): ProductVariantDataType => {
+const formatProductVariantData = (
+  variants: any[],
+  files?: Record<string, FileType>
+): ProductVariantDataType => {
   const attributeMap = new Map<string, AttributeType>();
   const variantGroups = new Map<string, VariantDataType>();
 
-  data.forEach((record) => {
+  variants.forEach((record) => {
     const attr = record.expand?.attribute;
     const attrValue = record.expand?.attribute_value;
     const variant = record.expand?.variant;
     if (!attr || !attrValue || !variant) return;
 
-    // 🔹 Build attributes
     if (!attributeMap.has(attr.id)) {
       attributeMap.set(attr.id, {
         id: attr.id,
@@ -32,10 +37,11 @@ const formatProductVariantData = (data: any[]): ProductVariantDataType => {
       name: attrValue.name,
     };
 
-    // 🔹 Group rows by variant.id
     if (!variantGroups.has(variant.id)) {
       variantGroups.set(variant.id, {});
     }
+
+    const file = files?.[variant.id];
 
     variantGroups.get(variant.id)![attrValue.id] = {
       option: {
@@ -48,6 +54,7 @@ const formatProductVariantData = (data: any[]): ProductVariantDataType => {
         discount: Number(variant.discount) * 100,
         stock: variant.stock,
         sku: variant.sku,
+        image: file?.id ? [file] : [],
       },
     };
   });
@@ -58,22 +65,35 @@ const formatProductVariantData = (data: any[]): ProductVariantDataType => {
   };
 };
 
+const formatFiles = (data: any[]) => {
+  const imageMap = new Map<string, FileType>();
+  data.forEach((record) => {
+    const variantId = record?.variant;
+    const file = record.expand.file;
+    const image: FileType = {
+      id: record.file,
+      url: convertToFileUrl(file) ?? "",
+    };
+
+    if (!imageMap.has(variantId)) {
+      imageMap.set(variantId, image);
+    }
+  });
+  return Object.fromEntries(imageMap);
+};
+
 export const productVariantQueryOptions = (productId: string) =>
   queryOptions({
     queryKey: [PRODUCT_VARIANT_ATTRIBUTES_COLLECTION, productId],
     queryFn: async () => {
-      const res = await pocketClient
-        .collection(PRODUCT_VARIANT_ATTRIBUTES_COLLECTION)
-        .getFullList({
-          filter: `variant.product = "${productId}"`,
-          expand: "attribute,attribute_value,variant",
-          sort: "attribute_value.order",
-        });
-
-      return res;
+      const variants = await listVariantAttributeProductPocket(productId);
+      const files = await getListVariantProductFilePocket(productId);
+      return { variants, files };
     },
     select(data) {
-      const formatted = formatProductVariantData(data);
+      const { variants, files } = data;
+      const fileMap = formatFiles(files);
+      const formatted = formatProductVariantData(variants, fileMap);
       return formatted;
     },
   });

@@ -1,9 +1,4 @@
-import { createVariantFilePocket } from "@/features/media/pocketbase/variant/create";
 import type { VariantNormalizeType } from "@/features/product/handler/mutation/normalize";
-import {
-  createVariantAttributePocket,
-  type CreateVariantAttributePayload,
-} from "@/features/product/pocketbase/variant/attribute/create";
 import {
   createVariantPocket,
   type CreateVariantPayload,
@@ -11,11 +6,10 @@ import {
 
 async function createVariantHandler(
   variants: VariantNormalizeType[],
-  optionIdMap: Record<string, string>,
-  attributeIdMap: Record<string, string>,
-  attributeOptionIdMap: Record<string, string>,
   productId: string
 ) {
+  const variantIdMap: Record<string, string> = {};
+
   for (const variant of variants) {
     const payload: CreateVariantPayload = {
       price: variant.price,
@@ -25,22 +19,10 @@ async function createVariantHandler(
       product: productId,
     };
     const res = await createVariantPocket(payload);
-    const variantIdDB = res.id;
-    const fileId = variant.image?.[0]?.id;
-
-    if (fileId) {
-      createVariantFilePocket(variantIdDB, fileId);
-    }
-
-    for (const optId of variant.optionIds) {
-      const payload: CreateVariantAttributePayload = {
-        variant: variantIdDB,
-        attribute_value: optionIdMap[optId],
-        attribute: attributeIdMap[attributeOptionIdMap[optId]],
-      };
-      createVariantAttributePocket(payload);
-    }
+    variantIdMap[variant.id] = res.id;
   }
+
+  return variantIdMap;
 }
 
 export { createVariantHandler };

@@ -1,16 +1,21 @@
 import pocketClient from "@/lib/pocketbase";
 import { FILE_GRAPH_COLLECTION } from "@/shared/constants/pocketbase";
 
-async function createProductFilePocket(productId: string, fileIds: string[]) {
+export type CreateProductFilePayload = {
+  productId: string;
+  filedId: string;
+};
+
+async function createProductFilePocket(payload: CreateProductFilePayload[]) {
   const batch = pocketClient.createBatch();
-  for (const id of fileIds) {
+  for (const item of payload) {
     batch.collection(FILE_GRAPH_COLLECTION).create({
       entity_type: "product",
-      product: productId,
-      file: id,
+      product: item.productId,
+      file: item.filedId,
     });
   }
-  if (fileIds.length) {
+  if (payload.length) {
     return batch.send();
   }
   return;

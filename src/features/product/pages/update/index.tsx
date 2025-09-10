@@ -4,7 +4,7 @@ import type { ProductFormType } from "@/features/product/components/form/schema"
 import { batchVariantHandler } from "@/features/product/handler/mutation/batch-variant";
 import { updateProductHandler } from "@/features/product/handler/mutation/update";
 import { productFilesQueryOptions } from "@/features/product/handler/query/media";
-import { productQueryOptions } from "@/features/product/handler/query/product";
+import { productQueryOptions } from "@/features/product/handler/query/one";
 import { productVariantQueryOptions } from "@/features/product/handler/query/variant";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
