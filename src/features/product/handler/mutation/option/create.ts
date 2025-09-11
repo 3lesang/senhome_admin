@@ -2,7 +2,7 @@ import type { OptionNormalizeType } from "@/features/product/handler/mutation/no
 import {
   createOptionPocket,
   type CreateOptionPayload,
-} from "@/features/product/pocketbase/option/create";
+} from "@/pocketbase/product/option/create";
 
 async function createOptionHandler(
   opts: OptionNormalizeType[],

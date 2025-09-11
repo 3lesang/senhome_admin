@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SigninForm from "@/features/auth/components/signin-form";
 import type { SigninFormType } from "@/features/auth/components/signin-form/type";
-import signInHandler from "@/features/auth/handler/query/signin";
+import signInHandler from "@/features/auth/handler/mutation/signin";
 import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 

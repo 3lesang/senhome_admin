@@ -1,7 +1,7 @@
 import {
   updateAttributePocket,
   type UpdateAttributePayload,
-} from "@/features/product/pocketbase/attribute/update";
+} from "@/pocketbase/product/attribute/update";
 
 async function updateAttributeHandler(payload: UpdateAttributePayload[]) {
   return updateAttributePocket(payload);

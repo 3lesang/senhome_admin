@@ -2,7 +2,7 @@ import type { AttributeNormalizeType } from "@/features/product/handler/mutation
 import {
   createAttributePocket,
   type CreateAttributePayload,
-} from "@/features/product/pocketbase/attribute/create";
+} from "@/pocketbase/product/attribute/create";
 
 async function createAttributeHandler(
   attrs: AttributeNormalizeType[],

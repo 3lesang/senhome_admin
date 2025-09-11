@@ -13,8 +13,8 @@ import {
   SortableContext,
 } from "@dnd-kit/sortable";
 
-import FileModal from "@/features/media/components/select/modal";
-import type { FileType } from "@/features/media/types";
+import FileModal from "@/features/file/components/select/modal";
+import type { FileType } from "@/features/file/types";
 import SortableItem from "./sortable-item";
 
 interface RenderDataProps {

@@ -4,7 +4,7 @@ import { XIcon } from "lucide-react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-import type { FileType } from "@/features/media/types";
+import type { FileType } from "@/features/file/types";
 
 function SortableItem({
   file,

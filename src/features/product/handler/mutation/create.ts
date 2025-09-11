@@ -2,7 +2,7 @@ import type { ProductFormType } from "@/features/product/components/form/schema"
 import {
   createProductPocket,
   type CreateProductPayload,
-} from "@/features/product/pocketbase/create";
+} from "@/pocketbase/product/create";
 import { slugify } from "@/lib/utils";
 
 function formatCreateProductPayload(

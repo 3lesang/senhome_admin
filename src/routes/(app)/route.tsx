@@ -21,7 +21,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
-import pocketClient from "@/lib/pocketbase";
+import pocketClient from "@/pocketbase/client";
 import { cn } from "@/lib/utils";
 
 const navigationMenuItems = [

@@ -1,13 +1,13 @@
-import { getListVariantProductFilePocket } from "@/features/media/pocketbase/variant/list";
-import type { FileType } from "@/features/media/types";
+import { getListVariantProductFilePocket } from "@/pocketbase/file/variant/list";
+import type { FileType } from "@/features/file/types";
 import type {
   AttributeType,
   ProductVariantDataType,
   VariantDataType,
 } from "@/features/product/components/form/schema";
-import { listVariantAttributeProductPocket } from "@/features/product/pocketbase/variant/attribute/list";
+import { listVariantAttributeProductPocket } from "@/pocketbase/product/variant/attribute/list";
 import { convertToFileUrl } from "@/lib/utils";
-import { PRODUCT_VARIANT_ATTRIBUTES_COLLECTION } from "@/shared/constants/pocketbase";
+import { PRODUCT_VARIANT_ATTRIBUTES_COLLECTION } from "@/pocketbase/constants/pocketbase";
 import { queryOptions } from "@tanstack/react-query";
 
 const formatProductVariantData = (

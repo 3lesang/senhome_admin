@@ -1,6 +1,6 @@
 import type { ProductDataType } from "@/features/product/types";
-import pocketClient from "@/lib/pocketbase";
-import { PRODUCT_COLLECTION } from "@/shared/constants/pocketbase";
+import pocketClient from "@/pocketbase/client";
+import { PRODUCT_COLLECTION } from "@/pocketbase/constants/pocketbase";
 import { queryOptions } from "@tanstack/react-query";
 
 export const productQueryOptions = (id: string) =>

@@ -1,4 +1,4 @@
-import { deleteVariantPocket } from "@/features/product/pocketbase/variant/delete";
+import { deleteVariantPocket } from "@/pocketbase/product/variant/delete";
 
 async function deleteVariantHandler(ids: string[]) {
   return deleteVariantPocket(ids);

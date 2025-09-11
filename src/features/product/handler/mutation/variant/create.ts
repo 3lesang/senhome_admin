@@ -2,7 +2,7 @@ import type { VariantNormalizeType } from "@/features/product/handler/mutation/n
 import {
   createVariantPocket,
   type CreateVariantPayload,
-} from "@/features/product/pocketbase/variant/create";
+} from "@/pocketbase/product/variant/create";
 
 async function createVariantHandler(
   variants: VariantNormalizeType[],

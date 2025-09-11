@@ -1,4 +1,4 @@
-import { batchProductMediaHandler } from "@/features/media/handler/mutation/product";
+import { batchProductMediaHandler } from "@/features/file/handler/mutation/product";
 import ProductForm from "@/features/product/components/form/form";
 import { type ProductFormType } from "@/features/product/components/form/schema";
 import { createProductHandler } from "@/features/product/handler/mutation/create";

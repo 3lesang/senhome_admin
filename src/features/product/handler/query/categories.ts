@@ -1,5 +1,5 @@
-import pocketClient from "@/lib/pocketbase";
-import { CATEGORY_COLLECTION } from "@/shared/constants/pocketbase";
+import pocketClient from "@/pocketbase/client";
+import { CATEGORY_COLLECTION } from "@/pocketbase/constants/pocketbase";
 import { useQuery } from "@tanstack/react-query";
 
 export const categoryMapHandler = () => {

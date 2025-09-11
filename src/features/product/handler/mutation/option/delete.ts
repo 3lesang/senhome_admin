@@ -1,4 +1,4 @@
-import { deleteOptionPocket } from "@/features/product/pocketbase/option/delete";
+import { deleteOptionPocket } from "@/pocketbase/product/option/delete";
 
 async function deleteOptionHandler(ids: string[]) {
   return deleteOptionPocket(ids);

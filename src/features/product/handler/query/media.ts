@@ -1,7 +1,7 @@
-import type { FileType } from "@/features/media/types";
-import pocketClient from "@/lib/pocketbase";
+import type { FileType } from "@/features/file/types";
+import pocketClient from "@/pocketbase/client";
 import { convertToFileUrl } from "@/lib/utils";
-import { FILE_GRAPH_COLLECTION } from "@/shared/constants/pocketbase";
+import { FILE_GRAPH_COLLECTION } from "@/pocketbase/constants/pocketbase";
 import { queryOptions } from "@tanstack/react-query";
 
 const convertToFileList = (files?: any): FileType[] => {

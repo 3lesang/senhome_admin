@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
-import type { FileType } from "@/features/media/types";
+import type { FileType } from "@/features/file/types";
 import type {
   VariantDataType,
   VariantType,
@@ -9,7 +9,7 @@ import type {
 import { ChevronDownIcon } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import ImageInput from "./image-input";
-import { parseValue } from "./parseValue";
+import { parseValue } from "../../parseValue";
 import VariantField from "./variant-field";
 
 interface CombinationRowProps {

@@ -2,7 +2,7 @@ import type { ProductFormType } from "@/features/product/components/form/schema"
 import {
   updateProductPocket,
   type UpdateProductPayload,
-} from "@/features/product/pocketbase/update";
+} from "@/pocketbase/product/update";
 import type { UpdateProductDataType } from "@/features/product/types";
 import _ from "lodash";
 

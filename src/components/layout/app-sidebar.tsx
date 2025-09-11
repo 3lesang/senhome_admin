@@ -35,14 +35,14 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import pocketClient from "@/lib/pocketbase";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
+import pocketClient from "@/pocketbase/client";
 
 function AppSidebar() {
   const location = useLocation();

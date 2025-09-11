@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import FileInput from "@/components/file-input";
-import type { FileType } from "@/features/media/types";
+import type { FileType } from "@/features/file/types";
 import { XIcon } from "lucide-react";
 
 interface ImageInputProps {

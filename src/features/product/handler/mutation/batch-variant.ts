@@ -1,8 +1,8 @@
-import { updateVariantFileProductHandler } from "@/features/media/handler/mutation/variant";
+import { updateVariantFileProductHandler } from "@/features/file/handler/mutation/variant";
 import {
   createVariantFilePocket,
   type CreateVariantFilePayload,
-} from "@/features/media/pocketbase/variant/create";
+} from "@/pocketbase/file/variant/create";
 import type { ProductVariantDataType } from "@/features/product/components/form/schema";
 import { createAttributeHandler } from "@/features/product/handler/mutation/attribute/create";
 import { normalizeVariantProductFormData } from "@/features/product/handler/mutation/normalize";
@@ -10,7 +10,7 @@ import { createOptionHandler } from "@/features/product/handler/mutation/option/
 import {
   createVariantAttributePocket,
   type CreateVariantAttributePayload,
-} from "@/features/product/pocketbase/variant/attribute/create";
+} from "@/pocketbase/product/variant/attribute/create";
 import { deleteAttributeHandler } from "./attribute/delete";
 import { updateAttributeHandler } from "./attribute/update";
 import { deleteOptionHandler } from "./option/delete";

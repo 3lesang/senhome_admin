@@ -1,4 +1,4 @@
-import type { FileType } from "@/features/media/types";
+import type { FileType } from "@/features/file/types";
 import type {
   ProductFormType,
   ProductVariantDataType,
