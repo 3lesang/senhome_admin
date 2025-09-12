@@ -1,6 +1,6 @@
 import type { UpdateProductDataType } from "@/features/product/types";
 import pocketClient from "@/pocketbase/client";
-import { PRODUCT_COLLECTION } from "@/pocketbase/constants/pocketbase";
+import { PRODUCT_COLLECTION } from "@/pocketbase/constants";
 
 export type UpdateProductPayload = Partial<UpdateProductDataType>;
 

@@ -1,6 +1,6 @@
 import { getOneVariantFilePocket } from "@/pocketbase/file/variant/one";
 import { convertToFileUrl } from "@/lib/utils";
-import { FILE_GRAPH_COLLECTION } from "@/pocketbase/constants/pocketbase";
+import { FILE_GRAPH_COLLECTION } from "@/pocketbase/constants";
 import { queryOptions } from "@tanstack/react-query";
 
 async function getOneVariantFileQueryOptions(variantId: string) {

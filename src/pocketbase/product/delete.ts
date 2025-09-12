@@ -1,5 +1,5 @@
 import pocketClient from "@/pocketbase/client";
-import { PRODUCT_COLLECTION } from "@/pocketbase/constants/pocketbase";
+import { PRODUCT_COLLECTION } from "@/pocketbase/constants";
 
 function deleteProductPocket(ids: string[]) {
   const batch = pocketClient.createBatch();

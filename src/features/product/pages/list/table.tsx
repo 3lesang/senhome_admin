@@ -15,7 +15,7 @@ interface ListPageTableProps {
 
 function ListPageTable({ data = [] }: ListPageTableProps) {
   return (
-    <Table className="bg-white rounded-md overflow-hidden">
+    <Table>
       <TableHeader className="bg-gray-50">
         <TableRow>
           <TableHead>
@@ -24,12 +24,11 @@ function ListPageTable({ data = [] }: ListPageTableProps) {
           <TableHead>Tên sản phẩm</TableHead>
           <TableHead>Trạng thái</TableHead>
           <TableHead>Danh mục</TableHead>
-          <TableHead></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {data?.map((item: ProductDataType) => (
-          <PageListTableRow data={item} key={item?.id} />
+          <PageListTableRow key={item?.id} data={item} />
         ))}
       </TableBody>
     </Table>

@@ -1,5 +1,5 @@
 import pocketClient from "@/pocketbase/client";
-import { PRODUCT_ATTRIBUTE_COLLECTION } from "@/pocketbase/constants/pocketbase";
+import { PRODUCT_ATTRIBUTE_COLLECTION } from "@/pocketbase/constants";
 
 async function deleteAttributePocket(ids: string[]) {
   const batch = pocketClient.createBatch();

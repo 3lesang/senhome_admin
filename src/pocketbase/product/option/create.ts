@@ -1,5 +1,5 @@
 import pocketClient from "@/pocketbase/client";
-import { PRODUCT_ATTRIBUTE_VALUE_COLLECTION } from "@/pocketbase/constants/pocketbase";
+import { PRODUCT_ATTRIBUTE_VALUE_COLLECTION } from "@/pocketbase/constants";
 
 export type CreateOptionPayload = {
   name: string;

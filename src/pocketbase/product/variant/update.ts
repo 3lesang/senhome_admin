@@ -1,6 +1,6 @@
 import type { FileType } from "@/features/file/types";
 import pocketClient from "@/pocketbase/client";
-import { PRODUCT_VARIANT_COLLECTION } from "@/pocketbase/constants/pocketbase";
+import { PRODUCT_VARIANT_COLLECTION } from "@/pocketbase/constants";
 
 export type UpdateVariantPayload = {
   id: string;

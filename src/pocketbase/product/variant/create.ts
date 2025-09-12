@@ -1,5 +1,5 @@
 import pocketClient from "@/pocketbase/client";
-import { PRODUCT_VARIANT_COLLECTION } from "@/pocketbase/constants/pocketbase";
+import { PRODUCT_VARIANT_COLLECTION } from "@/pocketbase/constants";
 
 export type CreateVariantPayload = {
   price: number;

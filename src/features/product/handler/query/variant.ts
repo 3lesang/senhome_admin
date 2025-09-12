@@ -7,7 +7,7 @@ import type {
 } from "@/features/product/components/form/schema";
 import { listVariantAttributeProductPocket } from "@/pocketbase/product/variant/attribute/list";
 import { convertToFileUrl } from "@/lib/utils";
-import { PRODUCT_VARIANT_ATTRIBUTES_COLLECTION } from "@/pocketbase/constants/pocketbase";
+import { PRODUCT_VARIANT_ATTRIBUTES_COLLECTION } from "@/pocketbase/constants";
 import { queryOptions } from "@tanstack/react-query";
 
 const formatProductVariantData = (

@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { usePageList } from "@/features/file/provider/list";
 import { cn } from "@/lib/utils";
-import { CheckIcon } from "lucide-react";
+import { SquareIcon } from "lucide-react";
 import PageListEmpty from "./empty";
 import PageListGrid from "./grid";
 import ListPagePagination from "./pagination";
@@ -27,7 +27,7 @@ function ListPageBody() {
             className={cn(hasSelect && "bg-gray-100")}
             onClick={() => setHasSelect?.(!hasSelect)}
           >
-            <CheckIcon />
+            {hasSelect && <SquareIcon />}
             Lựa chọn
           </Button>
         </div>

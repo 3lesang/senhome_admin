@@ -31,11 +31,14 @@ function MediaFile({ data = { id: "" } }: MediaFileProps) {
         <div
           className={cn(
             "absolute inset-0 hover:cursor-pointer",
-            isSelected && "bg-black/20"
+            isSelected ? "bg-black/20" : "bg-black/10"
           )}
           onClick={handleSelect}
         >
-          <Checkbox className="absolute top-1 right-1" checked={isSelected} />
+          <Checkbox
+            className="absolute top-1 right-1 bg-white"
+            checked={isSelected}
+          />
         </div>
       )}
     </div>

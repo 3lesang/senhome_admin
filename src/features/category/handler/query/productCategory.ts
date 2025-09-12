@@ -1,5 +1,5 @@
 import pocketClient from "@/pocketbase/client";
-import { CATEGORY_COLLECTION } from "@/pocketbase/constants/pocketbase";
+import { CATEGORY_COLLECTION } from "@/pocketbase/constants";
 import { queryOptions } from "@tanstack/react-query";
 
 export const productCategoryQueryOptions = () =>

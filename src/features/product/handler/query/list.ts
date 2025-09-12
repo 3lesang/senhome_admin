@@ -1,5 +1,5 @@
 import { getListProductPocket } from "@/pocketbase/product/list";
-import { PRODUCT_COLLECTION } from "@/pocketbase/constants/pocketbase";
+import { PRODUCT_COLLECTION } from "@/pocketbase/constants";
 import { queryOptions } from "@tanstack/react-query";
 
 type GetListQueryOptionType = {

@@ -1,3 +1,4 @@
+import OrderListPage from "@/features/order/pages/list";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(app)/order/")({
@@ -5,9 +6,5 @@ export const Route = createFileRoute("/(app)/order/")({
 });
 
 function RouteComponent() {
-  return (
-    <div>
-      <p>Order</p>
-    </div>
-  );
+  return <OrderListPage />;
 }

@@ -1,6 +1,6 @@
 import type { FileDataType } from "@/features/file/types";
 import pocketClient from "@/pocketbase/client";
-import { FILE_COLLECTION } from "@/pocketbase/constants/pocketbase";
+import { FILE_COLLECTION } from "@/pocketbase/constants";
 import type { ListResult } from "pocketbase";
 
 export type GetListQueryPocketType = {

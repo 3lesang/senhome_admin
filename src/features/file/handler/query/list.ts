@@ -1,7 +1,7 @@
 import { getListFilePocket } from "@/pocketbase/file/list";
 import type { FileType } from "@/features/file/types";
 import { convertToFileUrl } from "@/lib/utils";
-import { FILE_COLLECTION } from "@/pocketbase/constants/pocketbase";
+import { FILE_COLLECTION } from "@/pocketbase/constants";
 import { queryOptions } from "@tanstack/react-query";
 
 type GetListQueryOptionType = {

@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { usePageList } from "@/features/product/provider/list";
 import PageListEmpty from "./empty";
 import ListPagePagination from "./pagination";
@@ -21,9 +22,11 @@ function ListPageBody() {
       <div>
         <Badge variant="secondary">{data?.totalItems} sản phẩm</Badge>
       </div>
-      <div className="my-4">
-        <ListPageTable data={data?.items} />
-      </div>
+      <Card className="my-4 border-0 p-0 rounded-md shadow-none">
+        <CardContent className="p-0">
+          <ListPageTable data={data?.items} />
+        </CardContent>
+      </Card>
       <ListPagePagination />
     </div>
   );

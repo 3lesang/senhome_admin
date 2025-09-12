@@ -1,5 +1,6 @@
 import { PageListProvider } from "@/features/product/provider/list";
 import ListPageBody from "./body";
+import DeleteDialog from "./delete-dialog";
 import ListPageHeader from "./header";
 
 function ProductListPage() {
@@ -7,6 +8,7 @@ function ProductListPage() {
     <PageListProvider>
       <ListPageHeader />
       <ListPageBody />
+      <DeleteDialog />
     </PageListProvider>
   );
 }

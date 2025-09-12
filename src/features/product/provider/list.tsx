@@ -6,6 +6,7 @@ import React, { createContext, useContext, useState } from "react";
 
 type PageListContextType = {
   data?: ListResult<ProductDataType>;
+  deleteSelect?: string;
   selected?: Record<string, boolean>;
   page: number;
   limit: number;
@@ -14,6 +15,7 @@ type PageListContextType = {
   setLimit: (limit: number) => void;
   setQuery: (query: string) => void;
   setSelected?: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  setDeleteSelect?: (id: string) => void;
   refetch?: () => void;
   isLoading: boolean;
 };
@@ -26,6 +28,7 @@ export function PageListProvider({ children }: { children: React.ReactNode }) {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [query, setQuery] = useState("");
+  const [deleteSelect, setDeleteSelect] = useState("");
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const { data, isLoading, refetch } = useQuery(
     getListProductQueryOptions({ page, limit, query })
@@ -45,6 +48,8 @@ export function PageListProvider({ children }: { children: React.ReactNode }) {
         setSelected,
         refetch,
         isLoading,
+        deleteSelect,
+        setDeleteSelect,
       }}
     >
       {children}
