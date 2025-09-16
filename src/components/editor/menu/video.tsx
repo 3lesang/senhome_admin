@@ -63,7 +63,7 @@ export default ({ editor }: Props) => {
 						/>
 					</form>
 				</Form>
-				<VideoPlayer src={src} />
+				{/* <VideoPlayer src={src} /> */}
 				<DialogFooter>
 					<DialogClose asChild>
 						<Button variant="outline">Hủy</Button>
@@ -71,11 +71,11 @@ export default ({ editor }: Props) => {
 					<DialogClose asChild>
 						<Button
 							type="button"
-							onClick={() =>
-								editor?.commands.setVideoComponent({
-									src,
-								})
-							}
+							// onClick={() =>
+							// 	editor?.commands.setVideoComponent({
+							// 		src,
+							// 	})
+							// }
 						>
 							Chèn Video
 						</Button>

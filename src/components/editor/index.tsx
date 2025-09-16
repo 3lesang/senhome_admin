@@ -25,7 +25,7 @@ export default ({ content, onChange }: EditorProps) => {
 	return (
 		<div>
 			<Menu editor={editor} />
-			<EditorContent editor={editor} />
+			{/* <EditorContent editor={editor} /> */}
 		</div>
 	);
 };
