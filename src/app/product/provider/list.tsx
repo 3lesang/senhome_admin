@@ -6,7 +6,10 @@ import { getListProductQueryOptions } from "@/app/product/handler/query/list";
 import type { ProductDataType } from "@/app/product/types";
 
 type PageListContextType = {
-	data?: ListResult<ProductDataType>;
+	data?: {
+		products: ListResult<ProductDataType>;
+		categoryMap: Record<string, { id: string; name: string }>;
+	};
 	deleteSelect?: string;
 	selected?: Record<string, boolean>;
 	page: number;
@@ -31,6 +34,7 @@ export function PageListProvider({ children }: { children: React.ReactNode }) {
 	const [query, setQuery] = useState("");
 	const [deleteSelect, setDeleteSelect] = useState("");
 	const [selected, setSelected] = useState<Record<string, boolean>>({});
+
 	const { data, isLoading, refetch } = useQuery(
 		getListProductQueryOptions({ page, limit, query }),
 	);

@@ -2,7 +2,6 @@ import type { CheckedState } from "@radix-ui/react-checkbox";
 import { Link } from "@tanstack/react-router";
 import { EditIcon, Trash2Icon } from "lucide-react";
 import { PRODUCT_STATE } from "@/app/product/constants";
-import { categoryMapHandler } from "@/app/product/handler/query/categories";
 import { usePageList } from "@/app/product/provider/list";
 import type { ProductDataType } from "@/app/product/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -19,12 +18,15 @@ import { cn, convertToFileUrl } from "@/lib/utils";
 
 interface PageListTableRowProps {
 	data: ProductDataType;
+	categoryMap?: Record<string, { id: string; name: string }>;
 }
 
-function PageListTableRow({ data }: PageListTableRowProps) {
+export default function PageListTableRow({
+	data,
+	categoryMap,
+}: PageListTableRowProps) {
 	const { id } = data;
 	const { selected, setSelected, setDeleteSelect } = usePageList();
-	const { data: categories } = categoryMapHandler();
 
 	const handleSelect = (checked: CheckedState) => {
 		setSelected?.((prev) => ({ ...prev, [data.id]: checked as boolean }));
@@ -60,7 +62,7 @@ function PageListTableRow({ data }: PageListTableRowProps) {
 							{PRODUCT_STATE[state].text}
 						</Badge>
 					</TableCell>
-					<TableCell>{categories?.[data.category]?.name}</TableCell>
+					<TableCell>{categoryMap?.[data.category]?.name}</TableCell>
 				</TableRow>
 			</ContextMenuTrigger>
 			<ContextMenuContent>
@@ -86,5 +88,3 @@ function PageListTableRow({ data }: PageListTableRowProps) {
 		</ContextMenu>
 	);
 }
-
-export default PageListTableRow;

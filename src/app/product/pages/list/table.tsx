@@ -11,9 +11,13 @@ import PageListTableRow from "./row";
 
 interface ListPageTableProps {
 	data?: ProductDataType[];
+	categoryMap?: Record<string, { id: string; name: string }>;
 }
 
-function ListPageTable({ data = [] }: ListPageTableProps) {
+export default function ListPageTable({
+	data = [],
+	categoryMap,
+}: ListPageTableProps) {
 	return (
 		<Table>
 			<TableHeader className="bg-gray-50">
@@ -28,11 +32,13 @@ function ListPageTable({ data = [] }: ListPageTableProps) {
 			</TableHeader>
 			<TableBody>
 				{data?.map((item: ProductDataType) => (
-					<PageListTableRow key={item?.id} data={item} />
+					<PageListTableRow
+						key={item?.id}
+						data={item}
+						categoryMap={categoryMap}
+					/>
 				))}
 			</TableBody>
 		</Table>
 	);
 }
-
-export default ListPageTable;

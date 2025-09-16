@@ -32,7 +32,7 @@ function SortableItem({
 			style={style}
 			{...attributes}
 			{...listeners}
-			className="relative group w-32 aspect-square border rounded-lg overflow-hidden hover:cursor-move"
+			className="relative group size-20 aspect-square border rounded-lg overflow-hidden hover:cursor-move"
 		>
 			<img
 				src={file.url}

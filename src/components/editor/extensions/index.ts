@@ -10,7 +10,7 @@ import Text from "@tiptap/extension-text";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
 import { Placeholder, UndoRedo } from "@tiptap/extensions";
-import Video from "@/components/editor/extensions/video";
+// import Video from "@/components/editor/extensions/video";
 
 export const extensions = [
 	Document,
@@ -31,7 +31,7 @@ export const extensions = [
 		openOnClick: false,
 		autolink: true,
 	}),
-	Video,
+	// Video,
 	BulletList,
 	OrderedList,
 	ListItem,

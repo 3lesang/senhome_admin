@@ -92,6 +92,16 @@ function AppSidebar() {
 												</Link>
 											</SidebarMenuSubButton>
 										</SidebarMenuSubItem>
+										<SidebarMenuSubItem>
+											<SidebarMenuSubButton
+												asChild
+												isActive={location.pathname === "/product/create"}
+											>
+												<Link to="/product/create">
+													<span className="select-none">Danh mục sản phẩm</span>
+												</Link>
+											</SidebarMenuSubButton>
+										</SidebarMenuSubItem>
 									</SidebarMenuSub>
 								</CollapsibleContent>
 							</SidebarMenuItem>
@@ -113,6 +123,13 @@ function AppSidebar() {
 											>
 												<Link to="/order">
 													<span className="select-none">Tất cả</span>
+												</Link>
+											</SidebarMenuSubButton>
+										</SidebarMenuSubItem>
+										<SidebarMenuSubItem>
+											<SidebarMenuSubButton asChild>
+												<Link to="/order">
+													<span className="select-none">Đơn mới</span>
 												</Link>
 											</SidebarMenuSubButton>
 										</SidebarMenuSubItem>

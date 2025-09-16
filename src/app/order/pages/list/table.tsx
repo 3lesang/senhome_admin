@@ -18,8 +18,8 @@ function ListPageTable({ data = [] }: ListPageTableProps) {
 		<Table>
 			<TableHeader className="bg-gray-50">
 				<TableRow>
-					<TableHead>
-						<Checkbox />
+					<TableHead >
+						<Checkbox className="ml-7" />
 					</TableHead>
 					<TableHead>Mã đơn hàng</TableHead>
 					<TableHead>Khách hàng</TableHead>

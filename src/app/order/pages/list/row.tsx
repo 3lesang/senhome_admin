@@ -1,12 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import { ChevronDownIcon, Trash2Icon } from "lucide-react";
+import React, { useState } from "react";
 import { ORDER_STATUS } from "@/app/order/constants";
 import { getListItemOrderQueryOptions } from "@/app/order/handler/query/items";
 import type { OrderDataType } from "@/app/order/types";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
+import {
+	ContextMenu,
+	ContextMenuContent,
+	ContextMenuItem,
+	ContextMenuTrigger,
+} from "@/components/ui/context-menu";
 import {
 	HoverCard,
 	HoverCardContent,
@@ -23,6 +30,7 @@ type OrderStatus = typeof ORDER_STATUS;
 type OrderStatusKey = keyof OrderStatus;
 
 function PageListTableRow({ data }: PageListTableRowProps) {
+	const [expand, setExpand] = useState(false);
 	const { id } = data;
 	const { data: itemData } = useQuery(getListItemOrderQueryOptions(id));
 
@@ -31,9 +39,18 @@ function PageListTableRow({ data }: PageListTableRowProps) {
 		<React.Fragment>
 			<ContextMenu>
 				<ContextMenuTrigger asChild>
-					<TableRow>
+					<TableRow className="group">
 						<TableCell>
-							<Checkbox />
+							<div className="flex items-center gap-1">
+								<Button
+									variant="ghost"
+									className="size-6 opacity-0 group-hover:opacity-100"
+									onClick={() => setExpand((prev) => !prev)}
+								>
+									<ChevronDownIcon />
+								</Button>
+								<Checkbox />
+							</div>
 						</TableCell>
 						<TableCell className="h-14">{data.id}</TableCell>
 						<TableCell className="h-14">
@@ -68,36 +85,44 @@ function PageListTableRow({ data }: PageListTableRowProps) {
 						</TableCell>
 					</TableRow>
 				</ContextMenuTrigger>
+				<ContextMenuContent>
+					<ContextMenuItem>
+						<Trash2Icon />
+						Xóa
+					</ContextMenuItem>
+				</ContextMenuContent>
 			</ContextMenu>
-			{itemData?.map((item) => (
-				<TableRow key={item.id}>
-					<TableCell colSpan={6}>
-						<div className="flex items-center gap-1">
-							<div className="size-10 rounded-md bg-gray-50">
-								<img
-									src={item.thumbnail}
-									alt=""
-									className="w-full object-cover"
-								/>
-							</div>
-							<div className="space-y-1">
-								<div>
-									<span className="mr-8">{item.name}</span>
-									<span>{formatVND(item.price)}</span>
+			{expand &&
+				itemData?.map((item) => (
+					<TableRow key={item.id}>
+						<TableCell></TableCell>
+						<TableCell colSpan={5}>
+							<div className="flex items-center gap-1">
+								<div className="size-10 rounded-md bg-gray-50">
+									<img
+										src={item.thumbnail}
+										alt=""
+										className="w-full object-cover"
+									/>
 								</div>
-								<div className="space-x-2">
-									{item.variant.map((v) => (
-										<Badge key={v} variant="secondary">
-											{v}
-										</Badge>
-									))}
-									<Badge>Số lượng {item.quantity}</Badge>
+								<div className="space-y-1">
+									<div>
+										<span className="mr-8">{item.name}</span>
+										<span>{formatVND(item.price)}</span>
+									</div>
+									<div className="space-x-2">
+										{item.variant.map((v) => (
+											<Badge key={v} variant="secondary">
+												{v}
+											</Badge>
+										))}
+										<Badge variant="secondary">Số lượng {item.quantity}</Badge>
+									</div>
 								</div>
 							</div>
-						</div>
-					</TableCell>
-				</TableRow>
-			))}
+						</TableCell>
+					</TableRow>
+				))}
 		</React.Fragment>
 	);
 }

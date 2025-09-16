@@ -14,7 +14,7 @@ function ListPageBody() {
 	if (Number(data?.totalItems) === 0 && !isLoading) return <PageListEmpty />;
 
 	return (
-		<div className="max-w-7xl mx-auto">
+		<div className="max-w-7xl mx-auto pb-8">
 			<div className="flex items-center justify-between py-4">
 				<PageListSearchInput />
 				<DeleteAction />
