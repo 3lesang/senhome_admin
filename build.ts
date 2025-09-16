@@ -2,6 +2,10 @@
 import plugin from "bun-plugin-tailwind";
 import path from "path";
 
+const outdir = "./dist"
+// clean dist
+await Bun.$`rm -rf ${outdir}`;
+
 const formatFileSize = (bytes: number): string => {
 	const units = ["B", "KB", "MB", "GB"];
 	let size = bytes;
@@ -21,9 +25,9 @@ const start = performance.now();
 
 const build = await Bun.build({
 	entrypoints: ["./index.html"],
-	outdir: "./dist",
+	outdir,
 	plugins: [plugin],
-	splitting: true,
+	// splitting: true,
 	minify: true,
 	target: "browser",
 	sourcemap: "linked",
