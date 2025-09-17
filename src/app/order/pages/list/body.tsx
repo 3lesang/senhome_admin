@@ -1,15 +1,14 @@
-import { usePageList } from "@/app/order/provider/list";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { useOrderList } from "@/stores/order";
 import PageListEmpty from "./empty";
 import ListPagePagination from "./pagination";
 import ListPageTable from "./table";
 import DeleteAction from "./toolbar/delete-action";
 import PageListSearchInput from "./toolbar/page-search";
 
-function ListPageBody() {
-	const { data, isLoading } = usePageList();
-
+export default function ListPageBody() {
+	const { data, isLoading } = useOrderList();
 	if (isLoading) return null;
 	if (Number(data?.totalItems) === 0 && !isLoading) return <PageListEmpty />;
 
@@ -31,5 +30,3 @@ function ListPageBody() {
 		</div>
 	);
 }
-
-export default ListPageBody;

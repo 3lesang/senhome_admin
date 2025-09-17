@@ -2,7 +2,6 @@ import type { CheckedState } from "@radix-ui/react-checkbox";
 import { Link } from "@tanstack/react-router";
 import { EditIcon, Trash2Icon } from "lucide-react";
 import { PRODUCT_STATE } from "@/app/product/constants";
-import { usePageList } from "@/app/product/provider/list";
 import type { ProductDataType } from "@/app/product/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +14,7 @@ import {
 } from "@/components/ui/context-menu";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { cn, convertToFileUrl } from "@/lib/utils";
+import { useProductList } from "@/stores/product";
 
 interface PageListTableRowProps {
 	data: ProductDataType;
@@ -26,7 +26,7 @@ export default function PageListTableRow({
 	categoryMap,
 }: PageListTableRowProps) {
 	const { id } = data;
-	const { selected, setSelected, setDeleteSelect } = usePageList();
+	const { selected, setSelected, setDeleteSelect } = useProductList();
 
 	const handleSelect = (checked: CheckedState) => {
 		setSelected?.((prev) => ({ ...prev, [data.id]: checked as boolean }));

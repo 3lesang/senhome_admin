@@ -13,12 +13,12 @@ interface ListPageTableProps {
 	data?: OrderDataType[];
 }
 
-function ListPageTable({ data = [] }: ListPageTableProps) {
+export default function ListPageTable({ data = [] }: ListPageTableProps) {
 	return (
 		<Table>
-			<TableHeader className="bg-gray-50">
+			<TableHeader className="bg-sidebar">
 				<TableRow>
-					<TableHead >
+					<TableHead>
 						<Checkbox className="ml-7" />
 					</TableHead>
 					<TableHead>Mã đơn hàng</TableHead>
@@ -36,5 +36,3 @@ function ListPageTable({ data = [] }: ListPageTableProps) {
 		</Table>
 	);
 }
-
-export default ListPageTable;

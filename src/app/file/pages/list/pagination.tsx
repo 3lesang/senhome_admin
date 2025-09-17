@@ -1,5 +1,4 @@
 import { useId } from "react";
-import { usePageList } from "@/app/file/provider/list";
 import { DynamicPagination } from "@/components/dynamic-pagination";
 import { Label } from "@/components/ui/label";
 import {
@@ -9,9 +8,10 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { useFileList } from "@/stores/file";
 
-function ListPagePagination() {
-	const { page, limit, data, setPage, setLimit } = usePageList();
+export default function ListPagePagination() {
+	const { page, limit, data, setPage, setLimit } = useFileList();
 	const id = useId();
 	return (
 		<div className="flex justify-between">
@@ -47,5 +47,3 @@ function ListPagePagination() {
 		</div>
 	);
 }
-
-export default ListPagePagination;

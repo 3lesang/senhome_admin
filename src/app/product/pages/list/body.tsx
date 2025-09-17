@@ -1,6 +1,6 @@
-import { usePageList } from "@/app/product/provider/list";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { useProductList } from "@/stores/product";
 import PageListEmpty from "./empty";
 import ListPagePagination from "./pagination";
 import ListPageTable from "./table";
@@ -8,7 +8,7 @@ import DeleteAction from "./toolbar/delete-action";
 import PageListSearchInput from "./toolbar/page-search";
 
 export default function ListPageBody() {
-	const { data, isLoading } = usePageList();
+	const { data, isLoading } = useProductList();
 
 	const { products, categoryMap } = data ?? {};
 	const { totalItems, items } = products ?? {};

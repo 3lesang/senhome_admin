@@ -1,15 +1,15 @@
 import { SquareIcon } from "lucide-react";
-import { usePageList } from "@/app/file/provider/list";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useFileList } from "@/stores/file";
 import PageListEmpty from "./empty";
 import PageListGrid from "./grid";
 import ListPagePagination from "./pagination";
 import DeleteAction from "./toolbar/delete-action";
 
-function ListPageBody() {
-	const { data, isLoading, hasSelect, setHasSelect } = usePageList();
+export default function ListPageBody() {
+	const { data, isLoading, hasSelect, setHasSelect } = useFileList();
 
 	if (isLoading) return null;
 	if (Number(data?.totalItems) === 0 && !isLoading) return <PageListEmpty />;
@@ -39,5 +39,3 @@ function ListPageBody() {
 		</div>
 	);
 }
-
-export default ListPageBody;

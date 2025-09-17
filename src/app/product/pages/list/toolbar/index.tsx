@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { usePageList } from "@/app/product/provider/list";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useProductList } from "@/stores/product";
 
 const FILTERS = [
 	{ key: 0, label: "Tất cả", query: "" },
@@ -9,8 +9,8 @@ const FILTERS = [
 	{ key: 2, label: "Bản nháp", query: "deleted!=null" },
 ];
 
-function ListPageToolbar() {
-	const { setQuery } = usePageList();
+export default function ListPageToolbar() {
+	const { setQuery } = useProductList();
 	const [type, setType] = useState<number>(0);
 
 	const handleFilterClick = (key: number, filterQuery: string) => {
@@ -36,5 +36,3 @@ function ListPageToolbar() {
 		</div>
 	);
 }
-
-export default ListPageToolbar;

@@ -1,6 +1,6 @@
-import { usePageList } from "@/app/file/provider/list";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import { useFileList } from "@/stores/file";
 
 interface MediaFileProps {
 	data?: {
@@ -9,8 +9,8 @@ interface MediaFileProps {
 	};
 }
 
-function MediaFile({ data = { id: "" } }: MediaFileProps) {
-	const { hasSelect, setSelected, selected } = usePageList();
+export default function MediaFile({ data = { id: "" } }: MediaFileProps) {
+	const { hasSelect, setSelected, selected } = useFileList();
 	const { id = "", url } = data;
 
 	const isSelected = Boolean(selected?.[id]);
@@ -47,5 +47,3 @@ function MediaFile({ data = { id: "" } }: MediaFileProps) {
 		</div>
 	);
 }
-
-export default MediaFile;

@@ -4,9 +4,9 @@ import { PRODUCT_COLLECTION } from "@/pocketbase/constants";
 import { getListProductPocket } from "@/pocketbase/product/list";
 
 type GetListQueryOptionType = {
-	page?: number;
-	limit?: number;
-	query?: string;
+	page: number;
+	limit: number;
+	query: string;
 };
 
 export const getListProductQueryOptions = (queries: GetListQueryOptionType) => {

@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
+import type { VariantProps } from "class-variance-authority";
 import { ChevronDownIcon, Trash2Icon } from "lucide-react";
 import React, { useState } from "react";
 import { ORDER_STATUS } from "@/app/order/constants";
 import { getListItemOrderQueryOptions } from "@/app/order/handler/query/items";
 import type { OrderDataType } from "@/app/order/types";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
+import { Badge, type badgeVariants } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -28,13 +29,21 @@ interface PageListTableRowProps {
 
 type OrderStatus = typeof ORDER_STATUS;
 type OrderStatusKey = keyof OrderStatus;
+type BadgeVariant = VariantProps<typeof badgeVariants>["variant"];
 
-function PageListTableRow({ data }: PageListTableRowProps) {
+export default function PageListTableRow({ data }: PageListTableRowProps) {
 	const [expand, setExpand] = useState(false);
 	const { id } = data;
 	const { data: itemData } = useQuery(getListItemOrderQueryOptions(id));
 
 	const status = ORDER_STATUS[data.status as OrderStatusKey];
+
+	const statusVariant: Record<number, BadgeVariant> = {
+		0: "outline",
+		1: "default",
+		2: "secondary",
+	};
+
 	return (
 		<React.Fragment>
 			<ContextMenu>
@@ -79,7 +88,7 @@ function PageListTableRow({ data }: PageListTableRowProps) {
 						<TableCell>{data?.shipping_address}</TableCell>
 						<TableCell>{formatVND(data.final_price)}</TableCell>
 						<TableCell>
-							<Badge variant="secondary" className={status.class}>
+							<Badge variant={statusVariant[status.variant]}>
 								{status.label}
 							</Badge>
 						</TableCell>
@@ -126,5 +135,3 @@ function PageListTableRow({ data }: PageListTableRowProps) {
 		</React.Fragment>
 	);
 }
-
-export default PageListTableRow;

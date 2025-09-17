@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
 import { deleteProductHandler } from "@/app/product/handler/mutation/delete";
-import { usePageList } from "@/app/product/provider/list";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -11,9 +10,10 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import { useProductList } from "@/stores/product";
 
-function DeleteDialog() {
-	const { deleteSelect, setDeleteSelect, refetch } = usePageList();
+export default function DeleteDialog() {
+	const { deleteSelect, setDeleteSelect, refetch } = useProductList();
 
 	const { mutate } = useMutation({
 		mutationFn: deleteProductHandler,
@@ -54,5 +54,3 @@ function DeleteDialog() {
 		</Dialog>
 	);
 }
-
-export default DeleteDialog;

@@ -40,7 +40,7 @@ import {
 } from "@/components/ui/sidebar";
 import pocketClient from "@/pocketbase/client";
 
-function AppSidebar() {
+export default function AppSidebar() {
 	const location = useLocation();
 	const user = {
 		name: pocketClient.authStore.record?.name,
@@ -119,7 +119,7 @@ function AppSidebar() {
 										<SidebarMenuSubItem>
 											<SidebarMenuSubButton
 												asChild
-												isActive={location.pathname.includes("order")}
+												isActive={location.href === "/order"}
 											>
 												<Link to="/order">
 													<span className="select-none">Tất cả</span>
@@ -127,8 +127,16 @@ function AppSidebar() {
 											</SidebarMenuSubButton>
 										</SidebarMenuSubItem>
 										<SidebarMenuSubItem>
-											<SidebarMenuSubButton asChild>
-												<Link to="/order">
+											<SidebarMenuSubButton
+												asChild
+												isActive={location.searchStr === "?q=new"}
+											>
+												<Link
+													to="/order"
+													search={{
+														q: "new",
+													}}
+												>
 													<span className="select-none">Đơn mới</span>
 												</Link>
 											</SidebarMenuSubButton>
@@ -232,5 +240,3 @@ function AppSidebar() {
 		</Sidebar>
 	);
 }
-
-export default AppSidebar;

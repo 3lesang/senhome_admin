@@ -1,14 +1,11 @@
-import { PageListProvider } from "@/app/file/provider/list";
 import ListPageBody from "./body";
 import PageListHeader from "./header";
 
-function MediaListPage() {
-  return (
-    <PageListProvider>
-      <PageListHeader />
-      <ListPageBody />
-    </PageListProvider>
-  );
+export default function MediaListPage() {
+	return (
+		<>
+			<PageListHeader />
+			<ListPageBody />
+		</>
+	);
 }
-
-export default MediaListPage;

@@ -56,6 +56,7 @@
 		"bun-plugin-tailwind": "^0.0.15",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
+		"jotai": "^2.14.0",
 		"lodash": "^4.17.21",
 		"lucide-react": "^0.544.0",
 		"nanoid": "^5.1.5",

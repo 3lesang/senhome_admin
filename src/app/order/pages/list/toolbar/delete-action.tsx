@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
 import { Trash2Icon } from "lucide-react";
-import { usePageList } from "@/app/order/provider/list";
 import { deleteProductHandler } from "@/app/product/handler/mutation/delete";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,9 +12,10 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import { useOrderList } from "@/stores/order";
 
-function DeleteAction() {
-	const { selected, setSelected, refetch } = usePageList();
+export default function DeleteAction() {
+	const { selected, setSelected, refetch } = useOrderList();
 
 	const keys = Object.keys(selected ?? {}).filter((key) => selected?.[key]);
 
@@ -67,5 +67,3 @@ function DeleteAction() {
 		</div>
 	);
 }
-
-export default DeleteAction;

@@ -1,16 +1,14 @@
-import { usePageList } from "@/app/file/provider/list";
+import { useFileList } from "@/stores/file";
 import MediaFile from "./file";
 
-function PageListGrid() {
-  const { data } = usePageList();
+export default function PageListGrid() {
+	const { data } = useFileList();
 
-  return (
-    <div className="grid grid-cols-10 gap-1">
-      {data?.items?.map((item) => (
-        <MediaFile key={item.id} data={item} />
-      ))}
-    </div>
-  );
+	return (
+		<div className="grid grid-cols-10 gap-1">
+			{data?.items?.map((item) => (
+				<MediaFile key={item.id} data={item} />
+			))}
+		</div>
+	);
 }
-
-export default PageListGrid;

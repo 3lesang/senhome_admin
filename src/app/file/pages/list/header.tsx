@@ -1,11 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import UploadModal from "@/app/file/components/upload/modal";
 import { createFileHandler } from "@/app/file/handler/mutation/create";
-import { usePageList } from "@/app/file/provider/list";
+import { useFileList } from "@/stores/file";
 import ListPageToolbar from "./toolbar";
 
-function PageListHeader() {
-	const { refetch } = usePageList();
+export default function PageListHeader() {
+	const { refetch } = useFileList();
 	const { mutate } = useMutation({
 		mutationFn: createFileHandler,
 		onSuccess: () => {
@@ -31,5 +31,3 @@ function PageListHeader() {
 		</div>
 	);
 }
-
-export default PageListHeader;
