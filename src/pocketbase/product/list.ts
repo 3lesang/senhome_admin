@@ -1,8 +1,8 @@
 import type { ListResult } from "pocketbase";
-import type { ProductDataType } from "@/app/product/types";
 import pocketClient from "@/pocketbase/client";
 import { PRODUCT_COLLECTION } from "@/pocketbase/constants";
 import type { GetListQueryPocketType } from "@/pocketbase/types";
+import type { ProductDataType } from "@/types/product";
 
 async function getListProductPocket(
 	queries: GetListQueryPocketType,

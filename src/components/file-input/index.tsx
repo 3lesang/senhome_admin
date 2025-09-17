@@ -12,8 +12,8 @@ import {
 } from "@dnd-kit/sortable";
 import { type ReactNode, useState } from "react";
 
-import FileModal from "@/app/file/components/select/modal";
-import type { FileType } from "@/app/file/types";
+import FileModal from "@/components/file/select/modal";
+import type { FileType } from "@/types/file";
 import SortableItem from "./sortable-item";
 
 interface RenderDataProps {

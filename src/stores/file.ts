@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { atom, useAtom } from "jotai";
-import { getListFileQueryOptions } from "@/app/file/handler/query/list";
+import { getListFileQueryOptions } from "@/handlers/file/query/list";
 
 export const pageAtom = atom(1);
 export const limitAtom = atom(50);

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { atom, useAtom } from "jotai";
-import { getListCategoryQueryOptions } from "@/app/category/handler/query/list";
+import { getListCategoryQueryOptions } from "@/handlers/category/query/list";
 
 export const pageAtom = atom(1);
 export const limitAtom = atom(10);

@@ -1,7 +1,7 @@
 import type { ListResult } from "pocketbase";
-import type { FileDataType } from "@/app/file/types";
 import pocketClient from "@/pocketbase/client";
 import { FILE_COLLECTION } from "@/pocketbase/constants";
+import type { FileDataType } from "@/types/file";
 
 export type GetListQueryPocketType = {
 	page: number;

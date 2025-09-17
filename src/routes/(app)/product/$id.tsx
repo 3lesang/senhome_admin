@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getFullListCategoryQueryOptions } from "@/app/category/handler/query/list";
-import { productFilesQueryOptions } from "@/app/product/handler/query/media";
-import { productQueryOptions } from "@/app/product/handler/query/one";
-import { productVariantQueryOptions } from "@/app/product/handler/query/variant";
-import ProductUpdatePage from "@/app/product/pages/update";
+import { getFullListCategoryQueryOptions } from "@/handlers/category/query/list";
+import { productFilesQueryOptions } from "@/handlers/product/query/media";
+import { productQueryOptions } from "@/handlers/product/query/one";
+import { productVariantQueryOptions } from "@/handlers/product/query/variant";
+import ProductUpdatePage from "@/pages/product/update";
 
 export const Route = createFileRoute("/(app)/product/$id")({
 	component: RouteComponent,

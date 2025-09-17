@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
-import OrderListPage from "@/app/order/pages/list";
+import OrderListPage from "@/pages/order/list";
 
 const schema = z.object({
 	q: z.string().optional(),

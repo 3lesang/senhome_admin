@@ -1,5 +1,5 @@
 import type { ListResult } from "pocketbase";
-import type { CategoryDataType } from "@/app/category/types";
+import type { CategoryDataType } from "@/types/category";
 import pocketClient from "../client";
 import { CATEGORY_COLLECTION } from "../constants";
 import type { GetListQueryPocketType } from "../types";
