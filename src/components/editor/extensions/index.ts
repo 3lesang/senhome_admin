@@ -9,8 +9,8 @@ import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
+import Youtube from "@tiptap/extension-youtube";
 import { Placeholder, UndoRedo } from "@tiptap/extensions";
-// import Video from "@/components/editor/extensions/video";
 
 export const extensions = [
 	Document,
@@ -31,9 +31,20 @@ export const extensions = [
 		openOnClick: false,
 		autolink: true,
 	}),
-	// Video,
 	BulletList,
 	OrderedList,
 	ListItem,
 	UndoRedo,
+	Youtube.configure({
+		nocookie: true,
+	}).extend({
+		addAttributes() {
+			return {
+				...this.parent?.(),
+				width: {
+					default: "100%",
+				},
+			};
+		},
+	}),
 ];

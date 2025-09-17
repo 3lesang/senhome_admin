@@ -1,6 +1,7 @@
 import { type Editor, EditorContent, useEditor } from "@tiptap/react";
 import { extensions } from "@/components/editor/extensions";
 import Menu from "@/components/editor/menu";
+import "./styles.css";
 
 interface EditorProps {
 	content?: string;
@@ -23,9 +24,9 @@ export default ({ content, onChange }: EditorProps) => {
 	});
 
 	return (
-		<div>
+		<>
 			<Menu editor={editor} />
 			<EditorContent editor={editor} />
-		</div>
+		</>
 	);
 };

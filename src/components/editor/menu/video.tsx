@@ -28,11 +28,17 @@ interface Props {
 export default ({ editor }: Props) => {
 	const form = useForm({
 		defaultValues: {
-			url: "",
+			src: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
 		},
 	});
 
-	const src = form.watch("url");
+	const src = form.watch("src");
+
+	const handleAddVideo = () => {
+		editor.commands.setYoutubeVideo({
+			src,
+		});
+	};
 
 	return (
 		<Dialog>
@@ -50,12 +56,15 @@ export default ({ editor }: Props) => {
 					<form>
 						<FormField
 							control={form.control}
-							name="url"
+							name="src"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Video URL</FormLabel>
 									<FormControl>
-										<Input placeholder="youtube/id" {...field} />
+										<Input
+											placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+											{...field}
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -63,20 +72,13 @@ export default ({ editor }: Props) => {
 						/>
 					</form>
 				</Form>
-				{/* <VideoPlayer src={src} /> */}
+				{src && <VideoPlayer src={src} />}
 				<DialogFooter>
 					<DialogClose asChild>
 						<Button variant="outline">Hủy</Button>
 					</DialogClose>
 					<DialogClose asChild>
-						<Button
-							type="button"
-							// onClick={() =>
-							// 	editor?.commands.setVideoComponent({
-							// 		src,
-							// 	})
-							// }
-						>
+						<Button type="button" onClick={handleAddVideo}>
 							Chèn Video
 						</Button>
 					</DialogClose>
