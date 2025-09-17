@@ -12,7 +12,7 @@ const RootComponent = () => (
 	<>
 		<Outlet />
 		<TanStackRouterDevtools />
-		<ReactQueryDevtools initialIsOpen={false} />
+		<ReactQueryDevtools />
 		<Toaster closeButton />
 	</>
 );

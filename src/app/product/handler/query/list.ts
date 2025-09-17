@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import { getListCategoryPocket } from "@/pocketbase/category/list";
+import { getFullListCategoryPocket } from "@/pocketbase/category/list";
 import { PRODUCT_COLLECTION } from "@/pocketbase/constants";
 import { getListProductPocket } from "@/pocketbase/product/list";
 
@@ -14,7 +14,7 @@ export const getListProductQueryOptions = (queries: GetListQueryOptionType) => {
 	return queryOptions({
 		queryKey: [PRODUCT_COLLECTION, page, limit, query],
 		queryFn: async () => {
-			const categories = await getListCategoryPocket();
+			const categories = await getFullListCategoryPocket();
 			const categoryMap = categories.reduce(
 				(acc, { id, name }) => {
 					acc[id] = { id, name };

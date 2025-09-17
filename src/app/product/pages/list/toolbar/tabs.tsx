@@ -9,7 +9,7 @@ const FILTERS = [
 	{ key: 2, label: "Bản nháp", query: "deleted!=null" },
 ];
 
-export default function ListPageToolbar() {
+export default function ListPageTabs() {
 	const { setQuery } = useProductList();
 	const [type, setType] = useState<number>(0);
 

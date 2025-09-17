@@ -11,7 +11,7 @@ const FILTERS = [
 	{ key: 4, label: "Đã hủy", query: `status="canceled"` },
 ];
 
-export default function ListPageToolbar() {
+export default function ListPageTabs() {
 	const search = useSearch({ from: "/(app)/order/" });
 	const { setQuery } = useOrderList();
 	const [type, setType] = useState<number>(0);

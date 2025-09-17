@@ -1,5 +1,4 @@
 import { useMutation } from "@tanstack/react-query";
-import { deleteProductHandler } from "@/app/product/handler/mutation/delete";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -10,13 +9,14 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { useProductList } from "@/stores/product";
+import { deleteCategoryPocket } from "@/pocketbase/category/delete";
+import { useCategoryList } from "@/stores/category";
 
 export default function DeleteDialog() {
-	const { deleteSelect, setDeleteSelect, refetch } = useProductList();
+	const { deleteSelect, setDeleteSelect, refetch } = useCategoryList();
 
 	const { mutate } = useMutation({
-		mutationFn: deleteProductHandler,
+		mutationFn: deleteCategoryPocket,
 		onSuccess: () => {
 			refetch?.();
 			setDeleteSelect("");
@@ -35,7 +35,7 @@ export default function DeleteDialog() {
 		<Dialog open={!!deleteSelect} onOpenChange={handleOpenChange}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Bạn có chắc xóa sản phẩm?</DialogTitle>
+					<DialogTitle>Bạn có chắc xóa danh mục?</DialogTitle>
 					<DialogDescription>
 						Không thể hoàn tác hành động này. Thao tác này sẽ xóa vĩnh viễn dữ
 						liệu
@@ -48,7 +48,7 @@ export default function DeleteDialog() {
 						</Button>
 					</DialogClose>
 					<Button type="button" onClick={handleDelete}>
-						Xóa sản phẩm
+						Xóa danh mục
 					</Button>
 				</DialogFooter>
 			</DialogContent>

@@ -9,7 +9,7 @@ export default function SearchInput({
 }: {
 	onSearch?: (q: string) => void;
 }) {
-	const [open, setOpen] = useState(false);
+	const [open, setOpen] = useState(true);
 	const [query, setQuery] = useState("");
 
 	const debouncedSearch = useDebouncedCallback((value: string) => {
@@ -32,7 +32,6 @@ export default function SearchInput({
 				<Input
 					placeholder="Tìm kiếm..."
 					className="bg-white w-56"
-					autoFocus
 					value={query}
 					onChange={(e) => {
 						setQuery(e.target.value);

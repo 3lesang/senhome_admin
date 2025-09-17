@@ -1,4 +1,4 @@
-import ListPageToolbar from "./toolbar";
+import ListPageTabs from "./toolbar/tabs";
 
 export default function ListPageHeader() {
 	return (
@@ -7,7 +7,7 @@ export default function ListPageHeader() {
 				<div className="flex justify-between items-center">
 					<h3 className="font-bold text-2xl">Quản lý đơn hàng</h3>
 				</div>
-				<ListPageToolbar />
+				<ListPageTabs />
 			</div>
 		</div>
 	);

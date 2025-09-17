@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import ListPageToolbar from "./toolbar";
+import ListPageTabs from "./toolbar/tabs";
 
 export default function ListPageHeader() {
 	return (
@@ -15,7 +15,7 @@ export default function ListPageHeader() {
 						</Link>
 					</div>
 				</div>
-				<ListPageToolbar />
+				<ListPageTabs />
 			</div>
 		</div>
 	);

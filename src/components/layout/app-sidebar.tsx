@@ -95,9 +95,9 @@ export default function AppSidebar() {
 										<SidebarMenuSubItem>
 											<SidebarMenuSubButton
 												asChild
-												isActive={location.pathname === "/product/create"}
+												isActive={location.pathname === "/category"}
 											>
-												<Link to="/product/create">
+												<Link to="/category">
 													<span className="select-none">Danh mục sản phẩm</span>
 												</Link>
 											</SidebarMenuSubButton>

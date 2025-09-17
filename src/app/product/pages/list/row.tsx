@@ -44,9 +44,9 @@ export default function PageListTableRow({
 					</TableCell>
 					<TableCell>
 						<div className="flex items-center gap-2">
-							<Avatar className="size-10 rounded-md">
+							<Avatar className="rounded size-6">
 								<AvatarImage src={convertToFileUrl(data.expand.thumbnail)} />
-								<AvatarFallback className="rounded-md"></AvatarFallback>
+								<AvatarFallback className="rounded"></AvatarFallback>
 							</Avatar>
 							<Link
 								to="/product/$id"

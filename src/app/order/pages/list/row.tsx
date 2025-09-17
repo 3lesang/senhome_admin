@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { ORDER_STATUS } from "@/app/order/constants";
 import { getListItemOrderQueryOptions } from "@/app/order/handler/query/items";
 import type { OrderDataType } from "@/app/order/types";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge, type badgeVariants } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -61,8 +61,8 @@ export default function PageListTableRow({ data }: PageListTableRowProps) {
 								<Checkbox />
 							</div>
 						</TableCell>
-						<TableCell className="h-14">{data.id}</TableCell>
-						<TableCell className="h-14">
+						<TableCell>{data.id}</TableCell>
+						<TableCell>
 							<HoverCard>
 								<HoverCardTrigger asChild>
 									<Badge variant="secondary" className="cursor-pointer">
@@ -107,26 +107,19 @@ export default function PageListTableRow({ data }: PageListTableRowProps) {
 						<TableCell></TableCell>
 						<TableCell colSpan={5}>
 							<div className="flex items-center gap-1">
-								<div className="size-10 rounded-md bg-gray-50">
-									<img
-										src={item.thumbnail}
-										alt=""
-										className="w-full object-cover"
-									/>
-								</div>
-								<div className="space-y-1">
-									<div>
-										<span className="mr-8">{item.name}</span>
-										<span>{formatVND(item.price)}</span>
-									</div>
-									<div className="space-x-2">
-										{item.variant.map((v) => (
-											<Badge key={v} variant="secondary">
-												{v}
-											</Badge>
-										))}
-										<Badge variant="secondary">Số lượng {item.quantity}</Badge>
-									</div>
+								<Avatar className="rounded size-6">
+									<AvatarImage src={item.thumbnail} />
+									<AvatarFallback className="rounded"></AvatarFallback>
+								</Avatar>
+								<div className="space-x-1">
+									<span>{item.name}</span>
+									{item.variant.map((v) => (
+										<Badge key={v} variant="secondary">
+											{v}
+										</Badge>
+									))}
+									<Badge variant="secondary">Số lượng {item.quantity}</Badge>
+									<span>{formatVND(item.price)}</span>
 								</div>
 							</div>
 						</TableCell>
