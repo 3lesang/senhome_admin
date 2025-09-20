@@ -1,4 +1,4 @@
-import type { ProductVariantDataType } from "@/components/product/form/schema";
+import type { ProductVariantDataType } from "@/components/product-form/schema";
 import type { FileType } from "@/types/file";
 
 export type AttributeNormalizeType = {

@@ -1,19 +1,10 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useId, useState } from "react";
-import { DynamicPagination } from "@/components/dynamic-pagination";
-import FileDropzone from "@/components/file-dropzone";
-import { Label } from "@/components/ui/label";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import { createFileHandler } from "@/handlers/file/mutation/create";
-import { getListFileQueryOptions } from "@/handlers/file/query/list";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useIntersectionObserver } from "usehooks-ts";
+import { convertToFileUrl } from "@/lib/utils";
+import { FILE_COLLECTION } from "@/pocketbase/constants";
+import { getListFilePocket } from "@/pocketbase/file/list";
 import type { FileType } from "@/types/file";
-import Dropzone from "./dropzone";
 import FileItem from "./file";
 
 interface SelectModalGridProps {
@@ -22,77 +13,60 @@ interface SelectModalGridProps {
 	selected?: string[];
 }
 
+const LIMIT = 20;
+
 function SelectModalGrid({
 	onRemove,
 	onSelect,
 	selected,
 }: SelectModalGridProps) {
-	const [page, setPage] = useState(1);
-	const [limit, setLimit] = useState(20);
-	const { data, refetch } = useQuery(
-		getListFileQueryOptions({ page, limit, query: "" }),
-	);
-	const { mutate } = useMutation({
-		mutationFn: createFileHandler,
-		onSuccess: () => {
-			refetch?.();
-		},
+	const { isIntersecting, ref } = useIntersectionObserver({
+		threshold: 0.5,
 	});
 
-	const handleUpload = (files: File[]) => {
-		mutate(files);
-	};
+	const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
+		useInfiniteQuery({
+			queryKey: [FILE_COLLECTION],
+			queryFn: async ({ pageParam }) => {
+				return getListFilePocket({ page: pageParam, limit: LIMIT, filter: "" });
+			},
+			initialPageParam: 1,
+			getNextPageParam: (lastPage) => {
+				if (lastPage.page < lastPage.totalPages) {
+					return lastPage.page + 1;
+				}
+				return undefined;
+			},
+		});
 
-	const id = useId();
+	useEffect(() => {
+		if (isIntersecting && hasNextPage && !isFetchingNextPage) {
+			fetchNextPage();
+		}
+	}, [isIntersecting, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
 	return (
-		<div className="max-h-[500px] overflow-y-scroll space-y-8 scrollbar-hide">
-			<FileDropzone
-				onChange={handleUpload}
-				render={({ isDragActive }) => <Dropzone isDragActive={isDragActive} />}
-			/>
-			<div className="grid grid-cols-5 gap-4">
-				{data?.items.map((item) => (
-					<FileItem
-						key={item.id}
-						data={item}
-						onRemove={onRemove}
-						onSelect={onSelect}
-						isSelected={selected?.includes(item.id)}
-					/>
-				))}
+		<div className="max-h-[500px] overflow-y-auto">
+			<div className="grid grid-cols-10 gap-2">
+				{data?.pages.map((page) => {
+					return page.items.map((item) => {
+						const file: FileType = {
+							id: item.id,
+							url: convertToFileUrl(item) ?? "",
+						};
+						return (
+							<FileItem
+								key={item.id}
+								data={file}
+								onRemove={onRemove}
+								onSelect={onSelect}
+								isSelected={selected?.includes(item.id)}
+							/>
+						);
+					});
+				})}
 			</div>
-			<div className="flex justify-between">
-				<div className="flex w-full max-w-sm items-center gap-4">
-					<Label htmlFor={id} className="whitespace-nowrap">
-						Số lượng
-					</Label>
-					<Select
-						value={limit.toString()}
-						onValueChange={(val) => {
-							setLimit(Number(val));
-							setPage(1);
-						}}
-					>
-						<SelectTrigger id={id} className="bg-white w-[120px]">
-							<SelectValue placeholder="Chọn số lượng" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="10">10</SelectItem>
-							<SelectItem value="20">20</SelectItem>
-							<SelectItem value="50">50</SelectItem>
-						</SelectContent>
-					</Select>
-				</div>
-				<div>
-					<DynamicPagination
-						page={page}
-						totalItems={data?.totalItems ?? 0}
-						perPage={limit}
-						onPageChange={(page) => setPage(page)}
-					/>
-				</div>
-			</div>
+			<div ref={ref}></div>
 		</div>
 	);
 }

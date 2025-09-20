@@ -1,5 +1,5 @@
 import { useFileList } from "@/stores/file";
-import MediaFile from "./file";
+import FileItem from "./file";
 
 export default function PageListGrid() {
 	const { data } = useFileList();
@@ -7,7 +7,7 @@ export default function PageListGrid() {
 	return (
 		<div className="grid grid-cols-10 gap-1">
 			{data?.items?.map((item) => (
-				<MediaFile key={item.id} data={item} />
+				<FileItem key={item.id} data={item} />
 			))}
 		</div>
 	);

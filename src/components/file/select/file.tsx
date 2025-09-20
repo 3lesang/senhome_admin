@@ -28,29 +28,30 @@ function FileItem({
 		setSelected((prev) => !prev);
 	};
 	return (
-		<button
-			type="button"
-			className={cn(
-				"p-4 hover:bg-gray-50 rounded-md",
-				selected && "bg-gray-50",
-			)}
-			onClick={handleClick}
-		>
-			<div className="rounded-md border border-gray-100 p-1 bg-white">
-				<div className="relative bg-gray-50 rounded-md">
-					<img
-						src={url}
-						alt=""
-						className="object-contain aspect-square rounded-md"
-					/>
-					<Checkbox
-						checked={selected}
-						type="button"
-						className="absolute left-1 top-1 bg-white"
-					/>
-				</div>
+		<div className="relative group">
+			<button
+				type="button"
+				className="absolute inset-0 z-50"
+				onClick={handleClick}
+			></button>
+			<div
+				className={cn(
+					"group-hover:bg-gray-50 rounded-md p-2",
+					selected && "bg-gray-50",
+				)}
+			>
+				<img
+					src={url}
+					alt=""
+					className="object-contain aspect-square rounded-md"
+				/>
 			</div>
-		</button>
+			<Checkbox
+				checked={selected}
+				type="button"
+				className="absolute right-2 top-2 bg-white"
+			/>
+		</div>
 	);
 }
 

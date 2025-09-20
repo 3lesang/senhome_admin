@@ -106,7 +106,7 @@ function ProductSidebar() {
 											value={field.value}
 											mode="single"
 											render={({ files, handleOpen, handleRemove }) =>
-												files.length > 0 ? (
+												files[0]?.id ? (
 													<div className="relative group flex items-center justify-center w-full aspect-square rounded-md overflow-hidden">
 														<img
 															src={files[0]?.url}

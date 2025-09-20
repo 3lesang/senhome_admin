@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { EditIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
-import type { CategoryValuesType } from "@/components/category/form";
-import CategoryForm from "@/components/category/form";
+import type { CategoryValuesType } from "@/components/category-form";
+import CategoryForm from "@/components/category-form";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
 	ContextMenu,

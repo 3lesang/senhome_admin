@@ -1,15 +1,14 @@
-import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { useFileList } from "@/stores/file";
 
-interface MediaFileProps {
+interface FileItemProps {
 	data?: {
 		id?: string;
 		url?: string;
 	};
 }
 
-export default function MediaFile({ data = { id: "" } }: MediaFileProps) {
+export default function FileItem({ data = { id: "" } }: FileItemProps) {
 	const { hasSelect, setSelected, selected } = useFileList();
 	const { id = "", url } = data;
 
@@ -28,21 +27,21 @@ export default function MediaFile({ data = { id: "" } }: MediaFileProps) {
 				className="object-cover aspect-square w-full select-none"
 				aria-label="image"
 				alt=""
-			></img>
+			/>
 			{hasSelect && (
 				<button
 					type="button"
-					className={cn(
-						"absolute inset-0 hover:cursor-pointer",
-						isSelected ? "bg-black/20" : "bg-black/10",
-					)}
+					className="absolute inset-0 z-50"
 					onClick={handleSelect}
-				>
-					<Checkbox
-						className="absolute top-1 right-1 bg-white"
-						checked={isSelected}
-					/>
-				</button>
+				/>
+			)}
+			{hasSelect && (
+				<div
+					className={cn(
+						"absolute inset-0",
+						isSelected ? "bg-black/20" : "bg-black-10",
+					)}
+				></div>
 			)}
 		</div>
 	);

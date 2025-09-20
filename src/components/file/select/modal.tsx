@@ -1,15 +1,19 @@
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import FileDropzone from "@/components/file-dropzone";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogClose,
 	DialogContent,
+	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator";
+import { createFileHandler } from "@/handlers/file/mutation/create";
 import type { FileType } from "@/types/file";
+import Dropzone from "./dropzone";
 import SelectModalGrid from "./grid";
 
 interface FileModalProps {
@@ -20,7 +24,7 @@ interface FileModalProps {
 	onConfirm?: (files: FileType[]) => void;
 }
 
-function FileModal(props: FileModalProps) {
+export default function FileModal(props: FileModalProps) {
 	const { open, onOpenChange, onConfirm, mode } = props;
 	const [selectedFiles, setSelectedFiles] = useState<Record<string, FileType>>(
 		{},
@@ -44,18 +48,33 @@ function FileModal(props: FileModalProps) {
 		onConfirm?.(Object.values(selectedFiles));
 	};
 
+	const { mutate } = useMutation({
+		mutationFn: createFileHandler,
+		onSuccess: () => {},
+	});
+
+	const handleUpload = (files: File[]) => {
+		mutate(files);
+	};
+
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent className="min-w-5xl">
 				<DialogHeader>
 					<DialogTitle>Chọn tệp</DialogTitle>
+					<DialogDescription></DialogDescription>
+					<FileDropzone
+						onChange={handleUpload}
+						render={({ isDragActive }) => (
+							<Dropzone isDragActive={isDragActive} />
+						)}
+					/>
 				</DialogHeader>
 				<SelectModalGrid
 					onSelect={handleAdd}
 					onRemove={handleRemove}
 					selected={Object.keys(selectedFiles)}
 				/>
-				<Separator />
 				<DialogFooter>
 					<DialogClose asChild>
 						<Button variant="outline">Hủy</Button>
@@ -68,5 +87,3 @@ function FileModal(props: FileModalProps) {
 		</Dialog>
 	);
 }
-
-export default FileModal;

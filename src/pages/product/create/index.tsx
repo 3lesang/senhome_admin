@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import ProductForm from "@/components/product/form";
+import ProductForm from "@/components/product-form";
 import { batchProductMediaHandler } from "@/handlers/file/mutation/product";
 import { batchVariantHandler } from "@/handlers/product/mutation/batch-variant";
 import { createProductHandler } from "@/handlers/product/mutation/create";

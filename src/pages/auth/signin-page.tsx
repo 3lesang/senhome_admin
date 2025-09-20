@@ -1,11 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
-import SigninForm from "@/components/auth/signin-form";
-import type { SigninFormType } from "@/components/auth/signin-form/type";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { SigninFormValuesType } from "@/components/signin-form";
+import SigninForm from "@/components/signin-form";
+import {
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import signInHandler from "@/handlers/auth/mutation/signin";
 
-function SigninPage() {
+export default function SigninPage() {
 	const navigate = useNavigate();
 	const { mutate, isPending } = useMutation({
 		mutationFn: signInHandler,
@@ -14,30 +20,33 @@ function SigninPage() {
 		},
 	});
 
-	const handleSubmit = (values: SigninFormType) => {
+	const handleSubmit = (values: SigninFormValuesType) => {
 		mutate(values);
 	};
 
 	return (
-		<div className="bg-gray-50">
-			<div className="h-screen flex justify-center items-center">
-				<div>
-					<Card className="border-none shadow-none w-96">
-						<CardHeader>
-							<CardTitle>Đăng nhập</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<SigninForm isPending={isPending} onSubmit={handleSubmit} />
-						</CardContent>
-					</Card>
-					<div className="mt-2">
-						<span className="text-sm">Chưa có tài khoản?</span>
+		<div className="h-screen flex justify-center items-center bg-gray-50">
+			<Card className="border-none shadow-none w-96">
+				<CardHeader>
+					<CardTitle>Đăng nhập</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<SigninForm
+						defaultValues={{
+							email: "",
+							password: "",
+						}}
+						isPending={isPending}
+						onSubmit={handleSubmit}
+					/>
+				</CardContent>
+				<CardFooter>
+					<p>
+						<span>Chưa có tài khoản?</span>
 						<Link to="/signup">Tạo tài khoản</Link>
-					</div>
-				</div>
-			</div>
+					</p>
+				</CardFooter>
+			</Card>
 		</div>
 	);
 }
-
-export default SigninPage;
