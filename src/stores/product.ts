@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { atom, useAtom } from "jotai";
 import { getListProductQueryOptions } from "@/handlers/product/query/list";
 
@@ -23,7 +23,7 @@ export function useProductList() {
 
 	const params = { page, limit, query };
 
-	const { data, isLoading, refetch } = useQuery(
+	const { data, isLoading, refetch } = useSuspenseQuery(
 		getListProductQueryOptions(params),
 	);
 

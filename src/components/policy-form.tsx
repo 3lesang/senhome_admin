@@ -52,7 +52,9 @@ export default function PolicyForm({
 						<FormItem>
 							<FormLabel>Tên chính sách</FormLabel>
 							<FormControl>
-								<Input placeholder="" type="" {...field} />
+								<div className="p-2">
+									<Input placeholder="" type="" {...field} />
+								</div>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -65,7 +67,9 @@ export default function PolicyForm({
 						<FormItem>
 							<FormLabel>Nội dung</FormLabel>
 							<FormControl>
-								<Editor content={field.value} onChange={field.onChange} />
+								<div className="p-2">
+									<Editor content={field.value} onChange={field.onChange} />
+								</div>
 							</FormControl>
 							<FormMessage />
 						</FormItem>

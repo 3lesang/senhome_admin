@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
+import { getListOrderQueryOptions } from "@/handlers/order/query/list";
 import OrderListPage from "@/pages/order/list";
 
 const schema = z.object({
@@ -9,6 +10,11 @@ const schema = z.object({
 export const Route = createFileRoute("/(app)/order/")({
 	component: RouteComponent,
 	validateSearch: schema,
+	loader(ctx) {
+		ctx.context.queryClient?.ensureQueryData(
+			getListOrderQueryOptions({ page: 1, limit: 10, query: "" }),
+		);
+	},
 });
 
 function RouteComponent() {

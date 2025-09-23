@@ -1,4 +1,8 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+	queryOptions,
+	useMutation,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { EditIcon, TrashIcon } from "lucide-react";
 import { useState } from "react";
@@ -43,15 +47,26 @@ import {
 	type CreatePolicyPayload,
 	createPolicyPocket,
 } from "@/pocketbase/store/policy/create";
+import { deletePolicyPocket } from "@/pocketbase/store/policy/delete";
 import { getListPolicyPocket } from "@/pocketbase/store/policy/list";
 import {
 	type UpdatePolicyPayload,
 	updatePolicyPocket,
 } from "@/pocketbase/store/policy/update";
+import { queryClient } from "@/queryClient";
 import type { PolicyType } from "@/types/store";
 
+const getListPolicyQueryOptions = () => {
+	return queryOptions({
+		queryKey: [POLICY_COLLECTION],
+		queryFn: () => getListPolicyPocket(),
+	});
+};
 export const Route = createFileRoute("/(app)/store/policy")({
 	component: RouteComponent,
+	loader(ctx) {
+		ctx.context.queryClient?.ensureQueryData(getListPolicyQueryOptions());
+	},
 });
 
 interface PolicyTableProps {
@@ -79,10 +94,25 @@ function PolicyRow({ data }: PolicyRowProps) {
 		},
 		onSuccess: () => {
 			setOpen(false);
+			queryClient.invalidateQueries({ queryKey: [POLICY_COLLECTION] });
 		},
 	});
+
+	const { mutate: deleteMutate } = useMutation({
+		mutationFn: (ids: string[]) => deletePolicyPocket(ids),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: [POLICY_COLLECTION],
+			});
+		},
+	});
+
 	const handleSubmit = (values: PolicyFormValuesType) => {
 		mutate(values);
+	};
+
+	const handleDelete = () => {
+		deleteMutate([id]);
 	};
 
 	return (
@@ -99,7 +129,7 @@ function PolicyRow({ data }: PolicyRowProps) {
 						<EditIcon />
 						Chỉnh sửa
 					</ContextMenuItem>
-					<ContextMenuItem>
+					<ContextMenuItem onClick={handleDelete}>
 						<TrashIcon />
 						Xóa
 					</ContextMenuItem>
@@ -151,10 +181,8 @@ function PolicyTable({ data }: PolicyTableProps) {
 }
 
 function RouteComponent() {
-	const { data, refetch } = useQuery({
-		queryKey: [POLICY_COLLECTION],
-		queryFn: () => getListPolicyPocket(),
-	});
+	const [open, setOpen] = useState(false);
+	const { data, refetch } = useSuspenseQuery(getListPolicyQueryOptions());
 	const { mutate, isPending } = useMutation({
 		mutationFn: (values: PolicyFormValuesType) => {
 			const payload: CreatePolicyPayload = {
@@ -165,12 +193,15 @@ function RouteComponent() {
 		},
 		onSuccess: () => {
 			refetch();
+			setOpen(false);
 			toast("Tạo chính sách thành công!");
 		},
 	});
+
 	const handleSubmit = (values: PolicyFormValuesType) => {
 		mutate(values);
 	};
+
 	return (
 		<Card className="border-0 shadow-none bg-sidebar">
 			<CardHeader>
@@ -179,7 +210,7 @@ function RouteComponent() {
 					Cập nhật thông tin chính sách bảo hành
 				</CardDescription>
 				<CardAction>
-					<Dialog>
+					<Dialog open={open} onOpenChange={setOpen}>
 						<DialogTrigger asChild>
 							<Button>Thêm mới</Button>
 						</DialogTrigger>

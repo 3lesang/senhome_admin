@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { atom, useAtom } from "jotai";
 import { getListOrderQueryOptions } from "@/handlers/order/query/list";
 
@@ -21,7 +21,7 @@ export function useOrderList() {
 
 	const params = { page, limit, query };
 
-	const { data, isLoading, refetch } = useQuery(
+	const { data, isLoading, refetch } = useSuspenseQuery(
 		getListOrderQueryOptions(params),
 	);
 
