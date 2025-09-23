@@ -16,6 +16,7 @@ import { LoadingButton } from "./ui/loading-button";
 
 const formSchema = z.object({
 	title: z.string().min(1),
+	slug: z.string().min(1),
 	content: z.string().optional(),
 });
 
@@ -51,6 +52,21 @@ export default function PolicyForm({
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Tên chính sách</FormLabel>
+							<FormControl>
+								<div className="p-2">
+									<Input placeholder="" type="" {...field} />
+								</div>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="slug"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Đường dẫn</FormLabel>
 							<FormControl>
 								<div className="p-2">
 									<Input placeholder="" type="" {...field} />

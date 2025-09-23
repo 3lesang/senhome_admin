@@ -12,6 +12,7 @@ export type StoreType = {
 export type PolicyType = {
 	id: string;
 	title: string;
+	slug: string;
 	content: string;
 	created: Date;
 };

@@ -3,6 +3,7 @@ import { POLICY_COLLECTION } from "@/pocketbase/constants";
 
 export type UpdatePolicyPayload = {
 	title: string;
+	slug:string;
 	content: any;
 };
 

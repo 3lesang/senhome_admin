@@ -78,16 +78,18 @@ interface PolicyRowProps {
 }
 
 function PolicyRow({ data }: PolicyRowProps) {
-	const { id, title, content, created } = data ?? {
+	const { id, title, content, created, slug } = data ?? {
 		id: "",
 		title: "",
 		created: "",
+		slug: "",
 	};
 	const [open, setOpen] = useState(false);
 	const { mutate, isPending } = useMutation({
 		mutationFn: (values: PolicyFormValuesType) => {
 			const payload: UpdatePolicyPayload = {
 				title: values.title,
+				slug: values.slug,
 				content: values.content,
 			};
 			return updatePolicyPocket(id, payload);
@@ -121,6 +123,7 @@ function PolicyRow({ data }: PolicyRowProps) {
 				<ContextMenuTrigger asChild>
 					<TableRow key={id}>
 						<TableCell className="font-medium">{title}</TableCell>
+						<TableCell className="font-medium">{slug}</TableCell>
 						<TableCell>{new Date(created).toLocaleDateString()}</TableCell>
 					</TableRow>
 				</ContextMenuTrigger>
@@ -146,7 +149,7 @@ function PolicyRow({ data }: PolicyRowProps) {
 					</DialogHeader>
 					<ScrollArea className="h-96">
 						<PolicyForm
-							defaultValues={{ title, content: JSON.stringify(content) }}
+							defaultValues={{ title, content: JSON.stringify(content), slug }}
 							text="Cập nhật"
 							onSubmit={handleSubmit}
 							isPending={isPending}
@@ -168,6 +171,7 @@ function PolicyTable({ data }: PolicyTableProps) {
 			<TableHeader className="bg-sidebar">
 				<TableRow>
 					<TableHead>Tên chính sách</TableHead>
+					<TableHead>Đường dẫn</TableHead>
 					<TableHead>Ngày tạo</TableHead>
 				</TableRow>
 			</TableHeader>
@@ -187,6 +191,7 @@ function RouteComponent() {
 		mutationFn: (values: PolicyFormValuesType) => {
 			const payload: CreatePolicyPayload = {
 				title: values.title,
+				slug: values.slug,
 				content: values.content,
 			};
 			return createPolicyPocket(payload);
@@ -221,7 +226,7 @@ function RouteComponent() {
 							</DialogHeader>
 							<ScrollArea className="h-96">
 								<PolicyForm
-									defaultValues={{ title: "", content: "" }}
+									defaultValues={{ title: "", content: "", slug: "" }}
 									onSubmit={handleSubmit}
 									isPending={isPending}
 									text="Thêm"
