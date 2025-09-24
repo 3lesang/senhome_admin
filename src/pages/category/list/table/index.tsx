@@ -7,7 +7,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import type { CategoryDataType } from "@/types/category";
-import PageListTableRow from "./row";
+import CategoryRow from "./row";
 
 interface CategoryTableProps {
 	data?: CategoryDataType[];
@@ -28,7 +28,7 @@ export default function CategoryTable(props: CategoryTableProps) {
 			</TableHeader>
 			<TableBody>
 				{data?.map((item: CategoryDataType) => (
-					<PageListTableRow data={item} key={item?.id} />
+					<CategoryRow data={item} key={item?.id} />
 				))}
 			</TableBody>
 		</Table>

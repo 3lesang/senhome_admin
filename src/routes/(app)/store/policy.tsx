@@ -62,12 +62,6 @@ const getListPolicyQueryOptions = () => {
 		queryFn: () => getListPolicyPocket(),
 	});
 };
-export const Route = createFileRoute("/(app)/store/policy")({
-	component: RouteComponent,
-	loader(ctx) {
-		ctx.context.queryClient?.ensureQueryData(getListPolicyQueryOptions());
-	},
-});
 
 interface PolicyTableProps {
 	data?: PolicyType[];
@@ -183,6 +177,13 @@ function PolicyTable({ data }: PolicyTableProps) {
 		</Table>
 	);
 }
+
+export const Route = createFileRoute("/(app)/store/policy")({
+	component: RouteComponent,
+	loader(ctx) {
+		return ctx.context.queryClient?.ensureQueryData(getListPolicyQueryOptions());
+	},
+});
 
 function RouteComponent() {
 	const [open, setOpen] = useState(false);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -10,25 +10,34 @@ export type TableTableDataType = {
 interface ProductTabsProps {
 	onChange?: (q: string) => void;
 	data: TableTableDataType[];
+	q: string;
 }
 
-export default function TableTabs({ onChange, data }: ProductTabsProps) {
-	const [idx, setIdx] = useState<number>(0);
+export default function TableTabs({ onChange, data, q }: ProductTabsProps) {
+	const [query, setQuery] = useState(q);
 
-	const handleClick = (index: number, q: string) => {
-		setIdx(index);
+	const handleClick = (q: string) => {
+		setQuery(q);
 		onChange?.(q);
 	};
 
+	const checkActive = (q: string) => {
+		return query === q;
+	};
+
+	useEffect(() => {
+		setQuery(q);
+	}, [q]);
+
 	return (
 		<div className="flex items-center gap-2">
-			{data.map((item, index) => (
+			{data.map((item) => (
 				<Button
 					key={item.q}
 					type="button"
 					variant="ghost"
-					onClick={() => handleClick(index, item.q)}
-					className={cn(idx === index && "bg-gray-100")}
+					onClick={() => handleClick(item.q)}
+					className={cn(checkActive(item.q) && "bg-gray-100")}
 				>
 					{item.label}
 				</Button>

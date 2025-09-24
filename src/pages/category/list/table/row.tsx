@@ -18,23 +18,19 @@ import {
 } from "@/components/ui/dialog";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { updateCategoryPocket } from "@/pocketbase/category/update";
-import { useCategoryList } from "@/stores/category";
 import type { CategoryDataType } from "@/types/category";
 
-interface PageListTableRowProps {
+interface CategoryRowProps {
 	data: CategoryDataType;
 }
 
-export default function PageListTableRow({ data }: PageListTableRowProps) {
+export default function CategoryRow({ data }: CategoryRowProps) {
 	const [open, setOpen] = useState(false);
-
-	const { setDeleteSelect, refetch } = useCategoryList();
 
 	const { mutate: update } = useMutation({
 		mutationFn: (values: CategoryValuesType) =>
 			updateCategoryPocket({ id: data.id, name: values.name }),
 		onSuccess: () => {
-			refetch?.();
 			setOpen(false);
 		},
 	});
@@ -61,11 +57,7 @@ export default function PageListTableRow({ data }: PageListTableRowProps) {
 						Chỉnh sửa
 					</ContextMenuItem>
 
-					<ContextMenuItem
-						onClick={() => {
-							setDeleteSelect?.(data.id);
-						}}
-					>
+					<ContextMenuItem onClick={() => {}}>
 						<Trash2Icon />
 						Xóa
 					</ContextMenuItem>

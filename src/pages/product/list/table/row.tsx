@@ -1,4 +1,3 @@
-import type { CheckedState } from "@radix-ui/react-checkbox";
 import { Link } from "@tanstack/react-router";
 import { EditIcon, Trash2Icon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,8 +11,7 @@ import {
 } from "@/components/ui/context-menu";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { PRODUCT_STATE } from "@/constants/product";
-import { cn, convertToFileUrl } from "@/lib/utils";
-import { useProductList } from "@/stores/product";
+import { convertToFileUrl } from "@/lib/utils";
 import type { ProductDataType } from "@/types/product";
 
 interface ProductRowProps {
@@ -22,21 +20,15 @@ interface ProductRowProps {
 
 export default function ProductRow({ data }: ProductRowProps) {
 	const { id } = data;
-	const { selected, setSelected, setDeleteSelect } = useProductList();
 
-	const handleSelect = (checked: CheckedState) => {
-		setSelected?.((prev) => ({ ...prev, [data.id]: checked as boolean }));
-	};
-
-	const checked = Boolean(selected?.[data.id]);
 	const state = data?.deleted ? "draft" : "publish";
 
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger asChild>
-				<TableRow className={cn(checked ? "bg-gray-50" : "")}>
+				<TableRow>
 					<TableCell>
-						<Checkbox checked={checked} onCheckedChange={handleSelect} />
+						<Checkbox />
 					</TableCell>
 					<TableCell>
 						<div className="flex items-center gap-2">
@@ -71,11 +63,7 @@ export default function ProductRow({ data }: ProductRowProps) {
 						Chỉnh sửa
 					</Link>
 				</ContextMenuItem>
-				<ContextMenuItem
-					onClick={() => {
-						setDeleteSelect?.(id);
-					}}
-				>
+				<ContextMenuItem onClick={() => {}}>
 					<Trash2Icon />
 					Xóa
 				</ContextMenuItem>

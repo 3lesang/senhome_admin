@@ -135,7 +135,7 @@ export default function AppSidebar() {
 										<SidebarMenuSubItem>
 											<SidebarMenuSubButton
 												asChild
-												isActive={location.href === "/orders"}
+												isActive={location.pathname === "/orders"}
 											>
 												<Link to="/orders">
 													<span className="select-none">Tất cả đơn hàng</span>

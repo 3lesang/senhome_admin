@@ -21,7 +21,7 @@ import {
 export const Route = createFileRoute("/(app)/store/general")({
 	component: RouteComponent,
 	loader(ctx) {
-		ctx.context.queryClient?.ensureQueryData(getStoreQueryOptions());
+		return ctx.context.queryClient?.ensureQueryData(getStoreQueryOptions());
 	},
 });
 

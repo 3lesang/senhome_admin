@@ -9,7 +9,7 @@ type GetListQueryOptionType = {
 };
 
 export const getListProductQueryOptions = (queries: GetListQueryOptionType) => {
-	const { page = 1, limit = 10, query = "" } = queries;
+	const { page, limit, query } = queries;
 	return queryOptions({
 		queryKey: [PRODUCT_COLLECTION, page, limit, query],
 		queryFn: () =>

@@ -13,13 +13,13 @@ function getFullListCategoryQueryOptions() {
 }
 
 type GetListQueryOptionType = {
-	page?: number;
-	limit?: number;
-	query?: string;
+	page: number;
+	limit: number;
+	query: string;
 };
 
 function getListCategoryQueryOptions(queries: GetListQueryOptionType) {
-	const { page = 1, limit = 10, query = "" } = queries;
+	const { page, limit, query } = queries;
 	return queryOptions({
 		queryKey: [CATEGORY_COLLECTION, page, limit],
 		queryFn: () => getListCategoryPocket({ page, limit, filter: query }),
