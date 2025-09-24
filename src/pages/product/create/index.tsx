@@ -38,7 +38,7 @@ function ProductCreatePage() {
 		},
 		onSuccess: (id) => {
 			if (id) {
-				navigate({ to: "/product/$id", params: { id } });
+				navigate({ to: "/products/$id", params: { id } });
 				toast.success("Thêm sản phẩm thành công");
 			}
 		},

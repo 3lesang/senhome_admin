@@ -1,48 +1,42 @@
-import { cn } from "@/lib/utils";
-import { useFileList } from "@/stores/file";
+import { InfoIcon, Trash2Icon } from "lucide-react";
+import {
+	ContextMenu,
+	ContextMenuContent,
+	ContextMenuItem,
+	ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import type { FileType } from "@/types/file";
 
 interface FileItemProps {
-	data?: {
-		id?: string;
-		url?: string;
-	};
+	data?: FileType;
 }
 
-export default function FileItem({ data = { id: "" } }: FileItemProps) {
-	const { hasSelect, setSelected, selected } = useFileList();
-	const { id = "", url } = data;
-
-	const isSelected = Boolean(selected?.[id]);
-
-	const handleSelect = () => {
-		if (id) {
-			setSelected?.((prev) => ({ ...prev, [id]: !isSelected }));
-		}
-	};
-
+export default function FileItem({ data }: FileItemProps) {
 	return (
 		<div className="relative">
-			<img
-				src={url}
-				className="object-contain aspect-square w-full select-none"
-				aria-label="image"
-				alt=""
-			/>
-			{hasSelect && (
-				<button
-					type="button"
-					className="absolute inset-0 z-50"
-					onClick={handleSelect}
-				/>
-			)}
-			{hasSelect && (
-				<div
-					className={cn(
-						"absolute inset-0",
-						isSelected ? "bg-black/20" : "bg-black-10",
-					)}
-				></div>
-			)}
+			<ContextMenu>
+				<ContextMenuTrigger>
+					<img
+						src={data?.url}
+						width={100}
+						height={100}
+						className="object-contain aspect-square w-full select-none"
+						aria-label="image"
+						loading="lazy"
+						alt=""
+					/>
+				</ContextMenuTrigger>
+				<ContextMenuContent>
+					<ContextMenuItem>
+						<InfoIcon />
+						Xem chi tiết
+					</ContextMenuItem>
+					<ContextMenuItem>
+						<Trash2Icon />
+						Xóa
+					</ContextMenuItem>
+				</ContextMenuContent>
+			</ContextMenu>
 		</div>
 	);
 }

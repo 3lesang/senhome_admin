@@ -7,7 +7,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import type { OrderDataType } from "@/types/order";
-import PageListTableRow from "./row";
+import OrderRow from "./row";
 
 interface OrderTableProps {
 	data?: OrderDataType[];
@@ -15,22 +15,23 @@ interface OrderTableProps {
 
 export default function OrderTable({ data = [] }: OrderTableProps) {
 	return (
-		<Table className="bg-white rounded-md">
-			<TableHeader className="bg-sidebar">
-				<TableRow>
+		<Table className="bg-white rounded-md overflow-hidden">
+			<TableHeader className="bg-gray-50">
+				<TableRow className="">
 					<TableHead>
-						<Checkbox className="ml-7" />
+						<Checkbox className="ml-8" />
 					</TableHead>
-					<TableHead>Mã đơn hàng</TableHead>
+					<TableHead>Mã</TableHead>
+					<TableHead>Ngày tạo</TableHead>
 					<TableHead>Khách hàng</TableHead>
-					<TableHead>Địa chỉ giao hàng</TableHead>
-					<TableHead>Tổng đơn hàng</TableHead>
-					<TableHead>Trạng thái</TableHead>
+					<TableHead>Thanh toán</TableHead>
+					<TableHead>Giao hàng</TableHead>
+					<TableHead>Tổng tiền</TableHead>
 				</TableRow>
 			</TableHeader>
 			<TableBody>
 				{data?.map((item: OrderDataType) => (
-					<PageListTableRow data={item} key={item?.id} />
+					<OrderRow data={item} key={item?.id} />
 				))}
 			</TableBody>
 		</Table>

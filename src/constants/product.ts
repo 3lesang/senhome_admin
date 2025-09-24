@@ -5,6 +5,6 @@ export const PRODUCT_STATE = {
   },
   publish: {
     value: "publish",
-    text: "Đang hoạt động",
+    text: "Hoạt động",
   },
 };

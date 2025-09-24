@@ -1,75 +1,67 @@
-import { useId } from "react";
-import { DynamicPagination } from "@/components/dynamic-pagination";
+import { ListFilterIcon, PlusIcon, SearchIcon } from "lucide-react";
+import TablePagination, {
+	type TablePaginationDataChange,
+} from "@/components/table-pagination";
+import TableTabs, { type TableTableDataType } from "@/components/table-tabs";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
+	CardAction,
 	CardContent,
 	CardDescription,
+	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import { useOrderList } from "@/stores/order";
-import PageListEmpty from "./empty";
 import OrderTable from "./table";
-import DeleteAction from "./toolbar/delete-action";
-import PageListSearchInput from "./toolbar/page-search";
-import ListPageTabs from "./toolbar/tabs";
+
+const tabs: TableTableDataType[] = [
+	{ label: "Tất cả đơn hàng", q: "" },
+	{ label: "Đơn hàng mới", q: `status="created"` },
+	{ label: "Chưa giao hàng", q: `status="completed"` },
+	{ label: "Chưa thanh toán", q: `status="canceled"` },
+];
 
 function OrderContent() {
-	const { data, isLoading, page, limit, setPage, setLimit } = useOrderList();
-	const id = useId();
+	const { data, page, limit, setPage, setLimit, setQuery } = useOrderList();
 
-	if (isLoading) return null;
-	if (Number(data?.totalItems) === 0 && !isLoading) return <PageListEmpty />;
+	const handleChange = ({ limit, page }: TablePaginationDataChange) => {
+		setPage(page);
+		setLimit(limit);
+	};
 
 	return (
-		<div className="space-y-2">
-			<div className="flex items-center justify-between">
-				<PageListSearchInput />
-				<DeleteAction />
-			</div>
-			<Badge variant="secondary">{data?.totalItems} đơn hàng</Badge>
-			<OrderTable data={data?.items} />
-			<div className="flex justify-between">
-				<div className="flex w-full max-w-sm items-center gap-4">
-					<Label htmlFor={id} className="whitespace-nowrap">
-						Số lượng
-					</Label>
-					<Select
-						value={limit.toString()}
-						onValueChange={(val) => {
-							setLimit(Number(val));
-							setPage(1);
-						}}
-					>
-						<SelectTrigger id={id} className="bg-white w-[120px]">
-							<SelectValue placeholder="Chọn số lượng" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="10">10</SelectItem>
-							<SelectItem value="20">20</SelectItem>
-							<SelectItem value="50">50</SelectItem>
-						</SelectContent>
-					</Select>
-				</div>
-				<div>
-					<DynamicPagination
-						page={page}
-						totalItems={data?.totalItems ?? 0}
-						perPage={limit}
-						onPageChange={setPage}
-					/>
-				</div>
-			</div>
-		</div>
+		<Card className="border-0 shadow-none bg-sidebar">
+			<CardHeader>
+				<CardTitle>
+					<TableTabs data={tabs} onChange={setQuery} />
+				</CardTitle>
+				<CardDescription>
+					<Badge variant="secondary">{data.totalItems} đơn hàng</Badge>
+				</CardDescription>
+				<CardAction className="flex items-center gap-2">
+					<Button size="icon" variant="outline">
+						<SearchIcon />
+					</Button>
+					<Button variant="outline" size="icon">
+						<ListFilterIcon />
+					</Button>
+				</CardAction>
+			</CardHeader>
+			<CardContent>
+				<OrderTable data={data?.items} />
+			</CardContent>
+			<CardFooter>
+				<TablePagination
+					page={page}
+					limit={limit}
+					total={data.totalItems}
+					onChange={handleChange}
+				/>
+			</CardFooter>
+		</Card>
 	);
 }
 
@@ -79,11 +71,15 @@ export default function OrderListPage() {
 			<CardHeader>
 				<CardTitle>Quản lý đơn hàng</CardTitle>
 				<CardDescription>Danh sách đơn hàng</CardDescription>
-				<ListPageTabs />
+				<CardAction className="flex gap-2 items-center">
+					<Button variant="outline">Xuất dữ liệu</Button>
+					<Button>
+						<PlusIcon />
+						Tạo đơn hàng
+					</Button>
+				</CardAction>
 			</CardHeader>
-			<CardContent>
-				<OrderContent />
-			</CardContent>
+			<OrderContent />
 		</Card>
 	);
 }

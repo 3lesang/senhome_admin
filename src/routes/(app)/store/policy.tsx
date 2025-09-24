@@ -4,7 +4,7 @@ import {
 	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { EditIcon, TrashIcon } from "lucide-react";
+import { EditIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import PolicyForm, {
@@ -133,7 +133,7 @@ function PolicyRow({ data }: PolicyRowProps) {
 						Chỉnh sửa
 					</ContextMenuItem>
 					<ContextMenuItem onClick={handleDelete}>
-						<TrashIcon />
+						<Trash2Icon />
 						Xóa
 					</ContextMenuItem>
 				</ContextMenuContent>
@@ -208,7 +208,7 @@ function RouteComponent() {
 	};
 
 	return (
-		<Card className="border-0 shadow-none bg-sidebar">
+		<Card className="bg-sidebar border-0 shadow-none max-w-7xl mx-auto">
 			<CardHeader>
 				<CardTitle>Danh sách chính sách</CardTitle>
 				<CardDescription>

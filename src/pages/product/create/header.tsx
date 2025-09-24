@@ -7,7 +7,7 @@ function CreatePageHeader() {
 	return (
 		<div className="flex items-center gap-1">
 			<Link
-				to="/product"
+				to="/products"
 				className={cn(
 					buttonVariants({ size: "icon", variant: "ghost" }),
 					"size-6",

@@ -7,13 +7,13 @@ const schema = z.object({
 	q: z.string().optional(),
 });
 
-export const Route = createFileRoute("/(app)/order/")({
+export const Route = createFileRoute("/(app)/orders/")({
 	component: RouteComponent,
 	validateSearch: schema,
 	loader(ctx) {
 		ctx.context.queryClient?.ensureQueryData(
 			getListOrderQueryOptions({ page: 1, limit: 10, query: "" }),
-		);
+		)
 	},
 });
 

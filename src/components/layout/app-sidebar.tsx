@@ -1,14 +1,13 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import {
 	BellIcon,
-	ChartPieIcon,
-	ClipboardListIcon,
+	ChartColumnIcon,
 	GalleryVerticalEnd,
-	ImageIcon,
+	GlobeIcon,
 	LogOutIcon,
 	MoreVerticalIcon,
-	PackageIcon,
-	StoreIcon,
+	ShoppingCartIcon,
+	TagIcon,
 	UserCircleIcon,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -40,6 +39,7 @@ import {
 } from "@/components/ui/sidebar";
 import pocketClient from "@/pocketbase/client";
 import SettingsDialog from "../settings-dialog";
+import { Badge } from "../ui/badge";
 
 export default function AppSidebar() {
 	const location = useLocation();
@@ -63,43 +63,49 @@ export default function AppSidebar() {
 				<SidebarGroup>
 					<SidebarGroupLabel className="select-none">Quản lý</SidebarGroupLabel>
 					<SidebarMenu>
-						<Collapsible asChild className="group/collapsible">
+						<Collapsible
+							asChild
+							className="group/collapsible"
+							open={location.href.includes("/products")}
+						>
 							<SidebarMenuItem>
 								<CollapsibleTrigger asChild>
-									<SidebarMenuButton>
-										<PackageIcon />
-										<span className="select-none">Quản lý sản phẩm</span>
-									</SidebarMenuButton>
+									<Link to="/products">
+										<SidebarMenuButton>
+											<TagIcon />
+											<span className="select-none">Sản phẩm</span>
+										</SidebarMenuButton>
+									</Link>
 								</CollapsibleTrigger>
 								<CollapsibleContent>
 									<SidebarMenuSub className="border-l-0">
 										<SidebarMenuSubItem>
 											<SidebarMenuSubButton
 												asChild
-												isActive={location.pathname === "/product"}
+												isActive={location.pathname === "/products"}
 											>
-												<Link to="/product">
-													<span className="select-none">Tất cả</span>
+												<Link to="/products">
+													<span className="select-none">Tất cả sản phẩm</span>
 												</Link>
 											</SidebarMenuSubButton>
 										</SidebarMenuSubItem>
 										<SidebarMenuSubItem>
 											<SidebarMenuSubButton
 												asChild
-												isActive={location.pathname === "/product/create"}
+												isActive={location.pathname === "/products/collections"}
 											>
-												<Link to="/product/create">
-													<span className="select-none">Thêm sản phẩm</span>
+												<Link to="/products/collections">
+													<span className="select-none">Nhóm sản phẩm</span>
 												</Link>
 											</SidebarMenuSubButton>
 										</SidebarMenuSubItem>
 										<SidebarMenuSubItem>
 											<SidebarMenuSubButton
 												asChild
-												isActive={location.pathname === "/category"}
+												isActive={location.pathname === "/products/create"}
 											>
-												<Link to="/category">
-													<span className="select-none">Danh mục</span>
+												<Link to="/products/create">
+													<span className="select-none">Tạo sản phẩm</span>
 												</Link>
 											</SidebarMenuSubButton>
 										</SidebarMenuSubItem>
@@ -107,38 +113,42 @@ export default function AppSidebar() {
 								</CollapsibleContent>
 							</SidebarMenuItem>
 						</Collapsible>
-						<Collapsible asChild className="group/collapsible">
+						<Collapsible
+							asChild
+							className="group/collapsible"
+							open={location.href.includes("/orders")}
+						>
 							<SidebarMenuItem>
 								<CollapsibleTrigger asChild>
-									<SidebarMenuButton>
-										<ClipboardListIcon />
-										<span className="select-none">Quản lý đơn hàng</span>
-									</SidebarMenuButton>
+									<Link to="/orders">
+										<SidebarMenuButton>
+											<ShoppingCartIcon />
+											<span className="select-none">Đơn hàng</span>
+											<Badge variant="secondary" className="ml-auto">
+												10
+											</Badge>
+										</SidebarMenuButton>
+									</Link>
 								</CollapsibleTrigger>
 								<CollapsibleContent>
 									<SidebarMenuSub className="border-l-0">
 										<SidebarMenuSubItem>
 											<SidebarMenuSubButton
 												asChild
-												isActive={location.href === "/order"}
+												isActive={location.href === "/orders"}
 											>
-												<Link to="/order">
-													<span className="select-none">Tất cả</span>
+												<Link to="/orders">
+													<span className="select-none">Tất cả đơn hàng</span>
 												</Link>
 											</SidebarMenuSubButton>
 										</SidebarMenuSubItem>
 										<SidebarMenuSubItem>
 											<SidebarMenuSubButton
 												asChild
-												isActive={location.searchStr === "?q=new"}
+												isActive={location.href === "/orders/draft"}
 											>
-												<Link
-													to="/order"
-													search={{
-														q: "new",
-													}}
-												>
-													<span className="select-none">Đơn mới</span>
+												<Link to="/orders/draft">
+													<span className="select-none">Đơn hàng nháp</span>
 												</Link>
 											</SidebarMenuSubButton>
 										</SidebarMenuSubItem>
@@ -146,22 +156,28 @@ export default function AppSidebar() {
 								</CollapsibleContent>
 							</SidebarMenuItem>
 						</Collapsible>
-						<Collapsible asChild className="group/collapsible">
+						<Collapsible
+							asChild
+							className="group/collapsible"
+							open={location.href.includes("/analytics")}
+						>
 							<SidebarMenuItem>
 								<CollapsibleTrigger asChild>
-									<SidebarMenuButton>
-										<ChartPieIcon />
-										<span className="select-none">Dữ liệu</span>
-									</SidebarMenuButton>
+									<Link to="/analytics">
+										<SidebarMenuButton>
+											<ChartColumnIcon />
+											<span className="select-none">Báo cáo</span>
+										</SidebarMenuButton>
+									</Link>
 								</CollapsibleTrigger>
 								<CollapsibleContent>
 									<SidebarMenuSub className="border-l-0">
 										<SidebarMenuSubItem>
 											<SidebarMenuSubButton
 												asChild
-												isActive={location.pathname.includes("data")}
+												isActive={location.pathname === "/analytics"}
 											>
-												<Link to="/order">
+												<Link to="/analytics">
 													<span className="select-none">
 														Phân tích bán hàng
 													</span>
@@ -176,36 +192,62 @@ export default function AppSidebar() {
 				</SidebarGroup>
 				<SidebarGroup>
 					<SidebarGroupLabel className="select-none">
-						Cửa hàng
+						Kênh bán hàng
 					</SidebarGroupLabel>
 					<SidebarMenu>
-						<Collapsible asChild className="group/collapsible">
+						<Collapsible
+							asChild
+							className="group/collapsible"
+							open={location.href.includes("/store")}
+						>
 							<SidebarMenuItem>
 								<CollapsibleTrigger asChild>
-									<SidebarMenuButton>
-										<StoreIcon />
-										<span className="select-none">Quản lý cửa hàng</span>
-									</SidebarMenuButton>
+									<Link to="/store/policy">
+										<SidebarMenuButton>
+											<GlobeIcon />
+											<span className="select-none">Website</span>
+										</SidebarMenuButton>
+									</Link>
 								</CollapsibleTrigger>
 								<CollapsibleContent>
 									<SidebarMenuSub className="border-l-0">
 										<SidebarMenuSubItem>
 											<SidebarMenuSubButton
 												asChild
-												isActive={location.pathname === "/store/general"}
+												isActive={location.pathname === "/store/policy"}
 											>
-												<Link to="/store/general">
-													<span className="select-none">Thông tin</span>
+												<Link to="/store/policy">
+													<span className="select-none">Trang nội dung</span>
 												</Link>
 											</SidebarMenuSubButton>
 										</SidebarMenuSubItem>
 										<SidebarMenuSubItem>
 											<SidebarMenuSubButton
 												asChild
-												isActive={location.pathname === "/store/policy"}
+												isActive={location.pathname === "/store/files"}
 											>
-												<Link to="/store/policy">
-													<span className="select-none">Chính sách</span>
+												<Link to="/store/files">
+													<span className="select-none">File</span>
+												</Link>
+											</SidebarMenuSubButton>
+										</SidebarMenuSubItem>
+										<SidebarMenuSubItem>
+											<SidebarMenuSubButton
+												asChild
+												isActive={location.pathname === "/store/menus"}
+											>
+												<Link to="/store/menus">
+													<span className="select-none">Menu</span>
+												</Link>
+											</SidebarMenuSubButton>
+										</SidebarMenuSubItem>
+										<SidebarMenuSubItem>
+											<SidebarMenuSubButton
+												asChild
+												isActive={location.pathname === "/store/general"}
+											>
+												<Link to="/store/general">
+													<span className="select-none">Cấu hình</span>
 												</Link>
 											</SidebarMenuSubButton>
 										</SidebarMenuSubItem>
@@ -213,24 +255,6 @@ export default function AppSidebar() {
 								</CollapsibleContent>
 							</SidebarMenuItem>
 						</Collapsible>
-					</SidebarMenu>
-				</SidebarGroup>
-				<SidebarGroup>
-					<SidebarGroupLabel className="select-none">
-						Hệ thống
-					</SidebarGroupLabel>
-					<SidebarMenu>
-						<SidebarMenuItem>
-							<SidebarMenuButton
-								asChild
-								isActive={location.pathname.includes("file")}
-							>
-								<Link to="/file">
-									<ImageIcon />
-									<span className="select-none">Lưu trữ</span>
-								</Link>
-							</SidebarMenuButton>
-						</SidebarMenuItem>
 					</SidebarMenu>
 				</SidebarGroup>
 			</SidebarContent>

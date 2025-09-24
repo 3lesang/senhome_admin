@@ -5,7 +5,7 @@ import { productQueryOptions } from "@/handlers/product/query/one";
 import { productVariantQueryOptions } from "@/handlers/product/query/variant";
 import ProductUpdatePage from "@/pages/product/update";
 
-export const Route = createFileRoute("/(app)/product/$id")({
+export const Route = createFileRoute("/(app)/products/$id")({
 	component: RouteComponent,
 	loader(ctx) {
 		const id = ctx.params.id;
@@ -13,7 +13,7 @@ export const Route = createFileRoute("/(app)/product/$id")({
 		ctx.context.queryClient?.ensureQueryData(productQueryOptions(id));
 		ctx.context.queryClient?.ensureQueryData(productFilesQueryOptions(id));
 		ctx.context.queryClient?.ensureQueryData(getFullListCategoryQueryOptions());
-	},
+	}
 });
 
 function RouteComponent() {

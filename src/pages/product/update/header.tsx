@@ -31,7 +31,7 @@ function UpdatePageHeader({ data }: UpdatePageHeaderProps) {
 			<div className="max-w-7xl mx-auto py-4 flex justify-between items-center">
 				<div className="flex items-center gap-1">
 					<Link
-						to="/product"
+						to="/products"
 						className={cn(
 							buttonVariants({ size: "icon", variant: "ghost" }),
 							"size-6",

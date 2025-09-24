@@ -7,15 +7,14 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import type { ProductDataType } from "@/types/product";
-import PageListTableRow from "./row";
+import ProductRow from "./row";
 
 interface ProductTableProps {
 	data?: ProductDataType[];
-	categoryMap?: Record<string, { id: string; name: string }>;
 }
 
 export default function ProductTable(props: ProductTableProps) {
-	const { data = [], categoryMap } = props;
+	const { data = [] } = props;
 	return (
 		<Table className="bg-white rounded-md">
 			<TableHeader className="bg-gray-50">
@@ -25,16 +24,11 @@ export default function ProductTable(props: ProductTableProps) {
 					</TableHead>
 					<TableHead>Tên sản phẩm</TableHead>
 					<TableHead>Trạng thái</TableHead>
-					<TableHead>Danh mục</TableHead>
 				</TableRow>
 			</TableHeader>
 			<TableBody>
 				{data?.map((item: ProductDataType) => (
-					<PageListTableRow
-						key={item?.id}
-						data={item}
-						categoryMap={categoryMap}
-					/>
+					<ProductRow key={item?.id} data={item} />
 				))}
 			</TableBody>
 		</Table>

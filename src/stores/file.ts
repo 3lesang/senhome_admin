@@ -3,7 +3,7 @@ import { atom, useAtom } from "jotai";
 import { getListFileQueryOptions } from "@/handlers/file/query/list";
 
 export const pageAtom = atom(1);
-export const limitAtom = atom(50);
+export const limitAtom = atom(40);
 export const queryAtom = atom("");
 export const selectedAtom = atom<Record<string, boolean>>({});
 export const hasSelectAtom = atom(false);

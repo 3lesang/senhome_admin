@@ -16,15 +16,11 @@ import { cn, convertToFileUrl } from "@/lib/utils";
 import { useProductList } from "@/stores/product";
 import type { ProductDataType } from "@/types/product";
 
-interface PageListTableRowProps {
+interface ProductRowProps {
 	data: ProductDataType;
-	categoryMap?: Record<string, { id: string; name: string }>;
 }
 
-export default function PageListTableRow({
-	data,
-	categoryMap,
-}: PageListTableRowProps) {
+export default function ProductRow({ data }: ProductRowProps) {
 	const { id } = data;
 	const { selected, setSelected, setDeleteSelect } = useProductList();
 
@@ -49,7 +45,7 @@ export default function PageListTableRow({
 								<AvatarFallback className="rounded"></AvatarFallback>
 							</Avatar>
 							<Link
-								to="/product/$id"
+								to="/products/$id"
 								params={{ id: data.id }}
 								className="hover:underline"
 							>
@@ -62,13 +58,12 @@ export default function PageListTableRow({
 							{PRODUCT_STATE[state].text}
 						</Badge>
 					</TableCell>
-					<TableCell>{categoryMap?.[data.category]?.name}</TableCell>
 				</TableRow>
 			</ContextMenuTrigger>
 			<ContextMenuContent>
 				<ContextMenuItem asChild>
 					<Link
-						to="/product/$id"
+						to="/products/$id"
 						params={{ id }}
 						className="flex items-center gap-2"
 					>

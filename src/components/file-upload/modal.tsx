@@ -1,4 +1,4 @@
-import { UploadCloudIcon } from "lucide-react";
+import { UploadIcon } from "lucide-react";
 import { useState } from "react";
 import FileDropzone from "@/components/file-dropzone";
 import { Button } from "@/components/ui/button";
@@ -34,8 +34,8 @@ function UploadModal({ onConfirm }: UploadModalProps) {
 		<Dialog>
 			<DialogTrigger asChild>
 				<Button type="button">
-					Tải lên
-					<UploadCloudIcon />
+					<UploadIcon />
+					Tải file
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="min-w-5xl">

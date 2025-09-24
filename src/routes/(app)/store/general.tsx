@@ -51,7 +51,7 @@ function RouteComponent() {
 	};
 
 	return (
-		<Card className="border-0 shadow-none bg-sidebar">
+		<Card className="bg-sidebar border-0 shadow-none max-w-7xl mx-auto">
 			<CardHeader>
 				<CardTitle>Thông tin chung</CardTitle>
 				<CardDescription>Cập nhật thông tin chung</CardDescription>
