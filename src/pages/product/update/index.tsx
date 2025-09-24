@@ -1,4 +1,5 @@
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { useParams } from "@tanstack/react-router";
 import { toast } from "sonner";
 import ProductForm from "@/components/product-form";
 import {
@@ -14,11 +15,9 @@ import type { ProductFormType } from "@/types/product";
 import { formatProductDataForm } from "./format";
 import UpdatePageHeader from "./header";
 
-interface ProductUpdatePageProps {
-	id: string;
-}
+export default function ProductUpdatePage() {
+	const { id = "" } = useParams({ strict: false });
 
-function ProductUpdatePage({ id }: ProductUpdatePageProps) {
 	const { data: media, refetch: refetchMedia } = useSuspenseQuery(
 		productFilesQueryOptions(id),
 	);
@@ -67,5 +66,3 @@ function ProductUpdatePage({ id }: ProductUpdatePageProps) {
 		</div>
 	);
 }
-
-export default ProductUpdatePage;

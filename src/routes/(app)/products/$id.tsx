@@ -6,17 +6,14 @@ import { productVariantQueryOptions } from "@/handlers/product/query/variant";
 import ProductUpdatePage from "@/pages/product/update";
 
 export const Route = createFileRoute("/(app)/products/$id")({
-	component: RouteComponent,
-	loader(ctx) {
-		const id = ctx.params.id;
-		ctx.context.queryClient?.ensureQueryData(productVariantQueryOptions(id));
-		ctx.context.queryClient?.ensureQueryData(productQueryOptions(id));
-		ctx.context.queryClient?.ensureQueryData(productFilesQueryOptions(id));
-		ctx.context.queryClient?.ensureQueryData(getFullListCategoryQueryOptions());
-	}
+	component: ProductUpdatePage,
+	async loader({ context, params }) {
+		const id = params.id;
+		await context.queryClient?.ensureQueryData(productVariantQueryOptions(id));
+		await context.queryClient?.ensureQueryData(productQueryOptions(id));
+		await context.queryClient?.ensureQueryData(productFilesQueryOptions(id));
+		return await context.queryClient?.ensureQueryData(
+			getFullListCategoryQueryOptions(),
+		);
+	},
 });
-
-function RouteComponent() {
-	const { id } = Route.useParams();
-	return <ProductUpdatePage id={id} />;
-}
