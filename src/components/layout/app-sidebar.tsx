@@ -224,6 +224,16 @@ export default function AppSidebar() {
 										<SidebarMenuSubItem>
 											<SidebarMenuSubButton
 												asChild
+												isActive={location.pathname === "/store/articles"}
+											>
+												<Link to="/store/articles">
+													<span className="select-none">Blogs</span>
+												</Link>
+											</SidebarMenuSubButton>
+										</SidebarMenuSubItem>
+										<SidebarMenuSubItem>
+											<SidebarMenuSubButton
+												asChild
 												isActive={location.pathname === "/store/files"}
 											>
 												<Link to="/store/files">
@@ -244,7 +254,7 @@ export default function AppSidebar() {
 										<SidebarMenuSubItem>
 											<SidebarMenuSubButton
 												asChild
-												isActive={location.pathname === "/store/settings"}
+												isActive={location.pathname.includes("/store/settings")}
 											>
 												<Link to="/store/settings">
 													<span className="select-none">Cấu hình</span>

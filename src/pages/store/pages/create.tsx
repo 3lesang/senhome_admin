@@ -6,7 +6,7 @@ import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import StorePageForm, {
 	type StorePageFormValuesType,
-} from "@/components/page-form";
+} from "@/components/store-form/page";
 import { buttonVariants } from "@/components/ui/button";
 import {
 	Card,

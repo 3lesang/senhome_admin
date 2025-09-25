@@ -128,6 +128,9 @@ export default function ProductUpdatePage() {
 			</CardContent>
 			<CardFooter className="flex justify-between">
 				<Button variant="outline">Xóa</Button>
+				<LoadingButton type="button" loading={isPending} onClick={handleClick}>
+					Cập nhật
+				</LoadingButton>
 			</CardFooter>
 		</Card>
 	);

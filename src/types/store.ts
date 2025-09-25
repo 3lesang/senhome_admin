@@ -1,3 +1,5 @@
+import type { StoreLocationFormValuesType } from "@/components/store-form/location";
+
 export type StoreType = {
 	id: string;
 	name: string;
@@ -5,8 +7,7 @@ export type StoreType = {
 	email: string;
 	phone: string;
 	address: string;
-	social: any;
-	policy: any;
+	location: StoreLocationFormValuesType;
 };
 
 export type StorePageType = {

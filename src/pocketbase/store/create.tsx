@@ -1,3 +1,4 @@
+import type { StoreLocationFormValuesType } from "@/components/store-form/location";
 import pocketClient from "../client";
 import { STORE_COLLECTION } from "../constants";
 
@@ -6,8 +7,7 @@ export type CreateStorePayload = {
 	description: string;
 	email: string;
 	phone: string;
-	social: any;
-	address: string;
+	location: StoreLocationFormValuesType;
 };
 
 async function createStorePocket(payload: CreateStorePayload) {
