@@ -27,7 +27,7 @@ export default function ProductRow({ data }: ProductRowProps) {
 		<ContextMenu>
 			<ContextMenuTrigger asChild>
 				<TableRow>
-					<TableCell>
+					<TableCell className="w-8">
 						<Checkbox />
 					</TableCell>
 					<TableCell>

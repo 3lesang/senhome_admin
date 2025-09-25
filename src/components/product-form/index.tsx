@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useImperativeHandle } from "react";
+import { type UseFormReturn, useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import { LoadingButton } from "@/components/ui/loading-button";
 import type { ProductFormType } from "@/types/product";
 import ProductInfo from "./info";
 import ProductMedia from "./media";
@@ -11,26 +11,21 @@ import ProductSidebar from "./sidebar";
 import ProductVariant from "./variant";
 
 interface ProductProps {
-	isPending?: boolean;
-	isUpdate?: boolean;
-	defaultValues?: ProductFormType;
-	onSubmit?: (values: ProductFormType) => void;
+	defaultValues: ProductFormType;
+	ref: React.Ref<UseFormReturn<ProductFormType>>;
 }
 
-function ProductForm({
-	isUpdate,
-	isPending,
-	defaultValues,
-	onSubmit,
-}: ProductProps) {
+export default function ProductForm({ defaultValues, ref }: ProductProps) {
 	const form = useForm<ProductFormType>({
 		resolver: zodResolver(ProductFormSchema),
 		defaultValues,
 	});
 
+	useImperativeHandle(ref, () => form, [form]);
+
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit ?? (() => {}))}>
+			<form>
 				<div className="grid grid-cols-12 gap-8">
 					<div className="col-span-8">
 						<div className="grid grid-cols-12 gap-8">
@@ -54,15 +49,8 @@ function ProductForm({
 					<div className="col-span-4">
 						<ProductSidebar />
 					</div>
-					<div className="col-span-12 text-right">
-						<LoadingButton type="submit" loading={isPending}>
-							{isUpdate ? "Cập nhật" : "Thêm"}
-						</LoadingButton>
-					</div>
 				</div>
 			</form>
 		</Form>
 	);
 }
-
-export default ProductForm;

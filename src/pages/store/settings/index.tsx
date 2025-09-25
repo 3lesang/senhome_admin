@@ -1,5 +1,4 @@
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
 import GeneralForm, {
 	type GeneralFormValuesType,
@@ -11,21 +10,14 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { getStoreQueryOptions } from "@/handlers/store/one";
+import { getStoreQueryOptions } from "@/handlers/store/query/one";
 import { createStorePocket } from "@/pocketbase/store/create";
 import {
 	type UpdateStorePayload,
 	updateStorePocket,
 } from "@/pocketbase/store/update";
 
-export const Route = createFileRoute("/(app)/store/general")({
-	component: RouteComponent,
-	loader(ctx) {
-		return ctx.context.queryClient?.ensureQueryData(getStoreQueryOptions());
-	},
-});
-
-function RouteComponent() {
+export default function StoreSettings() {
 	const { data } = useSuspenseQuery(getStoreQueryOptions());
 	const { mutate, isPending } = useMutation({
 		mutationFn: (values: GeneralFormValuesType) => {

@@ -12,4 +12,4 @@ export const ORDER_COLLECTION = "sen_orders";
 export const ORDER_ITEM_COLLECTION = "sen_order_items";
 export const USER_COLLECTION = "sen_users";
 export const STORE_COLLECTION = "sen_store";
-export const POLICY_COLLECTION = "sen_policies";
+export const STORE_PAGE_COLLECTION = "sen_policies";

@@ -19,14 +19,16 @@ import { Route as appProductsIndexRouteImport } from './routes/(app)/products/in
 import { Route as appOrdersIndexRouteImport } from './routes/(app)/orders/index'
 import { Route as appCategoriesIndexRouteImport } from './routes/(app)/categories/index'
 import { Route as appAnalyticsIndexRouteImport } from './routes/(app)/analytics/index'
-import { Route as appStorePolicyRouteImport } from './routes/(app)/store/policy'
-import { Route as appStoreGeneralRouteImport } from './routes/(app)/store/general'
+import { Route as appStoreSettingsRouteImport } from './routes/(app)/store/settings'
 import { Route as appProductsCreateRouteImport } from './routes/(app)/products/create'
 import { Route as appProductsIdRouteImport } from './routes/(app)/products/$id'
+import { Route as appStorePagesIndexRouteImport } from './routes/(app)/store/pages/index'
 import { Route as appStoreMenusIndexRouteImport } from './routes/(app)/store/menus/index'
 import { Route as appStoreFilesIndexRouteImport } from './routes/(app)/store/files/index'
 import { Route as appProductsCollectionsIndexRouteImport } from './routes/(app)/products/collections/index'
 import { Route as appOrdersDraftIndexRouteImport } from './routes/(app)/orders/draft/index'
+import { Route as appStorePagesCreateRouteImport } from './routes/(app)/store/pages/create'
+import { Route as appStorePagesIdRouteImport } from './routes/(app)/store/pages/$id'
 
 const authRouteRoute = authRouteRouteImport.update({
   id: '/(auth)',
@@ -76,14 +78,9 @@ const appAnalyticsIndexRoute = appAnalyticsIndexRouteImport.update({
   path: '/analytics/',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appStorePolicyRoute = appStorePolicyRouteImport.update({
-  id: '/policy',
-  path: '/policy',
-  getParentRoute: () => appStoreRouteRoute,
-} as any)
-const appStoreGeneralRoute = appStoreGeneralRouteImport.update({
-  id: '/general',
-  path: '/general',
+const appStoreSettingsRoute = appStoreSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => appStoreRouteRoute,
 } as any)
 const appProductsCreateRoute = appProductsCreateRouteImport.update({
@@ -95,6 +92,11 @@ const appProductsIdRoute = appProductsIdRouteImport.update({
   id: '/products/$id',
   path: '/products/$id',
   getParentRoute: () => appRouteRoute,
+} as any)
+const appStorePagesIndexRoute = appStorePagesIndexRouteImport.update({
+  id: '/pages/',
+  path: '/pages/',
+  getParentRoute: () => appStoreRouteRoute,
 } as any)
 const appStoreMenusIndexRoute = appStoreMenusIndexRouteImport.update({
   id: '/menus/',
@@ -117,6 +119,16 @@ const appOrdersDraftIndexRoute = appOrdersDraftIndexRouteImport.update({
   path: '/orders/draft/',
   getParentRoute: () => appRouteRoute,
 } as any)
+const appStorePagesCreateRoute = appStorePagesCreateRouteImport.update({
+  id: '/pages/create',
+  path: '/pages/create',
+  getParentRoute: () => appStoreRouteRoute,
+} as any)
+const appStorePagesIdRoute = appStorePagesIdRouteImport.update({
+  id: '/pages/$id',
+  path: '/pages/$id',
+  getParentRoute: () => appStoreRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof appIndexRoute
@@ -125,16 +137,18 @@ export interface FileRoutesByFullPath {
   '/signup': typeof authSignupRoute
   '/products/$id': typeof appProductsIdRoute
   '/products/create': typeof appProductsCreateRoute
-  '/store/general': typeof appStoreGeneralRoute
-  '/store/policy': typeof appStorePolicyRoute
+  '/store/settings': typeof appStoreSettingsRoute
   '/analytics': typeof appAnalyticsIndexRoute
   '/categories': typeof appCategoriesIndexRoute
   '/orders': typeof appOrdersIndexRoute
   '/products': typeof appProductsIndexRoute
+  '/store/pages/$id': typeof appStorePagesIdRoute
+  '/store/pages/create': typeof appStorePagesCreateRoute
   '/orders/draft': typeof appOrdersDraftIndexRoute
   '/products/collections': typeof appProductsCollectionsIndexRoute
   '/store/files': typeof appStoreFilesIndexRoute
   '/store/menus': typeof appStoreMenusIndexRoute
+  '/store/pages': typeof appStorePagesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof appIndexRoute
@@ -143,16 +157,18 @@ export interface FileRoutesByTo {
   '/signup': typeof authSignupRoute
   '/products/$id': typeof appProductsIdRoute
   '/products/create': typeof appProductsCreateRoute
-  '/store/general': typeof appStoreGeneralRoute
-  '/store/policy': typeof appStorePolicyRoute
+  '/store/settings': typeof appStoreSettingsRoute
   '/analytics': typeof appAnalyticsIndexRoute
   '/categories': typeof appCategoriesIndexRoute
   '/orders': typeof appOrdersIndexRoute
   '/products': typeof appProductsIndexRoute
+  '/store/pages/$id': typeof appStorePagesIdRoute
+  '/store/pages/create': typeof appStorePagesCreateRoute
   '/orders/draft': typeof appOrdersDraftIndexRoute
   '/products/collections': typeof appProductsCollectionsIndexRoute
   '/store/files': typeof appStoreFilesIndexRoute
   '/store/menus': typeof appStoreMenusIndexRoute
+  '/store/pages': typeof appStorePagesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -164,16 +180,18 @@ export interface FileRoutesById {
   '/(app)/': typeof appIndexRoute
   '/(app)/products/$id': typeof appProductsIdRoute
   '/(app)/products/create': typeof appProductsCreateRoute
-  '/(app)/store/general': typeof appStoreGeneralRoute
-  '/(app)/store/policy': typeof appStorePolicyRoute
+  '/(app)/store/settings': typeof appStoreSettingsRoute
   '/(app)/analytics/': typeof appAnalyticsIndexRoute
   '/(app)/categories/': typeof appCategoriesIndexRoute
   '/(app)/orders/': typeof appOrdersIndexRoute
   '/(app)/products/': typeof appProductsIndexRoute
+  '/(app)/store/pages/$id': typeof appStorePagesIdRoute
+  '/(app)/store/pages/create': typeof appStorePagesCreateRoute
   '/(app)/orders/draft/': typeof appOrdersDraftIndexRoute
   '/(app)/products/collections/': typeof appProductsCollectionsIndexRoute
   '/(app)/store/files/': typeof appStoreFilesIndexRoute
   '/(app)/store/menus/': typeof appStoreMenusIndexRoute
+  '/(app)/store/pages/': typeof appStorePagesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -184,16 +202,18 @@ export interface FileRouteTypes {
     | '/signup'
     | '/products/$id'
     | '/products/create'
-    | '/store/general'
-    | '/store/policy'
+    | '/store/settings'
     | '/analytics'
     | '/categories'
     | '/orders'
     | '/products'
+    | '/store/pages/$id'
+    | '/store/pages/create'
     | '/orders/draft'
     | '/products/collections'
     | '/store/files'
     | '/store/menus'
+    | '/store/pages'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -202,16 +222,18 @@ export interface FileRouteTypes {
     | '/signup'
     | '/products/$id'
     | '/products/create'
-    | '/store/general'
-    | '/store/policy'
+    | '/store/settings'
     | '/analytics'
     | '/categories'
     | '/orders'
     | '/products'
+    | '/store/pages/$id'
+    | '/store/pages/create'
     | '/orders/draft'
     | '/products/collections'
     | '/store/files'
     | '/store/menus'
+    | '/store/pages'
   id:
     | '__root__'
     | '/(app)'
@@ -222,16 +244,18 @@ export interface FileRouteTypes {
     | '/(app)/'
     | '/(app)/products/$id'
     | '/(app)/products/create'
-    | '/(app)/store/general'
-    | '/(app)/store/policy'
+    | '/(app)/store/settings'
     | '/(app)/analytics/'
     | '/(app)/categories/'
     | '/(app)/orders/'
     | '/(app)/products/'
+    | '/(app)/store/pages/$id'
+    | '/(app)/store/pages/create'
     | '/(app)/orders/draft/'
     | '/(app)/products/collections/'
     | '/(app)/store/files/'
     | '/(app)/store/menus/'
+    | '/(app)/store/pages/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -311,18 +335,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appAnalyticsIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/store/policy': {
-      id: '/(app)/store/policy'
-      path: '/policy'
-      fullPath: '/store/policy'
-      preLoaderRoute: typeof appStorePolicyRouteImport
-      parentRoute: typeof appStoreRouteRoute
-    }
-    '/(app)/store/general': {
-      id: '/(app)/store/general'
-      path: '/general'
-      fullPath: '/store/general'
-      preLoaderRoute: typeof appStoreGeneralRouteImport
+    '/(app)/store/settings': {
+      id: '/(app)/store/settings'
+      path: '/settings'
+      fullPath: '/store/settings'
+      preLoaderRoute: typeof appStoreSettingsRouteImport
       parentRoute: typeof appStoreRouteRoute
     }
     '/(app)/products/create': {
@@ -338,6 +355,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/products/$id'
       preLoaderRoute: typeof appProductsIdRouteImport
       parentRoute: typeof appRouteRoute
+    }
+    '/(app)/store/pages/': {
+      id: '/(app)/store/pages/'
+      path: '/pages'
+      fullPath: '/store/pages'
+      preLoaderRoute: typeof appStorePagesIndexRouteImport
+      parentRoute: typeof appStoreRouteRoute
     }
     '/(app)/store/menus/': {
       id: '/(app)/store/menus/'
@@ -367,21 +391,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appOrdersDraftIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
+    '/(app)/store/pages/create': {
+      id: '/(app)/store/pages/create'
+      path: '/pages/create'
+      fullPath: '/store/pages/create'
+      preLoaderRoute: typeof appStorePagesCreateRouteImport
+      parentRoute: typeof appStoreRouteRoute
+    }
+    '/(app)/store/pages/$id': {
+      id: '/(app)/store/pages/$id'
+      path: '/pages/$id'
+      fullPath: '/store/pages/$id'
+      preLoaderRoute: typeof appStorePagesIdRouteImport
+      parentRoute: typeof appStoreRouteRoute
+    }
   }
 }
 
 interface appStoreRouteRouteChildren {
-  appStoreGeneralRoute: typeof appStoreGeneralRoute
-  appStorePolicyRoute: typeof appStorePolicyRoute
+  appStoreSettingsRoute: typeof appStoreSettingsRoute
+  appStorePagesIdRoute: typeof appStorePagesIdRoute
+  appStorePagesCreateRoute: typeof appStorePagesCreateRoute
   appStoreFilesIndexRoute: typeof appStoreFilesIndexRoute
   appStoreMenusIndexRoute: typeof appStoreMenusIndexRoute
+  appStorePagesIndexRoute: typeof appStorePagesIndexRoute
 }
 
 const appStoreRouteRouteChildren: appStoreRouteRouteChildren = {
-  appStoreGeneralRoute: appStoreGeneralRoute,
-  appStorePolicyRoute: appStorePolicyRoute,
+  appStoreSettingsRoute: appStoreSettingsRoute,
+  appStorePagesIdRoute: appStorePagesIdRoute,
+  appStorePagesCreateRoute: appStorePagesCreateRoute,
   appStoreFilesIndexRoute: appStoreFilesIndexRoute,
   appStoreMenusIndexRoute: appStoreMenusIndexRoute,
+  appStorePagesIndexRoute: appStorePagesIndexRoute,
 }
 
 const appStoreRouteRouteWithChildren = appStoreRouteRoute._addFileChildren(

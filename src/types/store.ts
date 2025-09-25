@@ -9,7 +9,7 @@ export type StoreType = {
 	policy: any;
 };
 
-export type PolicyType = {
+export type StorePageType = {
 	id: string;
 	title: string;
 	slug: string;

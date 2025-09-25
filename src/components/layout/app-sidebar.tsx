@@ -202,7 +202,7 @@ export default function AppSidebar() {
 						>
 							<SidebarMenuItem>
 								<CollapsibleTrigger asChild>
-									<Link to="/store/policy">
+									<Link to="/store/pages">
 										<SidebarMenuButton>
 											<GlobeIcon />
 											<span className="select-none">Website</span>
@@ -214,9 +214,9 @@ export default function AppSidebar() {
 										<SidebarMenuSubItem>
 											<SidebarMenuSubButton
 												asChild
-												isActive={location.pathname === "/store/policy"}
+												isActive={location.pathname === "/store/pages"}
 											>
-												<Link to="/store/policy">
+												<Link to="/store/pages">
 													<span className="select-none">Trang nội dung</span>
 												</Link>
 											</SidebarMenuSubButton>
@@ -244,9 +244,9 @@ export default function AppSidebar() {
 										<SidebarMenuSubItem>
 											<SidebarMenuSubButton
 												asChild
-												isActive={location.pathname === "/store/general"}
+												isActive={location.pathname === "/store/settings"}
 											>
-												<Link to="/store/general">
+												<Link to="/store/settings">
 													<span className="select-none">Cấu hình</span>
 												</Link>
 											</SidebarMenuSubButton>

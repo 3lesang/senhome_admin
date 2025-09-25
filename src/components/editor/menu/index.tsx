@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 
 export default ({ editor }: { editor: Editor }) => {
 	return (
-		<div className="sticky top-0 bg-white flex items-center flex-wrap">
+		<div className="flex items-center">
 			<Paragraph editor={editor} />
 			<Button
 				type="button"
