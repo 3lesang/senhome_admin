@@ -23,14 +23,16 @@ import { Route as appCategoriesIndexRouteImport } from './routes/(app)/categorie
 import { Route as appAnalyticsIndexRouteImport } from './routes/(app)/analytics/index'
 import { Route as appProductsCreateRouteImport } from './routes/(app)/products/create'
 import { Route as appProductsIdRouteImport } from './routes/(app)/products/$id'
+import { Route as appDiscountsPromotionsRouteImport } from './routes/(app)/discounts/promotions'
+import { Route as appDiscountsCouponsRouteImport } from './routes/(app)/discounts/coupons'
 import { Route as appCustomersRatingRouteImport } from './routes/(app)/customers/rating'
 import { Route as appStoreSettingsIndexRouteImport } from './routes/(app)/store/settings/index'
 import { Route as appStorePagesIndexRouteImport } from './routes/(app)/store/pages/index'
-import { Route as appStoreMenusIndexRouteImport } from './routes/(app)/store/menus/index'
-import { Route as appStoreFilesIndexRouteImport } from './routes/(app)/store/files/index'
-import { Route as appStoreArticlesIndexRouteImport } from './routes/(app)/store/articles/index'
 import { Route as appProductsCollectionsIndexRouteImport } from './routes/(app)/products/collections/index'
 import { Route as appOrdersDraftIndexRouteImport } from './routes/(app)/orders/draft/index'
+import { Route as appContentMenusIndexRouteImport } from './routes/(app)/content/menus/index'
+import { Route as appContentFilesIndexRouteImport } from './routes/(app)/content/files/index'
+import { Route as appContentArticlesIndexRouteImport } from './routes/(app)/content/articles/index'
 import { Route as appStoreSettingsShipmentsRouteImport } from './routes/(app)/store/settings/shipments'
 import { Route as appStoreSettingsPaymentsRouteImport } from './routes/(app)/store/settings/payments'
 import { Route as appStoreSettingsGeneralRouteImport } from './routes/(app)/store/settings/general'
@@ -106,6 +108,16 @@ const appProductsIdRoute = appProductsIdRouteImport.update({
   path: '/products/$id',
   getParentRoute: () => appRouteRoute,
 } as any)
+const appDiscountsPromotionsRoute = appDiscountsPromotionsRouteImport.update({
+  id: '/discounts/promotions',
+  path: '/discounts/promotions',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appDiscountsCouponsRoute = appDiscountsCouponsRouteImport.update({
+  id: '/discounts/coupons',
+  path: '/discounts/coupons',
+  getParentRoute: () => appRouteRoute,
+} as any)
 const appCustomersRatingRoute = appCustomersRatingRouteImport.update({
   id: '/customers/rating',
   path: '/customers/rating',
@@ -121,21 +133,6 @@ const appStorePagesIndexRoute = appStorePagesIndexRouteImport.update({
   path: '/pages/',
   getParentRoute: () => appStoreRouteRoute,
 } as any)
-const appStoreMenusIndexRoute = appStoreMenusIndexRouteImport.update({
-  id: '/menus/',
-  path: '/menus/',
-  getParentRoute: () => appStoreRouteRoute,
-} as any)
-const appStoreFilesIndexRoute = appStoreFilesIndexRouteImport.update({
-  id: '/files/',
-  path: '/files/',
-  getParentRoute: () => appStoreRouteRoute,
-} as any)
-const appStoreArticlesIndexRoute = appStoreArticlesIndexRouteImport.update({
-  id: '/articles/',
-  path: '/articles/',
-  getParentRoute: () => appStoreRouteRoute,
-} as any)
 const appProductsCollectionsIndexRoute =
   appProductsCollectionsIndexRouteImport.update({
     id: '/products/collections/',
@@ -145,6 +142,21 @@ const appProductsCollectionsIndexRoute =
 const appOrdersDraftIndexRoute = appOrdersDraftIndexRouteImport.update({
   id: '/orders/draft/',
   path: '/orders/draft/',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appContentMenusIndexRoute = appContentMenusIndexRouteImport.update({
+  id: '/content/menus/',
+  path: '/content/menus/',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appContentFilesIndexRoute = appContentFilesIndexRouteImport.update({
+  id: '/content/files/',
+  path: '/content/files/',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appContentArticlesIndexRoute = appContentArticlesIndexRouteImport.update({
+  id: '/content/articles/',
+  path: '/content/articles/',
   getParentRoute: () => appRouteRoute,
 } as any)
 const appStoreSettingsShipmentsRoute =
@@ -187,6 +199,8 @@ export interface FileRoutesByFullPath {
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
   '/customers/rating': typeof appCustomersRatingRoute
+  '/discounts/coupons': typeof appDiscountsCouponsRoute
+  '/discounts/promotions': typeof appDiscountsPromotionsRoute
   '/products/$id': typeof appProductsIdRoute
   '/products/create': typeof appProductsCreateRoute
   '/analytics': typeof appAnalyticsIndexRoute
@@ -201,11 +215,11 @@ export interface FileRoutesByFullPath {
   '/store/settings/general': typeof appStoreSettingsGeneralRoute
   '/store/settings/payments': typeof appStoreSettingsPaymentsRoute
   '/store/settings/shipments': typeof appStoreSettingsShipmentsRoute
+  '/content/articles': typeof appContentArticlesIndexRoute
+  '/content/files': typeof appContentFilesIndexRoute
+  '/content/menus': typeof appContentMenusIndexRoute
   '/orders/draft': typeof appOrdersDraftIndexRoute
   '/products/collections': typeof appProductsCollectionsIndexRoute
-  '/store/articles': typeof appStoreArticlesIndexRoute
-  '/store/files': typeof appStoreFilesIndexRoute
-  '/store/menus': typeof appStoreMenusIndexRoute
   '/store/pages': typeof appStorePagesIndexRoute
   '/store/settings': typeof appStoreSettingsIndexRoute
 }
@@ -215,6 +229,8 @@ export interface FileRoutesByTo {
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
   '/customers/rating': typeof appCustomersRatingRoute
+  '/discounts/coupons': typeof appDiscountsCouponsRoute
+  '/discounts/promotions': typeof appDiscountsPromotionsRoute
   '/products/$id': typeof appProductsIdRoute
   '/products/create': typeof appProductsCreateRoute
   '/analytics': typeof appAnalyticsIndexRoute
@@ -229,11 +245,11 @@ export interface FileRoutesByTo {
   '/store/settings/general': typeof appStoreSettingsGeneralRoute
   '/store/settings/payments': typeof appStoreSettingsPaymentsRoute
   '/store/settings/shipments': typeof appStoreSettingsShipmentsRoute
+  '/content/articles': typeof appContentArticlesIndexRoute
+  '/content/files': typeof appContentFilesIndexRoute
+  '/content/menus': typeof appContentMenusIndexRoute
   '/orders/draft': typeof appOrdersDraftIndexRoute
   '/products/collections': typeof appProductsCollectionsIndexRoute
-  '/store/articles': typeof appStoreArticlesIndexRoute
-  '/store/files': typeof appStoreFilesIndexRoute
-  '/store/menus': typeof appStoreMenusIndexRoute
   '/store/pages': typeof appStorePagesIndexRoute
   '/store/settings': typeof appStoreSettingsIndexRoute
 }
@@ -246,6 +262,8 @@ export interface FileRoutesById {
   '/(auth)/signup': typeof authSignupRoute
   '/(app)/': typeof appIndexRoute
   '/(app)/customers/rating': typeof appCustomersRatingRoute
+  '/(app)/discounts/coupons': typeof appDiscountsCouponsRoute
+  '/(app)/discounts/promotions': typeof appDiscountsPromotionsRoute
   '/(app)/products/$id': typeof appProductsIdRoute
   '/(app)/products/create': typeof appProductsCreateRoute
   '/(app)/analytics/': typeof appAnalyticsIndexRoute
@@ -260,11 +278,11 @@ export interface FileRoutesById {
   '/(app)/store/settings/general': typeof appStoreSettingsGeneralRoute
   '/(app)/store/settings/payments': typeof appStoreSettingsPaymentsRoute
   '/(app)/store/settings/shipments': typeof appStoreSettingsShipmentsRoute
+  '/(app)/content/articles/': typeof appContentArticlesIndexRoute
+  '/(app)/content/files/': typeof appContentFilesIndexRoute
+  '/(app)/content/menus/': typeof appContentMenusIndexRoute
   '/(app)/orders/draft/': typeof appOrdersDraftIndexRoute
   '/(app)/products/collections/': typeof appProductsCollectionsIndexRoute
-  '/(app)/store/articles/': typeof appStoreArticlesIndexRoute
-  '/(app)/store/files/': typeof appStoreFilesIndexRoute
-  '/(app)/store/menus/': typeof appStoreMenusIndexRoute
   '/(app)/store/pages/': typeof appStorePagesIndexRoute
   '/(app)/store/settings/': typeof appStoreSettingsIndexRoute
 }
@@ -276,6 +294,8 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/customers/rating'
+    | '/discounts/coupons'
+    | '/discounts/promotions'
     | '/products/$id'
     | '/products/create'
     | '/analytics'
@@ -290,11 +310,11 @@ export interface FileRouteTypes {
     | '/store/settings/general'
     | '/store/settings/payments'
     | '/store/settings/shipments'
+    | '/content/articles'
+    | '/content/files'
+    | '/content/menus'
     | '/orders/draft'
     | '/products/collections'
-    | '/store/articles'
-    | '/store/files'
-    | '/store/menus'
     | '/store/pages'
     | '/store/settings'
   fileRoutesByTo: FileRoutesByTo
@@ -304,6 +324,8 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/customers/rating'
+    | '/discounts/coupons'
+    | '/discounts/promotions'
     | '/products/$id'
     | '/products/create'
     | '/analytics'
@@ -318,11 +340,11 @@ export interface FileRouteTypes {
     | '/store/settings/general'
     | '/store/settings/payments'
     | '/store/settings/shipments'
+    | '/content/articles'
+    | '/content/files'
+    | '/content/menus'
     | '/orders/draft'
     | '/products/collections'
-    | '/store/articles'
-    | '/store/files'
-    | '/store/menus'
     | '/store/pages'
     | '/store/settings'
   id:
@@ -334,6 +356,8 @@ export interface FileRouteTypes {
     | '/(auth)/signup'
     | '/(app)/'
     | '/(app)/customers/rating'
+    | '/(app)/discounts/coupons'
+    | '/(app)/discounts/promotions'
     | '/(app)/products/$id'
     | '/(app)/products/create'
     | '/(app)/analytics/'
@@ -348,11 +372,11 @@ export interface FileRouteTypes {
     | '/(app)/store/settings/general'
     | '/(app)/store/settings/payments'
     | '/(app)/store/settings/shipments'
+    | '/(app)/content/articles/'
+    | '/(app)/content/files/'
+    | '/(app)/content/menus/'
     | '/(app)/orders/draft/'
     | '/(app)/products/collections/'
-    | '/(app)/store/articles/'
-    | '/(app)/store/files/'
-    | '/(app)/store/menus/'
     | '/(app)/store/pages/'
     | '/(app)/store/settings/'
   fileRoutesById: FileRoutesById
@@ -462,6 +486,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appProductsIdRouteImport
       parentRoute: typeof appRouteRoute
     }
+    '/(app)/discounts/promotions': {
+      id: '/(app)/discounts/promotions'
+      path: '/discounts/promotions'
+      fullPath: '/discounts/promotions'
+      preLoaderRoute: typeof appDiscountsPromotionsRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/discounts/coupons': {
+      id: '/(app)/discounts/coupons'
+      path: '/discounts/coupons'
+      fullPath: '/discounts/coupons'
+      preLoaderRoute: typeof appDiscountsCouponsRouteImport
+      parentRoute: typeof appRouteRoute
+    }
     '/(app)/customers/rating': {
       id: '/(app)/customers/rating'
       path: '/customers/rating'
@@ -483,27 +521,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appStorePagesIndexRouteImport
       parentRoute: typeof appStoreRouteRoute
     }
-    '/(app)/store/menus/': {
-      id: '/(app)/store/menus/'
-      path: '/menus'
-      fullPath: '/store/menus'
-      preLoaderRoute: typeof appStoreMenusIndexRouteImport
-      parentRoute: typeof appStoreRouteRoute
-    }
-    '/(app)/store/files/': {
-      id: '/(app)/store/files/'
-      path: '/files'
-      fullPath: '/store/files'
-      preLoaderRoute: typeof appStoreFilesIndexRouteImport
-      parentRoute: typeof appStoreRouteRoute
-    }
-    '/(app)/store/articles/': {
-      id: '/(app)/store/articles/'
-      path: '/articles'
-      fullPath: '/store/articles'
-      preLoaderRoute: typeof appStoreArticlesIndexRouteImport
-      parentRoute: typeof appStoreRouteRoute
-    }
     '/(app)/products/collections/': {
       id: '/(app)/products/collections/'
       path: '/products/collections'
@@ -516,6 +533,27 @@ declare module '@tanstack/react-router' {
       path: '/orders/draft'
       fullPath: '/orders/draft'
       preLoaderRoute: typeof appOrdersDraftIndexRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/content/menus/': {
+      id: '/(app)/content/menus/'
+      path: '/content/menus'
+      fullPath: '/content/menus'
+      preLoaderRoute: typeof appContentMenusIndexRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/content/files/': {
+      id: '/(app)/content/files/'
+      path: '/content/files'
+      fullPath: '/content/files'
+      preLoaderRoute: typeof appContentFilesIndexRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/content/articles/': {
+      id: '/(app)/content/articles/'
+      path: '/content/articles'
+      fullPath: '/content/articles'
+      preLoaderRoute: typeof appContentArticlesIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
     '/(app)/store/settings/shipments': {
@@ -570,9 +608,6 @@ interface appStoreRouteRouteChildren {
   appStoreSettingsGeneralRoute: typeof appStoreSettingsGeneralRoute
   appStoreSettingsPaymentsRoute: typeof appStoreSettingsPaymentsRoute
   appStoreSettingsShipmentsRoute: typeof appStoreSettingsShipmentsRoute
-  appStoreArticlesIndexRoute: typeof appStoreArticlesIndexRoute
-  appStoreFilesIndexRoute: typeof appStoreFilesIndexRoute
-  appStoreMenusIndexRoute: typeof appStoreMenusIndexRoute
   appStorePagesIndexRoute: typeof appStorePagesIndexRoute
   appStoreSettingsIndexRoute: typeof appStoreSettingsIndexRoute
 }
@@ -584,9 +619,6 @@ const appStoreRouteRouteChildren: appStoreRouteRouteChildren = {
   appStoreSettingsGeneralRoute: appStoreSettingsGeneralRoute,
   appStoreSettingsPaymentsRoute: appStoreSettingsPaymentsRoute,
   appStoreSettingsShipmentsRoute: appStoreSettingsShipmentsRoute,
-  appStoreArticlesIndexRoute: appStoreArticlesIndexRoute,
-  appStoreFilesIndexRoute: appStoreFilesIndexRoute,
-  appStoreMenusIndexRoute: appStoreMenusIndexRoute,
   appStorePagesIndexRoute: appStorePagesIndexRoute,
   appStoreSettingsIndexRoute: appStoreSettingsIndexRoute,
 }
@@ -599,6 +631,8 @@ interface appRouteRouteChildren {
   appStoreRouteRoute: typeof appStoreRouteRouteWithChildren
   appIndexRoute: typeof appIndexRoute
   appCustomersRatingRoute: typeof appCustomersRatingRoute
+  appDiscountsCouponsRoute: typeof appDiscountsCouponsRoute
+  appDiscountsPromotionsRoute: typeof appDiscountsPromotionsRoute
   appProductsIdRoute: typeof appProductsIdRoute
   appProductsCreateRoute: typeof appProductsCreateRoute
   appAnalyticsIndexRoute: typeof appAnalyticsIndexRoute
@@ -607,6 +641,9 @@ interface appRouteRouteChildren {
   appDiscountsIndexRoute: typeof appDiscountsIndexRoute
   appOrdersIndexRoute: typeof appOrdersIndexRoute
   appProductsIndexRoute: typeof appProductsIndexRoute
+  appContentArticlesIndexRoute: typeof appContentArticlesIndexRoute
+  appContentFilesIndexRoute: typeof appContentFilesIndexRoute
+  appContentMenusIndexRoute: typeof appContentMenusIndexRoute
   appOrdersDraftIndexRoute: typeof appOrdersDraftIndexRoute
   appProductsCollectionsIndexRoute: typeof appProductsCollectionsIndexRoute
 }
@@ -615,6 +652,8 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appStoreRouteRoute: appStoreRouteRouteWithChildren,
   appIndexRoute: appIndexRoute,
   appCustomersRatingRoute: appCustomersRatingRoute,
+  appDiscountsCouponsRoute: appDiscountsCouponsRoute,
+  appDiscountsPromotionsRoute: appDiscountsPromotionsRoute,
   appProductsIdRoute: appProductsIdRoute,
   appProductsCreateRoute: appProductsCreateRoute,
   appAnalyticsIndexRoute: appAnalyticsIndexRoute,
@@ -623,6 +662,9 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appDiscountsIndexRoute: appDiscountsIndexRoute,
   appOrdersIndexRoute: appOrdersIndexRoute,
   appProductsIndexRoute: appProductsIndexRoute,
+  appContentArticlesIndexRoute: appContentArticlesIndexRoute,
+  appContentFilesIndexRoute: appContentFilesIndexRoute,
+  appContentMenusIndexRoute: appContentMenusIndexRoute,
   appOrdersDraftIndexRoute: appOrdersDraftIndexRoute,
   appProductsCollectionsIndexRoute: appProductsCollectionsIndexRoute,
 }

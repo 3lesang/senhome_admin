@@ -24,7 +24,7 @@ const tabs = [{ label: "Tất cả file", q: "" }];
 
 export default function FileListContent() {
 	const navigate = useNavigate();
-	const { page, limit, q } = useSearch({ from: "/(app)/store/files/" });
+	const { page, limit, q } = useSearch({ from: "/(app)/content/files/" });
 	const { data } = useSuspenseQuery(
 		getListFileQueryOptions({ page, limit, query: q }),
 	);
@@ -33,11 +33,11 @@ export default function FileListContent() {
 		limit,
 		page,
 	}: TablePaginationDataChange) => {
-		navigate({ to: "/store/files", search: { page: page, limit: limit } });
+		navigate({ to: "/content/files", search: { page: page, limit: limit } });
 	};
 
 	const handleTabChange = (q: string) => {
-		navigate({ to: "/store/files", search: { page: 1, limit: limit, q } });
+		navigate({ to: "/content/files", search: { page: 1, limit: limit, q } });
 	};
 
 	return (

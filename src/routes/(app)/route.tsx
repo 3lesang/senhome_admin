@@ -1,10 +1,9 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import AppSidebar from "@/components/layout/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import DashboardLayout from "@/components/layout/dashboard";
 import pocketClient from "@/pocketbase/client";
 
 export const Route = createFileRoute("/(app)")({
-	component: RouteComponent,
+	component: DashboardLayout,
 	beforeLoad: async () => {
 		if (!pocketClient.authStore.isValid) {
 			throw redirect({
@@ -13,16 +12,3 @@ export const Route = createFileRoute("/(app)")({
 		}
 	},
 });
-
-function RouteComponent() {
-	return (
-		<SidebarProvider>
-			<AppSidebar />
-			<SidebarInset className="bg-sidebar">
-				<main>
-					<Outlet />
-				</main>
-			</SidebarInset>
-		</SidebarProvider>
-	);
-}

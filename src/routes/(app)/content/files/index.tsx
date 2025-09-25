@@ -9,7 +9,7 @@ const schema = z.object({
 	q: z.string().default(""),
 });
 
-export const Route = createFileRoute("/(app)/store/files/")({
+export const Route = createFileRoute("/(app)/content/files/")({
 	component: FileListPage,
 	validateSearch: schema,
 	loaderDeps: ({ search: { page, limit, q } }) => ({ page, limit, q }),
