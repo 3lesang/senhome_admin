@@ -30,7 +30,7 @@ export default function ProductRow({ data }: ProductRowProps) {
 					<TableCell className="w-8">
 						<Checkbox />
 					</TableCell>
-					<TableCell>
+					<TableCell className="min-w-96 max-w-96">
 						<div className="flex items-center gap-2">
 							<Avatar className="rounded size-6">
 								<AvatarImage src={convertToFileUrl(data.expand.thumbnail)} />

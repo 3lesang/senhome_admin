@@ -17,10 +17,13 @@ import { Route as authSigninRouteImport } from './routes/(auth)/signin'
 import { Route as appStoreRouteRouteImport } from './routes/(app)/store/route'
 import { Route as appProductsIndexRouteImport } from './routes/(app)/products/index'
 import { Route as appOrdersIndexRouteImport } from './routes/(app)/orders/index'
+import { Route as appDiscountsIndexRouteImport } from './routes/(app)/discounts/index'
+import { Route as appCustomersIndexRouteImport } from './routes/(app)/customers/index'
 import { Route as appCategoriesIndexRouteImport } from './routes/(app)/categories/index'
 import { Route as appAnalyticsIndexRouteImport } from './routes/(app)/analytics/index'
 import { Route as appProductsCreateRouteImport } from './routes/(app)/products/create'
 import { Route as appProductsIdRouteImport } from './routes/(app)/products/$id'
+import { Route as appCustomersRatingRouteImport } from './routes/(app)/customers/rating'
 import { Route as appStoreSettingsIndexRouteImport } from './routes/(app)/store/settings/index'
 import { Route as appStorePagesIndexRouteImport } from './routes/(app)/store/pages/index'
 import { Route as appStoreMenusIndexRouteImport } from './routes/(app)/store/menus/index'
@@ -73,6 +76,16 @@ const appOrdersIndexRoute = appOrdersIndexRouteImport.update({
   path: '/orders/',
   getParentRoute: () => appRouteRoute,
 } as any)
+const appDiscountsIndexRoute = appDiscountsIndexRouteImport.update({
+  id: '/discounts/',
+  path: '/discounts/',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appCustomersIndexRoute = appCustomersIndexRouteImport.update({
+  id: '/customers/',
+  path: '/customers/',
+  getParentRoute: () => appRouteRoute,
+} as any)
 const appCategoriesIndexRoute = appCategoriesIndexRouteImport.update({
   id: '/categories/',
   path: '/categories/',
@@ -91,6 +104,11 @@ const appProductsCreateRoute = appProductsCreateRouteImport.update({
 const appProductsIdRoute = appProductsIdRouteImport.update({
   id: '/products/$id',
   path: '/products/$id',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appCustomersRatingRoute = appCustomersRatingRouteImport.update({
+  id: '/customers/rating',
+  path: '/customers/rating',
   getParentRoute: () => appRouteRoute,
 } as any)
 const appStoreSettingsIndexRoute = appStoreSettingsIndexRouteImport.update({
@@ -168,10 +186,13 @@ export interface FileRoutesByFullPath {
   '/store': typeof appStoreRouteRouteWithChildren
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
+  '/customers/rating': typeof appCustomersRatingRoute
   '/products/$id': typeof appProductsIdRoute
   '/products/create': typeof appProductsCreateRoute
   '/analytics': typeof appAnalyticsIndexRoute
   '/categories': typeof appCategoriesIndexRoute
+  '/customers': typeof appCustomersIndexRoute
+  '/discounts': typeof appDiscountsIndexRoute
   '/orders': typeof appOrdersIndexRoute
   '/products': typeof appProductsIndexRoute
   '/store/pages/$id': typeof appStorePagesIdRoute
@@ -193,10 +214,13 @@ export interface FileRoutesByTo {
   '/store': typeof appStoreRouteRouteWithChildren
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
+  '/customers/rating': typeof appCustomersRatingRoute
   '/products/$id': typeof appProductsIdRoute
   '/products/create': typeof appProductsCreateRoute
   '/analytics': typeof appAnalyticsIndexRoute
   '/categories': typeof appCategoriesIndexRoute
+  '/customers': typeof appCustomersIndexRoute
+  '/discounts': typeof appDiscountsIndexRoute
   '/orders': typeof appOrdersIndexRoute
   '/products': typeof appProductsIndexRoute
   '/store/pages/$id': typeof appStorePagesIdRoute
@@ -221,10 +245,13 @@ export interface FileRoutesById {
   '/(auth)/signin': typeof authSigninRoute
   '/(auth)/signup': typeof authSignupRoute
   '/(app)/': typeof appIndexRoute
+  '/(app)/customers/rating': typeof appCustomersRatingRoute
   '/(app)/products/$id': typeof appProductsIdRoute
   '/(app)/products/create': typeof appProductsCreateRoute
   '/(app)/analytics/': typeof appAnalyticsIndexRoute
   '/(app)/categories/': typeof appCategoriesIndexRoute
+  '/(app)/customers/': typeof appCustomersIndexRoute
+  '/(app)/discounts/': typeof appDiscountsIndexRoute
   '/(app)/orders/': typeof appOrdersIndexRoute
   '/(app)/products/': typeof appProductsIndexRoute
   '/(app)/store/pages/$id': typeof appStorePagesIdRoute
@@ -248,10 +275,13 @@ export interface FileRouteTypes {
     | '/store'
     | '/signin'
     | '/signup'
+    | '/customers/rating'
     | '/products/$id'
     | '/products/create'
     | '/analytics'
     | '/categories'
+    | '/customers'
+    | '/discounts'
     | '/orders'
     | '/products'
     | '/store/pages/$id'
@@ -273,10 +303,13 @@ export interface FileRouteTypes {
     | '/store'
     | '/signin'
     | '/signup'
+    | '/customers/rating'
     | '/products/$id'
     | '/products/create'
     | '/analytics'
     | '/categories'
+    | '/customers'
+    | '/discounts'
     | '/orders'
     | '/products'
     | '/store/pages/$id'
@@ -300,10 +333,13 @@ export interface FileRouteTypes {
     | '/(auth)/signin'
     | '/(auth)/signup'
     | '/(app)/'
+    | '/(app)/customers/rating'
     | '/(app)/products/$id'
     | '/(app)/products/create'
     | '/(app)/analytics/'
     | '/(app)/categories/'
+    | '/(app)/customers/'
+    | '/(app)/discounts/'
     | '/(app)/orders/'
     | '/(app)/products/'
     | '/(app)/store/pages/$id'
@@ -384,6 +420,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appOrdersIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
+    '/(app)/discounts/': {
+      id: '/(app)/discounts/'
+      path: '/discounts'
+      fullPath: '/discounts'
+      preLoaderRoute: typeof appDiscountsIndexRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/customers/': {
+      id: '/(app)/customers/'
+      path: '/customers'
+      fullPath: '/customers'
+      preLoaderRoute: typeof appCustomersIndexRouteImport
+      parentRoute: typeof appRouteRoute
+    }
     '/(app)/categories/': {
       id: '/(app)/categories/'
       path: '/categories'
@@ -410,6 +460,13 @@ declare module '@tanstack/react-router' {
       path: '/products/$id'
       fullPath: '/products/$id'
       preLoaderRoute: typeof appProductsIdRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/customers/rating': {
+      id: '/(app)/customers/rating'
+      path: '/customers/rating'
+      fullPath: '/customers/rating'
+      preLoaderRoute: typeof appCustomersRatingRouteImport
       parentRoute: typeof appRouteRoute
     }
     '/(app)/store/settings/': {
@@ -541,10 +598,13 @@ const appStoreRouteRouteWithChildren = appStoreRouteRoute._addFileChildren(
 interface appRouteRouteChildren {
   appStoreRouteRoute: typeof appStoreRouteRouteWithChildren
   appIndexRoute: typeof appIndexRoute
+  appCustomersRatingRoute: typeof appCustomersRatingRoute
   appProductsIdRoute: typeof appProductsIdRoute
   appProductsCreateRoute: typeof appProductsCreateRoute
   appAnalyticsIndexRoute: typeof appAnalyticsIndexRoute
   appCategoriesIndexRoute: typeof appCategoriesIndexRoute
+  appCustomersIndexRoute: typeof appCustomersIndexRoute
+  appDiscountsIndexRoute: typeof appDiscountsIndexRoute
   appOrdersIndexRoute: typeof appOrdersIndexRoute
   appProductsIndexRoute: typeof appProductsIndexRoute
   appOrdersDraftIndexRoute: typeof appOrdersDraftIndexRoute
@@ -554,10 +614,13 @@ interface appRouteRouteChildren {
 const appRouteRouteChildren: appRouteRouteChildren = {
   appStoreRouteRoute: appStoreRouteRouteWithChildren,
   appIndexRoute: appIndexRoute,
+  appCustomersRatingRoute: appCustomersRatingRoute,
   appProductsIdRoute: appProductsIdRoute,
   appProductsCreateRoute: appProductsCreateRoute,
   appAnalyticsIndexRoute: appAnalyticsIndexRoute,
   appCategoriesIndexRoute: appCategoriesIndexRoute,
+  appCustomersIndexRoute: appCustomersIndexRoute,
+  appDiscountsIndexRoute: appDiscountsIndexRoute,
   appOrdersIndexRoute: appOrdersIndexRoute,
   appProductsIndexRoute: appProductsIndexRoute,
   appOrdersDraftIndexRoute: appOrdersDraftIndexRoute,

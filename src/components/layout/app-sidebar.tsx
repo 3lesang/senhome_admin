@@ -3,12 +3,14 @@ import {
 	BellIcon,
 	ChartColumnIcon,
 	GalleryVerticalEnd,
+	GiftIcon,
 	GlobeIcon,
 	LogOutIcon,
 	MoreVerticalIcon,
 	ShoppingCartIcon,
 	TagIcon,
 	UserCircleIcon,
+	UsersIcon,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -156,6 +158,56 @@ export default function AppSidebar() {
 								</CollapsibleContent>
 							</SidebarMenuItem>
 						</Collapsible>
+						<Collapsible
+							asChild
+							className="group/collapsible"
+							open={location.href.includes("/customers")}
+						>
+							<SidebarMenuItem>
+								<CollapsibleTrigger asChild>
+									<Link to="/customers">
+										<SidebarMenuButton>
+											<UsersIcon />
+											<span className="select-none">Khách hàng</span>
+										</SidebarMenuButton>
+									</Link>
+								</CollapsibleTrigger>
+								<CollapsibleContent>
+									<SidebarMenuSub className="border-l-0">
+										<SidebarMenuSubItem>
+											<SidebarMenuSubButton
+												asChild
+												isActive={location.pathname === "/customers"}
+											>
+												<Link to="/customers">
+													<span className="select-none">Tất cả khách hàng</span>
+												</Link>
+											</SidebarMenuSubButton>
+										</SidebarMenuSubItem>
+										<SidebarMenuSubItem>
+											<SidebarMenuSubButton
+												asChild
+												isActive={location.pathname === "/customers/rating"}
+											>
+												<Link to="/customers/rating">
+													<span className="select-none">Quản lý đánh giá</span>
+												</Link>
+											</SidebarMenuSubButton>
+										</SidebarMenuSubItem>
+									</SidebarMenuSub>
+								</CollapsibleContent>
+							</SidebarMenuItem>
+						</Collapsible>
+						<SidebarMenuItem>
+							<Link to="/discounts">
+								<SidebarMenuButton
+									isActive={location.pathname === "/discounts"}
+								>
+									<GiftIcon />
+									<span className="select-none">Khuyến mãi</span>
+								</SidebarMenuButton>
+							</Link>
+						</SidebarMenuItem>
 						<Collapsible
 							asChild
 							className="group/collapsible"
