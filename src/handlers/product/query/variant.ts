@@ -8,10 +8,34 @@ import type {
 	AttributeType,
 	ProductVariantDataType,
 	VariantDataType,
+	VariantType,
 } from "@/types/product";
 
+export type VariantAttributeExpand = {
+	id: string;
+	expand?: {
+		attribute?: AttributeType;
+		attribute_value?: { id: string; name: string };
+		variant?: VariantType;
+	};
+};
+
+export type VariantFileExpand = {
+	id: string;
+	variant: string;
+	file: string;
+	expand: {
+		file: {
+			id: string;
+			collectionName: string;
+			file: { id: string };
+			// other file fields if needed
+		};
+	};
+};
+
 const formatProductVariantData = (
-	variants: any[],
+	variants: VariantAttributeExpand[],
 	files?: Record<string, FileType>,
 ): ProductVariantDataType => {
 	const attributeMap = new Map<string, AttributeType>();
@@ -30,7 +54,8 @@ const formatProductVariantData = (
 				options: {},
 			});
 		}
-		const pa = attributeMap.get(attr.id)!;
+		const pa = attributeMap.get(attr.id);
+		if (!pa) return;
 
 		pa.options[attrValue.id] = {
 			id: attrValue.id,
@@ -42,8 +67,10 @@ const formatProductVariantData = (
 		}
 
 		const file = files?.[variant.id];
+		const group = variantGroups.get(variant.id);
+		if (!group) return;
 
-		variantGroups.get(variant.id)![attrValue.id] = {
+		group[attrValue.id] = {
 			option: {
 				id: attrValue.id,
 				name: attrValue.name,
@@ -65,13 +92,15 @@ const formatProductVariantData = (
 	};
 };
 
-const formatFiles = (data: any[]) => {
+const formatFiles = (data: VariantFileExpand[]): Record<string, FileType> => {
 	const imageMap = new Map<string, FileType>();
 	data.forEach((record) => {
 		const variantId = record?.variant;
-		const file = record.expand.file;
+		const file = record.expand?.file;
+		if (!variantId || !file) return;
+
 		const image: FileType = {
-			id: record.file,
+			id: file.id,
 			url: convertToFileUrl(file) ?? "",
 		};
 

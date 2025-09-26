@@ -1,10 +1,10 @@
 import {
-  updateOptionPocket,
-  type UpdateOptionPayload,
+	type UpdateOptionPayload,
+	updateOptionPocket,
 } from "@/pocketbase/product/option/update";
 
 async function updateOptionHandler(payload: UpdateOptionPayload[]) {
-  return updateOptionPocket(payload);
+	return updateOptionPocket(payload);
 }
 
 export { updateOptionHandler };

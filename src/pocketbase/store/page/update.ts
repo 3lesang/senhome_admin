@@ -4,7 +4,7 @@ import { STORE_PAGE_COLLECTION } from "@/pocketbase/constants";
 export type UpdateStorePagePayload = {
 	title: string;
 	slug: string;
-	content: any;
+	content: string;
 };
 
 async function updateStorePagePocket(

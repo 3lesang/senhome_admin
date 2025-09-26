@@ -73,9 +73,7 @@ export default function OrderRow({ data }: OrderRowProps) {
 							</HoverCard>
 						</TableCell>
 						<TableCell>
-							<Badge variant="secondary">
-								Chờ xử lý
-							</Badge>
+							<Badge variant="secondary">Chờ xử lý</Badge>
 						</TableCell>
 						<TableCell>
 							<Badge variant="outline">Chưa giao hàng</Badge>

@@ -31,10 +31,10 @@ function updateProductHandler(
 
 	const payload: UpdateProductPayload = _.transform(
 		updatedValues,
-		(result, value, key) => {
+		(result: Record<string, string | null | number | Date>, value, key) => {
 			const typeKey = key as keyof UpdateProductDataType;
 			if (!_.isEqual(value, defaultValues[typeKey])) {
-				result[typeKey] = value as any;
+				result[typeKey] = value;
 			}
 		},
 		{} as UpdateProductPayload,

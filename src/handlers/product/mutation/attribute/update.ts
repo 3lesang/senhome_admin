@@ -1,10 +1,10 @@
 import {
-  updateAttributePocket,
-  type UpdateAttributePayload,
+	type UpdateAttributePayload,
+	updateAttributePocket,
 } from "@/pocketbase/product/attribute/update";
 
 async function updateAttributeHandler(payload: UpdateAttributePayload[]) {
-  return updateAttributePocket(payload);
+	return updateAttributePocket(payload);
 }
 
 export { updateAttributeHandler };

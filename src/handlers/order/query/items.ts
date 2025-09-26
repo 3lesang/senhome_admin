@@ -18,7 +18,9 @@ export const getListItemOrderQueryOptions = (orderId: string) => {
 					try {
 						const file = await getOneVariantFilePocket(variantId);
 						item.file = file;
-					} catch (error) {}
+					} catch (error) {
+						console.log(error);
+					}
 					item.attrs = attrs;
 				}
 			}
@@ -34,7 +36,8 @@ export const getListItemOrderQueryOptions = (orderId: string) => {
 					quantity: item?.quantity,
 					thumbnail: convertToFileUrl(item?.file?.expand?.file) ?? "",
 					variant: item?.attrs?.map(
-						(i: any) => i?.expand?.attribute_value?.name,
+						(i: { expand: { attribute_value: { name: string } } }) =>
+							i?.expand?.attribute_value?.name,
 					),
 				};
 				return formatted;

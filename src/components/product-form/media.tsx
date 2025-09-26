@@ -29,7 +29,9 @@ function ProductMedia() {
 										<div
 											className={cn(
 												"border border-dashed w-full rounded-md flex justify-center items-center hover:bg-gray-50 relative",
-												files.length === 0 ? "col-span-8 h-32" : "aspect-square",
+												files.length === 0
+													? "col-span-8 h-32"
+													: "aspect-square",
 											)}
 										>
 											<button

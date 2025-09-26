@@ -13,7 +13,11 @@ export function formatVND(n: number = 0) {
 	}).format(n);
 }
 
-export function convertToFileUrl(record: any) {
+export function convertToFileUrl(record: {
+	id: string;
+	collectionName: string;
+	file: { id: string };
+}) {
 	if (!record?.id) return;
 	return `${API_KEY}/api/files/${record?.collectionName}/${record?.id}/${record?.file}?thumb=100x0`;
 }

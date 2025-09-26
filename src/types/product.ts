@@ -24,7 +24,7 @@ export type ProductDataType = {
 	discount: number;
 	category: string;
 	expand: {
-		thumbnail: any;
+		thumbnail: { id: string; file: { id: string }; collectionName: string };
 	};
 	deleted: Date;
 };
