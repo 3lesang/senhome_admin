@@ -39,6 +39,8 @@ import { Route as appStoreSettingsGeneralRouteImport } from './routes/(app)/stor
 import { Route as appStoreSettingsCheckoutsRouteImport } from './routes/(app)/store/settings/checkouts'
 import { Route as appStorePagesCreateRouteImport } from './routes/(app)/store/pages/create'
 import { Route as appStorePagesIdRouteImport } from './routes/(app)/store/pages/$id'
+import { Route as appContentMenusCreateRouteImport } from './routes/(app)/content/menus/create'
+import { Route as appContentMenusIdRouteImport } from './routes/(app)/content/menus/$id'
 
 const authRouteRoute = authRouteRouteImport.update({
   id: '/(auth)',
@@ -192,6 +194,16 @@ const appStorePagesIdRoute = appStorePagesIdRouteImport.update({
   path: '/pages/$id',
   getParentRoute: () => appStoreRouteRoute,
 } as any)
+const appContentMenusCreateRoute = appContentMenusCreateRouteImport.update({
+  id: '/content/menus/create',
+  path: '/content/menus/create',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appContentMenusIdRoute = appContentMenusIdRouteImport.update({
+  id: '/content/menus/$id',
+  path: '/content/menus/$id',
+  getParentRoute: () => appRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof appIndexRoute
@@ -209,6 +221,8 @@ export interface FileRoutesByFullPath {
   '/discounts': typeof appDiscountsIndexRoute
   '/orders': typeof appOrdersIndexRoute
   '/products': typeof appProductsIndexRoute
+  '/content/menus/$id': typeof appContentMenusIdRoute
+  '/content/menus/create': typeof appContentMenusCreateRoute
   '/store/pages/$id': typeof appStorePagesIdRoute
   '/store/pages/create': typeof appStorePagesCreateRoute
   '/store/settings/checkouts': typeof appStoreSettingsCheckoutsRoute
@@ -239,6 +253,8 @@ export interface FileRoutesByTo {
   '/discounts': typeof appDiscountsIndexRoute
   '/orders': typeof appOrdersIndexRoute
   '/products': typeof appProductsIndexRoute
+  '/content/menus/$id': typeof appContentMenusIdRoute
+  '/content/menus/create': typeof appContentMenusCreateRoute
   '/store/pages/$id': typeof appStorePagesIdRoute
   '/store/pages/create': typeof appStorePagesCreateRoute
   '/store/settings/checkouts': typeof appStoreSettingsCheckoutsRoute
@@ -272,6 +288,8 @@ export interface FileRoutesById {
   '/(app)/discounts/': typeof appDiscountsIndexRoute
   '/(app)/orders/': typeof appOrdersIndexRoute
   '/(app)/products/': typeof appProductsIndexRoute
+  '/(app)/content/menus/$id': typeof appContentMenusIdRoute
+  '/(app)/content/menus/create': typeof appContentMenusCreateRoute
   '/(app)/store/pages/$id': typeof appStorePagesIdRoute
   '/(app)/store/pages/create': typeof appStorePagesCreateRoute
   '/(app)/store/settings/checkouts': typeof appStoreSettingsCheckoutsRoute
@@ -304,6 +322,8 @@ export interface FileRouteTypes {
     | '/discounts'
     | '/orders'
     | '/products'
+    | '/content/menus/$id'
+    | '/content/menus/create'
     | '/store/pages/$id'
     | '/store/pages/create'
     | '/store/settings/checkouts'
@@ -334,6 +354,8 @@ export interface FileRouteTypes {
     | '/discounts'
     | '/orders'
     | '/products'
+    | '/content/menus/$id'
+    | '/content/menus/create'
     | '/store/pages/$id'
     | '/store/pages/create'
     | '/store/settings/checkouts'
@@ -366,6 +388,8 @@ export interface FileRouteTypes {
     | '/(app)/discounts/'
     | '/(app)/orders/'
     | '/(app)/products/'
+    | '/(app)/content/menus/$id'
+    | '/(app)/content/menus/create'
     | '/(app)/store/pages/$id'
     | '/(app)/store/pages/create'
     | '/(app)/store/settings/checkouts'
@@ -598,6 +622,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appStorePagesIdRouteImport
       parentRoute: typeof appStoreRouteRoute
     }
+    '/(app)/content/menus/create': {
+      id: '/(app)/content/menus/create'
+      path: '/content/menus/create'
+      fullPath: '/content/menus/create'
+      preLoaderRoute: typeof appContentMenusCreateRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/content/menus/$id': {
+      id: '/(app)/content/menus/$id'
+      path: '/content/menus/$id'
+      fullPath: '/content/menus/$id'
+      preLoaderRoute: typeof appContentMenusIdRouteImport
+      parentRoute: typeof appRouteRoute
+    }
   }
 }
 
@@ -641,6 +679,8 @@ interface appRouteRouteChildren {
   appDiscountsIndexRoute: typeof appDiscountsIndexRoute
   appOrdersIndexRoute: typeof appOrdersIndexRoute
   appProductsIndexRoute: typeof appProductsIndexRoute
+  appContentMenusIdRoute: typeof appContentMenusIdRoute
+  appContentMenusCreateRoute: typeof appContentMenusCreateRoute
   appContentArticlesIndexRoute: typeof appContentArticlesIndexRoute
   appContentFilesIndexRoute: typeof appContentFilesIndexRoute
   appContentMenusIndexRoute: typeof appContentMenusIndexRoute
@@ -662,6 +702,8 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appDiscountsIndexRoute: appDiscountsIndexRoute,
   appOrdersIndexRoute: appOrdersIndexRoute,
   appProductsIndexRoute: appProductsIndexRoute,
+  appContentMenusIdRoute: appContentMenusIdRoute,
+  appContentMenusCreateRoute: appContentMenusCreateRoute,
   appContentArticlesIndexRoute: appContentArticlesIndexRoute,
   appContentFilesIndexRoute: appContentFilesIndexRoute,
   appContentMenusIndexRoute: appContentMenusIndexRoute,

@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardAction,
-	CardContent,
 	CardDescription,
 	CardFooter,
 	CardHeader,
@@ -40,7 +39,7 @@ export default function ContentPage() {
 	};
 
 	return (
-		<Card className="bg-sidebar border-0 shadow-none">
+		<Card className="border-0 shadow-none">
 			<CardHeader>
 				<CardTitle>
 					<TableTabs data={tabs} onChange={handleTabChange} q={q} />
@@ -57,9 +56,7 @@ export default function ContentPage() {
 					</Button>
 				</CardAction>
 			</CardHeader>
-			<CardContent>
-				<PolicyTable data={data.items} />
-			</CardContent>
+			<PolicyTable data={data.items} />
 			<CardFooter>
 				<TablePagination
 					total={data.totalItems}

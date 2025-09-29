@@ -16,7 +16,7 @@ interface ProductTableProps {
 export default function ProductTable(props: ProductTableProps) {
 	const { data = [] } = props;
 	return (
-		<Table className="bg-white rounded-md">
+		<Table>
 			<TableHeader className="bg-gray-50">
 				<TableRow>
 					<TableHead>

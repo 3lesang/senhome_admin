@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardAction,
-	CardContent,
 	CardDescription,
 	CardFooter,
 	CardHeader,
@@ -46,7 +45,7 @@ export default function OrderContent() {
 	};
 
 	return (
-		<Card className="border-0 shadow-none bg-sidebar">
+		<Card className="border-0 shadow-none">
 			<CardHeader>
 				<CardTitle>
 					<TableTabs data={tabs} q={q} onChange={handleTabChange} />
@@ -63,9 +62,7 @@ export default function OrderContent() {
 					</Button>
 				</CardAction>
 			</CardHeader>
-			<CardContent>
-				<OrderTable data={data?.items} />
-			</CardContent>
+			<OrderTable data={data?.items} />
 			<CardFooter>
 				<TablePagination
 					page={page}

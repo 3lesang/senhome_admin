@@ -4,6 +4,7 @@ import { buttonVariants } from "@/components/ui/button";
 import {
 	Card,
 	CardAction,
+	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
@@ -24,7 +25,9 @@ export default function ProductListPage() {
 					</Link>
 				</CardAction>
 			</CardHeader>
-			<ProductContent />
+			<CardContent>
+				<ProductContent />
+			</CardContent>
 		</Card>
 	);
 }

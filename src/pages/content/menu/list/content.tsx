@@ -5,59 +5,47 @@ import TablePagination, {
 	type TablePaginationDataChange,
 } from "@/components/table-pagination";
 import TableTabs from "@/components/table-tabs";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardAction,
-	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { getListProductQueryOptions } from "@/handlers/product/query/list";
-import ProductTable from "./table";
+import { getListMenuQueryOptions } from "@/handlers/menu/query/list";
+import MenuTable from "./table";
 
-const tabs = [
-	{ label: "Tất cả sản phẩm", q: "" },
-	{ label: "Đang hoạt động", q: "deleted=null" },
-	{ label: "Bản nháp", q: "deleted!=null" },
-];
-
-export default function ProductContent() {
+export default function MenuContent() {
 	const navigate = useNavigate();
-	const { page, limit, q } = useSearch({ from: "/(app)/products/" });
-
+	const { page, limit, q } = useSearch({ from: "/(app)/content/menus/" });
 	const { data } = useSuspenseQuery(
-		getListProductQueryOptions({
-			page,
-			limit,
-			query: q,
-		}),
+		getListMenuQueryOptions({ page, limit, query: q }),
 	);
 
 	const handlePaginationChange = ({
 		limit,
 		page,
 	}: TablePaginationDataChange) => {
-		navigate({ to: "/products", search: { page: page, limit: limit } });
+		navigate({ to: "/content/menus", search: { page, limit, q } });
 	};
 
 	const handleTabChange = (q: string) => {
-		navigate({ to: "/products", search: { page: 1, limit: limit, q } });
+		navigate({ to: "/content/menus", search: { page: 1, limit: limit, q } });
 	};
 
 	return (
-		<Card className="border-0 shadow-none">
+		<Card className="shadow-none border-0">
 			<CardHeader>
 				<CardTitle>
-					<TableTabs data={tabs} onChange={handleTabChange} q={q} />
+					<TableTabs
+						data={[{ label: "Tất cả", q: "" }]}
+						q=""
+						onChange={handleTabChange}
+					/>
 				</CardTitle>
-				<CardDescription>
-					<Badge variant="secondary">{data.totalItems} sản phẩm</Badge>
-				</CardDescription>
 				<CardAction className="flex items-center gap-2">
-					<Button variant="outline" size="icon">
+					<Button size="icon" variant="outline">
 						<SearchIcon />
 					</Button>
 					<Button variant="outline" size="icon">
@@ -65,13 +53,13 @@ export default function ProductContent() {
 					</Button>
 				</CardAction>
 			</CardHeader>
-			<ProductTable data={data.items} />
+			<MenuTable data={data.items} />
 			<CardFooter>
 				<TablePagination
+					total={data.totalItems}
 					page={page}
 					limit={limit}
 					onChange={handlePaginationChange}
-					total={data.totalItems}
 				/>
 			</CardFooter>
 		</Card>

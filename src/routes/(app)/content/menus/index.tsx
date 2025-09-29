@@ -1,9 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
+import z from "zod";
+import { getListMenuQueryOptions } from "@/handlers/menu/query/list";
+import MenuListPage from "@/pages/content/menu/list";
 
-export const Route = createFileRoute("/(app)/content/menus/")({
-	component: RouteComponent,
+const schema = z.object({
+	page: z.number().default(1),
+	limit: z.number().default(10),
+	q: z.string().default(""),
 });
 
-function RouteComponent() {
-	return <div>Hello "/(app)/store/menus/"!</div>;
-}
+export const Route = createFileRoute("/(app)/content/menus/")({
+	component: MenuListPage,
+	validateSearch: schema,
+	loaderDeps: ({ search: { page, limit, q } }) => ({ page, limit, q }),
+	loader({ context, deps }) {
+		const { page, limit, q } = deps;
+		return context.queryClient?.ensureQueryData(
+			getListMenuQueryOptions({ page, limit, query: q }),
+		);
+	},
+});

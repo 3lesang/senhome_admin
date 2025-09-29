@@ -15,7 +15,7 @@ interface OrderTableProps {
 
 export default function OrderTable({ data = [] }: OrderTableProps) {
 	return (
-		<Table className="bg-white rounded-md overflow-hidden">
+		<Table>
 			<TableHeader className="bg-gray-50">
 				<TableRow className="">
 					<TableHead>
