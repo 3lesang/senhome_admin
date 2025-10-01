@@ -12,8 +12,10 @@ import type { MenuType } from "@/types/menu";
 
 interface MenuRowProps {
 	data: MenuType;
+	onDelete?: (id: string) => void;
 }
-export default function MenuRow({ data }: MenuRowProps) {
+
+export default function MenuRow({ data, onDelete }: MenuRowProps) {
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger asChild>
@@ -34,11 +36,13 @@ export default function MenuRow({ data }: MenuRowProps) {
 				</TableRow>
 			</ContextMenuTrigger>
 			<ContextMenuContent>
-				<ContextMenuItem>
-					<EditIcon />
-					Chỉnh sửa
-				</ContextMenuItem>
-				<ContextMenuItem>
+				<Link to="/content/menus/$id" params={{ id: data.id }}>
+					<ContextMenuItem>
+						<EditIcon />
+						Chỉnh sửa
+					</ContextMenuItem>
+				</Link>
+				<ContextMenuItem onClick={() => onDelete?.(data.id)}>
 					<TrashIcon />
 					Xóa
 				</ContextMenuItem>

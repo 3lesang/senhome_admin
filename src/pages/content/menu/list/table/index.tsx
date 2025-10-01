@@ -11,9 +11,10 @@ import MenuRow from "./row";
 
 interface MenuTableProps {
 	data: MenuType[];
+	onDelete?: (id: string) => void;
 }
 
-export default function MenuTable({ data }: MenuTableProps) {
+export default function MenuTable({ data, onDelete }: MenuTableProps) {
 	return (
 		<Table>
 			<TableHeader className="bg-sidebar">
@@ -27,7 +28,7 @@ export default function MenuTable({ data }: MenuTableProps) {
 			</TableHeader>
 			<TableBody>
 				{data?.map((item) => (
-					<MenuRow key={item.id} data={item} />
+					<MenuRow key={item.id} data={item} onDelete={onDelete} />
 				))}
 			</TableBody>
 		</Table>

@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { ListFilterIcon, SearchIcon } from "lucide-react";
 import TablePagination, {
@@ -14,14 +14,23 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { getListMenuQueryOptions } from "@/handlers/menu/query/list";
+import { deleteMenusPocket } from "@/pocketbase/menu/delete";
 import MenuTable from "./table";
 
 export default function MenuContent() {
 	const navigate = useNavigate();
 	const { page, limit, q } = useSearch({ from: "/(app)/content/menus/" });
-	const { data } = useSuspenseQuery(
+
+	const { data, refetch } = useSuspenseQuery(
 		getListMenuQueryOptions({ page, limit, query: q }),
 	);
+
+	const { mutate } = useMutation({
+		mutationFn: (ids: string[]) => deleteMenusPocket(ids),
+		onSuccess: () => {
+			refetch();
+		},
+	});
 
 	const handlePaginationChange = ({
 		limit,
@@ -32,6 +41,10 @@ export default function MenuContent() {
 
 	const handleTabChange = (q: string) => {
 		navigate({ to: "/content/menus", search: { page: 1, limit: limit, q } });
+	};
+
+	const handleDelete = (id: string) => {
+		mutate([id]);
 	};
 
 	return (
@@ -53,7 +66,7 @@ export default function MenuContent() {
 					</Button>
 				</CardAction>
 			</CardHeader>
-			<MenuTable data={data.items} />
+			<MenuTable data={data.items} onDelete={handleDelete} />
 			<CardFooter>
 				<TablePagination
 					total={data.totalItems}
