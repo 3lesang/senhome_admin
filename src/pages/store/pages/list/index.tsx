@@ -4,6 +4,7 @@ import { buttonVariants } from "@/components/ui/button";
 import {
 	Card,
 	CardAction,
+	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
@@ -22,11 +23,13 @@ export default function PageStoreListPage() {
 				<CardAction>
 					<Link to="/store/pages/create" className={cn(buttonVariants())}>
 						<PlusIcon />
-						Tạo trang mới
+						Tạo trang
 					</Link>
 				</CardAction>
 			</CardHeader>
-			<ContentPage />
+			<CardContent>
+				<ContentPage />
+			</CardContent>
 		</Card>
 	);
 }

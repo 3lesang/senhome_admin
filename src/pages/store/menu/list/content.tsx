@@ -5,10 +5,12 @@ import TablePagination, {
 	type TablePaginationDataChange,
 } from "@/components/table-pagination";
 import TableTabs from "@/components/table-tabs";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardAction,
+	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -19,7 +21,7 @@ import MenuTable from "./table";
 
 export default function MenuContent() {
 	const navigate = useNavigate();
-	const { page, limit, q } = useSearch({ from: "/(app)/content/menus/" });
+	const { page, limit, q } = useSearch({ from: "/(app)/store/menus/" });
 
 	const { data, refetch } = useSuspenseQuery(
 		getListMenuQueryOptions({ page, limit, query: q }),
@@ -36,11 +38,11 @@ export default function MenuContent() {
 		limit,
 		page,
 	}: TablePaginationDataChange) => {
-		navigate({ to: "/content/menus", search: { page, limit, q } });
+		navigate({ to: "/store/menus", search: { page, limit, q } });
 	};
 
 	const handleTabChange = (q: string) => {
-		navigate({ to: "/content/menus", search: { page: 1, limit: limit, q } });
+		navigate({ to: "/store/menus", search: { page: 1, limit: limit, q } });
 	};
 
 	const handleDelete = (id: string) => {
@@ -57,6 +59,9 @@ export default function MenuContent() {
 						onChange={handleTabChange}
 					/>
 				</CardTitle>
+				<CardDescription>
+					<Badge variant="secondary">{data.totalItems} menu</Badge>
+				</CardDescription>
 				<CardAction className="flex items-center gap-2">
 					<Button size="icon" variant="outline">
 						<SearchIcon />

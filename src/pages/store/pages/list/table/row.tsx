@@ -44,7 +44,7 @@ export default function StorePageRow({ data }: StorePageRowProps) {
 		<ContextMenu key={id}>
 			<ContextMenuTrigger asChild>
 				<TableRow key={id}>
-					<TableCell className="w-8">
+					<TableCell className="w-8 pl-6">
 						<Checkbox />
 					</TableCell>
 					<TableCell>

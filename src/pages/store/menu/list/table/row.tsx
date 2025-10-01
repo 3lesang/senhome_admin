@@ -20,12 +20,12 @@ export default function MenuRow({ data, onDelete }: MenuRowProps) {
 		<ContextMenu>
 			<ContextMenuTrigger asChild>
 				<TableRow>
-					<TableCell className="w-8">
+					<TableCell className="w-8 pl-6">
 						<Checkbox />
 					</TableCell>
 					<TableCell>
 						<Link
-							to="/content/menus/$id"
+							to="/store/menus/$id"
 							params={{ id: data.id }}
 							className="hover:underline"
 						>
@@ -36,7 +36,7 @@ export default function MenuRow({ data, onDelete }: MenuRowProps) {
 				</TableRow>
 			</ContextMenuTrigger>
 			<ContextMenuContent>
-				<Link to="/content/menus/$id" params={{ id: data.id }}>
+				<Link to="/store/menus/$id" params={{ id: data.id }}>
 					<ContextMenuItem>
 						<EditIcon />
 						Chỉnh sửa

@@ -46,7 +46,7 @@ export default function MenuCreatePage() {
 			<CardHeader>
 				<CardTitle className="flex items-center gap-2">
 					<Link
-						to="/content/menus"
+						to="/store/menus"
 						className={cn(buttonVariants({ variant: "ghost", size: "icon" }))}
 					>
 						<ChevronLeftIcon />

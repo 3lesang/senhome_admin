@@ -16,9 +16,9 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { getListStorePageQueryOptions } from "@/handlers/store/query/page/list";
-import PolicyTable from "./table";
+import StorePageTable from "./table";
 
-const tabs = [{ label: "Tất cả trang", q: "" }];
+const tabs = [{ label: "Tất cả", q: "" }];
 
 export default function ContentPage() {
 	const navigate = useNavigate();
@@ -56,7 +56,7 @@ export default function ContentPage() {
 					</Button>
 				</CardAction>
 			</CardHeader>
-			<PolicyTable data={data.items} />
+			<StorePageTable data={data.items} />
 			<CardFooter>
 				<TablePagination
 					total={data.totalItems}

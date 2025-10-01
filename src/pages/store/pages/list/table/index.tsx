@@ -22,7 +22,7 @@ export default function StorePageTable({ data }: StorePageTableProps) {
 		<Table className="bg-white rounded-md">
 			<TableHeader className="bg-sidebar">
 				<TableRow>
-					<TableHead>
+					<TableHead className="pl-6">
 						<Checkbox />
 					</TableHead>
 					<TableHead>Tên chính sách</TableHead>

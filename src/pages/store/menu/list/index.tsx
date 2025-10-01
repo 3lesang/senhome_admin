@@ -22,7 +22,7 @@ export default function MenuListPage() {
 					drop-down menus
 				</CardDescription>
 				<CardAction>
-					<Link to="/content/menus/create">
+					<Link to="/store/menus/create">
 						<Button>
 							<PlusIcon />
 							Tạo menu

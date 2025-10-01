@@ -22,7 +22,7 @@ import {
 } from "@/pocketbase/menu/update";
 
 export default function UpdateMenuPage() {
-	const { id } = useParams({ from: "/(app)/content/menus/$id" });
+	const { id } = useParams({ from: "/(app)/store/menus/$id" });
 	const { data, refetch } = useSuspenseQuery(getOneMenuQueryOptions(id));
 	const ref = useRef<UseFormReturn<MenuFormValuesType>>(null);
 
@@ -48,7 +48,7 @@ export default function UpdateMenuPage() {
 			<CardHeader>
 				<CardTitle className="flex items-center gap-2">
 					<Link
-						to="/content/menus"
+						to="/store/menus"
 						className={cn(buttonVariants({ variant: "ghost", size: "icon" }))}
 					>
 						<ChevronLeftIcon />

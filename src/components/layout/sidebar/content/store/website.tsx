@@ -42,10 +42,20 @@ export default function WebsiteMenu() {
 						<SidebarMenuSubItem>
 							<SidebarMenuSubButton
 								asChild
-								isActive={location.pathname === "/store/pages"}
+								isActive={location.pathname.includes("/store/pages")}
 							>
 								<Link to="/store/pages">
 									<span className="select-none">Trang nội dung</span>
+								</Link>
+							</SidebarMenuSubButton>
+						</SidebarMenuSubItem>
+						<SidebarMenuSubItem>
+							<SidebarMenuSubButton
+								asChild
+								isActive={location.pathname.includes("/store/menus")}
+							>
+								<Link to="/store/menus">
+									<span className="select-none">Menu</span>
 								</Link>
 							</SidebarMenuSubButton>
 						</SidebarMenuSubItem>

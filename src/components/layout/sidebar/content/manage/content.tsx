@@ -52,16 +52,6 @@ export default function ContentMenu() {
 								</Link>
 							</SidebarMenuSubButton>
 						</SidebarMenuSubItem>
-						<SidebarMenuSubItem>
-							<SidebarMenuSubButton
-								asChild
-								isActive={location.pathname.includes("/content/menus")}
-							>
-								<Link to="/content/menus">
-									<span className="select-none">Menu</span>
-								</Link>
-							</SidebarMenuSubButton>
-						</SidebarMenuSubItem>
 					</SidebarMenuSub>
 				</CollapsibleContent>
 			</SidebarMenuItem>

@@ -19,7 +19,7 @@ export default function MenuTable({ data, onDelete }: MenuTableProps) {
 		<Table>
 			<TableHeader className="bg-sidebar">
 				<TableRow>
-					<TableHead>
+					<TableHead className="pl-6">
 						<Checkbox />
 					</TableHead>
 					<TableHead>Tên</TableHead>
