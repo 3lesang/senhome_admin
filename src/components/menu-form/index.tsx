@@ -1,31 +1,49 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useImperativeHandle } from "react";
-import { type UseFormReturn, useForm } from "react-hook-form";
+import { type Resolver, type UseFormReturn, useForm } from "react-hook-form";
 import z from "zod";
-import { Card, CardContent } from "./ui/card";
+import TreeMenu from "../tree/TreeMenu";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "../ui/card";
 import {
 	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
+} from "../ui/form";
+import { Input } from "../ui/input";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "./ui/select";
+} from "../ui/select";
+
+const menuItemSchema = z.object({
+	id: z.string(),
+	title: z.string(),
+	url: z.string(),
+	parentId: z.string().nullable(),
+	order: z.number(),
+});
 
 const schema = z.object({
 	name: z.string().min(1),
 	position: z.enum(["header", "footer"]),
+	items: z.array(menuItemSchema),
 });
 
 export type MenuFormValuesType = z.infer<typeof schema>;
+export type MenuItem = z.infer<typeof menuItemSchema>;
 
 interface MenuFormProps {
 	defaultValues: MenuFormValuesType;
@@ -33,8 +51,8 @@ interface MenuFormProps {
 }
 
 export default function MenuForm({ defaultValues, ref }: MenuFormProps) {
-	const form = useForm({
-		resolver: zodResolver(schema),
+	const form = useForm<MenuFormValuesType>({
+		resolver: zodResolver(schema) as Resolver<MenuFormValuesType>,
 		defaultValues,
 	});
 
@@ -43,7 +61,7 @@ export default function MenuForm({ defaultValues, ref }: MenuFormProps) {
 	return (
 		<Form {...form}>
 			<form className="grid grid-cols-12 gap-8">
-				<div className="col-span-8">
+				<div className="col-span-8 space-y-8">
 					<Card className="shadow-none border-0">
 						<CardContent>
 							<FormField
@@ -55,6 +73,33 @@ export default function MenuForm({ defaultValues, ref }: MenuFormProps) {
 										<FormControl>
 											<Input placeholder="Nhập tên menu" {...field} />
 										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</CardContent>
+					</Card>
+					<Card className="border-0 shadow-none">
+						<CardHeader>
+							<CardTitle>Liên kết</CardTitle>
+							<CardDescription>
+								Danh sách liên kết website , giúp khách hàng chuyển trang trong
+								cửa hàng của bạn. Bạn có thể tạo các menu lồng nhau để hiện thị
+								drop-down menus
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<FormField
+								control={form.control}
+								name="items"
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<TreeMenu value={field.value} onChange={field.onChange} />
+										</FormControl>
+										<FormDescription>
+											Nhấp chuột phải vào menu con để mở menu
+										</FormDescription>
 										<FormMessage />
 									</FormItem>
 								)}

@@ -39,7 +39,7 @@ export default function OrderRow({ data }: OrderRowProps) {
 							<div className="flex items-center gap-2">
 								<Button
 									variant="ghost"
-									className="size-6"
+									className="size-6 opacity-0 group-hover:opacity-100"
 									onClick={() => setExpand((prev) => !prev)}
 								>
 									<ChevronRightIcon />

@@ -4,7 +4,8 @@ import { ChevronLeftIcon } from "lucide-react";
 import { useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
-import MenuForm, { type MenuFormValuesType } from "@/components/menu-form";
+import type { MenuFormValuesType } from "@/components/menu-form";
+import MenuForm from "@/components/menu-form";
 import { buttonVariants } from "@/components/ui/button";
 import {
 	Card,
@@ -54,12 +55,19 @@ export default function MenuCreatePage() {
 				</CardTitle>
 				<CardAction>
 					<LoadingButton loading={isPending} onClick={handleClick}>
-						Thêm menu
+						Lưu
 					</LoadingButton>
 				</CardAction>
 			</CardHeader>
 			<CardContent>
-				<MenuForm defaultValues={{ name: "", position: "header" }} ref={ref} />
+				<MenuForm
+					defaultValues={{
+						name: "",
+						position: "header",
+						items: [],
+					}}
+					ref={ref}
+				/>
 			</CardContent>
 		</Card>
 	);

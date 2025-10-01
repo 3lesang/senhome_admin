@@ -71,6 +71,7 @@ export default function UpdateMenuPage() {
 					defaultValues={{
 						name: data?.name ?? "",
 						position: data?.position,
+						items: data?.items ?? [],
 					}}
 				/>
 			</CardContent>
