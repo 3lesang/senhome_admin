@@ -1,29 +1,92 @@
-import { PlusIcon } from "lucide-react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import { ListFilterIcon, PlusIcon, SearchIcon } from "lucide-react";
+import TablePagination, {
+	type TablePaginationDataChange,
+} from "@/components/table-pagination";
+import TableTabs, { type TableTableDataType } from "@/components/table-tabs";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardAction,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+	Card,
+	CardAction,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
 } from "@/components/ui/card";
-import OrderContent from "./content";
+import { getListOrderQueryOptions } from "@/handlers/order/query/list";
+import OrderTable from "./table";
+
+const tabs: TableTableDataType[] = [
+	{ label: "Tất cả đơn hàng", q: "" },
+	{ label: "Đơn hàng mới", q: `status="created"` },
+	{ label: "Chưa giao hàng", q: `status="completed"` },
+	{ label: "Chưa thanh toán", q: `status="canceled"` },
+];
 
 export default function OrderListPage() {
-  return (
-    <Card className="bg-sidebar border-0 shadow-none max-w-7xl mx-auto">
-      <CardHeader>
-        <CardTitle>Quản lý đơn hàng</CardTitle>
-        <CardDescription>Danh sách đơn hàng</CardDescription>
-        <CardAction className="flex gap-2 items-center">
-          <Button variant="outline">Xuất dữ liệu</Button>
-          <Button>
-            <PlusIcon />
-            Tạo đơn hàng
-          </Button>
-        </CardAction>
-      </CardHeader>
-      <OrderContent />
-    </Card>
-  );
+	const navigate = useNavigate();
+	const { page, limit, q } = useSearch({ from: "/(app)/orders/" });
+
+	const { data } = useSuspenseQuery(
+		getListOrderQueryOptions({ page, limit, query: q }),
+	);
+
+	const handlePaginationChange = ({
+		limit,
+		page,
+	}: TablePaginationDataChange) => {
+		navigate({ to: "/orders", search: { page, limit, q } });
+	};
+
+	const handleTabChange = (q: string) => {
+		navigate({ to: "/orders", search: { page: 1, limit: limit, q } });
+	};
+
+	return (
+		<Card className="bg-sidebar border-0 shadow-none max-w-7xl mx-auto">
+			<CardHeader>
+				<CardTitle>Quản lý đơn hàng</CardTitle>
+				<CardDescription>Danh sách đơn hàng</CardDescription>
+				<CardAction className="flex gap-2 items-center">
+					<Button variant="outline">Xuất dữ liệu</Button>
+					<Button>
+						<PlusIcon />
+						Tạo đơn hàng
+					</Button>
+				</CardAction>
+			</CardHeader>
+			<CardContent>
+				<Card className="border-0 shadow-none">
+					<CardHeader>
+						<CardTitle>
+							<TableTabs data={tabs} q={q} onChange={handleTabChange} />
+						</CardTitle>
+						<CardDescription>
+							<Badge variant="secondary">{data.totalItems} đơn hàng</Badge>
+						</CardDescription>
+						<CardAction className="flex items-center gap-2">
+							<Button size="icon" variant="outline">
+								<SearchIcon />
+							</Button>
+							<Button variant="outline" size="icon">
+								<ListFilterIcon />
+							</Button>
+						</CardAction>
+					</CardHeader>
+					<OrderTable data={data?.items} />
+					<CardFooter>
+						<TablePagination
+							page={page}
+							limit={limit}
+							total={data.totalItems}
+							onChange={handlePaginationChange}
+						/>
+					</CardFooter>
+				</Card>
+			</CardContent>
+		</Card>
+	);
 }

@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
-import { STORE_PAGE_COLLECTION } from "@/pocketbase/constants";
-import { getListStorePagePocket } from "@/pocketbase/store/page/list";
+import { getListCollectionPocket } from "@/pocketbase/collection/list";
+import { COLLECTION_COLLECTION } from "@/pocketbase/constants";
 
 type GetListQueryOptionType = {
 	page: number;
@@ -8,14 +8,14 @@ type GetListQueryOptionType = {
 	query: string;
 };
 
-export const getListStorePageQueryOptions = (
+export const getListCollectionQueryOptions = (
 	queries: GetListQueryOptionType,
 ) => {
 	const { page, limit, query } = queries;
 	return queryOptions({
-		queryKey: [STORE_PAGE_COLLECTION, page, limit, query],
+		queryKey: [COLLECTION_COLLECTION, page, limit, query],
 		queryFn: () =>
-			getListStorePagePocket({
+			getListCollectionPocket({
 				page,
 				limit,
 				filter: query,

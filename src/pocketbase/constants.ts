@@ -14,4 +14,4 @@ export const USER_COLLECTION = "sen_users";
 export const STORE_COLLECTION = "sen_store";
 export const STORE_PAGE_COLLECTION = "sen_pages";
 export const MENU_COLLECTION = "sen_menus";
-export const MENU_ITEM_COLLECTION = "sen_menu_items";
+export const COLLECTION_COLLECTION = "sen_collections";

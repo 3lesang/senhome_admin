@@ -18,8 +18,9 @@ export default function OrderTable({ data = [] }: OrderTableProps) {
 		<Table>
 			<TableHeader className="bg-gray-50">
 				<TableRow className="">
+					<TableHead className="w-8"></TableHead>
 					<TableHead>
-						<Checkbox className="ml-8" />
+						<Checkbox />
 					</TableHead>
 					<TableHead>Mã</TableHead>
 					<TableHead>Ngày tạo</TableHead>

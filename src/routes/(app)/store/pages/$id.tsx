@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getOneStorePageQueryOptions } from "@/handlers/store/query/page/one";
+import { getOneStorePageQueryOptions } from "@/handlers/page/query/one";
 import StorePageUpdatePage from "@/pages/store/pages/update";
 
 export const Route = createFileRoute("/(app)/store/pages/$id")({

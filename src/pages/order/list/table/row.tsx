@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRightIcon, Trash2Icon } from "lucide-react";
 import React, { useState } from "react";
+import { format } from "timeago.js";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,7 +19,7 @@ import {
 } from "@/components/ui/hover-card";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { getListItemOrderQueryOptions } from "@/handlers/order/query/items";
-import { formatRelativeDate, formatVND } from "@/lib/utils";
+import { formatVND } from "@/lib/utils";
 import type { OrderDataType } from "@/types/order";
 
 interface OrderRowProps {
@@ -35,20 +36,21 @@ export default function OrderRow({ data }: OrderRowProps) {
 			<ContextMenu>
 				<ContextMenuTrigger asChild>
 					<TableRow className="group">
-						<TableCell className="w-16">
-							<div className="flex items-center gap-2">
-								<Button
-									variant="ghost"
-									className="size-6 opacity-0 group-hover:opacity-100"
-									onClick={() => setExpand((prev) => !prev)}
-								>
-									<ChevronRightIcon />
-								</Button>
-								<Checkbox />
-							</div>
+						<TableCell>
+							<Button
+								variant="ghost"
+								size="icon"
+								className="opacity-0 group-hover:opacity-100"
+								onClick={() => setExpand((prev) => !prev)}
+							>
+								<ChevronRightIcon />
+							</Button>
+						</TableCell>
+						<TableCell>
+							<Checkbox />
 						</TableCell>
 						<TableCell>{data.id}</TableCell>
-						<TableCell>{formatRelativeDate(new Date(data.created))}</TableCell>
+						<TableCell>{format(new Date(data.created))}</TableCell>
 						<TableCell>
 							<HoverCard>
 								<HoverCardTrigger asChild>
@@ -89,10 +91,11 @@ export default function OrderRow({ data }: OrderRowProps) {
 				</ContextMenuContent>
 			</ContextMenu>
 			{expand &&
+				Number(itemData?.length) > 0 &&
 				itemData?.map((item) => (
 					<TableRow key={item.id}>
 						<TableCell></TableCell>
-						<TableCell colSpan={6}>
+						<TableCell colSpan={7}>
 							<div className="flex items-center gap-1">
 								<Avatar className="rounded size-6">
 									<AvatarImage src={item.thumbnail} />
@@ -100,7 +103,7 @@ export default function OrderRow({ data }: OrderRowProps) {
 								</Avatar>
 								<div className="space-x-1">
 									<span>{item.name}</span>
-									{item.variant.map((v) => (
+									{item?.variant?.map((v) => (
 										<Badge key={v} variant="secondary">
 											{v}
 										</Badge>

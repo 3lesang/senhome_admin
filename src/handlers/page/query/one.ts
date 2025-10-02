@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { STORE_PAGE_COLLECTION } from "@/pocketbase/constants";
-import { getOneStorePagePocket } from "@/pocketbase/store/page/one";
+import { getOneStorePagePocket } from "@/pocketbase/page/one";
 
 export const getOneStorePageQueryOptions = (id: string) => {
 	return queryOptions({

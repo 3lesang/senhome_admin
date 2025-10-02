@@ -19,7 +19,7 @@ export default function ProductTable(props: ProductTableProps) {
 		<Table>
 			<TableHeader className="bg-gray-50">
 				<TableRow>
-					<TableHead className="pl-6">
+					<TableHead className="w-16 pl-6">
 						<Checkbox />
 					</TableHead>
 					<TableHead>Tên sản phẩm</TableHead>

@@ -6,7 +6,7 @@ import TablePagination, {
 } from "@/components/table-pagination";
 import TableTabs from "@/components/table-tabs";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
 	Card,
 	CardAction,
@@ -16,20 +16,23 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { getListMenuQueryOptions } from "@/handlers/menu/query/list";
-import { deleteMenusPocket } from "@/pocketbase/menu/delete";
-import MenuTable from "./table";
+import { getListCollectionQueryOptions } from "@/handlers/collection/query/list";
+import { cn } from "@/lib/utils";
+import { deleteCollectionsPocket } from "@/pocketbase/collection/delete";
+import CollectionTable from "./table";
 
-export default function MenuListPage() {
+export default function CollectionListPage() {
 	const navigate = useNavigate();
-	const { page, limit, q } = useSearch({ from: "/(app)/store/menus/" });
+	const { page, limit, q } = useSearch({
+		from: "/(app)/products/collections/",
+	});
 
 	const { data, refetch } = useSuspenseQuery(
-		getListMenuQueryOptions({ page, limit, query: q }),
+		getListCollectionQueryOptions({ page, limit, query: q }),
 	);
 
 	const { mutate } = useMutation({
-		mutationFn: (ids: string[]) => deleteMenusPocket(ids),
+		mutationFn: (ids: string[]) => deleteCollectionsPocket(ids),
 		onSuccess: () => {
 			refetch();
 		},
@@ -39,11 +42,17 @@ export default function MenuListPage() {
 		limit,
 		page,
 	}: TablePaginationDataChange) => {
-		navigate({ to: "/store/menus", search: { page, limit, q } });
+		navigate({
+			to: "/products/collections",
+			search: { page: page, limit: limit },
+		});
 	};
 
 	const handleTabChange = (q: string) => {
-		navigate({ to: "/store/menus", search: { page: 1, limit: limit, q } });
+		navigate({
+			to: "/products/collections",
+			search: { page: 1, limit: limit, q },
+		});
 	};
 
 	const handleDelete = (id: string) => {
@@ -53,36 +62,36 @@ export default function MenuListPage() {
 	return (
 		<Card className="bg-sidebar border-0 shadow-none max-w-7xl mx-auto">
 			<CardHeader>
-				<CardTitle>Menu</CardTitle>
+				<CardTitle>Quản lý nhóm sản phẩm</CardTitle>
 				<CardDescription>
-					Menu hoặc danh sách liên kết website , giúp khách hàng chuyển trang
-					trong cửa hàng của bạn. Bạn có thể tạo các menu lồng nhau để hiện thị
-					drop-down menus
+					Nhóm sản phẩm giúp quản lý sản phẩm và khách hàng tìm kiếm sản phẩm
+					một cách dễ dàng.
 				</CardDescription>
 				<CardAction>
-					<Link to="/store/menus/create">
-						<Button>
-							<PlusIcon />
-							Tạo menu
-						</Button>
+					<Link
+						to="/products/collections/create"
+						className={cn(buttonVariants())}
+					>
+						<PlusIcon />
+						Tạo nhóm sản phẩm
 					</Link>
 				</CardAction>
 			</CardHeader>
 			<CardContent>
-				<Card className="shadow-none border-0">
+				<Card className="border-0 shadow-none">
 					<CardHeader>
 						<CardTitle>
 							<TableTabs
-								data={[{ label: "Tất cả", q: "" }]}
-								q=""
+								data={[{ label: "All", q: "" }]}
 								onChange={handleTabChange}
+								q=""
 							/>
 						</CardTitle>
 						<CardDescription>
-							<Badge variant="secondary">{data.totalItems} menu</Badge>
+							<Badge variant="secondary">{data.totalItems} banner</Badge>
 						</CardDescription>
 						<CardAction className="flex items-center gap-2">
-							<Button size="icon" variant="outline">
+							<Button variant="outline" size="icon">
 								<SearchIcon />
 							</Button>
 							<Button variant="outline" size="icon">
@@ -90,7 +99,7 @@ export default function MenuListPage() {
 							</Button>
 						</CardAction>
 					</CardHeader>
-					<MenuTable data={data.items} onDelete={handleDelete} />
+					<CollectionTable data={data.items} onDelete={handleDelete} />
 					<CardFooter>
 						<TablePagination
 							total={data.totalItems}

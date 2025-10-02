@@ -19,20 +19,18 @@ interface ProductRowProps {
 }
 
 export default function ProductRow({ data }: ProductRowProps) {
-	const { id } = data;
-
 	const state = data?.deleted ? "draft" : "publish";
 
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger asChild>
 				<TableRow>
-					<TableCell className="w-8 pl-6">
+					<TableCell className="pl-6">
 						<Checkbox />
 					</TableCell>
 					<TableCell className="min-w-96 max-w-96">
 						<div className="flex items-center gap-2">
-							<Avatar className="rounded size-6">
+							<Avatar className="rounded">
 								<AvatarImage src={convertToFileUrl(data.expand.thumbnail)} />
 								<AvatarFallback className="rounded"></AvatarFallback>
 							</Avatar>
@@ -56,7 +54,7 @@ export default function ProductRow({ data }: ProductRowProps) {
 				<ContextMenuItem asChild>
 					<Link
 						to="/products/$id"
-						params={{ id }}
+						params={{ id: data.id }}
 						className="flex items-center gap-2"
 					>
 						<EditIcon />
