@@ -1,4 +1,4 @@
-import type { SigninFormValuesType } from "@/components/signin-form";
+import type { SigninFormValuesType } from "@/components/form/signin";
 import { signInRootPocket } from "@/pocketbase/auth/signin-root";
 
 async function signInHandler(data: SigninFormValuesType) {

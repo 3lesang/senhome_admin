@@ -1,11 +1,18 @@
-import type { MenuFormValuesType } from "@/components/menu-form";
 import pocketClient from "../client";
 import { MENU_COLLECTION } from "../constants";
+
+type MenuItem = {
+	id: string;
+	title: string;
+	url: string | null;
+	parentId: string | null;
+	order: number;
+};
 
 export type UpadteMenuPayload = {
 	name: string;
 	position: string;
-	items: MenuFormValuesType["items"];
+	items: MenuItem[];
 };
 
 async function updateMenuPocket(id: string, payload: UpadteMenuPayload) {

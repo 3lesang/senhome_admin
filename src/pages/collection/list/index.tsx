@@ -82,13 +82,13 @@ export default function CollectionListPage() {
 					<CardHeader>
 						<CardTitle>
 							<TableTabs
-								data={[{ label: "All", q: "" }]}
+								data={[{ label: "Tất cả", q: "" }]}
 								onChange={handleTabChange}
-								q=""
+								q={q}
 							/>
 						</CardTitle>
 						<CardDescription>
-							<Badge variant="secondary">{data.totalItems} banner</Badge>
+							<Badge variant="secondary">{data.totalItems} nhóm sản phẩm</Badge>
 						</CardDescription>
 						<CardAction className="flex items-center gap-2">
 							<Button variant="outline" size="icon">

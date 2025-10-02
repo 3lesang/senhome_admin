@@ -1,3 +1,4 @@
+import type { UseFormReturn } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -8,8 +9,13 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import type { ProductFormType } from "@/types/product";
 
-function ProductPrice() {
+interface ProductPriceProps {
+	form: UseFormReturn<ProductFormType>;
+}
+
+export default function ProductPrice({ form }: ProductPriceProps) {
 	return (
 		<Card className="shadow-none border-0">
 			<CardHeader>
@@ -19,6 +25,7 @@ function ProductPrice() {
 				<div className="grid grid-cols-12 gap-8">
 					<div className="col-span-6">
 						<FormField
+							control={form.control}
 							name="price"
 							render={({ field }) => (
 								<FormItem>
@@ -42,6 +49,7 @@ function ProductPrice() {
 					</div>
 					<div className="col-span-6">
 						<FormField
+							control={form.control}
 							name="discount"
 							render={({ field }) => (
 								<FormItem>
@@ -71,5 +79,3 @@ function ProductPrice() {
 		</Card>
 	);
 }
-
-export default ProductPrice;

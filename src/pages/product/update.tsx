@@ -1,11 +1,10 @@
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { Link, useParams } from "@tanstack/react-router";
-import { ChevronLeftIcon } from "lucide-react";
+import { useParams } from "@tanstack/react-router";
 import { useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
-import ProductForm from "@/components/product-form";
-import { Button, buttonVariants } from "@/components/ui/button";
+import ProductForm from "@/components/form/product";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardAction,
@@ -24,7 +23,7 @@ import { updateProductHandler } from "@/handlers/product/mutation/update";
 import { productFilesQueryOptions } from "@/handlers/product/query/media";
 import { productQueryOptions } from "@/handlers/product/query/one";
 import { productVariantQueryOptions } from "@/handlers/product/query/variant";
-import { cn, convertToFileUrl } from "@/lib/utils";
+import { convertToFileUrl } from "@/lib/utils";
 import type { FileType } from "@/types/file";
 import type {
 	ProductDataType,
@@ -47,12 +46,16 @@ function formatProductDataForm(
 		content: JSON.stringify(data?.content),
 		price: data?.price?.toString() || "",
 		discount: data?.discount > 0 ? (data?.discount * 100)?.toString() : "",
-		slug: data?.slug || "",
 		category: data?.category || "",
 		thumbnail: [thumbnail],
 		state: data?.deleted ? "draft" : "publish",
 		media,
 		variantData: productVariantData,
+		seo: {
+			title: "",
+			slug: data?.slug,
+			description: "",
+		},
 	};
 }
 
@@ -104,15 +107,7 @@ export default function ProductUpdatePage() {
 	return (
 		<Card className="bg-sidebar border-0 shadow-none max-w-7xl mx-auto">
 			<CardHeader>
-				<CardTitle className="flex items-center gap-2">
-					<Link
-						to="/products"
-						className={cn(buttonVariants({ variant: "ghost", size: "icon" }))}
-					>
-						<ChevronLeftIcon />
-					</Link>
-					{defaultProduct.name}
-				</CardTitle>
+				<CardTitle>{defaultProduct.name}</CardTitle>
 				<CardAction>
 					<LoadingButton
 						type="button"

@@ -2,12 +2,10 @@ import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
-import StoreSettingForm, {
-	type StoreSettingFormValuesType,
-} from "@/components/store-form/info";
-import StoreLocationForm, {
-	type StoreLocationFormValuesType,
-} from "@/components/store-form/location";
+import type { StoreSettingFormValuesType } from "@/components/form/store/info";
+import StoreSettingForm from "@/components/form/store/info";
+import type { StoreLocationFormValuesType } from "@/components/form/store/location";
+import StoreLocationForm from "@/components/form/store/location";
 import {
 	Card,
 	CardContent,

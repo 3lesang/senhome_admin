@@ -2,6 +2,7 @@ import { type Editor, EditorContent, useEditor } from "@tiptap/react";
 import { extensions } from "@/components/editor/extensions";
 import Menu from "@/components/editor/menu";
 import "./styles.css";
+import { ScrollArea } from "../ui/scroll-area";
 
 interface EditorProps {
 	content?: string;
@@ -13,7 +14,7 @@ export default ({ content, onChange }: EditorProps) => {
 		extensions,
 		editorProps: {
 			attributes: {
-				class: "typography text-sm focus:outline-none min-h-56 w-full mt-4",
+				class: "typography max-w-none text-sm",
 			},
 		},
 		content: content ? JSON.parse(content) : undefined,
@@ -23,9 +24,9 @@ export default ({ content, onChange }: EditorProps) => {
 	});
 
 	return (
-		<>
+		<ScrollArea className="max-h-96">
 			<Menu editor={editor} />
 			<EditorContent editor={editor} />
-		</>
+		</ScrollArea>
 	);
 };

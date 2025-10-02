@@ -65,7 +65,6 @@ export const ProductVariantDataSchema = z.object({
 export const ProductFormSchema = z.object({
 	id: z.string().optional(),
 	name: z.string().optional(),
-	slug: z.string().optional(),
 	discount: z.string().min(0).optional(),
 	content: z.string().optional(),
 	price: z.string().optional(),
@@ -74,4 +73,9 @@ export const ProductFormSchema = z.object({
 	thumbnail: z.array(FileSchema).optional(),
 	variantData: ProductVariantDataSchema.optional(),
 	state: ProductStateSchema.optional().catch("draft"),
+	seo: z.object({
+		title: z.string().optional(),
+		description: z.string().optional(),
+		slug: z.string().optional(),
+	}),
 });

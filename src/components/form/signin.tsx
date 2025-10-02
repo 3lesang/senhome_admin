@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useImperativeHandle } from "react";
+import { type UseFormReturn, useForm } from "react-hook-form";
 import z from "zod";
 import {
 	Form,
@@ -10,7 +11,6 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { LoadingButton } from "./ui/loading-button";
 
 const SigninFormSchema = z.object({
 	email: z.string().min(2, {
@@ -25,27 +25,19 @@ export type SigninFormValuesType = z.infer<typeof SigninFormSchema>;
 
 interface SigninFormProps {
 	defaultValues: SigninFormValuesType;
-	onSubmit?: (values: SigninFormValuesType) => void;
-	isPending?: boolean;
+	ref: React.Ref<UseFormReturn<SigninFormValuesType>>;
 }
 
-export default function SigninForm({
-	defaultValues,
-	onSubmit,
-	isPending,
-}: SigninFormProps) {
+export default function SigninForm({ defaultValues, ref }: SigninFormProps) {
 	const form = useForm<SigninFormValuesType>({
 		resolver: zodResolver(SigninFormSchema),
 		defaultValues,
 	});
 
-	const handleSubmit = (values: SigninFormValuesType) => {
-		onSubmit?.(values);
-	};
-
+	useImperativeHandle(ref, () => form);
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+			<form className="space-y-6">
 				<FormField
 					control={form.control}
 					name="email"
@@ -53,7 +45,7 @@ export default function SigninForm({
 						<FormItem>
 							<FormLabel>Email</FormLabel>
 							<FormControl>
-								<Input placeholder="email" {...field} />
+								<Input placeholder="Địa chỉ email" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -72,9 +64,6 @@ export default function SigninForm({
 						</FormItem>
 					)}
 				/>
-				<LoadingButton type="submit" className="w-full" loading={isPending}>
-					Đăng nhập
-				</LoadingButton>
 			</form>
 		</Form>
 	);

@@ -1,9 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
+import CollectionCreatePage from "@/pages/collection/create";
 
-export const Route = createFileRoute('/(app)/products/collections/create')({
-  component: RouteComponent,
-})
-
-function RouteComponent() {
-  return <div>Hello "/(app)/products/collections/create"!</div>
-}
+export const Route = createFileRoute("/(app)/products/collections/create")({
+	component: CollectionCreatePage,
+});

@@ -1,5 +1,5 @@
 import type z from "zod";
-import type { FileSchema } from "@/components/product-form/schema";
+import type { FileSchema } from "@/components/form/product/schema";
 
 export type FileDataType = {
 	id: string;

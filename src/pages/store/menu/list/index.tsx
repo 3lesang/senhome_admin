@@ -6,7 +6,7 @@ import TablePagination, {
 } from "@/components/table-pagination";
 import TableTabs from "@/components/table-tabs";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
 	Card,
 	CardAction,
@@ -17,6 +17,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { getListMenuQueryOptions } from "@/handlers/menu/query/list";
+import { cn } from "@/lib/utils";
 import { deleteMenusPocket } from "@/pocketbase/menu/delete";
 import MenuTable from "./table";
 
@@ -60,11 +61,9 @@ export default function MenuListPage() {
 					drop-down menus
 				</CardDescription>
 				<CardAction>
-					<Link to="/store/menus/create">
-						<Button>
-							<PlusIcon />
-							Tạo menu
-						</Button>
+					<Link to="/store/menus/create" className={cn(buttonVariants())}>
+						<PlusIcon />
+						Tạo menu
 					</Link>
 				</CardAction>
 			</CardHeader>

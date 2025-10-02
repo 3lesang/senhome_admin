@@ -12,7 +12,7 @@ import type {
 	VariantOptionSchema,
 	VariantOptionsSchema,
 	VariantSchema,
-} from "@/components/product-form/schema";
+} from "@/components/form/product/schema";
 
 export type ProductDataType = {
 	id: string;

@@ -1,13 +1,11 @@
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { Link, useParams } from "@tanstack/react-router";
-import { ChevronLeftIcon } from "lucide-react";
+import { useParams } from "@tanstack/react-router";
 import { useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
-import StorePageForm, {
-	type StorePageFormValuesType,
-} from "@/components/store-form/page";
-import { Button, buttonVariants } from "@/components/ui/button";
+import type { StorePageFormValuesType } from "@/components/form/store/page";
+import StorePageForm from "@/components/form/store/page";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardAction,
@@ -18,7 +16,6 @@ import {
 } from "@/components/ui/card";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { getOneStorePageQueryOptions } from "@/handlers/page/query/one";
-import { cn } from "@/lib/utils";
 import { updateStorePagePocket } from "@/pocketbase/page/update";
 
 export default function StorePageUpdatePage() {
@@ -52,15 +49,7 @@ export default function StorePageUpdatePage() {
 	return (
 		<Card className="bg-sidebar border-0 shadow-none max-w-7xl mx-auto">
 			<CardHeader>
-				<CardTitle className="flex items-center gap-2">
-					<Link
-						to="/store/pages"
-						className={cn(buttonVariants({ variant: "ghost", size: "icon" }))}
-					>
-						<ChevronLeftIcon />
-					</Link>
-					{data.title}
-				</CardTitle>
+				<CardTitle>{data.title}</CardTitle>
 				<CardAction>
 					<LoadingButton
 						type="button"

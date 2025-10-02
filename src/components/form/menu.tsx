@@ -2,14 +2,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useImperativeHandle } from "react";
 import { type Resolver, type UseFormReturn, useForm } from "react-hook-form";
 import z from "zod";
-import TreeMenu from "../tree/TreeMenu";
+import TreeMenu from "@/components/tree/TreeMenu";
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from "../ui/card";
+} from "@/components/ui/card";
 import {
 	Form,
 	FormControl,
@@ -18,15 +18,15 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
 
 const menuItemSchema = z.object({
 	id: z.string(),

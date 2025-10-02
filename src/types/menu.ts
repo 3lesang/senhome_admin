@@ -1,4 +1,4 @@
-import type { MenuFormValuesType } from "@/components/menu-form";
+import type { MenuFormValuesType } from "@/components/form/menu";
 
 export type MenuType = {
 	id: string;

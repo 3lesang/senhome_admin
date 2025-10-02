@@ -1,5 +1,5 @@
+import type { UseFormReturn } from "react-hook-form";
 import Editor from "@/components/editor";
-
 import { Card, CardContent } from "@/components/ui/card";
 import {
 	FormControl,
@@ -9,13 +9,19 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import type { ProductFormType } from "@/types/product";
 
-function ProductInfo() {
+interface ProductInfoProps {
+	form: UseFormReturn<ProductFormType>;
+}
+
+function ProductInfo({ form }: ProductInfoProps) {
 	return (
 		<Card className="shadow-none border-0">
 			<CardContent className="grid grid-cols-12 gap-8">
 				<div className="col-span-12">
 					<FormField
+						control={form.control}
 						name="name"
 						render={({ field }) => (
 							<FormItem>
@@ -30,6 +36,7 @@ function ProductInfo() {
 				</div>
 				<div className="col-span-12">
 					<FormField
+						control={form.control}
 						name="content"
 						render={({ field }) => (
 							<FormItem>

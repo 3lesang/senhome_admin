@@ -1,18 +1,24 @@
 import { useMutation } from "@tanstack/react-query";
-import { Link, useNavigate } from "@tanstack/react-router";
-import type { SigninFormValuesType } from "@/components/signin-form";
-import SigninForm from "@/components/signin-form";
+import { useNavigate } from "@tanstack/react-router";
+import { useRef } from "react";
+import type { UseFormReturn } from "react-hook-form";
+import type { SigninFormValuesType } from "@/components/form/signin";
+import SigninForm from "@/components/form/signin";
 import {
 	Card,
 	CardContent,
+	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { LoadingButton } from "@/components/ui/loading-button";
 import signInHandler from "@/handlers/auth/mutation/signin";
 
 export default function SigninPage() {
 	const navigate = useNavigate();
+	const ref = useRef<UseFormReturn<SigninFormValuesType>>(null);
+
 	const { mutate, isPending } = useMutation({
 		mutationFn: signInHandler,
 		onSuccess: () => {
@@ -20,8 +26,10 @@ export default function SigninPage() {
 		},
 	});
 
-	const handleSubmit = (values: SigninFormValuesType) => {
-		mutate(values);
+	const handleSubmit = () => {
+		const form = ref.current;
+		if (!form) return;
+		form.handleSubmit((values) => mutate(values))();
 	};
 
 	return (
@@ -29,22 +37,26 @@ export default function SigninPage() {
 			<Card className="border-none shadow-none w-96">
 				<CardHeader>
 					<CardTitle>Đăng nhập</CardTitle>
+					<CardDescription>Welcome to SenHome</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<SigninForm
+						ref={ref}
 						defaultValues={{
 							email: "",
 							password: "",
 						}}
-						isPending={isPending}
-						onSubmit={handleSubmit}
 					/>
 				</CardContent>
 				<CardFooter>
-					<p>
-						<span>Chưa có tài khoản?</span>
-						<Link to="/signup">Tạo tài khoản</Link>
-					</p>
+					<LoadingButton
+						type="button"
+						className="w-full"
+						loading={isPending}
+						onClick={handleSubmit}
+					>
+						Đăng nhập
+					</LoadingButton>
 				</CardFooter>
 			</Card>
 		</div>

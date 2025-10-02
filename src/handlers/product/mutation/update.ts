@@ -10,7 +10,7 @@ const getValues = (data: ProductFormType): UpdateProductDataType => {
 		name: data.name,
 		content: data.content,
 		category: data.category,
-		slug: data.slug,
+		slug: data.seo.slug,
 		deleted: data.state === "draft" ? new Date() : null,
 		price: Number(data.price),
 		discount: Number(data.discount) / 100,

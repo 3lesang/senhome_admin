@@ -1,4 +1,4 @@
-import type { StoreLocationFormValuesType } from "@/components/store-form/location";
+import type { StoreLocationFormValuesType } from "@/components/form/store/location";
 
 export type StoreType = {
 	id: string;

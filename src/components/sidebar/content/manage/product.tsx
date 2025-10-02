@@ -45,7 +45,7 @@ export default function ProductMenu() {
 						<SidebarMenuSubItem>
 							<SidebarMenuSubButton
 								asChild
-								isActive={location.pathname === "/products/collections"}
+								isActive={location.pathname.includes("/products/collections")}
 							>
 								<Link to="/products/collections">
 									<span className="select-none">Nhóm sản phẩm</span>
@@ -55,7 +55,7 @@ export default function ProductMenu() {
 						<SidebarMenuSubItem>
 							<SidebarMenuSubButton
 								asChild
-								isActive={location.pathname === "/products/create"}
+								isActive={location.pathname.includes("/products/create")}
 							>
 								<Link to="/products/create">
 									<span className="select-none">Tạo sản phẩm</span>

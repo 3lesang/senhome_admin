@@ -1,4 +1,5 @@
 import { PlusIcon } from "lucide-react";
+import type { UseFormReturn } from "react-hook-form";
 import FileInput from "@/components/file-input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -8,8 +9,13 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
+import type { ProductFormType } from "@/types/product";
 
-function ProductMedia() {
+interface ProductMediaProps {
+	form: UseFormReturn<ProductFormType>;
+}
+
+function ProductMedia({ form }: ProductMediaProps) {
 	return (
 		<Card className="shadow-none border-0">
 			<CardHeader>
@@ -17,6 +23,7 @@ function ProductMedia() {
 			</CardHeader>
 			<CardContent>
 				<FormField
+					control={form.control}
 					name="media"
 					render={({ field }) => (
 						<FormItem>
