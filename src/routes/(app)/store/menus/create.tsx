@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import MenuCreatePage from "@/pages/store/menu/create";
+import MenuCreatePage from "@/pages/menu/create";
 
 export const Route = createFileRoute("/(app)/store/menus/create")({
 	component: MenuCreatePage,

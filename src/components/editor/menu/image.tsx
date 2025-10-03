@@ -1,6 +1,6 @@
 import type { Editor } from "@tiptap/react";
 import { ImagePlusIcon } from "lucide-react";
-import FileInput from "@/components/file-input";
+import FileInput from "@/components/file/input";
 import { Button } from "@/components/ui/button";
 
 export default ({ editor }: { editor: Editor }) => {

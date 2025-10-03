@@ -1,8 +1,12 @@
-import type { MenuFormValuesType } from "@/components/form/menu";
-
 export type MenuType = {
 	id: string;
 	name: string;
 	position: "header" | "footer";
-	items: MenuFormValuesType["items"];
+	items: {
+		id: string;
+		title: string;
+		url: string;
+		parentId: string | null;
+		order: number;
+	}[];
 };

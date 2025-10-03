@@ -49,6 +49,13 @@ export default function CollectionSEO({ form }: CollectionSEOProps) {
 					)}
 				</CardAction>
 			</CardHeader>
+			{!open && (
+				<CardContent>
+					<p>{form.getValues("seo.title")}</p>
+					<small>{form.getValues("seo.description")}</small>
+					<small>{form.getValues("seo.slug")}</small>
+				</CardContent>
+			)}
 			{open && (
 				<CardContent className="space-y-4">
 					<FormField

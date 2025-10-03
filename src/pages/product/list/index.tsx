@@ -1,10 +1,10 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
-import { ListFilterIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { ListFilterIcon, SearchIcon } from "lucide-react";
 import TablePagination, {
 	type TablePaginationDataChange,
-} from "@/components/table-pagination";
-import TableTabs from "@/components/table-tabs";
+} from "@/components/table/pagination";
+import TableTabs from "@/components/table/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -50,13 +50,12 @@ export default function ProductListPage() {
 	};
 
 	return (
-		<Card className="bg-sidebar border-0 shadow-none max-w-7xl mx-auto">
+		<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
 			<CardHeader>
 				<CardTitle>Quản lý sản phẩm</CardTitle>
 				<CardDescription>Danh sách sản phẩm</CardDescription>
 				<CardAction className="flex gap-2 items-center">
 					<Link to="/products/create" className={cn(buttonVariants())}>
-						<PlusIcon />
 						Tạo sản phẩm
 					</Link>
 				</CardAction>

@@ -1,9 +1,9 @@
+import type { ProductFormType } from "@/components/form/product/types";
 import { slugify } from "@/lib/utils";
 import {
 	type CreateProductPayload,
 	createProductPocket,
 } from "@/pocketbase/product/create";
-import type { ProductFormType } from "@/types/product";
 
 function formatCreateProductPayload(
 	data: ProductFormType,

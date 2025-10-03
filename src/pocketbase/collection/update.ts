@@ -2,9 +2,10 @@ import pocketClient from "@/pocketbase/client";
 import { COLLECTION_COLLECTION } from "@/pocketbase/constants";
 
 export type UpdateCollectionPayload = {
-	title: string;
+	name: string;
 	slug: string;
-	content: string;
+	description: string;
+	seo: { title: string; description: string };
 };
 
 async function updateCollectionPocket(

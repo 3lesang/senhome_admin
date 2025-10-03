@@ -1,10 +1,10 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { ListFilterIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { ListFilterIcon, SearchIcon } from "lucide-react";
 import TablePagination, {
 	type TablePaginationDataChange,
-} from "@/components/table-pagination";
-import TableTabs from "@/components/table-tabs";
+} from "@/components/table/pagination";
+import TableTabs from "@/components/table/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -44,10 +44,7 @@ export default function CategoryListPage() {
 				<CardTitle>Quản lý danh mục</CardTitle>
 				<CardDescription>Danh sách danh mục sản phẩm</CardDescription>
 				<CardAction>
-					<Button>
-						<PlusIcon />
-						Tạo danh mục
-					</Button>
+					<Button>Tạo danh mục</Button>
 				</CardAction>
 			</CardHeader>
 			<CardContent>

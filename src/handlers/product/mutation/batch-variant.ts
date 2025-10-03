@@ -1,3 +1,4 @@
+import type { ProductVariantDataType } from "@/components/form/product/types";
 import { updateVariantFileProductHandler } from "@/handlers/file/mutation/variant";
 import {
 	type CreateVariantFilePayload,
@@ -7,7 +8,6 @@ import {
 	type CreateVariantAttributePayload,
 	createVariantAttributePocket,
 } from "@/pocketbase/product/variant/attribute/create";
-import type { ProductVariantDataType } from "@/types/product";
 import { createAttributeHandler } from "./attribute/create";
 import { deleteAttributeHandler } from "./attribute/delete";
 import { updateAttributeHandler } from "./attribute/update";
@@ -81,11 +81,11 @@ async function batchVariantHandler(
 	const createVariantAttrPayload = addedVariants.flatMap((v) => {
 		const payload: CreateVariantAttributePayload[] = v.optionIds.map(
 			(optId) => {
-				const attId = attributeOptionIdMap[optId] ?? "";
+				const attId = attributeOptionIdMap[optId];
 				const body: CreateVariantAttributePayload = {
-					variant: variantIdMap[v.id] ?? "",
-					attribute_value: optionIdMap[optId] ?? "",
-					attribute: attributeIdMap[attId] ?? "",
+					variant: variantIdMap[v.id] ?? v.id,
+					attribute_value: optionIdMap[optId] ?? optId,
+					attribute: attributeIdMap[attId] ?? attId,
 				};
 				return body;
 			},

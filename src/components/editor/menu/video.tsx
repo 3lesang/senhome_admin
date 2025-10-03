@@ -1,6 +1,7 @@
 import type { Editor } from "@tiptap/react";
 import { PlayIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
+import VideoPlayer from "@/components/player/video";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -20,11 +21,11 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import VideoPlayer from "@/components/video-player";
 
 interface Props {
 	editor: Editor;
 }
+
 export default ({ editor }: Props) => {
 	const form = useForm({
 		defaultValues: {

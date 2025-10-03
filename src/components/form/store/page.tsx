@@ -40,10 +40,10 @@ export default function StorePageForm({
 
 	return (
 		<Form {...form}>
-			<form className="grid grid-cols-12 space-y-4 gap-8">
+			<form className="grid grid-cols-12 gap-4">
 				<div className="col-span-8">
 					<Card className="border-0 shadow-none">
-						<CardContent className="space-y-8">
+						<CardContent className="space-y-4">
 							<FormField
 								control={form.control}
 								name="title"

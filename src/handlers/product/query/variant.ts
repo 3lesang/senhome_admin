@@ -1,15 +1,15 @@
 import { queryOptions } from "@tanstack/react-query";
-import { convertToFileUrl } from "@/lib/utils";
-import { PRODUCT_VARIANT_ATTRIBUTES_COLLECTION } from "@/pocketbase/constants";
-import { getListVariantProductFilePocket } from "@/pocketbase/file/variant/list";
-import { listVariantAttributeProductPocket } from "@/pocketbase/product/variant/attribute/list";
-import type { FileType } from "@/types/file";
 import type {
 	AttributeType,
 	ProductVariantDataType,
 	VariantDataType,
 	VariantType,
-} from "@/types/product";
+} from "@/components/form/product/types";
+import { convertToFileUrl } from "@/lib/utils";
+import { PRODUCT_VARIANT_ATTRIBUTES_COLLECTION } from "@/pocketbase/constants";
+import { getListVariantProductFilePocket } from "@/pocketbase/file/variant/list";
+import { listVariantAttributeProductPocket } from "@/pocketbase/product/variant/attribute/list";
+import type { FileType } from "@/types/file";
 
 export type VariantAttributeExpand = {
 	id: string;

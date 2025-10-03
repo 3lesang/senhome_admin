@@ -1,10 +1,10 @@
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
-import { ListFilterIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { ListFilterIcon, SearchIcon } from "lucide-react";
 import TablePagination, {
 	type TablePaginationDataChange,
-} from "@/components/table-pagination";
-import TableTabs from "@/components/table-tabs";
+} from "@/components/table/pagination";
+import TableTabs from "@/components/table/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -60,7 +60,7 @@ export default function CollectionListPage() {
 	};
 
 	return (
-		<Card className="bg-sidebar border-0 shadow-none max-w-7xl mx-auto">
+		<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
 			<CardHeader>
 				<CardTitle>Quản lý nhóm sản phẩm</CardTitle>
 				<CardDescription>
@@ -72,7 +72,6 @@ export default function CollectionListPage() {
 						to="/products/collections/create"
 						className={cn(buttonVariants())}
 					>
-						<PlusIcon />
 						Tạo nhóm sản phẩm
 					</Link>
 				</CardAction>

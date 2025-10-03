@@ -16,7 +16,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { getFullListCategoryQueryOptions } from "@/handlers/category/query/list";
-import type { ProductFormType } from "@/types/product";
+import type { ProductFormType } from "./types";
 
 interface ProductCategoryProps {
 	form: UseFormReturn<ProductFormType>;

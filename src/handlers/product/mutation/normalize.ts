@@ -1,5 +1,5 @@
+import type { ProductVariantDataType } from "@/components/form/product/types";
 import type { FileType } from "@/types/file";
-import type { ProductVariantDataType } from "@/types/product";
 
 export type AttributeNormalizeType = {
 	id: string;

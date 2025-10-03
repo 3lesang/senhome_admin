@@ -34,9 +34,9 @@ export default function CollectionInfo({ form }: CollectionInfoProps) {
 					name="name"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Tên nhóm sản phẩm</FormLabel>
+							<FormLabel>Tên</FormLabel>
 							<FormControl>
-								<Input placeholder="Nhập tên nhóm sản phẩm" {...field} />
+								<Input placeholder="ví dụ, sản phẩm mới nhất,..." {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>

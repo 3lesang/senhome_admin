@@ -1,6 +1,6 @@
 import { PlusIcon, XIcon } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
-import FileInput from "@/components/file-input";
+import FileInput from "@/components/file/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -9,7 +9,7 @@ import {
 	FormItem,
 	FormMessage,
 } from "@/components/ui/form";
-import type { ProductFormType } from "@/types/product";
+import type { ProductFormType } from "./types";
 
 interface ProductThumbnailProps {
 	form: UseFormReturn<ProductFormType>;

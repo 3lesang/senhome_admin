@@ -1,10 +1,10 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { ListFilterIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { ListFilterIcon, SearchIcon } from "lucide-react";
 import TablePagination, {
 	type TablePaginationDataChange,
-} from "@/components/table-pagination";
-import TableTabs, { type TableTableDataType } from "@/components/table-tabs";
+} from "@/components/table/pagination";
+import TableTabs, { type TableTableDataType } from "@/components/table/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -46,16 +46,13 @@ export default function OrderListPage() {
 	};
 
 	return (
-		<Card className="bg-sidebar border-0 shadow-none max-w-7xl mx-auto">
+		<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
 			<CardHeader>
 				<CardTitle>Quản lý đơn hàng</CardTitle>
 				<CardDescription>Danh sách đơn hàng</CardDescription>
 				<CardAction className="flex gap-2 items-center">
 					<Button variant="outline">Xuất dữ liệu</Button>
-					<Button>
-						<PlusIcon />
-						Tạo đơn hàng
-					</Button>
+					<Button>Tạo đơn hàng</Button>
 				</CardAction>
 			</CardHeader>
 			<CardContent>

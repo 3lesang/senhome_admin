@@ -4,10 +4,12 @@ import { useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import ProductForm from "@/components/form/product";
-import { Button } from "@/components/ui/button";
+import type {
+	ProductFormType,
+	ProductVariantDataType,
+} from "@/components/form/product/types";
 import {
 	Card,
-	CardAction,
 	CardContent,
 	CardFooter,
 	CardHeader,
@@ -25,11 +27,7 @@ import { productQueryOptions } from "@/handlers/product/query/one";
 import { productVariantQueryOptions } from "@/handlers/product/query/variant";
 import { convertToFileUrl } from "@/lib/utils";
 import type { FileType } from "@/types/file";
-import type {
-	ProductDataType,
-	ProductFormType,
-	ProductVariantDataType,
-} from "@/types/product";
+import type { ProductDataType } from "@/types/product";
 
 function formatProductDataForm(
 	data: ProductDataType,
@@ -105,26 +103,21 @@ export default function ProductUpdatePage() {
 	};
 
 	return (
-		<Card className="bg-sidebar border-0 shadow-none max-w-7xl mx-auto">
+		<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
 			<CardHeader>
 				<CardTitle>{defaultProduct.name}</CardTitle>
-				<CardAction>
-					<LoadingButton
-						type="button"
-						loading={isPending}
-						onClick={handleClick}
-					>
-						Cập nhật
-					</LoadingButton>
-				</CardAction>
 			</CardHeader>
 			<CardContent>
 				<ProductForm ref={ref} defaultValues={defaultProduct} />
 			</CardContent>
-			<CardFooter className="flex justify-between">
-				<Button variant="outline">Xóa</Button>
-				<LoadingButton type="button" loading={isPending} onClick={handleClick}>
-					Cập nhật
+			<CardFooter>
+				<LoadingButton
+					type="button"
+					loading={isPending}
+					onClick={handleClick}
+					className="ml-auto"
+				>
+					Lưu
 				</LoadingButton>
 			</CardFooter>
 		</Card>

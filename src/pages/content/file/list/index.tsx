@@ -1,11 +1,11 @@
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { ListFilterIcon, SearchIcon } from "lucide-react";
-import UploadModal from "@/components/file-upload/modal";
+import UploadModal from "@/components/file/upload/modal";
 import TablePagination, {
 	type TablePaginationDataChange,
-} from "@/components/table-pagination";
-import TableTabs from "@/components/table-tabs";
+} from "@/components/table/pagination";
+import TableTabs from "@/components/table/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -54,7 +54,7 @@ export default function FileListPage() {
 	};
 
 	return (
-		<Card className="bg-sidebar border-0 shadow-none max-w-7xl mx-auto">
+		<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
 			<CardHeader>
 				<CardTitle>Quản lý danh sách files</CardTitle>
 				<CardDescription>

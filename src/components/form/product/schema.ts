@@ -1,10 +1,6 @@
 import z from "zod";
+import { FileSchema } from "@/components/file/schema";
 import { PRODUCT_STATE } from "@/constants/product";
-
-export const FileSchema = z.object({
-	id: z.string(),
-	url: z.string(),
-});
 
 export const StatusSchema = z.enum(["new", "updated", "removed", "unchanged"]);
 export const ProductStateSchema = z.enum(

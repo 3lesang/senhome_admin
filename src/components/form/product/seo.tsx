@@ -19,7 +19,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import type { ProductFormType } from "@/types/product";
+import type { ProductFormType } from "./types";
 
 interface ProductSEOProps {
 	form: UseFormReturn<ProductFormType>;

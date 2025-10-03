@@ -1,9 +1,10 @@
 import _ from "lodash";
+import type { ProductFormType } from "@/components/form/product/types";
 import {
 	type UpdateProductPayload,
 	updateProductPocket,
 } from "@/pocketbase/product/update";
-import type { ProductFormType, UpdateProductDataType } from "@/types/product";
+import type { UpdateProductDataType } from "@/types/product";
 
 const getValues = (data: ProductFormType): UpdateProductDataType => {
 	return {

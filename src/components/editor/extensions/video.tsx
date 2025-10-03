@@ -1,6 +1,6 @@
 import { mergeAttributes, Node, type NodeViewProps } from "@tiptap/core";
 import { NodeViewWrapper, ReactNodeViewRenderer } from "@tiptap/react";
-import VideoPlayer from "@/components/video-player";
+import VideoPlayer from "@/components/player/video";
 
 declare module "@tiptap/core" {
 	interface Commands<ReturnType> {

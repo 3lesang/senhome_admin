@@ -14,7 +14,7 @@ async function createOptionHandler(
 	for (const opt of opts) {
 		const payload: CreateOptionPayload = {
 			name: opt.name,
-			attribute: attributeIdMap[opt.attributeId],
+			attribute: attributeIdMap[opt.attributeId] ?? opt.attributeId,
 		};
 		const res = await createOptionPocket(payload);
 		optionIdMap[opt.id] = res.id;

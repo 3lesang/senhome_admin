@@ -3,75 +3,80 @@ import { useParams } from "@tanstack/react-router";
 import { useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
-import type { StorePageFormValuesType } from "@/components/form/store/page";
-import StorePageForm from "@/components/form/store/page";
-import { Button } from "@/components/ui/button";
+import CollectionForm, {
+	type CollectionFormValuesType,
+} from "@/components/form/collection";
 import {
 	Card,
-	CardAction,
 	CardContent,
 	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { getOneStorePageQueryOptions } from "@/handlers/page/query/one";
-import { updateStorePagePocket } from "@/pocketbase/page/update";
+import { getOneCollectionQueryOptions } from "@/handlers/collection/query/one";
+import { slugify } from "@/lib/utils";
+import {
+	type UpdateCollectionPayload,
+	updateCollectionPocket,
+} from "@/pocketbase/collection/update";
 
-export default function StorePageUpdatePage() {
-	const ref = useRef<UseFormReturn<StorePageFormValuesType>>(null);
+export default function CollectionUpdatePage() {
+	const ref = useRef<UseFormReturn<CollectionFormValuesType>>(null);
 	const { id = "" } = useParams({ strict: false });
-	const { data, refetch } = useSuspenseQuery(getOneStorePageQueryOptions(id));
-
+	const { data } = useSuspenseQuery(getOneCollectionQueryOptions(id));
 	const { mutate, isPending } = useMutation({
-		mutationFn: (values: StorePageFormValuesType) =>
-			updateStorePagePocket(id, {
-				title: values.title,
-				content: values.content ? JSON.parse(values.content) : null,
-				slug: values.slug,
-			}),
+		mutationFn: (values: UpdateCollectionPayload) =>
+			updateCollectionPocket(id, values),
 		onSuccess: () => {
-			toast.success("Cập nhật trang thành công");
-			refetch();
+			toast.success("Update collection susscesfully");
 		},
 	});
 
-	const handleSubmit = (values: StorePageFormValuesType) => {
-		mutate(values);
-	};
-
-	const handleClick = () => {
+	const handleSubmit = () => {
 		const form = ref.current;
 		if (!form) return;
-		form.handleSubmit(handleSubmit)();
+		form.handleSubmit((values) =>
+			mutate({
+				name: values.name,
+				description: values.description ?? "",
+				slug: slugify(values.name),
+				seo: {
+					title: values.seo.title ?? values.name,
+					description: values.seo.description ?? "",
+				},
+			}),
+		)();
 	};
 
 	return (
-		<Card className="bg-sidebar border-0 shadow-none max-w-7xl mx-auto">
+		<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
 			<CardHeader>
-				<CardTitle>{data.title}</CardTitle>
-				<CardAction>
-					<LoadingButton
-						type="button"
-						onClick={handleClick}
-						loading={isPending}
-					>
-						Cập nhật
-					</LoadingButton>
-				</CardAction>
+				<CardTitle>{data.name}</CardTitle>
 			</CardHeader>
 			<CardContent>
-				<StorePageForm
+				<CollectionForm
 					ref={ref}
 					defaultValues={{
-						title: data?.title,
-						content: JSON.stringify(data?.content),
-						slug: data?.slug,
+						name: data.name,
+						description: JSON.stringify(data.description),
+						seo: {
+							title: data.seo?.title,
+							description: data.seo?.desciprtion,
+							slug: data.slug,
+						},
 					}}
 				/>
 			</CardContent>
 			<CardFooter>
-				<Button variant="outline">Xóa</Button>
+				<LoadingButton
+					type="button"
+					onClick={handleSubmit}
+					loading={isPending}
+					className="ml-auto"
+				>
+					Lưu
+				</LoadingButton>
 			</CardFooter>
 		</Card>
 	);

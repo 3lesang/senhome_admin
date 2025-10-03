@@ -15,7 +15,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { PRODUCT_STATE } from "@/constants/product";
-import type { ProductFormType } from "@/types/product";
+import type { ProductFormType } from "./types";
 
 interface ProductStateProps {
 	form: UseFormReturn<ProductFormType>;

@@ -6,7 +6,7 @@ export default function DashboardLayout() {
 	return (
 		<SidebarProvider>
 			<AppSidebar />
-			<SidebarInset className="bg-sidebar">
+			<SidebarInset className="bg-transparent">
 				<main>
 					<Outlet />
 				</main>

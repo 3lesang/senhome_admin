@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useImperativeHandle } from "react";
 import { type UseFormReturn, useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import type { ProductFormType } from "@/types/product";
+import ProductVariant from "../../variant";
 import ProductCategory from "./category";
 import ProductInfo from "./info";
 import ProductMedia from "./media";
@@ -11,7 +11,7 @@ import { ProductFormSchema } from "./schema";
 import ProductSEO from "./seo";
 import ProductState from "./state";
 import ProductThumbnail from "./thumbnail";
-import ProductVariant from "./variant";
+import type { ProductFormType } from "./types";
 
 interface ProductProps {
 	defaultValues: ProductFormType;
@@ -29,8 +29,8 @@ export default function ProductForm({ defaultValues, ref }: ProductProps) {
 	return (
 		<Form {...form}>
 			<form>
-				<div className="grid grid-cols-12 gap-8">
-					<div className="col-span-8 space-y-8">
+				<div className="grid grid-cols-12 gap-4">
+					<div className="col-span-8 space-y-4">
 						<ProductInfo form={form} />
 						<ProductMedia form={form} />
 						<ProductPrice form={form} />
@@ -40,7 +40,7 @@ export default function ProductForm({ defaultValues, ref }: ProductProps) {
 						/>
 						<ProductSEO form={form} />
 					</div>
-					<div className="col-span-4 space-y-8">
+					<div className="col-span-4 space-y-4">
 						<ProductState form={form} />
 						<ProductThumbnail form={form} />
 						<ProductCategory form={form} />

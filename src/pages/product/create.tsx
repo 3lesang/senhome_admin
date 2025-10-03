@@ -4,6 +4,7 @@ import { useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import ProductForm from "@/components/form/product";
+import type { ProductFormType } from "@/components/form/product/types";
 import {
 	Card,
 	CardContent,
@@ -15,7 +16,6 @@ import { LoadingButton } from "@/components/ui/loading-button";
 import { batchProductFileHandler } from "@/handlers/file/mutation/product";
 import { batchVariantHandler } from "@/handlers/product/mutation/batch-variant";
 import { createProductHandler } from "@/handlers/product/mutation/create";
-import type { ProductFormType } from "@/types/product";
 
 export default function ProductCreatePage() {
 	const navigate = useNavigate();
@@ -56,7 +56,7 @@ export default function ProductCreatePage() {
 	};
 
 	return (
-		<Card className="bg-sidebar border-0 shadow-none max-w-7xl mx-auto">
+		<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
 			<CardHeader>
 				<CardTitle>Thêm sản phẩm</CardTitle>
 			</CardHeader>
@@ -83,7 +83,7 @@ export default function ProductCreatePage() {
 			</CardContent>
 			<CardFooter className="flex justify-end">
 				<LoadingButton type="button" loading={isPending} onClick={handleClick}>
-					Tạo sản phẩm
+					Lưu
 				</LoadingButton>
 			</CardFooter>
 		</Card>

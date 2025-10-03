@@ -4,7 +4,7 @@ import {
 	MoreVerticalIcon,
 	UserCircleIcon,
 } from "lucide-react";
-import SettingsDialog from "@/components/settings-dialog";
+import SettingsDialog from "@/components/dialog/setting";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	DropdownMenu,

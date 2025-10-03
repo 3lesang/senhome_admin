@@ -1,4 +1,3 @@
-import type { ListResult } from "pocketbase";
 import type { CategoryDataType } from "@/types/category";
 import pocketClient from "../client";
 import { CATEGORY_COLLECTION } from "../constants";
@@ -11,15 +10,15 @@ async function getFullListCategoryPocket() {
 	return res;
 }
 
-async function getListCategoryPocket(
-	queries: GetListQueryPocketType,
-): Promise<ListResult<CategoryDataType>> {
+async function getListCategoryPocket(queries: GetListQueryPocketType) {
 	const { page, limit, filter } = queries;
-	return pocketClient.collection(CATEGORY_COLLECTION).getList(page, limit, {
-		sort: "-created",
-		expand: "thumbnail",
-		filter,
-	});
+	return pocketClient
+		.collection<CategoryDataType>(CATEGORY_COLLECTION)
+		.getList(page, limit, {
+			sort: "-created",
+			expand: "thumbnail",
+			filter,
+		});
 }
 
 export { getFullListCategoryPocket, getListCategoryPocket };

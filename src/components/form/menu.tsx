@@ -60,8 +60,8 @@ export default function MenuForm({ defaultValues, ref }: MenuFormProps) {
 
 	return (
 		<Form {...form}>
-			<form className="grid grid-cols-12 gap-8">
-				<div className="col-span-8 space-y-8">
+			<form className="grid grid-cols-12 gap-4">
+				<div className="col-span-8 space-y-4">
 					<Card className="shadow-none border-0">
 						<CardContent>
 							<FormField
