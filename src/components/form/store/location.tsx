@@ -40,8 +40,8 @@ const formSchema = z.object({
 export type StoreLocationFormValuesType = z.infer<typeof formSchema>;
 
 interface StoreLocationFormProps {
-	defaultValues: StoreLocationFormValuesType;
-	ref: React.Ref<UseFormReturn<StoreLocationFormValuesType>>;
+	defaultValues?: StoreLocationFormValuesType;
+	ref?: React.Ref<UseFormReturn<StoreLocationFormValuesType>>;
 }
 
 export default function StoreLocationForm({
@@ -50,7 +50,12 @@ export default function StoreLocationForm({
 }: StoreLocationFormProps) {
 	const form = useForm<StoreLocationFormValuesType>({
 		resolver: zodResolver(formSchema),
-		defaultValues,
+		defaultValues: {
+			street: defaultValues?.street,
+			province: defaultValues?.province,
+			district: defaultValues?.district,
+			ward: defaultValues?.ward,
+		},
 	});
 
 	useImperativeHandle(ref, () => form);

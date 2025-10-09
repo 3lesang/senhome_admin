@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import CollectionForm, {
 	type CollectionFormValuesType,
 } from "@/components/form/collection";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -13,21 +14,19 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { LoadingButton } from "@/components/ui/loading-button";
+import { Spinner } from "@/components/ui/spinner";
+import { updateCollectionHandler } from "@/handlers/collection/mutation/update";
 import { getOneCollectionQueryOptions } from "@/handlers/collection/query/one";
-import { slugify } from "@/lib/utils";
-import {
-	type UpdateCollectionPayload,
-	updateCollectionPocket,
-} from "@/pocketbase/collection/update";
+import { convertToFileUrl } from "@/lib/utils";
 
-export default function CollectionUpdatePage() {
+export function CollectionUpdatePage() {
 	const ref = useRef<UseFormReturn<CollectionFormValuesType>>(null);
 	const { id = "" } = useParams({ strict: false });
+
 	const { data } = useSuspenseQuery(getOneCollectionQueryOptions(id));
+
 	const { mutate, isPending } = useMutation({
-		mutationFn: (values: UpdateCollectionPayload) =>
-			updateCollectionPocket(id, values),
+		mutationFn: updateCollectionHandler,
 		onSuccess: () => {
 			toast.success("Update collection susscesfully");
 		},
@@ -36,17 +35,10 @@ export default function CollectionUpdatePage() {
 	const handleSubmit = () => {
 		const form = ref.current;
 		if (!form) return;
-		form.handleSubmit((values) =>
-			mutate({
-				name: values.name,
-				description: values.description ?? "",
-				slug: slugify(values.name),
-				seo: {
-					title: values.seo.title ?? values.name,
-					description: values.seo.description ?? "",
-				},
-			}),
-		)();
+		form.handleSubmit((values) => {
+			console.log(values);
+			mutate();
+		})();
 	};
 
 	return (
@@ -56,27 +48,35 @@ export default function CollectionUpdatePage() {
 			</CardHeader>
 			<CardContent>
 				<CollectionForm
+					collectionId={data.id}
 					ref={ref}
 					defaultValues={{
 						name: data.name,
-						description: JSON.stringify(data.description),
+						content: JSON.stringify(data.content),
+						type: data.type,
+						slug: data.slug,
 						seo: {
-							title: data.seo?.title,
-							description: data.seo?.desciprtion,
-							slug: data.slug,
+							title: data?.seo?.title,
+							description: data?.seo?.description,
+						},
+						schedule: data.schedule,
+						file: {
+							id: data.expand.file?.id,
+							url: convertToFileUrl(data.expand.file) ?? "",
 						},
 					}}
 				/>
 			</CardContent>
 			<CardFooter>
-				<LoadingButton
+				<Button
 					type="button"
-					onClick={handleSubmit}
-					loading={isPending}
+					disabled={isPending}
 					className="ml-auto"
+					onClick={handleSubmit}
 				>
+					{isPending && <Spinner />}
 					Lưu
-				</LoadingButton>
+				</Button>
 			</CardFooter>
 		</Card>
 	);

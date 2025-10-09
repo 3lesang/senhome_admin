@@ -1,17 +1,31 @@
 import { queryOptions } from "@tanstack/react-query";
+import pocketClient from "@/pocketbase/client";
 import { ORDER_COLLECTION } from "@/pocketbase/constants";
-import { getListOrderPocket } from "@/pocketbase/order/list";
 
-type GetListQueryOptionType = {
+type OrderDataType = {
+	id: string;
+	name: string;
+	email: string;
+	phone: string;
+	final_price: number;
+	created: Date;
+};
+
+export const getListOrderQueryOptions = ({
+	page,
+	limit,
+	query,
+}: {
 	page: number;
 	limit: number;
 	query: string;
-};
-
-export const getListOrderQueryOptions = (queries: GetListQueryOptionType) => {
-	const { page, limit, query } = queries;
+}) => {
 	return queryOptions({
 		queryKey: [ORDER_COLLECTION, page, limit, query],
-		queryFn: () => getListOrderPocket({ page, limit, filter: query }),
+		queryFn: () => {
+			return pocketClient
+				.collection<OrderDataType>(ORDER_COLLECTION)
+				.getList(page, limit, { filter: query });
+		},
 	});
 };

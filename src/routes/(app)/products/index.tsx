@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
 import { getListProductQueryOptions } from "@/handlers/product/query/list";
-import ProductListPage from "@/pages/product/list";
+import { ProductListPage } from "@/pages/product/list";
 
 const schema = z.object({
 	page: z.number().default(1),

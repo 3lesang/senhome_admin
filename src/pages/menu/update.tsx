@@ -5,6 +5,7 @@ import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import type { MenuFormValuesType } from "@/components/form/menu";
 import MenuForm from "@/components/form/menu";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -12,20 +13,17 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { LoadingButton } from "@/components/ui/loading-button";
+import { Spinner } from "@/components/ui/spinner";
+import { updateMenuHandler } from "@/handlers/menu/mutation/update";
 import { getOneMenuQueryOptions } from "@/handlers/menu/query/one";
-import {
-	type UpadteMenuPayload,
-	updateMenuPocket,
-} from "@/pocketbase/menu/update";
 
-export default function UpdateMenuPage() {
+export function UpdateMenuPage() {
 	const { id } = useParams({ from: "/(app)/store/menus/$id" });
 	const { data, refetch } = useSuspenseQuery(getOneMenuQueryOptions(id));
 	const ref = useRef<UseFormReturn<MenuFormValuesType>>(null);
 
 	const { mutate, isPending } = useMutation({
-		mutationFn: (values: UpadteMenuPayload) => updateMenuPocket(id, values),
+		mutationFn: updateMenuHandler,
 		onSuccess: () => {
 			toast.success("Cập nhật menu thành công");
 			refetch();
@@ -33,7 +31,8 @@ export default function UpdateMenuPage() {
 	});
 
 	const handleSubmit = (values: MenuFormValuesType) => {
-		mutate(values);
+		console.log(values);
+		mutate();
 	};
 
 	const handleClick = () => {
@@ -41,6 +40,7 @@ export default function UpdateMenuPage() {
 		if (!form) return;
 		form.handleSubmit(handleSubmit)();
 	};
+
 	return (
 		<Card className="bg-sidebar shadow-none border-none max-w-6xl mx-auto">
 			<CardHeader>
@@ -57,14 +57,15 @@ export default function UpdateMenuPage() {
 				/>
 			</CardContent>
 			<CardFooter>
-				<LoadingButton
+				<Button
 					type="button"
-					onClick={handleClick}
-					loading={isPending}
+					disabled={isPending}
 					className="ml-auto"
+					onClick={handleClick}
 				>
+					{isPending && <Spinner />}
 					Lưu
-				</LoadingButton>
+				</Button>
 			</CardFooter>
 		</Card>
 	);

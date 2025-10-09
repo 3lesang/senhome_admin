@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
-import { getListCollectionQueryOptions } from "@/handlers/collection/query/list";
-import CollectionListPage from "@/pages/collection/list";
+import { getCollectionsQueryOptions } from "@/handlers/collection/query/list";
+import { CollectionListPage } from "@/pages/collection/list";
 
 const schema = z.object({
 	page: z.number().default(1),
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/(app)/products/collections/")({
 	loader({ context, deps }) {
 		const { page, limit, q } = deps;
 		return context.queryClient?.ensureQueryData(
-			getListCollectionQueryOptions({ page, limit, query: q }),
+			getCollectionsQueryOptions({ page, limit, query: q }),
 		);
 	},
 });

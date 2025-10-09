@@ -1,0 +1,259 @@
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
+import TablePagination, {
+	type TablePaginationDataChange,
+} from "@/components/table/pagination";
+import TableTabs from "@/components/table/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+	Card,
+	CardAction,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+	ContextMenu,
+	ContextMenuContent,
+	ContextMenuItem,
+	ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import { Spinner } from "@/components/ui/spinner";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
+import { deleteProductsHandler } from "@/handlers/product/mutation/delete";
+import { getListProductQueryOptions } from "@/handlers/product/query/list";
+import { cn, convertToFileUrl } from "@/lib/utils";
+
+const tabs = [
+	{ label: "Tất cả sản phẩm", q: "" },
+	{ label: "Đang hoạt động", q: "deleted=null" },
+	{ label: "Bản nháp", q: "deleted!=null" },
+];
+
+function getStatusLabel(status: "active" | "draft") {
+	return {
+		active: "Hoạt động",
+		draft: "Bản nháp",
+	}[status];
+}
+
+type FormValues = {
+	ids: { value: string }[];
+};
+
+export function ProductListPage() {
+	const navigate = useNavigate();
+	const { page, limit, q } = useSearch({ from: "/(app)/products/" });
+
+	const form = useForm<FormValues>({
+		defaultValues: { ids: [] },
+	});
+	const { control } = form;
+
+	const { fields, append, remove } = useFieldArray({
+		control,
+		name: "ids",
+	});
+
+	const selectedIds = useWatch({ control, name: "ids" });
+
+	const { data, refetch } = useSuspenseQuery(
+		getListProductQueryOptions({ page, limit, query: q }),
+	);
+
+	const { mutate, isPending } = useMutation({
+		mutationFn: deleteProductsHandler,
+		onSuccess: () => {
+			remove();
+			refetch();
+		},
+	});
+
+	const handlePaginationChange = ({
+		page,
+		limit,
+	}: TablePaginationDataChange) => {
+		navigate({ to: "/products", search: { page, limit } });
+	};
+
+	const handleTabChange = (q: string) => {
+		navigate({ to: "/products", search: { page: 1, limit, q } });
+	};
+
+	const toggleSelect = (id: string, checked: boolean) => {
+		const index = fields.findIndex((f) => f.value === id);
+		if (checked && index === -1) append({ value: id });
+		if (!checked && index !== -1) remove(index);
+	};
+
+	const handleBulkDelete = () => {
+		if (selectedIds.length === 0) return;
+		mutate(selectedIds.map((i) => i.value));
+	};
+
+	const allChecked =
+		data.items.length > 0 && fields.length === data.items.length;
+
+	const isIndeterminate = fields.length > 0 && !allChecked;
+
+	return (
+		<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
+			<CardHeader>
+				<CardTitle>Quản lý sản phẩm</CardTitle>
+				<CardDescription>Danh sách sản phẩm</CardDescription>
+				<CardAction className="flex gap-2 items-center">
+					<Link to="/products/create" className={cn(buttonVariants())}>
+						Tạo sản phẩm
+					</Link>
+				</CardAction>
+			</CardHeader>
+
+			<CardContent>
+				<Card className="border-0 shadow-none">
+					<CardHeader>
+						<CardTitle>
+							<TableTabs data={tabs} onChange={handleTabChange} q={q} />
+						</CardTitle>
+						<CardDescription>
+							<Badge variant="secondary">{data.totalItems} sản phẩm</Badge>
+						</CardDescription>
+						<CardAction className="flex items-center gap-2">
+							{selectedIds.length > 0 && (
+								<Button variant="ghost" onClick={() => remove()}>
+									Hủy bỏ
+								</Button>
+							)}
+							{selectedIds.length > 0 && (
+								<Button
+									variant="outline"
+									onClick={handleBulkDelete}
+									disabled={isPending}
+								>
+									{isPending && <Spinner />}
+									Xóa {selectedIds.length} sản phẩm
+								</Button>
+							)}
+							<Button variant="outline" size="icon">
+								<SearchIcon />
+							</Button>
+							<Button variant="outline" size="icon">
+								<ListFilterIcon />
+							</Button>
+						</CardAction>
+					</CardHeader>
+
+					<Table>
+						<TableHeader className="bg-gray-50">
+							<TableRow>
+								<TableHead className="w-16 pl-6">
+									<Checkbox
+										checked={isIndeterminate ? "indeterminate" : allChecked}
+										onCheckedChange={(checked) => {
+											if (checked) {
+												data.items.forEach((item) => {
+													if (!fields.find((f) => f.value === item.id)) {
+														append({ value: item.id });
+													}
+												});
+											} else {
+												remove();
+											}
+										}}
+									/>
+								</TableHead>
+								<TableHead>Tên sản phẩm</TableHead>
+								<TableHead>Trạng thái</TableHead>
+							</TableRow>
+						</TableHeader>
+
+						<TableBody>
+							{data.items.map((item) => {
+								const isSelected = fields.some((f) => f.value === item.id);
+								return (
+									<ContextMenu key={item.id}>
+										<ContextMenuTrigger asChild>
+											<TableRow>
+												<TableCell className="pl-6">
+													<Checkbox
+														checked={isSelected}
+														onCheckedChange={(checked) =>
+															toggleSelect(item.id, !!checked)
+														}
+													/>
+												</TableCell>
+												<TableCell className="min-w-96 max-w-96">
+													<div className="flex items-center gap-2">
+														<Avatar className="rounded">
+															<AvatarImage
+																src={convertToFileUrl(item.expand.file?.[0])}
+															/>
+															<AvatarFallback className="rounded" />
+														</Avatar>
+														<Link
+															to="/products/$id"
+															params={{ id: item.id }}
+															className="hover:underline"
+														>
+															{item.name}
+														</Link>
+													</div>
+												</TableCell>
+												<TableCell>
+													{item.status && (
+														<Badge variant="secondary">
+															{getStatusLabel(item.status)}
+														</Badge>
+													)}
+												</TableCell>
+											</TableRow>
+										</ContextMenuTrigger>
+
+										<ContextMenuContent>
+											<ContextMenuItem asChild>
+												<Link
+													to="/products/$id"
+													params={{ id: item.id }}
+													className="flex items-center gap-2"
+												>
+													<EditIcon />
+													Chỉnh sửa
+												</Link>
+											</ContextMenuItem>
+											<ContextMenuItem onClick={() => mutate([item.id])}>
+												<Trash2Icon />
+												Xóa
+											</ContextMenuItem>
+										</ContextMenuContent>
+									</ContextMenu>
+								);
+							})}
+						</TableBody>
+					</Table>
+
+					<CardFooter>
+						<TablePagination
+							page={page}
+							limit={limit}
+							total={data.totalItems}
+							onChange={handlePaginationChange}
+						/>
+					</CardFooter>
+				</Card>
+			</CardContent>
+		</Card>
+	);
+}

@@ -44,7 +44,7 @@ export default ({ editor }: Props) => {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button variant="ghost" size="icon" type="button">
+				<Button variant="ghost" size="sm" type="button">
 					<PlayIcon />
 				</Button>
 			</DialogTrigger>

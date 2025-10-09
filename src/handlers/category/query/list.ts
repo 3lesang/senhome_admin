@@ -1,29 +1,37 @@
 import { queryOptions } from "@tanstack/react-query";
-import {
-	getFullListCategoryPocket,
-	getListCategoryPocket,
-} from "@/pocketbase/category/list";
+import pocketClient from "@/pocketbase/client";
 import { CATEGORY_COLLECTION } from "@/pocketbase/constants";
 
-function getFullListCategoryQueryOptions() {
+export function getFullListCategoryQueryOptions() {
 	return queryOptions({
 		queryKey: [CATEGORY_COLLECTION],
-		queryFn: getFullListCategoryPocket,
+		queryFn: () => {
+			return pocketClient.collection(CATEGORY_COLLECTION).getFullList();
+		},
 	});
 }
 
-type GetListQueryOptionType = {
+type CategoryDataType = {
+	id: string;
+	name: string;
+	created: Date;
+};
+
+export function getListCategoryQueryOptions({
+	page,
+	limit,
+	query,
+}: {
 	page: number;
 	limit: number;
 	query: string;
-};
-
-function getListCategoryQueryOptions(queries: GetListQueryOptionType) {
-	const { page, limit, query } = queries;
+}) {
 	return queryOptions({
 		queryKey: [CATEGORY_COLLECTION, page, limit],
-		queryFn: () => getListCategoryPocket({ page, limit, filter: query }),
+		queryFn: () => {
+			return pocketClient
+				.collection<CategoryDataType>(CATEGORY_COLLECTION)
+				.getList(page, limit, { filter: query });
+		},
 	});
 }
-
-export { getFullListCategoryQueryOptions, getListCategoryQueryOptions };

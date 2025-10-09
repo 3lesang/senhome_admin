@@ -1,7 +1,11 @@
-import type { UseFormReturn } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { type Ref, useImperativeHandle } from "react";
+import { type UseFormReturn, useForm } from "react-hook-form";
+import z from "zod";
 import Editor from "@/components/editor";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
+	Form,
 	FormControl,
 	FormField,
 	FormItem,
@@ -9,17 +13,37 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import type { ProductFormType } from "./types";
 
-interface ProductInfoProps {
-	form: UseFormReturn<ProductFormType>;
+const schema = z.object({
+	name: z.string().min(1, "Product name is required"),
+	content: z.string().optional(),
+});
+
+export type ProductInfoFormValuesType = z.infer<typeof schema>;
+
+interface ProductInfoFormProps {
+	ref?: Ref<UseFormReturn<ProductInfoFormValuesType>>;
+	defaultValues?: ProductInfoFormValuesType;
 }
 
-function ProductInfo({ form }: ProductInfoProps) {
+export function ProductInfoForm({ ref, defaultValues }: ProductInfoFormProps) {
+	const form = useForm<ProductInfoFormValuesType>({
+		resolver: zodResolver(schema),
+		defaultValues: {
+			name: defaultValues?.name ?? "",
+			content: defaultValues?.content ?? "",
+		},
+	});
+
+	useImperativeHandle(ref, () => form);
+
 	return (
 		<Card className="shadow-none border-0">
-			<CardContent className="grid grid-cols-12 gap-8">
-				<div className="col-span-12">
+			<CardHeader>
+				<CardTitle>Thông tin chung</CardTitle>
+			</CardHeader>
+			<CardContent className="space-y-4">
+				<Form {...form}>
 					<FormField
 						control={form.control}
 						name="name"
@@ -33,8 +57,6 @@ function ProductInfo({ form }: ProductInfoProps) {
 							</FormItem>
 						)}
 					/>
-				</div>
-				<div className="col-span-12">
 					<FormField
 						control={form.control}
 						name="content"
@@ -48,10 +70,8 @@ function ProductInfo({ form }: ProductInfoProps) {
 							</FormItem>
 						)}
 					/>
-				</div>
+				</Form>
 			</CardContent>
 		</Card>
 	);
 }
-
-export default ProductInfo;

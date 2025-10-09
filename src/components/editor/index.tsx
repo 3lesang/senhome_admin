@@ -2,7 +2,8 @@ import { type Editor, EditorContent, useEditor } from "@tiptap/react";
 import { extensions } from "@/components/editor/extensions";
 import Menu from "@/components/editor/menu";
 import "./styles.css";
-import { ScrollArea } from "../ui/scroll-area";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface EditorProps {
 	content?: string;
@@ -10,23 +11,39 @@ interface EditorProps {
 }
 
 export default ({ content, onChange }: EditorProps) => {
+	const [focus, setFocus] = useState(false);
 	const editor: Editor = useEditor({
 		extensions,
 		editorProps: {
 			attributes: {
-				class: "typography max-w-none text-sm",
+				class: "typography max-w-none text-sm outline-none",
 			},
 		},
 		content: content ? JSON.parse(content) : undefined,
 		onUpdate: ({ editor }) => {
 			onChange?.(JSON.stringify(editor.getJSON()));
 		},
+		onFocus() {
+			setFocus(true);
+		},
+		onBlur() {
+			setFocus(false);
+		},
 	});
 
 	return (
-		<ScrollArea className="max-h-96">
-			<Menu editor={editor} />
-			<EditorContent editor={editor} />
-		</ScrollArea>
+		<div
+			className={cn(
+				"border border-input shadow-xs rounded-md overflow-hidden transition-[color,box-shadow] bg-transparent",
+				focus && "ring-ring/50 ring-[3px] border-ring",
+			)}
+		>
+			<div className="p-2">
+				<Menu editor={editor} />
+			</div>
+			<div className="max-h-80 min-h-44 overflow-scroll p-4">
+				<EditorContent editor={editor} />
+			</div>
+		</div>
 	);
 };

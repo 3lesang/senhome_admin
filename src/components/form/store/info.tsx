@@ -26,8 +26,8 @@ const formSchema = z.object({
 export type StoreSettingFormValuesType = z.infer<typeof formSchema>;
 
 interface StoreSettingFormProps {
-	defaultValues: StoreSettingFormValuesType;
-	ref: React.Ref<UseFormReturn<StoreSettingFormValuesType>>;
+	defaultValues?: StoreSettingFormValuesType;
+	ref?: React.Ref<UseFormReturn<StoreSettingFormValuesType>>;
 }
 
 export default function StoreSettingForm({
@@ -36,7 +36,12 @@ export default function StoreSettingForm({
 }: StoreSettingFormProps) {
 	const form = useForm<StoreSettingFormValuesType>({
 		resolver: zodResolver(formSchema),
-		defaultValues,
+		defaultValues: {
+			name: defaultValues?.name ?? "",
+			description: defaultValues?.description ?? "",
+			email: defaultValues?.email ?? "",
+			phone: defaultValues?.phone ?? "",
+		},
 	});
 
 	useImperativeHandle(ref, () => form);

@@ -1,17 +1,18 @@
 export const PRODUCT_COLLECTION = "sen_products";
-export const FILE_COLLECTION = "sen_files";
-export const FILE_GRAPH_COLLECTION = "sen_file_graph";
-export const PRODUCT_ATTRIBUTE_COLLECTION = "sen_product_attributes";
-export const PRODUCT_ATTRIBUTE_VALUE_COLLECTION =
-	"sen_product_attribute_values";
 export const PRODUCT_VARIANT_COLLECTION = "sen_product_variants";
-export const PRODUCT_VARIANT_ATTRIBUTES_COLLECTION =
-	"sen_product_variant_attributes";
+export const PRODUCT_OPTION_COLLECTION = "sen_product_options";
+export const PRODUCT_OPTION_VALUE_COLLECTION = "sen_product_option_values";
 export const CATEGORY_COLLECTION = "sen_categories";
+
+export const COLLECTION_COLLECTION = "sen_collections";
+export const COLLECTION_PRODUCT_COLLECTION = "sen_collection_products";
+
 export const ORDER_COLLECTION = "sen_orders";
 export const ORDER_ITEM_COLLECTION = "sen_order_items";
+
 export const USER_COLLECTION = "sen_users";
+export const FILE_COLLECTION = "sen_files";
+
 export const STORE_COLLECTION = "sen_store";
-export const STORE_PAGE_COLLECTION = "sen_pages";
 export const MENU_COLLECTION = "sen_menus";
-export const COLLECTION_COLLECTION = "sen_collections";
+export const STORE_PAGE_COLLECTION = "sen_pages";

@@ -23,7 +23,7 @@ export default ({ editor }: { editor: Editor }) => {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button type="button" variant="ghost" size="icon">
+				<Button type="button" variant="ghost" size="sm">
 					<MoreHorizontalIcon />
 				</Button>
 			</DropdownMenuTrigger>

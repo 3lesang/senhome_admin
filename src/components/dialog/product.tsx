@@ -1,5 +1,5 @@
 import type { CheckedState } from "@radix-ui/react-checkbox";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { type ReactNode, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -47,7 +47,7 @@ export default function ListProductDialog({
 		{},
 	);
 
-	const { data } = useSuspenseQuery(
+	const { data } = useQuery(
 		getListProductQueryOptions({ page: 1, limit: 10, query: "" }),
 	);
 
@@ -97,25 +97,23 @@ export default function ListProductDialog({
 				</div>
 				<Separator />
 				<ScrollArea className="-mx-6 h-96">
-					{data.items.map((item) => (
-						<Label key={item.id} className="px-6 py-2 rounded hover:bg-gray-50">
+					{data?.items.map((item) => (
+						<Label key={item.id} className="px-6 py-3 rounded hover:bg-gray-50">
 							<Checkbox
 								id={item.id}
 								onCheckedChange={(checked) =>
 									handleCheck(checked, {
 										id: item.id,
-										thumbnail: convertToFileUrl(item.expand.thumbnail) ?? "",
+										thumbnail: convertToFileUrl(item.expand.file?.[0]) ?? "",
 										name: item.name,
 									})
 								}
 							/>
-							<div className="flex gap-2 font-normal">
-								<Avatar className="rounded">
-									<AvatarImage src={convertToFileUrl(item.expand.thumbnail)} />
-									<AvatarFallback>CN</AvatarFallback>
-								</Avatar>
-								<p>{item.name}</p>
-							</div>
+							<Avatar className="rounded">
+								<AvatarImage src={convertToFileUrl(item.expand.file?.[0])} />
+								<AvatarFallback>CN</AvatarFallback>
+							</Avatar>
+							<p>{item.name}</p>
 						</Label>
 					))}
 				</ScrollArea>

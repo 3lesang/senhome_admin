@@ -1,17 +1,28 @@
 import { queryOptions } from "@tanstack/react-query";
+import pocketClient from "@/pocketbase/client";
 import { FILE_COLLECTION } from "@/pocketbase/constants";
-import { getListFilePocket } from "@/pocketbase/file/list";
 
-type GetListQueryOptionType = {
+type FileDataType = {
+	id: string;
+	collectionName: string;
+	file: string;
+};
+
+export function getListFileQueryOptions({
+	page,
+	limit,
+	query,
+}: {
 	page: number;
 	limit: number;
 	query: string;
-};
-
-export const getListFileQueryOptions = (queries: GetListQueryOptionType) => {
-	const { page, limit, query } = queries;
+}) {
 	return queryOptions({
 		queryKey: [FILE_COLLECTION, page, limit, query],
-		queryFn: () => getListFilePocket({ page, limit, filter: query }),
+		queryFn: () => {
+			return pocketClient
+				.collection<FileDataType>(FILE_COLLECTION)
+				.getList(page, limit, { filter: query });
+		},
 	});
-};
+}

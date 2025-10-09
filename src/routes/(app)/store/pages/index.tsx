@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
-import { getListStorePageQueryOptions } from "@/handlers/page/query/list";
-import PagesStoreListPage from "@/pages/pages/list";
+import { getStorePagesQueryOptions } from "@/handlers/page/query/list";
+import { PageStoreListPage } from "@/pages/pages/list";
 
 const schema = z.object({
 	page: z.number().default(1),
@@ -10,13 +10,13 @@ const schema = z.object({
 });
 
 export const Route = createFileRoute("/(app)/store/pages/")({
-	component: PagesStoreListPage,
+	component: PageStoreListPage,
 	validateSearch: schema,
 	loaderDeps: ({ search: { page, limit, q } }) => ({ page, limit, q }),
 	loader({ context, deps }) {
 		const { page, limit, q } = deps;
 		return context.queryClient?.ensureQueryData(
-			getListStorePageQueryOptions({ page, limit, query: q }),
+			getStorePagesQueryOptions({ page, limit, query: q }),
 		);
 	},
 });

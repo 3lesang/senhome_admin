@@ -1,9 +1,10 @@
 import type { SigninFormValuesType } from "@/components/form/signin";
-import { signInRootPocket } from "@/pocketbase/auth/signin-root";
+import pocketClient from "@/pocketbase/client";
 
 async function signInHandler(data: SigninFormValuesType) {
-	const { email, password } = data;
-	return signInRootPocket({ identify: email, password });
+	return pocketClient
+		.collection("_superusers")
+		.authWithPassword(data.email, data.password);
 }
 
 export default signInHandler;

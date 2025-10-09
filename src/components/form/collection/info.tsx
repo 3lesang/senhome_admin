@@ -44,7 +44,7 @@ export default function CollectionInfo({ form }: CollectionInfoProps) {
 				/>
 				<FormField
 					control={form.control}
-					name="description"
+					name="content"
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Mô tả</FormLabel>

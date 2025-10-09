@@ -1,10 +1,40 @@
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
 import { useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
-import ProductForm from "@/components/form/product";
-import type { ProductFormType } from "@/components/form/product/types";
+import {
+	ProductCollectionForm,
+	type ProductCollectionFormValuesType,
+} from "@/components/form/product/collection";
+import {
+	ProductFileForm,
+	type ProductFileFormValuesType,
+} from "@/components/form/product/file";
+import {
+	ProductInfoForm,
+	type ProductInfoFormValuesType,
+} from "@/components/form/product/info";
+import {
+	ProductPriceForm,
+	type ProductPriceFormValuesType,
+} from "@/components/form/product/price";
+import {
+	ProductSEOForm,
+	type ProductSEOFormValuesType,
+} from "@/components/form/product/seo";
+import {
+	ProductStatusForm,
+	type ProductStatusFormValuesType,
+} from "@/components/form/product/status";
+import {
+	ProductTagForm,
+	type ProductTagFormValuesType,
+} from "@/components/form/product/tag";
+import {
+	ProductVariantForm,
+	type ProductVariantFormValuesType,
+} from "@/components/form/product/variant";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -12,47 +42,55 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { LoadingButton } from "@/components/ui/loading-button";
-import { batchProductFileHandler } from "@/handlers/file/mutation/product";
-import { batchVariantHandler } from "@/handlers/product/mutation/batch-variant";
+import { Spinner } from "@/components/ui/spinner";
 import { createProductHandler } from "@/handlers/product/mutation/create";
 
-export default function ProductCreatePage() {
-	const navigate = useNavigate();
-	const ref = useRef<UseFormReturn<ProductFormType>>(null);
+export function ProductCreatePage() {
+	const infoRef = useRef<UseFormReturn<ProductInfoFormValuesType>>(null);
+	const fileRef = useRef<UseFormReturn<ProductFileFormValuesType>>(null);
+	const priceRef = useRef<UseFormReturn<ProductPriceFormValuesType>>(null);
+	const seoRef = useRef<UseFormReturn<ProductSEOFormValuesType>>(null);
+	const statusRef = useRef<UseFormReturn<ProductStatusFormValuesType>>(null);
+	const variantRef = useRef<UseFormReturn<ProductVariantFormValuesType>>(null);
+	const tagRef = useRef<UseFormReturn<ProductTagFormValuesType>>(null);
+	const collectionRef =
+		useRef<UseFormReturn<ProductCollectionFormValuesType>>(null);
 
 	const { mutate, isPending } = useMutation({
-		mutationFn: async (values: ProductFormType) => {
-			const resp = await createProductHandler(values);
-			const { media = [], variantData = {} } = values;
-			if (resp?.id) {
-				const productId = resp.id;
-				await batchProductFileHandler([], media, productId);
-				await batchVariantHandler(variantData, productId);
-				return productId;
-			}
-
-			return null;
-		},
-		onSuccess: (id) => {
-			if (id) {
-				navigate({ to: "/products/$id", params: { id } });
-				toast.success("Thêm sản phẩm thành công");
-			}
-		},
-		onError: () => {
-			toast.error("Không thể tạo sản phẩm");
+		mutationFn: createProductHandler,
+		onSuccess: () => {
+			toast.success("Product create succesfully");
 		},
 	});
 
-	const handleSubmit = (values: ProductFormType) => {
-		mutate(values);
-	};
-
 	const handleClick = () => {
-		const form = ref.current;
-		if (!form) return;
-		form.handleSubmit(handleSubmit)();
+		infoRef.current?.handleSubmit((infoValues) => {
+			fileRef.current?.handleSubmit((fileValues) => {
+				priceRef.current?.handleSubmit((priceValues) => {
+					seoRef.current?.handleSubmit((seoValues) => {
+						statusRef.current?.handleSubmit((statusValues) => {
+							variantRef.current?.handleSubmit((variantValues) => {
+								tagRef.current?.handleSubmit((tagValues) => {
+									collectionRef.current?.handleSubmit((collectionValues) => {
+										mutate({
+											info: infoValues,
+											status: statusValues.status,
+											price: priceValues,
+											file: fileValues.files,
+											tags: tagValues.tags,
+											seo: seoValues,
+											options: variantValues.options,
+											variants: variantValues.variants,
+											collections: collectionValues.collections,
+										});
+									})();
+								})();
+							})();
+						})();
+					})();
+				})();
+			})();
+		})();
 	};
 
 	return (
@@ -60,31 +98,25 @@ export default function ProductCreatePage() {
 			<CardHeader>
 				<CardTitle>Thêm sản phẩm</CardTitle>
 			</CardHeader>
-			<CardContent>
-				<ProductForm
-					ref={ref}
-					defaultValues={{
-						name: "",
-						price: "",
-						discount: "",
-						content: "",
-						thumbnail: [],
-						category: "",
-						state: "draft",
-						media: [],
-						variantData: {},
-						seo: {
-							title: "",
-							slug: "",
-							description: "",
-						},
-					}}
-				/>
+			<CardContent className="grid grid-cols-12 gap-4">
+				<div className="col-span-8 space-y-4">
+					<ProductInfoForm ref={infoRef} />
+					<ProductFileForm ref={fileRef} />
+					<ProductPriceForm ref={priceRef} />
+					<ProductVariantForm ref={variantRef} />
+					<ProductSEOForm ref={seoRef} />
+				</div>
+				<div className="col-span-4 space-y-4">
+					<ProductStatusForm ref={statusRef} />
+					<ProductCollectionForm ref={collectionRef} />
+					<ProductTagForm ref={tagRef} />
+				</div>
 			</CardContent>
 			<CardFooter className="flex justify-end">
-				<LoadingButton type="button" loading={isPending} onClick={handleClick}>
+				<Button type="button" onClick={handleClick} disabled={isPending}>
+					{isPending && <Spinner />}
 					Lưu
-				</LoadingButton>
+				</Button>
 			</CardFooter>
 		</Card>
 	);

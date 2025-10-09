@@ -10,21 +10,21 @@ import { Button } from "@/components/ui/button";
 
 export default ({ editor }: { editor: Editor }) => {
 	return (
-		<div className="flex items-center sticky top-0 bg-white">
+		<div className="flex items-center">
 			<Paragraph editor={editor} />
 			<Button
 				type="button"
 				variant="ghost"
-				size="icon"
+				size="sm"
 				aria-label="Toggle bold"
 				onClick={() => editor.chain().focus().toggleBold().run()}
 			>
-				<Bold />
+				<Bold size={4} />
 			</Button>
 			<Button
 				type="button"
 				variant="ghost"
-				size="icon"
+				size="sm"
 				aria-label="Toggle italic"
 				onClick={() => editor.chain().focus().toggleItalic().run()}
 			>
@@ -33,7 +33,7 @@ export default ({ editor }: { editor: Editor }) => {
 			<Button
 				type="button"
 				variant="ghost"
-				size="icon"
+				size="sm"
 				aria-label="Toggle strikethrough"
 				onClick={() => editor.chain().focus().toggleUnderline().run()}
 			>

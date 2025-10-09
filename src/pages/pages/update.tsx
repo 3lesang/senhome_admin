@@ -5,6 +5,7 @@ import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import type { StorePageFormValuesType } from "@/components/form/store/page";
 import StorePageForm from "@/components/form/store/page";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -12,22 +13,17 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { LoadingButton } from "@/components/ui/loading-button";
+import { Spinner } from "@/components/ui/spinner";
+import { updateStorePageHandler } from "@/handlers/page/mutation/update";
 import { getOneStorePageQueryOptions } from "@/handlers/page/query/one";
-import { updateStorePagePocket } from "@/pocketbase/page/update";
 
-export default function StorePageUpdatePage() {
+export function StorePageUpdatePage() {
 	const ref = useRef<UseFormReturn<StorePageFormValuesType>>(null);
 	const { id = "" } = useParams({ strict: false });
 	const { data, refetch } = useSuspenseQuery(getOneStorePageQueryOptions(id));
 
 	const { mutate, isPending } = useMutation({
-		mutationFn: (values: StorePageFormValuesType) =>
-			updateStorePagePocket(id, {
-				title: values.title,
-				content: values.content ? JSON.parse(values.content) : null,
-				slug: values.slug,
-			}),
+		mutationFn: updateStorePageHandler,
 		onSuccess: () => {
 			toast.success("Cập nhật trang thành công");
 			refetch();
@@ -35,7 +31,7 @@ export default function StorePageUpdatePage() {
 	});
 
 	const handleSubmit = (values: StorePageFormValuesType) => {
-		mutate(values);
+		mutate({ id, values });
 	};
 
 	const handleClick = () => {
@@ -60,14 +56,15 @@ export default function StorePageUpdatePage() {
 				/>
 			</CardContent>
 			<CardFooter>
-				<LoadingButton
+				<Button
 					type="button"
 					onClick={handleClick}
-					loading={isPending}
+					disabled={isPending}
 					className="ml-auto"
 				>
+					{isPending && <Spinner />}
 					Lưu
-				</LoadingButton>
+				</Button>
 			</CardFooter>
 		</Card>
 	);

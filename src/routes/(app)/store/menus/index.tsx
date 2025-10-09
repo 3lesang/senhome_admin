@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
 import { getListMenuQueryOptions } from "@/handlers/menu/query/list";
-import MenuListPage from "@/pages/menu/list";
+import { MenuListPage } from "@/pages/menu/list";
 
 const schema = z.object({
 	page: z.number().default(1),

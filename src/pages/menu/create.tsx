@@ -4,6 +4,7 @@ import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import type { MenuFormValuesType } from "@/components/form/menu";
 import MenuForm from "@/components/form/menu";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -11,17 +12,14 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { LoadingButton } from "@/components/ui/loading-button";
-import {
-	type CreateMenuPayload,
-	createMenuPocket,
-} from "@/pocketbase/menu/create";
+import { Spinner } from "@/components/ui/spinner";
+import { createMenuHandler } from "@/handlers/menu/mutation/create";
 
-export default function MenuCreatePage() {
+export function MenuCreatePage() {
 	const ref = useRef<UseFormReturn<MenuFormValuesType>>(null);
 
 	const { mutate, isPending } = useMutation({
-		mutationFn: (values: CreateMenuPayload) => createMenuPocket(values),
+		mutationFn: createMenuHandler,
 		onSuccess: () => {
 			toast.success("Tạo menu thành công");
 		},
@@ -53,13 +51,10 @@ export default function MenuCreatePage() {
 				/>
 			</CardContent>
 			<CardFooter>
-				<LoadingButton
-					loading={isPending}
-					onClick={handleClick}
-					className="ml-auto"
-				>
+				<Button disabled={isPending} className="ml-auto" onClick={handleClick}>
+					{isPending && <Spinner />}
 					Lưu
-				</LoadingButton>
+				</Button>
 			</CardFooter>
 		</Card>
 	);

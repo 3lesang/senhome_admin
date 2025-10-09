@@ -56,7 +56,7 @@ export default ({ editor }: Props) => {
 				<Button
 					type="button"
 					variant="ghost"
-					size="icon"
+					size="sm"
 					onClick={() => {
 						form.setValue("url", editor.getAttributes("link").href || "");
 					}}

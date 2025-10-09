@@ -18,7 +18,7 @@ export default ({ editor }: { editor: Editor }) => {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button type="button" variant="ghost">
+				<Button type="button" variant="ghost" size="sm">
 					<AlignLeftIcon />
 					<ChevronDownIcon />
 				</Button>

@@ -1,8 +1,11 @@
+import { useMutation } from "@tanstack/react-query";
 import { useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
+import { toast } from "sonner";
 import CollectionForm, {
 	type CollectionFormValuesType,
 } from "@/components/form/collection";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -10,15 +13,26 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { LoadingButton } from "@/components/ui/loading-button";
+import { Spinner } from "@/components/ui/spinner";
+import { createCollectionHander } from "@/handlers/collection/mutation/create";
 
-export default function CollectionCreatePage() {
+export function CollectionCreatePage() {
 	const ref = useRef<UseFormReturn<CollectionFormValuesType>>(null);
+
+	const { mutate, isPending } = useMutation({
+		mutationFn: createCollectionHander,
+		onSuccess: () => {
+			toast.success("Tạo bộ sưu tập thành công");
+		},
+	});
 
 	const handleSubmit = () => {
 		const form = ref.current;
 		if (!form) return;
-		form.handleSubmit((values) => console.log(values))();
+		form.handleSubmit((values) => {
+			console.log(values);
+			mutate();
+		})();
 	};
 
 	return (
@@ -28,18 +42,29 @@ export default function CollectionCreatePage() {
 			</CardHeader>
 			<CardContent>
 				<CollectionForm
+					collectionId=""
 					ref={ref}
 					defaultValues={{
 						name: "",
-						description: "",
-						seo: { title: "", description: "", slug: "" },
+						content: "",
+						slug: "",
+						type: "manual",
+						seo: { title: "", description: "" },
+						schedule: null,
+						file: null,
 					}}
 				/>
 			</CardContent>
 			<CardFooter>
-				<LoadingButton type="button" onClick={handleSubmit} className="ml-auto">
+				<Button
+					type="button"
+					className="ml-auto"
+					disabled={isPending}
+					onClick={handleSubmit}
+				>
+					{isPending && <Spinner />}
 					Lưu
-				</LoadingButton>
+				</Button>
 			</CardFooter>
 		</Card>
 	);

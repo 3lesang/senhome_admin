@@ -28,6 +28,11 @@ interface CollectionSEOProps {
 
 export default function CollectionSEO({ form }: CollectionSEOProps) {
 	const [open, setOpen] = useState(false);
+
+	function handleToogle() {
+		setOpen((o) => !o);
+	}
+
 	return (
 		<Card className="border-0 shadow-none">
 			<CardHeader>
@@ -37,23 +42,21 @@ export default function CollectionSEO({ form }: CollectionSEOProps) {
 					trên công cụ tìm kiếm như Google.
 				</CardDescription>
 				<CardAction>
-					{!open && (
-						<Button
-							type="button"
-							size="icon"
-							variant="ghost"
-							onClick={() => setOpen(true)}
-						>
-							<EditIcon />
-						</Button>
-					)}
+					<Button
+						type="button"
+						size="icon"
+						variant="ghost"
+						onClick={handleToogle}
+					>
+						<EditIcon />
+					</Button>
 				</CardAction>
 			</CardHeader>
 			{!open && (
 				<CardContent>
 					<p>{form.getValues("seo.title")}</p>
 					<small>{form.getValues("seo.description")}</small>
-					<small>{form.getValues("seo.slug")}</small>
+					<small>{form.getValues("slug")}</small>
 				</CardContent>
 			)}
 			{open && (
@@ -90,7 +93,7 @@ export default function CollectionSEO({ form }: CollectionSEOProps) {
 					/>
 					<FormField
 						control={form.control}
-						name="seo.slug"
+						name="slug"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Đường dẫn</FormLabel>

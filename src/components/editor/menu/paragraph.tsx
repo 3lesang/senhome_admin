@@ -16,7 +16,7 @@ export default ({ editor }: Props) => {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="ghost" className="select-none" type="button">
+				<Button variant="ghost" className="select-none" type="button" size="sm">
 					Paragraph
 					<ChevronDownIcon />
 				</Button>

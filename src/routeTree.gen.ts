@@ -32,7 +32,7 @@ import { Route as appStoreMenusIndexRouteImport } from './routes/(app)/store/men
 import { Route as appProductsCollectionsIndexRouteImport } from './routes/(app)/products/collections/index'
 import { Route as appOrdersDraftIndexRouteImport } from './routes/(app)/orders/draft/index'
 import { Route as appContentFilesIndexRouteImport } from './routes/(app)/content/files/index'
-import { Route as appContentArticlesIndexRouteImport } from './routes/(app)/content/articles/index'
+import { Route as appContentBlogsIndexRouteImport } from './routes/(app)/content/blogs/index'
 import { Route as appStoreSettingsShipmentsRouteImport } from './routes/(app)/store/settings/shipments'
 import { Route as appStoreSettingsPaymentsRouteImport } from './routes/(app)/store/settings/payments'
 import { Route as appStoreSettingsGeneralRouteImport } from './routes/(app)/store/settings/general'
@@ -158,9 +158,9 @@ const appContentFilesIndexRoute = appContentFilesIndexRouteImport.update({
   path: '/content/files/',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appContentArticlesIndexRoute = appContentArticlesIndexRouteImport.update({
-  id: '/content/articles/',
-  path: '/content/articles/',
+const appContentBlogsIndexRoute = appContentBlogsIndexRouteImport.update({
+  id: '/content/blogs/',
+  path: '/content/blogs/',
   getParentRoute: () => appRouteRoute,
 } as any)
 const appStoreSettingsShipmentsRoute =
@@ -245,7 +245,7 @@ export interface FileRoutesByFullPath {
   '/store/settings/general': typeof appStoreSettingsGeneralRoute
   '/store/settings/payments': typeof appStoreSettingsPaymentsRoute
   '/store/settings/shipments': typeof appStoreSettingsShipmentsRoute
-  '/content/articles': typeof appContentArticlesIndexRoute
+  '/content/blogs': typeof appContentBlogsIndexRoute
   '/content/files': typeof appContentFilesIndexRoute
   '/orders/draft': typeof appOrdersDraftIndexRoute
   '/products/collections': typeof appProductsCollectionsIndexRoute
@@ -279,7 +279,7 @@ export interface FileRoutesByTo {
   '/store/settings/general': typeof appStoreSettingsGeneralRoute
   '/store/settings/payments': typeof appStoreSettingsPaymentsRoute
   '/store/settings/shipments': typeof appStoreSettingsShipmentsRoute
-  '/content/articles': typeof appContentArticlesIndexRoute
+  '/content/blogs': typeof appContentBlogsIndexRoute
   '/content/files': typeof appContentFilesIndexRoute
   '/orders/draft': typeof appOrdersDraftIndexRoute
   '/products/collections': typeof appProductsCollectionsIndexRoute
@@ -316,7 +316,7 @@ export interface FileRoutesById {
   '/(app)/store/settings/general': typeof appStoreSettingsGeneralRoute
   '/(app)/store/settings/payments': typeof appStoreSettingsPaymentsRoute
   '/(app)/store/settings/shipments': typeof appStoreSettingsShipmentsRoute
-  '/(app)/content/articles/': typeof appContentArticlesIndexRoute
+  '/(app)/content/blogs/': typeof appContentBlogsIndexRoute
   '/(app)/content/files/': typeof appContentFilesIndexRoute
   '/(app)/orders/draft/': typeof appOrdersDraftIndexRoute
   '/(app)/products/collections/': typeof appProductsCollectionsIndexRoute
@@ -352,7 +352,7 @@ export interface FileRouteTypes {
     | '/store/settings/general'
     | '/store/settings/payments'
     | '/store/settings/shipments'
-    | '/content/articles'
+    | '/content/blogs'
     | '/content/files'
     | '/orders/draft'
     | '/products/collections'
@@ -386,7 +386,7 @@ export interface FileRouteTypes {
     | '/store/settings/general'
     | '/store/settings/payments'
     | '/store/settings/shipments'
-    | '/content/articles'
+    | '/content/blogs'
     | '/content/files'
     | '/orders/draft'
     | '/products/collections'
@@ -422,7 +422,7 @@ export interface FileRouteTypes {
     | '/(app)/store/settings/general'
     | '/(app)/store/settings/payments'
     | '/(app)/store/settings/shipments'
-    | '/(app)/content/articles/'
+    | '/(app)/content/blogs/'
     | '/(app)/content/files/'
     | '/(app)/orders/draft/'
     | '/(app)/products/collections/'
@@ -599,11 +599,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appContentFilesIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/content/articles/': {
-      id: '/(app)/content/articles/'
-      path: '/content/articles'
-      fullPath: '/content/articles'
-      preLoaderRoute: typeof appContentArticlesIndexRouteImport
+    '/(app)/content/blogs/': {
+      id: '/(app)/content/blogs/'
+      path: '/content/blogs'
+      fullPath: '/content/blogs'
+      preLoaderRoute: typeof appContentBlogsIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
     '/(app)/store/settings/shipments': {
@@ -727,7 +727,7 @@ interface appRouteRouteChildren {
   appProductsIndexRoute: typeof appProductsIndexRoute
   appProductsCollectionsIdRoute: typeof appProductsCollectionsIdRoute
   appProductsCollectionsCreateRoute: typeof appProductsCollectionsCreateRoute
-  appContentArticlesIndexRoute: typeof appContentArticlesIndexRoute
+  appContentBlogsIndexRoute: typeof appContentBlogsIndexRoute
   appContentFilesIndexRoute: typeof appContentFilesIndexRoute
   appOrdersDraftIndexRoute: typeof appOrdersDraftIndexRoute
   appProductsCollectionsIndexRoute: typeof appProductsCollectionsIndexRoute
@@ -749,7 +749,7 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appProductsIndexRoute: appProductsIndexRoute,
   appProductsCollectionsIdRoute: appProductsCollectionsIdRoute,
   appProductsCollectionsCreateRoute: appProductsCollectionsCreateRoute,
-  appContentArticlesIndexRoute: appContentArticlesIndexRoute,
+  appContentBlogsIndexRoute: appContentBlogsIndexRoute,
   appContentFilesIndexRoute: appContentFilesIndexRoute,
   appOrdersDraftIndexRoute: appOrdersDraftIndexRoute,
   appProductsCollectionsIndexRoute: appProductsCollectionsIndexRoute,

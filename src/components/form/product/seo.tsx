@@ -1,32 +1,51 @@
-import { EditIcon } from "lucide-react";
-import { useState } from "react";
-import type { UseFormReturn } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { type Ref, useImperativeHandle } from "react";
+import { type UseFormReturn, useForm } from "react-hook-form";
+import z from "zod";
 import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
-import { Button } from "@/components/ui/button";
 import {
 	Card,
-	CardAction,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
 import {
+	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import type { ProductFormType } from "./types";
+
+const schema = z.object({
+	title: z.string().max(70),
+	description: z.string().max(160),
+	slug: z.string(),
+});
+
+export type ProductSEOFormValuesType = z.infer<typeof schema>;
 
 interface ProductSEOProps {
-	form: UseFormReturn<ProductFormType>;
+	ref?: Ref<UseFormReturn<ProductSEOFormValuesType>>;
+	defaultValues?: ProductSEOFormValuesType;
 }
 
-export default function ProductSEO({ form }: ProductSEOProps) {
-	const [open, setOpen] = useState(false);
+export function ProductSEOForm({ ref, defaultValues }: ProductSEOProps) {
+	const form = useForm<ProductSEOFormValuesType>({
+		resolver: zodResolver(schema),
+		defaultValues: {
+			title: defaultValues?.title ?? "",
+			description: defaultValues?.description ?? "",
+			slug: defaultValues?.slug ?? "",
+		},
+	});
+
+	useImperativeHandle(ref, () => form);
+
 	return (
 		<Card className="border-0 shadow-none">
 			<CardHeader>
@@ -35,66 +54,57 @@ export default function ProductSEO({ form }: ProductSEOProps) {
 					Thiết lập các thẻ mô tả giúp khách hàng dễ dàng tìm thấy danh mục này
 					trên công cụ tìm kiếm như Google.
 				</CardDescription>
-				<CardAction>
-					{!open && (
-						<Button
-							type="button"
-							size="icon"
-							variant="ghost"
-							onClick={() => setOpen(true)}
-						>
-							<EditIcon />
-						</Button>
-					)}
-				</CardAction>
 			</CardHeader>
-			{open && (
-				<CardContent className="space-y-4">
-					<FormField
-						control={form.control}
-						name="seo.title"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Tiêu đề trang</FormLabel>
-								<FormControl>
-									<Input placeholder="Tiêu đề trang" {...field} />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="seo.description"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Mô tả trang</FormLabel>
-								<FormControl>
-									<AutosizeTextarea
-										placeholder="Mô tả trang"
-										className="resize-none"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="seo.slug"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Đường dẫn</FormLabel>
-								<FormControl>
-									<Input {...field} />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-				</CardContent>
-			)}
+			<CardContent>
+				<Form {...form}>
+					<div className="space-y-4">
+						<FormField
+							control={form.control}
+							name="title"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Tiêu đề trang</FormLabel>
+									<FormControl>
+										<Input {...field} />
+									</FormControl>
+									<FormDescription>0 of 70 characters used</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="description"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Mô tả trang</FormLabel>
+									<FormControl>
+										<AutosizeTextarea className="resize-none" {...field} />
+									</FormControl>
+									<FormDescription>0 of 160 characters used</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="slug"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Đường dẫn</FormLabel>
+									<FormControl>
+										<Input {...field} />
+									</FormControl>
+									<FormMessage />
+									<FormDescription>
+										https://senhome.vn/products/{form.watch("slug")}
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+					</div>
+				</Form>
+			</CardContent>
 		</Card>
 	);
 }

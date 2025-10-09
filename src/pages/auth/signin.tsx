@@ -4,6 +4,7 @@ import { useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import type { SigninFormValuesType } from "@/components/form/signin";
 import SigninForm from "@/components/form/signin";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -12,10 +13,10 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { LoadingButton } from "@/components/ui/loading-button";
+import { Spinner } from "@/components/ui/spinner";
 import signInHandler from "@/handlers/auth/mutation/signin";
 
-export default function SigninPage() {
+export function SigninPage() {
 	const navigate = useNavigate();
 	const ref = useRef<UseFormReturn<SigninFormValuesType>>(null);
 
@@ -49,14 +50,10 @@ export default function SigninPage() {
 					/>
 				</CardContent>
 				<CardFooter>
-					<LoadingButton
-						type="button"
-						className="w-full"
-						loading={isPending}
-						onClick={handleSubmit}
-					>
+					<Button type="button" className="w-full" onClick={handleSubmit}>
+						{isPending && <Spinner />}
 						Đăng nhập
-					</LoadingButton>
+					</Button>
 				</CardFooter>
 			</Card>
 		</div>

@@ -4,6 +4,7 @@ import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import type { StorePageFormValuesType } from "@/components/form/store/page";
 import StorePageForm from "@/components/form/store/page";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -11,19 +12,14 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { LoadingButton } from "@/components/ui/loading-button";
-import { createStorePagePocket } from "@/pocketbase/page/create";
+import { Spinner } from "@/components/ui/spinner";
+import { createStorePageHandler } from "@/handlers/page/mutation/create";
 
-export default function StorePageCreatePage() {
+export function StorePageCreatePage() {
 	const ref = useRef<UseFormReturn<StorePageFormValuesType>>(null);
 
 	const { mutate, isPending } = useMutation({
-		mutationFn: (values: StorePageFormValuesType) =>
-			createStorePagePocket({
-				title: values.title,
-				content: values.content ? JSON.parse(values.content) : null,
-				slug: values.slug,
-			}),
+		mutationFn: createStorePageHandler,
 		onSuccess: () => {
 			toast("Trang đã được tạo thành công!");
 			ref.current?.reset();
@@ -56,14 +52,15 @@ export default function StorePageCreatePage() {
 				/>
 			</CardContent>
 			<CardFooter>
-				<LoadingButton
+				<Button
 					type="button"
 					onClick={handleClick}
-					loading={isPending}
+					disabled={isPending}
 					className="ml-auto"
 				>
+					{isPending && <Spinner />}
 					Lưu
-				</LoadingButton>
+				</Button>
 			</CardFooter>
 		</Card>
 	);
