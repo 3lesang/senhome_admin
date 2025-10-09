@@ -3,6 +3,8 @@ import { useParams } from "@tanstack/react-router";
 import { useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
+import { updateStorePageHandler } from "@/api/page/mutation/update";
+import { getOneStorePageQueryOptions } from "@/api/page/query/one";
 import type { StorePageFormValuesType } from "@/components/form/store/page";
 import StorePageForm from "@/components/form/store/page";
 import { Button } from "@/components/ui/button";
@@ -14,8 +16,6 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
-import { updateStorePageHandler } from "@/handlers/page/mutation/update";
-import { getOneStorePageQueryOptions } from "@/handlers/page/query/one";
 
 export function StorePageUpdatePage() {
 	const ref = useRef<UseFormReturn<StorePageFormValuesType>>(null);

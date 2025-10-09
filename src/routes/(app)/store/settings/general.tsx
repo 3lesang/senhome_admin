@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getStoreQueryOptions } from "@/handlers/store/query/one";
+import { getStoreQueryOptions } from "@/api/store/query/one";
 import { StoreSettingsGeneral } from "@/pages/settings/general";
 
 export const Route = createFileRoute("/(app)/store/settings/general")({

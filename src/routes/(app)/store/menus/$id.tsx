@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getOneMenuQueryOptions } from "@/handlers/menu/query/one";
+import { getOneMenuQueryOptions } from "@/api/menu/query/one";
 import { UpdateMenuPage } from "@/pages/menu/update";
 
 export const Route = createFileRoute("/(app)/store/menus/$id")({

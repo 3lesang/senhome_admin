@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
-import { getListCategoryQueryOptions } from "@/handlers/category/query/list";
+import { getListCategoryQueryOptions } from "@/api/category/query/list";
 import { CategoryListPage } from "@/pages/category/list";
 
 const schema = z.object({

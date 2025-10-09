@@ -2,6 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { format } from "timeago.js";
+import { getListCategoryQueryOptions } from "@/api/category/query/list";
 import TablePagination, {
 	type TablePaginationDataChange,
 } from "@/components/table/pagination";
@@ -32,7 +33,6 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { getListCategoryQueryOptions } from "@/handlers/category/query/list";
 
 export function CategoryListPage() {
 	const navigate = useNavigate();
@@ -84,45 +84,43 @@ export function CategoryListPage() {
 							</Button>
 						</CardAction>
 					</CardHeader>
-					<CardContent>
-						<Table className="bg-white rounded-md">
-							<TableHeader className="bg-sidebar">
-								<TableRow>
-									<TableHead className="w-16 pl-6">
-										<Checkbox />
-									</TableHead>
-									<TableHead>Tên danh mục</TableHead>
-									<TableHead>Ngày tạo</TableHead>
-								</TableRow>
-							</TableHeader>
-							<TableBody>
-								{data.items?.map((item) => (
-									<ContextMenu key={item.id}>
-										<ContextMenuTrigger asChild>
-											<TableRow>
-												<TableCell className="pl-6">
-													<Checkbox />
-												</TableCell>
-												<TableCell>{item.name}</TableCell>
-												<TableCell>{format(new Date(item.created))}</TableCell>
-											</TableRow>
-										</ContextMenuTrigger>
-										<ContextMenuContent>
-											<ContextMenuItem>
-												<EditIcon />
-												Chỉnh sửa
-											</ContextMenuItem>
+					<Table className="bg-white rounded-md">
+						<TableHeader className="bg-sidebar">
+							<TableRow>
+								<TableHead className="w-16 pl-6">
+									<Checkbox />
+								</TableHead>
+								<TableHead>Tên danh mục</TableHead>
+								<TableHead>Ngày tạo</TableHead>
+							</TableRow>
+						</TableHeader>
+						<TableBody>
+							{data.items?.map((item) => (
+								<ContextMenu key={item.id}>
+									<ContextMenuTrigger asChild>
+										<TableRow>
+											<TableCell className="pl-6">
+												<Checkbox />
+											</TableCell>
+											<TableCell>{item.name}</TableCell>
+											<TableCell>{format(new Date(item.created))}</TableCell>
+										</TableRow>
+									</ContextMenuTrigger>
+									<ContextMenuContent>
+										<ContextMenuItem>
+											<EditIcon />
+											Chỉnh sửa
+										</ContextMenuItem>
 
-											<ContextMenuItem onClick={() => {}}>
-												<Trash2Icon />
-												Xóa
-											</ContextMenuItem>
-										</ContextMenuContent>
-									</ContextMenu>
-								))}
-							</TableBody>
-						</Table>
-					</CardContent>
+										<ContextMenuItem onClick={() => {}}>
+											<Trash2Icon />
+											Xóa
+										</ContextMenuItem>
+									</ContextMenuContent>
+								</ContextMenu>
+							))}
+						</TableBody>
+					</Table>
 					<CardFooter>
 						<TablePagination
 							total={data?.totalItems}

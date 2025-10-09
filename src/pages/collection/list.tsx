@@ -2,6 +2,8 @@ import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { format } from "timeago.js";
+import { deleteCollectionsHandler } from "@/api/collection/mutation/delete";
+import { getCollectionsQueryOptions } from "@/api/collection/query/list";
 import TablePagination, {
 	type TablePaginationDataChange,
 } from "@/components/table/pagination";
@@ -32,8 +34,6 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { deleteCollectionsHandler } from "@/handlers/collection/mutation/delete";
-import { getCollectionsQueryOptions } from "@/handlers/collection/query/list";
 import { cn } from "@/lib/utils";
 
 export function CollectionListPage() {

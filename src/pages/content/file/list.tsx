@@ -1,7 +1,7 @@
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { InfoIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
-import UploadModal from "@/components/file/upload/modal";
+import { getListFileQueryOptions } from "@/api/file/query/list";
 import TablePagination, {
 	type TablePaginationDataChange,
 } from "@/components/table/pagination";
@@ -23,8 +23,6 @@ import {
 	ContextMenuItem,
 	ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { createFileHandler } from "@/handlers/file/mutation/create";
-import { getListFileQueryOptions } from "@/handlers/file/query/list";
 import { convertToFileUrl } from "@/lib/utils";
 
 const tabs = [{ label: "Tất cả file", q: "" }];
@@ -32,7 +30,7 @@ const tabs = [{ label: "Tất cả file", q: "" }];
 export function FileListPage() {
 	const navigate = useNavigate();
 	const { page, limit, q } = useSearch({ from: "/(app)/content/files/" });
-	const { data, refetch } = useSuspenseQuery(
+	const { data } = useSuspenseQuery(
 		getListFileQueryOptions({ page, limit, query: q }),
 	);
 
@@ -47,18 +45,6 @@ export function FileListPage() {
 		navigate({ to: "/content/files", search: { page: 1, limit: limit, q } });
 	};
 
-	const { mutate } = useMutation({
-		mutationFn: createFileHandler,
-		onSuccess: () => {
-			refetch();
-		},
-	});
-
-	const handleUpload = (files: File[]) => {
-		console.log(files);
-		mutate();
-	};
-
 	return (
 		<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
 			<CardHeader>
@@ -67,9 +53,7 @@ export function FileListPage() {
 					Những hình ảnh tải lên ở đây có thể được thêm cho sản phẩm, nhóm sản
 					phẩm, trang và các bài blog.
 				</CardDescription>
-				<CardAction>
-					<UploadModal onConfirm={handleUpload} />
-				</CardAction>
+				<CardAction></CardAction>
 			</CardHeader>
 			<CardContent>
 				<Card className="border-0 shadow-none">

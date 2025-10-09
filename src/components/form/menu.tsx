@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useImperativeHandle } from "react";
 import { type Resolver, type UseFormReturn, useForm } from "react-hook-form";
 import z from "zod";
-import TreeMenu from "@/components/tree/TreeMenu";
 import {
 	Card,
 	CardContent,
@@ -27,6 +26,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import TreeMenu from "../input/tree/TreeMenu";
 
 const menuItemSchema = z.object({
 	id: z.string(),

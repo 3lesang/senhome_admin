@@ -1,6 +1,7 @@
 import type { CheckedState } from "@radix-ui/react-checkbox";
 import { useQuery } from "@tanstack/react-query";
 import { type ReactNode, useState } from "react";
+import { getListProductQueryOptions } from "@/api/product/query/list";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -25,7 +26,6 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { getListProductQueryOptions } from "@/handlers/product/query/list";
 import { convertToFileUrl } from "@/lib/utils";
 
 export type ListProductDialogDataType = {

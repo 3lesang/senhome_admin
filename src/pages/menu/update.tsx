@@ -3,6 +3,8 @@ import { useParams } from "@tanstack/react-router";
 import { useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
+import { updateMenuHandler } from "@/api/menu/mutation/update";
+import { getOneMenuQueryOptions } from "@/api/menu/query/one";
 import type { MenuFormValuesType } from "@/components/form/menu";
 import MenuForm from "@/components/form/menu";
 import { Button } from "@/components/ui/button";
@@ -14,8 +16,6 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
-import { updateMenuHandler } from "@/handlers/menu/mutation/update";
-import { getOneMenuQueryOptions } from "@/handlers/menu/query/one";
 
 export function UpdateMenuPage() {
 	const { id } = useParams({ from: "/(app)/store/menus/$id" });

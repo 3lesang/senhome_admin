@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useImperativeHandle } from "react";
 import { type UseFormReturn, useForm } from "react-hook-form";
 import { z } from "zod";
-import Editor from "@/components/editor";
+import { TextEditor } from "@/components/input/editor";
 import { Card, CardContent } from "@/components/ui/card";
 import {
 	Form,
@@ -67,10 +67,7 @@ export default function StorePageForm({
 										<FormLabel>Nội dung</FormLabel>
 										<FormControl>
 											<div className="p-2">
-												<Editor
-													content={field.value}
-													onChange={field.onChange}
-												/>
+												<TextEditor {...field} />
 											</div>
 										</FormControl>
 										<FormMessage />

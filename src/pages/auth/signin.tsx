@@ -1,24 +1,45 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { useRef } from "react";
-import type { UseFormReturn } from "react-hook-form";
-import type { SigninFormValuesType } from "@/components/form/signin";
-import SigninForm from "@/components/form/signin";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { signInHandler } from "@/api/auth/mutation/signin";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
-import signInHandler from "@/handlers/auth/mutation/signin";
+
+const schema = z.object({
+	email: z.string().min(2, {
+		message: "Email must be at least 2 characters.",
+	}),
+	password: z.string().min(1, {
+		message: "Password is required",
+	}),
+});
+
+export type SigninFormValuesType = z.infer<typeof schema>;
 
 export function SigninPage() {
 	const navigate = useNavigate();
-	const ref = useRef<UseFormReturn<SigninFormValuesType>>(null);
+	const form = useForm<SigninFormValuesType>({
+		resolver: zodResolver(schema),
+		defaultValues: { email: "", password: "" },
+	});
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: signInHandler,
@@ -27,35 +48,56 @@ export function SigninPage() {
 		},
 	});
 
-	const handleSubmit = () => {
-		const form = ref.current;
-		if (!form) return;
-		form.handleSubmit((values) => mutate(values))();
-	};
+	function handleSubmit(values: SigninFormValuesType) {
+		mutate(values);
+	}
 
 	return (
-		<div className="h-screen flex justify-center items-center bg-gray-50">
-			<Card className="border-none shadow-none w-96">
-				<CardHeader>
-					<CardTitle>Đăng nhập</CardTitle>
-					<CardDescription>Welcome to SenHome</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<SigninForm
-						ref={ref}
-						defaultValues={{
-							email: "",
-							password: "",
-						}}
-					/>
-				</CardContent>
-				<CardFooter>
-					<Button type="button" className="w-full" onClick={handleSubmit}>
-						{isPending && <Spinner />}
-						Đăng nhập
-					</Button>
-				</CardFooter>
-			</Card>
-		</div>
+		<Form {...form}>
+			<form
+				onSubmit={form.handleSubmit(handleSubmit)}
+				className="h-screen flex justify-center items-center bg-sidebar"
+			>
+				<Card className="border-none shadow-none w-96">
+					<CardHeader>
+						<CardTitle>Đăng nhập</CardTitle>
+					</CardHeader>
+					<CardContent className="space-y-4">
+						<FormField
+							control={form.control}
+							name="email"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Email</FormLabel>
+									<FormControl>
+										<Input placeholder="Địa chỉ email" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="password"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Mật khẩu</FormLabel>
+									<FormControl>
+										<Input placeholder="Mật khẩu" {...field} type="password" />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</CardContent>
+					<CardFooter>
+						<Button type="submit" className="w-full" disabled={isPending}>
+							{isPending && <Spinner />}
+							Đăng nhập
+						</Button>
+					</CardFooter>
+				</Card>
+			</form>
+		</Form>
 	);
 }

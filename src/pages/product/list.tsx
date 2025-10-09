@@ -2,6 +2,8 @@ import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
+import { deleteProductsHandler } from "@/api/product/mutation/delete";
+import { getListProductQueryOptions } from "@/api/product/query/list";
 import TablePagination, {
 	type TablePaginationDataChange,
 } from "@/components/table/pagination";
@@ -34,14 +36,12 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { deleteProductsHandler } from "@/handlers/product/mutation/delete";
-import { getListProductQueryOptions } from "@/handlers/product/query/list";
 import { cn, convertToFileUrl } from "@/lib/utils";
 
 const tabs = [
 	{ label: "Tất cả sản phẩm", q: "" },
-	{ label: "Đang hoạt động", q: "deleted=null" },
-	{ label: "Bản nháp", q: "deleted!=null" },
+	{ label: "Đang hoạt động", q: `status="active"` },
+	{ label: "Bản nháp", q: `status="draft"` },
 ];
 
 function getStatusLabel(status: "active" | "draft") {

@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useImperativeHandle } from "react";
 import { type UseFormReturn, useForm } from "react-hook-form";
 import { z } from "zod";
-import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import {
 	Form,
 	FormControl,
@@ -13,6 +12,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
 	name: z.string().min(1, { message: "Vui lòng nhập tên cửa hàng" }),
@@ -116,7 +116,7 @@ export default function StoreSettingForm({
 						<FormItem className="col-span-12">
 							<FormLabel>Mô tả trang</FormLabel>
 							<FormControl>
-								<AutosizeTextarea
+								<Textarea
 									placeholder="Mô tả trang"
 									className="bg-white resize-none"
 									{...field}

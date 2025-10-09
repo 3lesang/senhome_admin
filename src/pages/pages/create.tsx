@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
+import { createStorePageHandler } from "@/api/page/mutation/create";
 import type { StorePageFormValuesType } from "@/components/form/store/page";
 import StorePageForm from "@/components/form/store/page";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,6 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
-import { createStorePageHandler } from "@/handlers/page/mutation/create";
 
 export function StorePageCreatePage() {
 	const ref = useRef<UseFormReturn<StorePageFormValuesType>>(null);

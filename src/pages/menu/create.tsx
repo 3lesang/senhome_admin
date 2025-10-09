@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
+import { createMenuHandler } from "@/api/menu/mutation/create";
 import type { MenuFormValuesType } from "@/components/form/menu";
 import MenuForm from "@/components/form/menu";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,6 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
-import { createMenuHandler } from "@/handlers/menu/mutation/create";
 
 export function MenuCreatePage() {
 	const ref = useRef<UseFormReturn<MenuFormValuesType>>(null);

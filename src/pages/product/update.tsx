@@ -1,46 +1,23 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
 import { ChevronDownIcon, Trash2Icon } from "lucide-react";
-import { useRef } from "react";
-import type { UseFormReturn } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
-import {
-	ProductCollectionForm,
-	type ProductCollectionFormValuesType,
-} from "@/components/form/product/collection";
-import {
-	ProductFileForm,
-	type ProductFileFormValuesType,
-} from "@/components/form/product/file";
-import {
-	ProductInfoForm,
-	type ProductInfoFormValuesType,
-} from "@/components/form/product/info";
-import {
-	ProductPriceForm,
-	type ProductPriceFormValuesType,
-} from "@/components/form/product/price";
-import {
-	ProductSEOForm,
-	type ProductSEOFormValuesType,
-} from "@/components/form/product/seo";
-import {
-	ProductStatusForm,
-	type ProductStatusFormValuesType,
-} from "@/components/form/product/status";
-import {
-	ProductTagForm,
-	type ProductTagFormValuesType,
-} from "@/components/form/product/tag";
-import {
-	ProductVariantForm,
-	type ProductVariantFormValuesType,
-} from "@/components/form/product/variant";
+import z from "zod";
+import { getCollectionsProductQueryOptions } from "@/api/collection/query/list";
+import { getOptionsProductQueryOptions } from "@/api/option/query/list";
+import { updateProductHander } from "@/api/product/mutation/update";
+import { productQueryOptions } from "@/api/product/query/one";
+import { getVariantsProductQueryOptions } from "@/api/variant/query/list";
+import { TextEditor } from "@/components/input/editor";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardAction,
 	CardContent,
+	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -51,26 +28,63 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
-import { getCollectionsProductQueryOptions } from "@/handlers/collection/query/list";
-import { getOptionsProductQueryOptions } from "@/handlers/option/query/list";
-import { updateProductHander } from "@/handlers/product/mutation/update";
-import { productQueryOptions } from "@/handlers/product/query/one";
-import { getVariantsProductQueryOptions } from "@/handlers/variant/query/list";
-import { convertToFileUrl } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
+
+const schema = z.object({
+	name: z.string(),
+	content: z.union([z.string(), z.record(z.string(), z.any()), z.null()]),
+	file: z.array(z.object({ id: z.string(), url: z.string() })),
+	price: z.number(),
+	sale_price: z.number(),
+	slug: z.string(),
+	seo: z.object({
+		title: z.string(),
+		description: z.string(),
+	}),
+	status: z.enum(["active", "draft"]),
+	options: z.array(
+		z.object({
+			id: z.string(),
+			name: z.string(),
+			values: z.array(z.object({ id: z.string(), name: z.string() })),
+		}),
+	),
+	variants: z.array(
+		z.object({
+			id: z.string(),
+			price: z.number(),
+			sale_price: z.number(),
+			stock: z.number(),
+			sku: z.string(),
+			combos: z.string(),
+			file: z.object({ id: z.string(), url: z.string() }).nullable(),
+		}),
+	),
+	collections: z.array(z.object({ id: z.string(), name: z.string() })),
+});
+
+export type FormValues = z.infer<typeof schema>;
 
 export function ProductUpdatePage() {
 	const { id } = useParams({ from: "/(app)/products/$id" });
-	const infoRef = useRef<UseFormReturn<ProductInfoFormValuesType>>(null);
-	const fileRef = useRef<UseFormReturn<ProductFileFormValuesType>>(null);
-	const priceRef = useRef<UseFormReturn<ProductPriceFormValuesType>>(null);
-	const seoRef = useRef<UseFormReturn<ProductSEOFormValuesType>>(null);
-	const statusRef = useRef<UseFormReturn<ProductStatusFormValuesType>>(null);
-	const variantRef = useRef<UseFormReturn<ProductVariantFormValuesType>>(null);
-	const tagRef = useRef<UseFormReturn<ProductTagFormValuesType>>(null);
-	const collectionRef =
-		useRef<UseFormReturn<ProductCollectionFormValuesType>>(null);
-
 	const { data: product } = useSuspenseQuery(productQueryOptions(id));
 	const { data: options } = useSuspenseQuery(getOptionsProductQueryOptions(id));
 	const { data: variants } = useSuspenseQuery(
@@ -80,159 +94,253 @@ export function ProductUpdatePage() {
 		getCollectionsProductQueryOptions(id),
 	);
 
-	const { mutate, isPending } = useMutation({
+	const form = useForm<FormValues>({
+		resolver: zodResolver(schema),
+		defaultValues: {
+			name: product.name,
+			content: product.content,
+			file: product.file,
+			slug: product.slug,
+			price: product.price,
+			sale_price: product.sale_price,
+			options,
+			variants,
+			collections,
+			seo: {
+				title: product.seo?.title,
+				description: product.seo.description,
+			},
+			status: product.status,
+		},
+	});
+
+	const { isPending } = useMutation({
 		mutationFn: updateProductHander,
 		onSuccess: () => {
 			toast.success("Update product successfully");
 		},
 	});
 
-	function handleClick() {
-		infoRef.current?.handleSubmit((infoValues) => {
-			fileRef.current?.handleSubmit((fileValues) => {
-				priceRef.current?.handleSubmit((priceValues) => {
-					seoRef.current?.handleSubmit((seoValues) => {
-						statusRef.current?.handleSubmit((statusValues) => {
-							tagRef.current?.handleSubmit((tagValues) => {
-								collectionRef.current?.handleSubmit((collectionValues) => {
-									variantRef.current?.handleSubmit((variantValues) => {
-										mutate({
-											id,
-											info: infoValues,
-											status: statusValues.status,
-											price: priceValues,
-											file: fileValues.files,
-											tags: tagValues.tags,
-											seo: seoValues,
-											options: variantValues.options,
-											variants: variantValues.variants,
-											collections: collectionValues.collections,
-										});
-									})();
-								})();
-							})();
-						})();
-					})();
-				})();
-			})();
-		})();
+	function handleSubmit(values: FormValues) {
+		console.log(values);
 	}
 
 	return (
-		<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
-			<CardHeader>
-				<CardTitle>{product.name}</CardTitle>
-				<CardAction className="flex gap-2">
-					<Button type="button" variant="secondary">
-						Xem trước
-					</Button>
-					<Button type="button" variant="secondary">
-						Nhân bản
-					</Button>
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
+		<Form {...form}>
+			<form onSubmit={form.handleSubmit(handleSubmit)}>
+				<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
+					<CardHeader>
+						<CardTitle>{product.name}</CardTitle>
+						<CardAction className="flex gap-2">
 							<Button type="button" variant="secondary">
-								Thêm hành động
-								<ChevronDownIcon />
+								Xem trước
 							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent>
-							<DropdownMenuItem>
-								<Trash2Icon />
-								Xóa sản phẩm
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-				</CardAction>
-			</CardHeader>
-			<CardContent className="grid grid-cols-12 gap-4">
-				<div className="col-span-8 space-y-4">
-					<ProductInfoForm
-						ref={infoRef}
-						defaultValues={{
-							name: product.name,
-							content: JSON.stringify(product.content),
-						}}
-					/>
-					<ProductFileForm
-						ref={fileRef}
-						defaultValues={{
-							files: product.expand?.file
-								? product.expand?.file.map((f) => ({
-										id: f.id,
-										url: convertToFileUrl(f) ?? "",
-									}))
-								: [],
-						}}
-					/>
-					<ProductPriceForm
-						ref={priceRef}
-						defaultValues={{
-							price: product.price,
-							sale_price: product.sale_price,
-						}}
-					/>
-					<ProductVariantForm
-						ref={variantRef}
-						defaultValues={{
-							options,
-							variants: variants.map((v) => ({
-								id: v.id,
-								price: v.price,
-								sale_price: v.sale_price,
-								stock: v.stock,
-								sku: v.sku,
-								combos: v.combos,
-								file: v.expand.file?.id
-									? {
-											id: v.expand.file.id,
-											url: convertToFileUrl(v.expand.file),
-										}
-									: null,
-							})),
-						}}
-					/>
-					<ProductSEOForm
-						ref={seoRef}
-						defaultValues={{
-							title: product.seo?.title,
-							description: product.seo?.description,
-							slug: product.slug,
-						}}
-					/>
-				</div>
-				<div className="col-span-4 space-y-4">
-					<ProductStatusForm
-						ref={statusRef}
-						defaultValues={{ status: product.status }}
-					/>
-					<ProductCollectionForm
-						ref={collectionRef}
-						defaultValues={{
-							collections: collections.map((c) => c.expand.collection),
-						}}
-					/>
-					<ProductTagForm
-						ref={tagRef}
-						defaultValues={{
-							tags: product.tag
-								? product.tag.split(",").map((t) => ({ name: t }))
-								: [],
-						}}
-					/>
-				</div>
-			</CardContent>
-			<CardFooter>
-				<Button
-					type="button"
-					className="ml-auto"
-					disabled={isPending}
-					onClick={handleClick}
-				>
-					{isPending && <Spinner />}
-					Lưu
-				</Button>
-			</CardFooter>
-		</Card>
+							<Button type="button" variant="secondary">
+								Nhân bản
+							</Button>
+							<DropdownMenu>
+								<DropdownMenuTrigger asChild>
+									<Button type="button" variant="secondary">
+										Thêm hành động
+										<ChevronDownIcon />
+									</Button>
+								</DropdownMenuTrigger>
+								<DropdownMenuContent>
+									<DropdownMenuItem>
+										<Trash2Icon />
+										Xóa sản phẩm
+									</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
+						</CardAction>
+					</CardHeader>
+					<CardContent className="grid grid-cols-12 gap-4">
+						<div className="col-span-8 space-y-4">
+							<Card className="shadow-none border-0">
+								<CardHeader>
+									<CardTitle>Thông tin chung</CardTitle>
+								</CardHeader>
+								<CardContent className="space-y-4">
+									<FormField
+										control={form.control}
+										name="name"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Tên sản phẩm</FormLabel>
+												<FormControl>
+													<Input placeholder="Tên sản phẩm" {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="content"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Mô tả sản phẩm</FormLabel>
+												<FormControl>
+													<TextEditor {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</CardContent>
+							</Card>
+							<Card className="shadow-none border-0">
+								<CardHeader>
+									<CardTitle>Giá sản phẩm</CardTitle>
+								</CardHeader>
+								<CardContent className="grid grid-cols-2 gap-4">
+									<FormField
+										control={form.control}
+										name="price"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Giá so sánh</FormLabel>
+												<FormControl>
+													<NumericFormat
+														value={field.value}
+														className="bg-white"
+														thousandSeparator
+														suffix=" đ"
+														customInput={Input}
+														onValueChange={(v) =>
+															field.onChange(Number(v.value))
+														}
+														inputMode="decimal"
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="sale_price"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Giá bán</FormLabel>
+												<FormControl>
+													<NumericFormat
+														value={field.value}
+														className="bg-white"
+														thousandSeparator
+														suffix=" đ"
+														customInput={Input}
+														onValueChange={(v) =>
+															field.onChange(Number(v.value))
+														}
+														inputMode="decimal"
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</CardContent>
+							</Card>
+							<Card className="border-0 shadow-none">
+								<CardHeader>
+									<CardTitle>Tối ưu SEO</CardTitle>
+									<CardDescription>
+										Thiết lập các thẻ mô tả giúp khách hàng dễ dàng tìm thấy
+										danh mục này trên công cụ tìm kiếm như Google.
+									</CardDescription>
+								</CardHeader>
+								<CardContent className="space-y-4">
+									<FormField
+										control={form.control}
+										name="seo.title"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Tiêu đề trang</FormLabel>
+												<FormControl>
+													<Input {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="seo.description"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Mô tả trang</FormLabel>
+												<FormControl>
+													<Textarea className="resize-none" {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="slug"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Đường dẫn</FormLabel>
+												<FormControl>
+													<Input {...field} />
+												</FormControl>
+												<FormMessage />
+												<FormDescription>
+													https://senhome.vn/products/{form.watch("slug")}
+												</FormDescription>
+											</FormItem>
+										)}
+									/>
+								</CardContent>
+							</Card>
+						</div>
+						<div className="col-span-4 space-y-4">
+							<Card className="shadow-none border-0">
+								<CardHeader>
+									<CardTitle>Trạng thái</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<FormField
+										control={form.control}
+										name="status"
+										render={({ field }) => (
+											<FormItem>
+												<Select
+													value={field.value}
+													onValueChange={field.onChange}
+												>
+													<FormControl>
+														<SelectTrigger className="w-full">
+															<SelectValue placeholder="Chọn trạng thái" />
+														</SelectTrigger>
+													</FormControl>
+													<SelectContent>
+														<SelectItem value="active">Hoạt động</SelectItem>
+														<SelectItem value="draft">Bản nháp</SelectItem>
+													</SelectContent>
+												</Select>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</CardContent>
+							</Card>
+						</div>
+					</CardContent>
+					<CardFooter>
+						<Button
+							type="submit"
+							className="ml-auto"
+							disabled={isPending || !form.formState.isDirty}
+						>
+							{isPending && <Spinner />}
+							Lưu
+						</Button>
+					</CardFooter>
+				</Card>
+			</form>
+		</Form>
 	);
 }

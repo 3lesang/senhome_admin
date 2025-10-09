@@ -2,6 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { format } from "timeago.js";
+import { getListOrderQueryOptions } from "@/api/order/query/list";
 import TablePagination, {
 	type TablePaginationDataChange,
 } from "@/components/table/pagination";
@@ -38,7 +39,6 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { getListOrderQueryOptions } from "@/handlers/order/query/list";
 import { formatVND } from "@/lib/utils";
 
 const tabs: TableTableDataType[] = [

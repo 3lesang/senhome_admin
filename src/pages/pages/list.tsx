@@ -2,6 +2,8 @@ import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { format } from "timeago.js";
+import { deleteStorePagesHandler } from "@/api/page/mutation/delete";
+import { getStorePagesQueryOptions } from "@/api/page/query/list";
 import type { TablePaginationDataChange } from "@/components/table/pagination";
 import TablePagination from "@/components/table/pagination";
 import TableTabs from "@/components/table/tabs";
@@ -31,8 +33,6 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { deleteStorePagesHandler } from "@/handlers/page/mutation/delete";
-import { getStorePagesQueryOptions } from "@/handlers/page/query/list";
 import { cn } from "@/lib/utils";
 
 const tabs = [{ label: "Tất cả", q: "" }];
