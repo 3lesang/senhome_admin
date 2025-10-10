@@ -1,11 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
 import z from "zod";
 import { createProductHandler } from "@/api/product/create";
+import { ProductOptions } from "@/components/form/product/options";
+import { ProductVariant } from "@/components/form/product/variant";
+import { CollectionInput } from "@/components/input/collection";
 import { TextEditor } from "@/components/input/editor";
+import { MediaInput } from "@/components/input/media";
+import { TagInput } from "@/components/input/tag";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -26,6 +32,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
+	InputGroup,
+	InputGroupAddon,
+	InputGroupInput,
+	InputGroupText,
+} from "@/components/ui/input-group";
+import {
 	Select,
 	SelectContent,
 	SelectItem,
@@ -34,9 +46,11 @@ import {
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
+import { checkDuplicateNames } from "@/lib/utils";
 
 const schema = z.object({
-	name: z.string(),
+	id: z.string(),
+	name: z.string().min(1, "Name is required"),
 	content: z.union([z.string(), z.record(z.string(), z.any()), z.null()]),
 	file: z.array(z.object({ id: z.string(), url: z.string() })),
 	price: z.number(),
@@ -47,13 +61,27 @@ const schema = z.object({
 		description: z.string(),
 	}),
 	status: z.enum(["active", "draft"]),
-	options: z.array(
-		z.object({
-			id: z.string(),
-			name: z.string(),
-			values: z.array(z.object({ id: z.string(), name: z.string() })),
-		}),
-	),
+	tag: z.string(),
+	options: z
+		.array(
+			z.object({
+				id: z.string(),
+				name: z.string().min(1, "Name is required"),
+				values: z
+					.array(
+						z.object({
+							id: z.string(),
+							name: z.string().min(1, "Value name is required"),
+						}),
+					)
+					.superRefine((values, ctx) =>
+						checkDuplicateNames(values, ctx, "This value name already exists"),
+					),
+			}),
+		)
+		.superRefine((options, ctx) =>
+			checkDuplicateNames(options, ctx, "This value name already exists"),
+		),
 	variants: z.array(
 		z.object({
 			id: z.string(),
@@ -68,38 +96,42 @@ const schema = z.object({
 	collections: z.array(z.object({ id: z.string(), name: z.string() })),
 });
 
-export type FormValues = z.infer<typeof schema>;
+type FormValues = z.infer<typeof schema>;
 
 export function ProductCreatePage() {
+	const navigate = useNavigate();
 	const form = useForm<FormValues>({
 		resolver: zodResolver(schema),
 		defaultValues: {
+			id: "",
 			name: "",
 			content: null,
 			file: [],
 			slug: "",
 			price: 0,
 			sale_price: 0,
-			options: [],
-			variants: [],
-			collections: [],
 			seo: {
 				title: "",
 				description: "",
 			},
 			status: "draft",
+			tag: "",
+			options: [],
+			variants: [],
+			collections: [],
 		},
 	});
 
-	const { isPending } = useMutation({
+	const { mutate, isPending } = useMutation({
 		mutationFn: createProductHandler,
 		onSuccess: () => {
 			toast.success("Create product successfully");
+			navigate({ to: "/products" });
 		},
 	});
 
 	function handleSubmit(values: FormValues) {
-		console.log(values);
+		mutate(values);
 	}
 
 	return (
@@ -146,6 +178,25 @@ export function ProductCreatePage() {
 							</Card>
 							<Card className="shadow-none border-0">
 								<CardHeader>
+									<CardTitle>Hình ảnh sản phẩm</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<FormField
+										control={form.control}
+										name="file"
+										render={({ field }) => (
+											<FormItem>
+												<FormControl>
+													<MediaInput {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</CardContent>
+							</Card>
+							<Card className="shadow-none border-0">
+								<CardHeader>
 									<CardTitle>Giá sản phẩm</CardTitle>
 								</CardHeader>
 								<CardContent className="grid grid-cols-2 gap-4">
@@ -156,17 +207,22 @@ export function ProductCreatePage() {
 											<FormItem>
 												<FormLabel>Giá so sánh</FormLabel>
 												<FormControl>
-													<NumericFormat
-														value={field.value}
-														className="bg-white"
-														thousandSeparator
-														suffix=" đ"
-														customInput={Input}
-														onValueChange={(v) =>
-															field.onChange(Number(v.value))
-														}
-														inputMode="decimal"
-													/>
+													<InputGroup>
+														<InputGroupAddon>
+															<InputGroupText>$</InputGroupText>
+														</InputGroupAddon>
+														<NumericFormat
+															value={field.value}
+															thousandSeparator
+															customInput={InputGroupInput}
+															onValueChange={(v) =>
+																field.onChange(Number(v.value))
+															}
+														/>
+														<InputGroupAddon align="inline-end">
+															<InputGroupText>VNĐ</InputGroupText>
+														</InputGroupAddon>
+													</InputGroup>
 												</FormControl>
 												<FormMessage />
 											</FormItem>
@@ -179,22 +235,36 @@ export function ProductCreatePage() {
 											<FormItem>
 												<FormLabel>Giá bán</FormLabel>
 												<FormControl>
-													<NumericFormat
-														value={field.value}
-														className="bg-white"
-														thousandSeparator
-														suffix=" đ"
-														customInput={Input}
-														onValueChange={(v) =>
-															field.onChange(Number(v.value))
-														}
-														inputMode="decimal"
-													/>
+													<InputGroup>
+														<InputGroupAddon>
+															<InputGroupText>$</InputGroupText>
+														</InputGroupAddon>
+														<NumericFormat
+															value={field.value}
+															thousandSeparator
+															customInput={InputGroupInput}
+															onValueChange={(v) =>
+																field.onChange(Number(v.value))
+															}
+														/>
+														<InputGroupAddon align="inline-end">
+															<InputGroupText>VNĐ</InputGroupText>
+														</InputGroupAddon>
+													</InputGroup>
 												</FormControl>
 												<FormMessage />
 											</FormItem>
 										)}
 									/>
+								</CardContent>
+							</Card>
+							<Card className="shadow-none border-0">
+								<CardHeader>
+									<CardTitle>Biến thể</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<ProductOptions form={form} />
+									<ProductVariant form={form} />
 								</CardContent>
 							</Card>
 							<Card className="border-0 shadow-none">
@@ -277,6 +347,46 @@ export function ProductCreatePage() {
 													</SelectContent>
 												</Select>
 												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</CardContent>
+							</Card>
+							<Card className="shadow-none border-0">
+								<CardHeader>
+									<CardTitle>Nhóm sản phẩm</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<FormField
+										control={form.control}
+										name="collections"
+										render={({ field }) => (
+											<FormItem>
+												<FormControl>
+													<CollectionInput {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</CardContent>
+							</Card>
+							<Card className="shadow-none border-0">
+								<CardHeader>
+									<CardTitle>Nhãn</CardTitle>
+									<CardDescription>
+										Nhập và nhấn enter để thêm thẻ
+									</CardDescription>
+								</CardHeader>
+								<CardContent>
+									<FormField
+										control={form.control}
+										name="tag"
+										render={({ field }) => (
+											<FormItem>
+												<FormControl>
+													<TagInput {...field} />
+												</FormControl>
 											</FormItem>
 										)}
 									/>

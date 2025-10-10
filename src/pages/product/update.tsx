@@ -11,7 +11,12 @@ import { getOptionsProductQueryOptions } from "@/api/option/list";
 import { productQueryOptions } from "@/api/product/one";
 import { updateProductHander } from "@/api/product/update";
 import { getVariantsProductQueryOptions } from "@/api/variant/list";
+import { ProductOptions } from "@/components/form/product/options";
+import { ProductVariant } from "@/components/form/product/variant";
+import { CollectionInput } from "@/components/input/collection";
 import { TextEditor } from "@/components/input/editor";
+import { MediaInput } from "@/components/input/media";
+import { TagInput } from "@/components/input/tag";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -47,9 +52,11 @@ import {
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
+import { checkDuplicateNames } from "@/lib/utils";
 
 const schema = z.object({
-	name: z.string(),
+	id: z.string(),
+	name: z.string().min(1, "Name is required"),
 	content: z.union([z.string(), z.record(z.string(), z.any()), z.null()]),
 	file: z.array(z.object({ id: z.string(), url: z.string() })),
 	price: z.number(),
@@ -60,13 +67,27 @@ const schema = z.object({
 		description: z.string(),
 	}),
 	status: z.enum(["active", "draft"]),
-	options: z.array(
-		z.object({
-			id: z.string(),
-			name: z.string(),
-			values: z.array(z.object({ id: z.string(), name: z.string() })),
-		}),
-	),
+	tag: z.string(),
+	options: z
+		.array(
+			z.object({
+				id: z.string(),
+				name: z.string().min(1, "Name is required"),
+				values: z
+					.array(
+						z.object({
+							id: z.string(),
+							name: z.string().min(1, "Value name is required"),
+						}),
+					)
+					.superRefine((values, ctx) =>
+						checkDuplicateNames(values, ctx, "This value name already exists"),
+					),
+			}),
+		)
+		.superRefine((options, ctx) =>
+			checkDuplicateNames(options, ctx, "This value name already exists"),
+		),
 	variants: z.array(
 		z.object({
 			id: z.string(),
@@ -97,6 +118,7 @@ export function ProductUpdatePage() {
 	const form = useForm<FormValues>({
 		resolver: zodResolver(schema),
 		defaultValues: {
+			id: product.id,
 			name: product.name,
 			content: product.content,
 			file: product.file,
@@ -111,10 +133,11 @@ export function ProductUpdatePage() {
 				description: product.seo.description,
 			},
 			status: product.status,
+			tag: product.tag,
 		},
 	});
 
-	const { isPending } = useMutation({
+	const { mutate, isPending } = useMutation({
 		mutationFn: updateProductHander,
 		onSuccess: () => {
 			toast.success("Update product successfully");
@@ -122,7 +145,7 @@ export function ProductUpdatePage() {
 	});
 
 	function handleSubmit(values: FormValues) {
-		console.log(values);
+		mutate(values);
 	}
 
 	return (
@@ -191,6 +214,25 @@ export function ProductUpdatePage() {
 							</Card>
 							<Card className="shadow-none border-0">
 								<CardHeader>
+									<CardTitle>Hình ảnh sản phẩm</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<FormField
+										control={form.control}
+										name="file"
+										render={({ field }) => (
+											<FormItem>
+												<FormControl>
+													<MediaInput {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</CardContent>
+							</Card>
+							<Card className="shadow-none border-0">
+								<CardHeader>
 									<CardTitle>Giá sản phẩm</CardTitle>
 								</CardHeader>
 								<CardContent className="grid grid-cols-2 gap-4">
@@ -240,6 +282,15 @@ export function ProductUpdatePage() {
 											</FormItem>
 										)}
 									/>
+								</CardContent>
+							</Card>
+							<Card className="shadow-none border-0">
+								<CardHeader>
+									<CardTitle>Biến thể</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<ProductOptions form={form} />
+									<ProductVariant form={form} />
 								</CardContent>
 							</Card>
 							<Card className="border-0 shadow-none">
@@ -322,6 +373,46 @@ export function ProductUpdatePage() {
 													</SelectContent>
 												</Select>
 												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</CardContent>
+							</Card>
+							<Card className="shadow-none border-0">
+								<CardHeader>
+									<CardTitle>Nhóm sản phẩm</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<FormField
+										control={form.control}
+										name="collections"
+										render={({ field }) => (
+											<FormItem>
+												<FormControl>
+													<CollectionInput {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</CardContent>
+							</Card>
+							<Card className="shadow-none border-0">
+								<CardHeader>
+									<CardTitle>Nhãn</CardTitle>
+									<CardDescription>
+										Nhập và nhấn enter để thêm thẻ
+									</CardDescription>
+								</CardHeader>
+								<CardContent>
+									<FormField
+										control={form.control}
+										name="tag"
+										render={({ field }) => (
+											<FormItem>
+												<FormControl>
+													<TagInput {...field} />
+												</FormControl>
 											</FormItem>
 										)}
 									/>

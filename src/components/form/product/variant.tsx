@@ -1,28 +1,12 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusIcon, XIcon } from "lucide-react";
-import { type Ref, useEffect, useImperativeHandle } from "react";
-import {
-	type UseFormReturn,
-	useFieldArray,
-	useForm,
-	useWatch,
-} from "react-hook-form";
+import { useEffect } from "react";
+import { type UseFormReturn, useFieldArray, useWatch } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
-import z from "zod";
-import { FileInput } from "@/components/input/file";
+import { ImageInput } from "@/components/input/image";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardAction,
-	CardContent,
-	CardHeader,
-} from "@/components/ui/card";
 import {
 	FormControl,
 	FormField,
 	FormItem,
-	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -34,86 +18,11 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { OptionField } from "./options";
+import type { FormValues } from "@/pages/product/update";
 
-const schema = z.object({
-	options: z
-		.array(
-			z.object({
-				id: z.string(),
-				name: z.string().min(1, "Name is required"),
-				values: z
-					.array(
-						z.object({
-							id: z.string(),
-							name: z.string().min(1, "Value name is required"),
-						}),
-					)
-					.superRefine((values, ctx) => {
-						const seen = new Map<string, number[]>();
-						values.forEach((v, i) => {
-							const key = v.name.trim().toLowerCase();
-							if (!key) return;
-							if (seen.has(key)) {
-								seen.get(key)?.push(i);
-							} else {
-								seen.set(key, [i]);
-							}
-						});
-						for (const [_, indexes] of seen.entries()) {
-							if (indexes.length > 1) {
-								indexes.forEach((i) => {
-									ctx.addIssue({
-										code: "custom",
-										message: "This value name already exists",
-										path: [i, "name"],
-									});
-								});
-							}
-						}
-					}),
-			}),
-		)
-		.superRefine((values, ctx) => {
-			const seen = new Map<string, number[]>();
-			values.forEach((v, i) => {
-				const key = v.name.trim().toLowerCase();
-				if (!key) return;
-				if (seen.has(key)) {
-					seen.get(key)?.push(i);
-				} else {
-					seen.set(key, [i]);
-				}
-			});
-			for (const [_, indexes] of seen.entries()) {
-				if (indexes.length > 1) {
-					indexes.forEach((i) => {
-						ctx.addIssue({
-							code: "custom",
-							message: "This value name already exists",
-							path: [i, "name"],
-						});
-					});
-				}
-			}
-		}),
-	variants: z.array(
-		z.object({
-			id: z.string(),
-			price: z.number().min(0, "Price is required"),
-			sale_price: z.number(),
-			stock: z.number().min(0),
-			sku: z.string(),
-			file: z
-				.object({
-					id: z.string(),
-					url: z.string(),
-				})
-				.nullable(),
-			combos: z.string(),
-		}),
-	),
-});
+interface ProductVariantProps {
+	form: UseFormReturn<FormValues>;
+}
 
 function generateCombinations(options: { values: { name: string }[] }[]) {
 	let result: string[][] = [[]];
@@ -133,35 +42,7 @@ function generateCombinations(options: { values: { name: string }[] }[]) {
 	return result.map((combo) => combo.join(","));
 }
 
-export type ProductVariantFormValuesType = z.infer<typeof schema>;
-
-interface ProductVariantFormProps {
-	ref?: Ref<UseFormReturn<ProductVariantFormValuesType>>;
-	defaultValues?: ProductVariantFormValuesType;
-}
-
-export function ProductVariantForm({
-	ref,
-	defaultValues,
-}: ProductVariantFormProps) {
-	const form = useForm<ProductVariantFormValuesType>({
-		resolver: zodResolver(schema),
-		mode: "onChange",
-		reValidateMode: "onChange",
-		defaultValues: {
-			options: defaultValues?.options ?? [],
-			variants: defaultValues?.variants ?? [],
-		},
-	});
-
-	useImperativeHandle(ref, () => form);
-
-	const {
-		fields: optionFields,
-		append: appendOption,
-		remove: removeOption,
-	} = useFieldArray({ control: form.control, keyName: "key", name: "options" });
-
+export function ProductVariant({ form }: ProductVariantProps) {
 	const { fields: variantFields, replace: replaceVariants } = useFieldArray({
 		control: form.control,
 		name: "variants",
@@ -191,185 +72,136 @@ export function ProductVariantForm({
 		replaceVariants(newVariants);
 	}, [options, getValues, replaceVariants]);
 
+	if (!variantFields.length) return;
+
 	return (
-		<div className="space-y-4">
-			{optionFields.map((field, index) => (
-				<Card key={field.key} className="border-0 shadow-none p-0">
-					<CardHeader className="p-0">
-						<CardAction>
-							<Button
-								type="button"
-								variant="ghost"
-								size="icon"
-								onClick={() => removeOption(index)}
-							>
-								<XIcon />
-							</Button>
-						</CardAction>
-					</CardHeader>
-					<CardContent className="space-y-4 p-0">
-						<FormField
-							control={form.control}
-							name={`options.${index}.name`}
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Thuộc tính</FormLabel>
-									<FormControl>
-										<Input
-											{...field}
-											placeholder="vd: kích thước, màu sắc,..."
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<OptionField optionIndex={index} form={form} />
-					</CardContent>
-				</Card>
-			))}
-			<Button
-				variant="ghost"
-				type="button"
-				onClick={() =>
-					appendOption({
-						id: "",
-						name: "",
-						values: [{ name: "", id: "" }],
-					})
-				}
-			>
-				<PlusIcon />
-				Thêm thuộc tính khác
-			</Button>
-			<Table>
-				<TableHeader>
-					<TableRow>
-						<TableHead>Biến thể</TableHead>
-						<TableHead>Giá</TableHead>
-						<TableHead>Giá bán</TableHead>
-						<TableHead>Giảm giá</TableHead>
-						<TableHead>Tồn kho</TableHead>
-						<TableHead>SKU</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{variantFields.map((item, index) => (
-						<TableRow key={item.key}>
-							<TableCell>
-								<div className="space-y-1">
-									<FormField
-										control={form.control}
-										name={`variants.${index}.file`}
-										render={({ field }) => (
-											<FormItem>
-												<FormControl>
-													<FileInput {...field} />
-												</FormControl>
-											</FormItem>
-										)}
-									/>
-									<div className="space-x-1">
-										{item.combos.split(",").map((value) => (
-											<Badge key={value} variant="secondary">
-												{value}
-											</Badge>
-										))}
-									</div>
+		<Table>
+			<TableHeader>
+				<TableRow>
+					<TableHead>Biến thể</TableHead>
+					<TableHead>Giá</TableHead>
+					<TableHead>Giá bán</TableHead>
+					<TableHead>Giảm giá</TableHead>
+					<TableHead>Tồn kho</TableHead>
+					<TableHead>SKU</TableHead>
+				</TableRow>
+			</TableHeader>
+			<TableBody>
+				{variantFields.map((item, index) => (
+					<TableRow key={item.key}>
+						<TableCell>
+							<div className="space-y-1">
+								<FormField
+									control={form.control}
+									name={`variants.${index}.file`}
+									render={({ field }) => (
+										<FormItem>
+											<FormControl>
+												<ImageInput {...field} />
+											</FormControl>
+										</FormItem>
+									)}
+								/>
+								<div className="space-x-1">
+									{item.combos.split(",").map((value) => (
+										<Badge key={value} variant="secondary">
+											{value}
+										</Badge>
+									))}
 								</div>
-							</TableCell>
-							<TableCell>
-								<FormField
-									control={form.control}
-									name={`variants.${index}.price`}
-									render={({ field }) => (
-										<FormItem>
-											<FormControl>
-												<NumericFormat
-													className="bg-white"
-													thousandSeparator
-													prefix="đ "
-													customInput={Input}
-													inputMode="decimal"
-													value={field.value}
-													onValueChange={(values) =>
-														field.onChange(Number(values.value))
-													}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-							</TableCell>
-							<TableCell>
-								<FormField
-									control={form.control}
-									name={`variants.${index}.sale_price`}
-									render={({ field }) => (
-										<FormItem>
-											<FormControl>
-												<NumericFormat
-													className="bg-white"
-													thousandSeparator
-													prefix="đ "
-													customInput={Input}
-													inputMode="decimal"
-													value={field.value}
-													onValueChange={(values) =>
-														field.onChange(Number(values.value))
-													}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-							</TableCell>
-							<TableCell>
-								<Badge variant="secondary">-20%</Badge>
-							</TableCell>
-							<TableCell>
-								<FormField
-									control={form.control}
-									name={`variants.${index}.stock`}
-									render={({ field }) => (
-										<FormItem>
-											<FormControl>
-												<NumericFormat
-													className="bg-white"
-													thousandSeparator
-													customInput={Input}
-													inputMode="decimal"
-													value={field.value}
-													onValueChange={(values) =>
-														field.onChange(Number(values.value))
-													}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-							</TableCell>
-							<TableCell>
-								<FormField
-									control={form.control}
-									name={`variants.${index}.sku`}
-									render={({ field }) => (
-										<FormItem>
-											<FormControl>
-												<Input className="bg-white" {...field} />
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-							</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
-		</div>
+							</div>
+						</TableCell>
+						<TableCell>
+							<FormField
+								control={form.control}
+								name={`variants.${index}.price`}
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<NumericFormat
+												className="bg-white"
+												thousandSeparator
+												prefix="đ "
+												customInput={Input}
+												inputMode="decimal"
+												value={field.value}
+												onValueChange={(values) =>
+													field.onChange(Number(values.value))
+												}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</TableCell>
+						<TableCell>
+							<FormField
+								control={form.control}
+								name={`variants.${index}.sale_price`}
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<NumericFormat
+												className="bg-white"
+												thousandSeparator
+												prefix="đ "
+												customInput={Input}
+												inputMode="decimal"
+												value={field.value}
+												onValueChange={(values) =>
+													field.onChange(Number(values.value))
+												}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</TableCell>
+						<TableCell>
+							<Badge variant="secondary">-20%</Badge>
+						</TableCell>
+						<TableCell>
+							<FormField
+								control={form.control}
+								name={`variants.${index}.stock`}
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<NumericFormat
+												className="bg-white"
+												thousandSeparator
+												customInput={Input}
+												inputMode="decimal"
+												value={field.value}
+												onValueChange={(values) =>
+													field.onChange(Number(values.value))
+												}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</TableCell>
+						<TableCell>
+							<FormField
+								control={form.control}
+								name={`variants.${index}.sku`}
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<Input className="bg-white" {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</TableCell>
+					</TableRow>
+				))}
+			</TableBody>
+		</Table>
 	);
 }

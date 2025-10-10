@@ -1,3 +1,4 @@
+import z from "zod";
 import { slugify } from "@/lib/utils";
 import pocketClient from "@/pocketbase/client";
 import {
@@ -8,25 +9,47 @@ import {
 	PRODUCT_VARIANT_COLLECTION,
 } from "@/pocketbase/constants";
 
-type UpdateProductPayload = {
-	id: string;
-	info: { name: string; content?: string };
-	file: { id: string; url: string }[];
-	seo: { title: string; description: string; slug: string };
-	price: { price: number; sale_price: number };
-	tags: { name: string }[];
-	status: "active" | "draft";
-	options: { name: string; values: { name: string }[] }[];
-	variants: {
-		price: number;
-		sale_price: number;
-		stock: number;
-		sku: string;
-		file: { id: string; url: string } | null;
-		combos: string;
-	}[];
-	collections: { id: string; name: string }[];
-};
+const schema = z.object({
+	id: z.string(),
+	name: z.string(),
+	content: z.union([z.string(), z.record(z.string(), z.any()), z.null()]),
+	file: z.array(z.object({ id: z.string(), url: z.string() })),
+	price: z.number(),
+	sale_price: z.number(),
+	slug: z.string(),
+	seo: z.object({
+		title: z.string(),
+		description: z.string(),
+	}),
+	status: z.enum(["active", "draft"]),
+	tag: z.string(),
+	options: z.array(
+		z.object({
+			id: z.string(),
+			name: z.string().min(1, "Name is required"),
+			values: z.array(
+				z.object({
+					id: z.string(),
+					name: z.string().min(1, "Value name is required"),
+				}),
+			),
+		}),
+	),
+	variants: z.array(
+		z.object({
+			id: z.string(),
+			price: z.number(),
+			sale_price: z.number(),
+			stock: z.number(),
+			sku: z.string(),
+			combos: z.string(),
+			file: z.object({ id: z.string(), url: z.string() }).nullable(),
+		}),
+	),
+	collections: z.array(z.object({ id: z.string(), name: z.string() })),
+});
+
+type UpdateProductPayload = z.infer<typeof schema>;
 
 export async function updateProductHander(values: UpdateProductPayload) {
 	const options = await pocketClient
@@ -107,17 +130,18 @@ export async function updateProductHander(values: UpdateProductPayload) {
 	}
 
 	return pocketClient.collection(PRODUCT_COLLECTION).update(values.id, {
-		name: values.info.name,
-		content: values.info.content ? JSON.parse(values.info.content) : null,
+		name: values.name,
+		content: values.content,
 		status: values.status,
-		price: values.price.price,
-		sale_price: values.price.sale_price,
-		slug: values.seo.slug ?? slugify(values.info.name),
+		price: values.price,
+		sale_price: values.sale_price,
+		slug: values.slug ?? slugify(values.name),
 		seo: {
 			title: values.seo.title,
 			description: values.seo.description,
 		},
-		file: values.file.map((f) => f.id),
-		tag: values.tags.map((t) => t.name).join(","),
+		thumbnail: values.file?.[0]?.id,
+		file: values.file?.map((f) => f?.id),
+		tag: values.tag,
 	});
 }

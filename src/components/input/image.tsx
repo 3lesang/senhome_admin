@@ -3,14 +3,16 @@ import { useState } from "react";
 import { FileDialog } from "@/components/dialog/file";
 import { Button } from "@/components/ui/button";
 
-interface FileInputProps {
-	value: { id: string; url: string } | null;
+interface ImageInputProps {
+	value?: { id: string; url: string } | null;
 	onChange?: (data: { id: string; url: string } | null) => void;
 }
 
-export function FileInput({ value, onChange }: FileInputProps) {
+export function ImageInput({ value, onChange }: ImageInputProps) {
 	const [open, setOpen] = useState(false);
-	const [file, setFile] = useState<{ id: string; url: string } | null>(value);
+	const [file, setFile] = useState<
+		{ id: string; url: string } | null | undefined
+	>(value);
 
 	function handleConfirm(files: { id: string; url: string }[]) {
 		const file = files?.[0];

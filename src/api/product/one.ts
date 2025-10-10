@@ -34,6 +34,7 @@ export function productQueryOptions(id: string) {
 		},
 		select(data) {
 			return {
+				id: data.id,
 				name: data.name,
 				content: data.content,
 				slug: data.slug,
@@ -45,7 +46,7 @@ export function productQueryOptions(id: string) {
 				})),
 				seo: { title: data.seo.title, description: data.seo.description },
 				status: data.status,
-				tags: data.tag.split(",").map((t) => ({ name: t })),
+				tag: data.tag,
 			};
 		},
 	});

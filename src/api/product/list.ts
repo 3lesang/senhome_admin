@@ -7,7 +7,7 @@ type ProductDataType = {
 	name: string;
 	status: "active" | "draft";
 	expand: {
-		file: { id: string; file: string; collectionName: string }[];
+		thumbnail: { id: string; file: string; collectionName: string };
 	};
 };
 
@@ -27,8 +27,8 @@ export function getListProductQueryOptions({
 				.collection<ProductDataType>(PRODUCT_COLLECTION)
 				.getList(page, limit, {
 					filter: query,
-					fields: "id,name,file,expand,status",
-					expand: "file",
+					fields: "id,name,file,status,expand",
+					expand: "thumbnail",
 					sort: "-created",
 				});
 		},

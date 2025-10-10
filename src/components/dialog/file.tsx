@@ -1,6 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { type ReactNode, useEffect } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { type ReactNode, useEffect, useState } from "react";
 import { useIntersectionObserver } from "usehooks-ts";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,7 +14,6 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Spinner } from "@/components/ui/spinner";
 import { convertToFileUrl } from "@/lib/utils";
 import pocketClient from "@/pocketbase/client";
@@ -30,10 +28,6 @@ interface FileDialogProps {
 	children?: ReactNode;
 }
 
-type FormType = {
-	files: { id: string; url: string }[];
-};
-
 export function FileDialog({
 	value,
 	open,
@@ -42,16 +36,8 @@ export function FileDialog({
 	multiple,
 	children,
 }: FileDialogProps) {
-	const form = useForm<FormType>({
-		defaultValues: { files: value },
-		values: open ? { files: value } : undefined,
-	});
-
-	const { append, remove, replace, fields } = useFieldArray({
-		control: form.control,
-		name: "files",
-		keyName: "key",
-	});
+	const [selectedFiles, setSelectedFiles] =
+		useState<{ id: string; url: string }[]>(value);
 
 	const { isIntersecting, ref } = useIntersectionObserver({ threshold: 0.5 });
 
@@ -68,16 +54,39 @@ export function FileDialog({
 			lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
 	});
 
-	const handleConfirm = () => {
-		onConfirm?.(form.getValues("files"));
-	};
+	const isSelected = (id: string) => selectedFiles.some((f) => f.id === id);
 
-	const handleCancel = () => {
-		form.reset({ files: [] });
-	};
+	function handleToggle(item: {
+		id: string;
+		collectionName: string;
+		file: string;
+	}) {
+		const fileObj = { id: item.id, url: convertToFileUrl(item) ?? "" };
 
-	const isSelected = (id: string) =>
-		form.getValues("files").some((f) => f.id === id);
+		setSelectedFiles((prev) => {
+			const exists = prev.some((f) => f.id === item.id);
+
+			if (multiple) {
+				if (exists) return prev.filter((f) => f.id !== item.id);
+				return [...prev, fileObj];
+			}
+
+			if (exists) return [];
+			return [fileObj];
+		});
+	}
+
+	function handleConfirm() {
+		onConfirm?.(selectedFiles);
+	}
+
+	function handleCancel() {
+		setSelectedFiles([]);
+	}
+
+	useEffect(() => {
+		setSelectedFiles(value);
+	}, [value]);
 
 	useEffect(() => {
 		if (isIntersecting && !isFetchingNextPage) {
@@ -85,105 +94,43 @@ export function FileDialog({
 		}
 	}, [isIntersecting, isFetchingNextPage, fetchNextPage]);
 
-	const renderFileItem = (item: {
-		id: string;
-		collectionName: string;
-		file: string;
-	}) => {
-		const selected = isSelected(item.id);
-
-		if (!multiple) {
-			return (
-				<Label
-					key={item.id}
-					className="aspect-square bg-neutral-50 relative rounded-md overflow-hidden border cursor-pointer"
-				>
-					<img
-						src={convertToFileUrl(item)}
-						alt=""
-						className="object-contain h-full w-full"
-					/>
-					<RadioGroupItem
-						value={item.id}
-						className="absolute top-1 right-1 bg-white"
-					/>
-				</Label>
-			);
-		}
-
-		return (
-			<Label
-				key={item.id}
-				className="aspect-square bg-neutral-50 relative rounded-md overflow-hidden border cursor-pointer"
-			>
-				<img
-					src={convertToFileUrl(item)}
-					alt=""
-					className="object-contain h-full w-full"
-				/>
-				<Checkbox
-					defaultChecked={selected}
-					onCheckedChange={(checked) => {
-						const current = form.getValues("files");
-						const index = current.findIndex((f) => f.id === item.id);
-
-						if (checked) {
-							if (index === -1)
-								append({
-									id: item.id,
-									url: convertToFileUrl(item) ?? "",
-								});
-						} else if (index !== -1) {
-							remove(index);
-						}
-					}}
-					className="absolute top-1 right-1 bg-white"
-				/>
-			</Label>
-		);
-	};
-
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			{children && <DialogTrigger asChild>{children}</DialogTrigger>}
+
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Chọn tệp</DialogTitle>
-					<DialogDescription></DialogDescription>
+					<DialogDescription />
 				</DialogHeader>
 
 				<div className="max-h-96 overflow-scroll">
-					{multiple ? (
-						<div className="grid grid-cols-5 gap-1 min-h-96">
-							{data?.pages.flatMap((page) =>
-								page.items.map((item) => renderFileItem(item)),
-							)}
-						</div>
-					) : (
-						<RadioGroup
-							value={form.getValues("files")[0]?.id ?? ""}
-							onValueChange={(id) => {
-								const item = data?.pages
-									.flatMap((p) => p.items)
-									.find((it) => it.id === id);
-								if (item) {
-									replace([
-										{
-											id: item.id,
-											url: convertToFileUrl(item) ?? "",
-										},
-									]);
-								}
-							}}
-							className="grid grid-cols-5 gap-1 min-h-96"
-						>
-							{data?.pages.flatMap((page) =>
-								page.items.map((item) => renderFileItem(item)),
-							)}
-						</RadioGroup>
-					)}
+					<div className="grid grid-cols-5 gap-1 min-h-96">
+						{data?.pages.flatMap((page) =>
+							page.items.map((item) => {
+								const selected = isSelected(item.id);
+								return (
+									<Label
+										key={item.id}
+										className="aspect-square bg-neutral-50 relative rounded-md overflow-hidden border cursor-pointer"
+									>
+										<img
+											src={convertToFileUrl(item)}
+											alt=""
+											className="object-contain h-full w-full"
+										/>
+										<Checkbox
+											checked={selected}
+											onCheckedChange={() => handleToggle(item)}
+											className="absolute top-1 right-1 bg-white"
+										/>
+									</Label>
+								);
+							}),
+						)}
+					</div>
 
-					<div ref={ref} className="flex justify-center items-center h-8">
+					<div ref={ref} className="flex justify-center items-center h-16">
 						{isFetchingNextPage && <Spinner />}
 					</div>
 				</div>
@@ -198,7 +145,7 @@ export function FileDialog({
 						<Button
 							type="button"
 							onClick={handleConfirm}
-							disabled={fields.length === 0}
+							disabled={selectedFiles.length === 0}
 						>
 							Xác nhận
 						</Button>

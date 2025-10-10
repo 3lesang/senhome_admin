@@ -201,7 +201,7 @@ export function ProductListPage() {
 													<div className="flex items-center gap-2">
 														<Avatar className="rounded">
 															<AvatarImage
-																src={convertToFileUrl(item.expand.file?.[0])}
+																src={convertToFileUrl(item.expand.thumbnail)}
 															/>
 															<AvatarFallback className="rounded" />
 														</Avatar>
