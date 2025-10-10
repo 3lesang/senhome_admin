@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
 import z from "zod";
-import { createProductHandler } from "@/api/product/mutation/create";
+import { createProductHandler } from "@/api/product/create";
 import { TextEditor } from "@/components/input/editor";
 import { Button } from "@/components/ui/button";
 import {

@@ -1,12 +1,12 @@
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { EditIcon, ListFilterIcon, SearchIcon, TrashIcon } from "lucide-react";
-import { deleteMenusHandler } from "@/api/menu/mutation/delete";
-import { getListMenuQueryOptions } from "@/api/menu/query/list";
+import { deleteMenusHandler } from "@/api/menu/delete";
+import { getListMenuQueryOptions } from "@/api/menu/list";
 import TablePagination, {
 	type TablePaginationDataChange,
 } from "@/components/table/pagination";
-import TableTabs from "@/components/table/tabs";
+import { TabsButton } from "@/components/table/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -37,10 +37,10 @@ import { cn } from "@/lib/utils";
 
 export function MenuListPage() {
 	const navigate = useNavigate();
-	const { page, limit, q } = useSearch({ from: "/(app)/store/menus/" });
+	const { page, limit, query } = useSearch({ from: "/(app)/store/menus/" });
 
 	const { data, refetch } = useSuspenseQuery(
-		getListMenuQueryOptions({ page, limit, query: q }),
+		getListMenuQueryOptions({ page, limit, query: query }),
 	);
 
 	const { mutate } = useMutation({
@@ -54,11 +54,11 @@ export function MenuListPage() {
 		limit,
 		page,
 	}: TablePaginationDataChange) => {
-		navigate({ to: "/store/menus", search: { page, limit, q } });
+		navigate({ to: "/store/menus", search: { page, limit, query } });
 	};
 
-	const handleTabChange = (q: string) => {
-		navigate({ to: "/store/menus", search: { page: 1, limit: limit, q } });
+	const handleTabChange = (query: string) => {
+		navigate({ to: "/store/menus", search: { page: 1, limit: limit, query } });
 	};
 
 	const handleDelete = (id: string) => {
@@ -84,9 +84,9 @@ export function MenuListPage() {
 				<Card className="shadow-none border-0">
 					<CardHeader>
 						<CardTitle>
-							<TableTabs
-								data={[{ label: "Tất cả", q: "" }]}
-								q=""
+							<TabsButton
+								tabs={[{ label: "Tất cả", value: "" }]}
+								value=""
 								onChange={handleTabChange}
 							/>
 						</CardTitle>

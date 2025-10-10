@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
-import { createStorePageHandler } from "@/api/page/mutation/create";
+import { createStorePageHandler } from "@/api/page/create";
 import type { StorePageFormValuesType } from "@/components/form/store/page";
 import StorePageForm from "@/components/form/store/page";
 import { Button } from "@/components/ui/button";

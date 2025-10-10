@@ -1,11 +1,11 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { InfoIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
-import { getListFileQueryOptions } from "@/api/file/query/list";
+import { getListFileQueryOptions } from "@/api/file/list";
 import TablePagination, {
 	type TablePaginationDataChange,
 } from "@/components/table/pagination";
-import TableTabs from "@/components/table/tabs";
+import { TabsButton } from "@/components/table/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,13 +25,11 @@ import {
 } from "@/components/ui/context-menu";
 import { convertToFileUrl } from "@/lib/utils";
 
-const tabs = [{ label: "Tất cả file", q: "" }];
-
 export function FileListPage() {
 	const navigate = useNavigate();
-	const { page, limit, q } = useSearch({ from: "/(app)/content/files/" });
+	const { page, limit, query } = useSearch({ from: "/(app)/content/files/" });
 	const { data } = useSuspenseQuery(
-		getListFileQueryOptions({ page, limit, query: q }),
+		getListFileQueryOptions({ page, limit, query }),
 	);
 
 	const handlePaginationChange = ({
@@ -41,8 +39,11 @@ export function FileListPage() {
 		navigate({ to: "/content/files", search: { page: page, limit: limit } });
 	};
 
-	const handleTabChange = (q: string) => {
-		navigate({ to: "/content/files", search: { page: 1, limit: limit, q } });
+	const handleTabChange = (query: string) => {
+		navigate({
+			to: "/content/files",
+			search: { page: 1, limit: limit, query },
+		});
 	};
 
 	return (
@@ -59,7 +60,11 @@ export function FileListPage() {
 				<Card className="border-0 shadow-none">
 					<CardHeader>
 						<CardTitle>
-							<TableTabs data={tabs} q={q} onChange={handleTabChange} />
+							<TabsButton
+								tabs={[{ label: "Tất cả file", value: "" }]}
+								value={query}
+								onChange={handleTabChange}
+							/>
 						</CardTitle>
 						<CardDescription>
 							<Badge variant="secondary">{data?.totalItems} file</Badge>
@@ -73,36 +78,34 @@ export function FileListPage() {
 							</Button>
 						</CardAction>
 					</CardHeader>
-					<CardContent>
-						<div className="grid grid-cols-10 gap-1">
-							{data?.items?.map((item) => (
-								<ContextMenu key={item.id}>
-									<ContextMenuTrigger>
-										<div className="rounded-md border overflow-hidden bg-neutral-50">
-											<img
-												src={convertToFileUrl(item)}
-												width={100}
-												height={100}
-												className="object-contain aspect-square w-full select-none"
-												aria-label="image"
-												loading="lazy"
-												alt=""
-											/>
-										</div>
-									</ContextMenuTrigger>
-									<ContextMenuContent>
-										<ContextMenuItem>
-											<InfoIcon />
-											Xem chi tiết
-										</ContextMenuItem>
-										<ContextMenuItem>
-											<Trash2Icon />
-											Xóa
-										</ContextMenuItem>
-									</ContextMenuContent>
-								</ContextMenu>
-							))}
-						</div>
+					<CardContent className="grid grid-cols-10 gap-1">
+						{data?.items?.map((item) => (
+							<ContextMenu key={item.id}>
+								<ContextMenuTrigger>
+									<div className="rounded-md border overflow-hidden bg-neutral-50">
+										<img
+											src={convertToFileUrl(item)}
+											width={100}
+											height={100}
+											className="object-contain aspect-square w-full select-none"
+											aria-label="image"
+											loading="lazy"
+											alt=""
+										/>
+									</div>
+								</ContextMenuTrigger>
+								<ContextMenuContent>
+									<ContextMenuItem>
+										<InfoIcon />
+										Xem chi tiết
+									</ContextMenuItem>
+									<ContextMenuItem>
+										<Trash2Icon />
+										Xóa
+									</ContextMenuItem>
+								</ContextMenuContent>
+							</ContextMenu>
+						))}
 					</CardContent>
 					<CardFooter>
 						<TablePagination

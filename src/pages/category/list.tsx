@@ -2,11 +2,11 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { format } from "timeago.js";
-import { getListCategoryQueryOptions } from "@/api/category/query/list";
+import { getListCategoryQueryOptions } from "@/api/category/list";
 import TablePagination, {
 	type TablePaginationDataChange,
 } from "@/components/table/pagination";
-import TableTabs from "@/components/table/tabs";
+import { TabsButton } from "@/components/table/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,21 +36,21 @@ import {
 
 export function CategoryListPage() {
 	const navigate = useNavigate();
-	const { page, limit, q } = useSearch({ from: "/(app)/categories/" });
+	const { page, limit, query } = useSearch({ from: "/(app)/categories/" });
 
 	const { data } = useSuspenseQuery(
-		getListCategoryQueryOptions({ page, limit, query: q }),
+		getListCategoryQueryOptions({ page, limit, query }),
 	);
 
 	const handlePaginationChange = ({
 		limit,
 		page,
 	}: TablePaginationDataChange) => {
-		navigate({ to: "/products", search: { page: page, limit: limit } });
+		navigate({ to: "/products", search: { page, limit } });
 	};
 
-	const handleTabChange = (q: string) => {
-		navigate({ to: "/products", search: { page: 1, limit: limit, q } });
+	const handleTabChange = (query: string) => {
+		navigate({ to: "/products", search: { page: 1, limit, query } });
 	};
 
 	return (
@@ -66,9 +66,9 @@ export function CategoryListPage() {
 				<Card className="border-0 shadow-none">
 					<CardHeader>
 						<CardTitle>
-							<TableTabs
-								data={[{ label: "Tất cả danh mục", q: "" }]}
-								q={q}
+							<TabsButton
+								tabs={[{ label: "Tất cả danh mục", value: "" }]}
+								value={query}
 								onChange={handleTabChange}
 							/>
 						</CardTitle>

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getOneCollectionQueryOptions } from "@/api/collection/query/one";
+import { getOneCollectionQueryOptions } from "@/api/collection/one";
 import { CollectionUpdatePage } from "@/pages/collection/update";
 
 export const Route = createFileRoute("/(app)/products/collections/$id")({

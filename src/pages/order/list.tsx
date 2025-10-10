@@ -2,11 +2,11 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { format } from "timeago.js";
-import { getListOrderQueryOptions } from "@/api/order/query/list";
+import { getListOrderQueryOptions } from "@/api/order/list";
 import TablePagination, {
 	type TablePaginationDataChange,
 } from "@/components/table/pagination";
-import TableTabs, { type TableTableDataType } from "@/components/table/tabs";
+import { TabsButton } from "@/components/table/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -41,30 +41,23 @@ import {
 } from "@/components/ui/table";
 import { formatVND } from "@/lib/utils";
 
-const tabs: TableTableDataType[] = [
-	{ label: "Tất cả đơn hàng", q: "" },
-	{ label: "Đơn hàng mới", q: `status="created"` },
-	{ label: "Chưa giao hàng", q: `status="completed"` },
-	{ label: "Chưa thanh toán", q: `status="canceled"` },
-];
-
 export function OrderListPage() {
 	const navigate = useNavigate();
-	const { page, limit, q } = useSearch({ from: "/(app)/orders/" });
+	const { page, limit, query } = useSearch({ from: "/(app)/orders/" });
 
 	const { data } = useSuspenseQuery(
-		getListOrderQueryOptions({ page, limit, query: q }),
+		getListOrderQueryOptions({ page, limit, query }),
 	);
 
 	const handlePaginationChange = ({
 		limit,
 		page,
 	}: TablePaginationDataChange) => {
-		navigate({ to: "/orders", search: { page, limit, q } });
+		navigate({ to: "/orders", search: { page, limit, query } });
 	};
 
-	const handleTabChange = (q: string) => {
-		navigate({ to: "/orders", search: { page: 1, limit: limit, q } });
+	const handleTabChange = (query: string) => {
+		navigate({ to: "/orders", search: { page: 1, limit: limit, query } });
 	};
 
 	return (
@@ -81,7 +74,16 @@ export function OrderListPage() {
 				<Card className="border-0 shadow-none">
 					<CardHeader>
 						<CardTitle>
-							<TableTabs data={tabs} q={q} onChange={handleTabChange} />
+							<TabsButton
+								tabs={[
+									{ label: "Tất cả đơn hàng", value: "" },
+									{ label: "Đơn hàng mới", value: `status="created"` },
+									{ label: "Chưa giao hàng", value: `status="completed"` },
+									{ label: "Chưa thanh toán", value: `status="canceled"` },
+								]}
+								value={query}
+								onChange={handleTabChange}
+							/>
 						</CardTitle>
 						<CardDescription>
 							<Badge variant="secondary">{data.totalItems} đơn hàng</Badge>

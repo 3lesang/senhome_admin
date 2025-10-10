@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
-import { createMenuHandler } from "@/api/menu/mutation/create";
+import { createMenuHandler } from "@/api/menu/create";
 import type { MenuFormValuesType } from "@/components/form/menu";
 import MenuForm from "@/components/form/menu";
 import { Button } from "@/components/ui/button";

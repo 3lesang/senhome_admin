@@ -2,11 +2,11 @@ import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { format } from "timeago.js";
-import { deleteStorePagesHandler } from "@/api/page/mutation/delete";
-import { getStorePagesQueryOptions } from "@/api/page/query/list";
+import { deleteStorePagesHandler } from "@/api/page/delete";
+import { getStorePagesQueryOptions } from "@/api/page/list";
 import type { TablePaginationDataChange } from "@/components/table/pagination";
 import TablePagination from "@/components/table/pagination";
-import TableTabs from "@/components/table/tabs";
+import { TabsButton } from "@/components/table/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -35,14 +35,12 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
-const tabs = [{ label: "Tất cả", q: "" }];
-
 export function PageStoreListPage() {
 	const navigate = useNavigate();
-	const { page, limit, q } = useSearch({ from: "/(app)/store/pages/" });
+	const { page, limit, query } = useSearch({ from: "/(app)/store/pages/" });
 
 	const { data, refetch } = useSuspenseQuery(
-		getStorePagesQueryOptions({ page, limit, query: q }),
+		getStorePagesQueryOptions({ page, limit, query }),
 	);
 
 	const { mutate } = useMutation({
@@ -59,8 +57,8 @@ export function PageStoreListPage() {
 		navigate({ to: "/store/pages", search: { page: page, limit: limit } });
 	};
 
-	const handleTabChange = (q: string) => {
-		navigate({ to: "/store/pages", search: { page: 1, limit: limit, q } });
+	const handleTabChange = (query: string) => {
+		navigate({ to: "/store/pages", search: { page: 1, limit: limit, query } });
 	};
 
 	const handleDelete = (id: string) => {
@@ -84,7 +82,11 @@ export function PageStoreListPage() {
 				<Card className="border-0 shadow-none">
 					<CardHeader>
 						<CardTitle>
-							<TableTabs data={tabs} onChange={handleTabChange} q={q} />
+							<TabsButton
+								tabs={[{ label: "Tất cả", value: "" }]}
+								onChange={handleTabChange}
+								value={query}
+							/>
 						</CardTitle>
 						<CardDescription>
 							<Badge variant="secondary">{data.totalItems} trang</Badge>

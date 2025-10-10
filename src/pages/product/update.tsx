@@ -6,11 +6,11 @@ import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
 import z from "zod";
-import { getCollectionsProductQueryOptions } from "@/api/collection/query/list";
-import { getOptionsProductQueryOptions } from "@/api/option/query/list";
-import { updateProductHander } from "@/api/product/mutation/update";
-import { productQueryOptions } from "@/api/product/query/one";
-import { getVariantsProductQueryOptions } from "@/api/variant/query/list";
+import { getCollectionsProductQueryOptions } from "@/api/collection/list";
+import { getOptionsProductQueryOptions } from "@/api/option/list";
+import { productQueryOptions } from "@/api/product/one";
+import { updateProductHander } from "@/api/product/update";
+import { getVariantsProductQueryOptions } from "@/api/variant/list";
 import { TextEditor } from "@/components/input/editor";
 import { Button } from "@/components/ui/button";
 import {

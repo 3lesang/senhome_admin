@@ -1,7 +1,7 @@
 import type { CheckedState } from "@radix-ui/react-checkbox";
 import { useQuery } from "@tanstack/react-query";
 import { type ReactNode, useState } from "react";
-import { getListProductQueryOptions } from "@/api/product/query/list";
+import { getListProductQueryOptions } from "@/api/product/list";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";

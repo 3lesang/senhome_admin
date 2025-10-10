@@ -2,12 +2,12 @@ import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { format } from "timeago.js";
-import { deleteCollectionsHandler } from "@/api/collection/mutation/delete";
-import { getCollectionsQueryOptions } from "@/api/collection/query/list";
+import { deleteCollectionsHandler } from "@/api/collection/delete";
+import { getCollectionsQueryOptions } from "@/api/collection/list";
 import TablePagination, {
 	type TablePaginationDataChange,
 } from "@/components/table/pagination";
-import TableTabs from "@/components/table/tabs";
+import { TabsButton } from "@/components/table/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -38,12 +38,12 @@ import { cn } from "@/lib/utils";
 
 export function CollectionListPage() {
 	const navigate = useNavigate();
-	const { page, limit, q } = useSearch({
+	const { page, limit, query } = useSearch({
 		from: "/(app)/products/collections/",
 	});
 
 	const { data, refetch } = useSuspenseQuery(
-		getCollectionsQueryOptions({ page, limit, query: q }),
+		getCollectionsQueryOptions({ page, limit, query }),
 	);
 
 	const { mutate } = useMutation({
@@ -63,10 +63,10 @@ export function CollectionListPage() {
 		});
 	};
 
-	const handleTabChange = (q: string) => {
+	const handleTabChange = (query: string) => {
 		navigate({
 			to: "/products/collections",
-			search: { page: 1, limit: limit, q },
+			search: { page: 1, limit: limit, query },
 		});
 	};
 
@@ -95,10 +95,10 @@ export function CollectionListPage() {
 				<Card className="border-0 shadow-none">
 					<CardHeader>
 						<CardTitle>
-							<TableTabs
-								data={[{ label: "Tất cả", q: "" }]}
+							<TabsButton
+								tabs={[{ label: "Tất cả", value: "" }]}
 								onChange={handleTabChange}
-								q={q}
+								value={query}
 							/>
 						</CardTitle>
 						<CardDescription>

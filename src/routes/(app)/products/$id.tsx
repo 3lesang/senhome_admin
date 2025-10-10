@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getCollectionsProductQueryOptions } from "@/api/collection/query/list";
-import { getOptionsProductQueryOptions } from "@/api/option/query/list";
-import { productQueryOptions } from "@/api/product/query/one";
-import { getVariantsProductQueryOptions } from "@/api/variant/query/list";
+import { getCollectionsProductQueryOptions } from "@/api/collection/list";
+import { getOptionsProductQueryOptions } from "@/api/option/list";
+import { productQueryOptions } from "@/api/product/one";
+import { getVariantsProductQueryOptions } from "@/api/variant/list";
 import { ProductUpdatePage } from "@/pages/product/update";
 
 export const Route = createFileRoute("/(app)/products/$id")({

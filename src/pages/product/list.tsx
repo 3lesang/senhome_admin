@@ -2,12 +2,12 @@ import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
-import { deleteProductsHandler } from "@/api/product/mutation/delete";
-import { getListProductQueryOptions } from "@/api/product/query/list";
+import { deleteProductsHandler } from "@/api/product/delete";
+import { getListProductQueryOptions } from "@/api/product/list";
 import TablePagination, {
 	type TablePaginationDataChange,
 } from "@/components/table/pagination";
-import TableTabs from "@/components/table/tabs";
+import { TabsButton } from "@/components/table/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -38,11 +38,9 @@ import {
 } from "@/components/ui/table";
 import { cn, convertToFileUrl } from "@/lib/utils";
 
-const tabs = [
-	{ label: "Tất cả sản phẩm", q: "" },
-	{ label: "Đang hoạt động", q: `status="active"` },
-	{ label: "Bản nháp", q: `status="draft"` },
-];
+type FormValues = {
+	ids: { value: string }[];
+};
 
 function getStatusLabel(status: "active" | "draft") {
 	return {
@@ -51,13 +49,9 @@ function getStatusLabel(status: "active" | "draft") {
 	}[status];
 }
 
-type FormValues = {
-	ids: { value: string }[];
-};
-
 export function ProductListPage() {
 	const navigate = useNavigate();
-	const { page, limit, q } = useSearch({ from: "/(app)/products/" });
+	const { page, limit, query } = useSearch({ from: "/(app)/products/" });
 
 	const form = useForm<FormValues>({
 		defaultValues: { ids: [] },
@@ -72,7 +66,7 @@ export function ProductListPage() {
 	const selectedIds = useWatch({ control, name: "ids" });
 
 	const { data, refetch } = useSuspenseQuery(
-		getListProductQueryOptions({ page, limit, query: q }),
+		getListProductQueryOptions({ page, limit, query }),
 	);
 
 	const { mutate, isPending } = useMutation({
@@ -90,8 +84,8 @@ export function ProductListPage() {
 		navigate({ to: "/products", search: { page, limit } });
 	};
 
-	const handleTabChange = (q: string) => {
-		navigate({ to: "/products", search: { page: 1, limit, q } });
+	const handleTabChange = (query: string) => {
+		navigate({ to: "/products", search: { page: 1, limit, query } });
 	};
 
 	const toggleSelect = (id: string, checked: boolean) => {
@@ -126,7 +120,15 @@ export function ProductListPage() {
 				<Card className="border-0 shadow-none">
 					<CardHeader>
 						<CardTitle>
-							<TableTabs data={tabs} onChange={handleTabChange} q={q} />
+							<TabsButton
+								tabs={[
+									{ label: "Tất cả sản phẩm", value: "" },
+									{ label: "Đang hoạt động", value: `status="active"` },
+									{ label: "Bản nháp", value: `status="draft"` },
+								]}
+								onChange={handleTabChange}
+								value={query}
+							/>
 						</CardTitle>
 						<CardDescription>
 							<Badge variant="secondary">{data.totalItems} sản phẩm</Badge>

@@ -2,42 +2,31 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export type TableTableDataType = {
-	label: string;
-	q: string;
-};
-
-interface ProductTabsProps {
-	onChange?: (q: string) => void;
-	data: TableTableDataType[];
-	q: string;
+interface TabsButtonProps {
+	onChange?: (value: string) => void;
+	tabs: { label: string; value: string }[];
+	value: string;
 }
 
-export default function TableTabs({ onChange, data, q }: ProductTabsProps) {
-	const [query, setQuery] = useState(q);
-
-	const handleClick = (q: string) => {
-		setQuery(q);
-		onChange?.(q);
-	};
-
-	const checkActive = (q: string) => {
-		return query === q;
-	};
+export function TabsButton({ onChange, tabs, value }: TabsButtonProps) {
+	const [tab, setTab] = useState(value);
 
 	useEffect(() => {
-		setQuery(q);
-	}, [q]);
+		setTab(value);
+	}, [value]);
 
 	return (
 		<div className="flex items-center gap-2">
-			{data.map((item) => (
+			{tabs.map((item) => (
 				<Button
-					key={item.q}
+					key={item.value}
 					type="button"
 					variant="ghost"
-					onClick={() => handleClick(item.q)}
-					className={cn(checkActive(item.q) && "bg-gray-100")}
+					onClick={() => {
+						setTab(value);
+						onChange?.(value);
+					}}
+					className={cn(item.value === tab && "bg-gray-100")}
 				>
 					{item.label}
 				</Button>

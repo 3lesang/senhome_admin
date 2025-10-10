@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { signInHandler } from "@/api/auth/mutation/signin";
+import { signInHandler } from "@/api/auth/signin";
 import { Button } from "@/components/ui/button";
 import {
 	Card,

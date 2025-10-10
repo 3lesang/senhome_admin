@@ -4,7 +4,7 @@ import { ImagePlusIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { createCollectionHander } from "@/api/collection/mutation/create";
+import { createCollectionHander } from "@/api/collection/create";
 import { FileDialog } from "@/components/dialog/file";
 import { TextEditor } from "@/components/input/editor";
 import ScheduleInput from "@/components/input/schedule";
