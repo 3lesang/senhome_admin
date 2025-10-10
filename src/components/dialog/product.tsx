@@ -104,13 +104,13 @@ export default function ListProductDialog({
 								onCheckedChange={(checked) =>
 									handleCheck(checked, {
 										id: item.id,
-										thumbnail: convertToFileUrl(item.expand.file?.[0]) ?? "",
+										thumbnail: convertToFileUrl(item.expand.thumbnail),
 										name: item.name,
 									})
 								}
 							/>
 							<Avatar className="rounded">
-								<AvatarImage src={convertToFileUrl(item.expand.file?.[0])} />
+								<AvatarImage src={convertToFileUrl(item.expand.thumbnail)} />
 								<AvatarFallback>CN</AvatarFallback>
 							</Avatar>
 							<p>{item.name}</p>
