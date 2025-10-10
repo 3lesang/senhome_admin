@@ -256,7 +256,7 @@ export function ProductUpdatePage() {
 										name="seo.title"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Tiêu đề trang</FormLabel>
+												<FormLabel>Tiêu đề</FormLabel>
 												<FormControl>
 													<Input {...field} />
 												</FormControl>
@@ -269,7 +269,7 @@ export function ProductUpdatePage() {
 										name="seo.description"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Mô tả trang</FormLabel>
+												<FormLabel>Mô tả</FormLabel>
 												<FormControl>
 													<Textarea className="resize-none" {...field} />
 												</FormControl>

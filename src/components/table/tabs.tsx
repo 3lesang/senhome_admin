@@ -23,8 +23,8 @@ export function TabsButton({ onChange, tabs, value }: TabsButtonProps) {
 					type="button"
 					variant="ghost"
 					onClick={() => {
-						setTab(value);
-						onChange?.(value);
+						onChange?.(item.value);
+						setTab(item.value);
 					}}
 					className={cn(item.value === tab && "bg-gray-100")}
 				>

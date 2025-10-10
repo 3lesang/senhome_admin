@@ -28,7 +28,7 @@ interface TreeMenuProps {
 	onChange?: (values: TreeItem[]) => void;
 }
 
-export default function TreeMenu({ value, onChange }: TreeMenuProps) {
+export function TreeMenu({ value, onChange }: TreeMenuProps) {
 	const [nodes, setNodes] = useState<TreeItem[]>(value);
 	const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
 	const [open, setOpen] = useState(false);
