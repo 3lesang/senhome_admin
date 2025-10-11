@@ -199,9 +199,10 @@ export function ProductListPage() {
 													/>
 												</TableCell>
 												<TableCell className="w-8">
-													<Avatar className="rounded">
+													<Avatar className="rounded bg-neutral-50">
 														<AvatarImage
 															src={convertToFileUrl(item.expand.thumbnail)}
+															className="object-contain"
 														/>
 														<AvatarFallback className="rounded" />
 													</Avatar>

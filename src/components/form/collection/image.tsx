@@ -45,7 +45,7 @@ export function CollectionImageInput({
 					<img
 						src={file.url}
 						alt=""
-						className="w-full h-full object-cover rounded-md"
+						className="w-full h-full object-contain rounded-md bg-neutral-50/30"
 					/>
 				</FileDialog>
 				<Button
