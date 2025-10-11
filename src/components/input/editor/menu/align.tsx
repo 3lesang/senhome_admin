@@ -4,7 +4,6 @@ import {
 	AlignJustifyIcon,
 	AlignLeftIcon,
 	AlignRightIcon,
-	ChevronDownIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,9 +17,8 @@ export function EditorAlignButton({ editor }: { editor: Editor }) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button type="button" variant="ghost" size="sm">
+				<Button type="button" variant="ghost" size="icon-sm">
 					<AlignLeftIcon />
-					<ChevronDownIcon />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="min-w-0">
@@ -28,7 +26,7 @@ export function EditorAlignButton({ editor }: { editor: Editor }) {
 					<Button
 						type="button"
 						variant="ghost"
-						size="icon"
+						size="icon-sm"
 						onClick={() => editor.chain().focus().setTextAlign("left").run()}
 					>
 						<AlignLeftIcon />
@@ -38,7 +36,7 @@ export function EditorAlignButton({ editor }: { editor: Editor }) {
 					<Button
 						type="button"
 						variant="ghost"
-						size="icon"
+						size="icon-sm"
 						onClick={() => editor.chain().focus().setTextAlign("center").run()}
 						className={
 							editor.isActive({ textAlign: "center" }) ? "is-active" : ""
@@ -51,7 +49,7 @@ export function EditorAlignButton({ editor }: { editor: Editor }) {
 					<Button
 						type="button"
 						variant="ghost"
-						size="icon"
+						size="icon-sm"
 						onClick={() => editor.chain().focus().setTextAlign("right").run()}
 						className={
 							editor.isActive({ textAlign: "right" }) ? "is-active" : ""
@@ -64,7 +62,7 @@ export function EditorAlignButton({ editor }: { editor: Editor }) {
 					<Button
 						type="button"
 						variant="ghost"
-						size="icon"
+						size="icon-sm"
 						onClick={() => editor.chain().focus().setTextAlign("justify").run()}
 						className={
 							editor.isActive({ textAlign: "justify" }) ? "is-active" : ""

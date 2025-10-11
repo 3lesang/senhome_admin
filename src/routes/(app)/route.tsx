@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import DashboardLayout from "@/components/layout/dashboard";
-import pocketClient from "@/pocketbase/client";
+import { pocketClient } from "@/pocketbase";
 
 export const Route = createFileRoute("/(app)")({
 	component: DashboardLayout,

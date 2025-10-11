@@ -1,5 +1,4 @@
 import type { Editor } from "@tiptap/react";
-import { useEditorState } from "@tiptap/react";
 import { ListIcon, ListOrderedIcon, MoreHorizontalIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,20 +9,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function EditorMoreButton({ editor }: { editor: Editor }) {
-	const editorState = useEditorState({
-		editor,
-		selector: (ctx) => {
-			return {
-				isBulletList: ctx.editor.isActive("bulletList") ?? false,
-				isOrderedList: ctx.editor.isActive("orderedList") ?? false,
-			};
-		},
-	});
-
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button type="button" variant="ghost" size="sm">
+				<Button type="button" variant="ghost" size="icon-sm">
 					<MoreHorizontalIcon />
 				</Button>
 			</DropdownMenuTrigger>
@@ -32,9 +21,8 @@ export function EditorMoreButton({ editor }: { editor: Editor }) {
 					<Button
 						type="button"
 						variant="ghost"
-						size="icon"
+						size="icon-sm"
 						onClick={() => editor.chain().focus().toggleBulletList().run()}
-						className={editorState.isBulletList ? "is-active" : ""}
 					>
 						<ListIcon />
 					</Button>
@@ -43,9 +31,8 @@ export function EditorMoreButton({ editor }: { editor: Editor }) {
 					<Button
 						type="button"
 						variant="ghost"
-						size="icon"
+						size="icon-sm"
 						onClick={() => editor.chain().focus().toggleOrderedList().run()}
-						className={editorState.isOrderedList ? "is-active" : ""}
 					>
 						<ListOrderedIcon />
 					</Button>

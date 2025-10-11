@@ -1,5 +1,4 @@
-import pocketClient from "@/pocketbase/client";
-import { PRODUCT_COLLECTION } from "@/pocketbase/constants";
+import { PRODUCT_COLLECTION, pocketClient } from "@/pocketbase";
 
 async function deleteProductsHandler(ids: string[]) {
 	const batch = pocketClient.createBatch();

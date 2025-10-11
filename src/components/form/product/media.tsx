@@ -118,23 +118,21 @@ export function MediaInput({ value, onChange }: MediaInputProps) {
 
 	if (!files.length)
 		return (
-			<Empty className="border border-dashed">
+			<Empty>
 				<EmptyHeader>
 					<EmptyMedia variant="icon">
 						<CloudIcon />
 					</EmptyMedia>
-					<EmptyTitle>Chưa có hình ảnh</EmptyTitle>
+					<EmptyTitle>Chưa có hình ảnh nào</EmptyTitle>
 					<EmptyDescription>
 						Hãy tải lên tệp để lưu trữ và truy cập chúng ở bất kỳ đâu.
 					</EmptyDescription>
 				</EmptyHeader>
 				<EmptyContent>
 					<div className="flex gap-2">
-						<Button variant="outline" size="sm">
-							Tải lên
-						</Button>
+						<Button type="button">Tải lên</Button>
 						<FileDialog value={files} multiple onConfirm={handleAdd}>
-							<Button variant="ghost" size="sm">
+							<Button type="button" variant="outline">
 								Chọn ảnh
 							</Button>
 						</FileDialog>

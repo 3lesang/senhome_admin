@@ -1,8 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-	getCollectionsProductQueryOptions,
-	getCollectionsQueryOptions,
-} from "@/api/collection/list";
+import { getCollectionsProductQueryOptions } from "@/api/collection/list";
 import { getOptionsProductQueryOptions } from "@/api/option/list";
 import { productQueryOptions } from "@/api/product/one";
 import { getVariantsProductQueryOptions } from "@/api/variant/list";
@@ -20,9 +17,6 @@ export const Route = createFileRoute("/(app)/products/$id")({
 		);
 		await context.queryClient?.ensureQueryData(
 			getCollectionsProductQueryOptions(id),
-		);
-		await context.queryClient?.ensureQueryData(
-			getCollectionsQueryOptions({ page: 1, limit: 10, query: "" }),
 		);
 		return context.queryClient?.ensureQueryData(productQueryOptions(id));
 	},

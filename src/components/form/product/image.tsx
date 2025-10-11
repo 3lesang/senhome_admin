@@ -3,12 +3,17 @@ import { useState } from "react";
 import { FileDialog } from "@/components/dialog/file";
 import { Button } from "@/components/ui/button";
 
-interface ImageInputProps {
-	value?: { id: string; url: string } | null;
-	onChange?: (data: { id: string; url: string } | null) => void;
+type FileType = {
+	id: string;
+	url: string;
+};
+
+interface VariantImageInputProps {
+	value?: FileType | null;
+	onChange?: (data: FileType | null) => void;
 }
 
-export function ImageInput({ value, onChange }: ImageInputProps) {
+export function VariantImageInput({ value, onChange }: VariantImageInputProps) {
 	const [open, setOpen] = useState(false);
 	const [file, setFile] = useState<
 		{ id: string; url: string } | null | undefined

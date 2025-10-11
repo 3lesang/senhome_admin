@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { type UseFormReturn, useFieldArray, useWatch } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
-import { ImageInput } from "@/components/input/image";
+import { VariantImageInput } from "@/components/form/product/image";
 import { Badge } from "@/components/ui/badge";
 import {
 	FormControl,
@@ -97,7 +97,7 @@ export function ProductVariant({ form }: ProductVariantProps) {
 									render={({ field }) => (
 										<FormItem>
 											<FormControl>
-												<ImageInput {...field} />
+												<VariantImageInput {...field} />
 											</FormControl>
 										</FormItem>
 									)}

@@ -1,7 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { convertToFileUrl } from "@/lib/utils";
-import pocketClient from "@/pocketbase/client";
-import { PRODUCT_COLLECTION } from "@/pocketbase/constants";
+import { PRODUCT_COLLECTION, pocketClient } from "@/pocketbase";
 
 type ProductData = {
 	id: string;

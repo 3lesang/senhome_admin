@@ -1,6 +1,5 @@
 import z from "zod";
-import pocketClient from "@/pocketbase/client";
-import { STORE_PAGE_COLLECTION } from "@/pocketbase/constants";
+import { pocketClient, STORE_PAGE_COLLECTION } from "@/pocketbase";
 
 const schema = z.object({
 	title: z.string().min(1),

@@ -1,6 +1,5 @@
-import { queryOptions } from "@tanstack/react-query";
-import pocketClient from "@/pocketbase/client";
-import { FILE_COLLECTION } from "@/pocketbase/constants";
+import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
+import { FILE_COLLECTION, pocketClient } from "@/pocketbase";
 
 type FileDataType = {
 	id: string;
@@ -24,5 +23,19 @@ export function getListFileQueryOptions({
 				.collection<FileDataType>(FILE_COLLECTION)
 				.getList(page, limit, { filter: query });
 		},
+	});
+}
+
+export function getFilesInfinityQueyrOptions() {
+	return infiniteQueryOptions({
+		queryKey: [FILE_COLLECTION],
+		queryFn: ({ pageParam }) => {
+			return pocketClient
+				.collection<FileDataType>(FILE_COLLECTION)
+				.getList(pageParam, 20, { sort: "-created" });
+		},
+		initialPageParam: 1,
+		getNextPageParam: (lastPage) =>
+			lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
 	});
 }

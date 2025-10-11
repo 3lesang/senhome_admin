@@ -1,6 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import pocketClient from "@/pocketbase/client";
-import { STORE_PAGE_COLLECTION } from "@/pocketbase/constants";
+import { pocketClient, STORE_PAGE_COLLECTION } from "@/pocketbase";
 
 type StorePageDateType = {
 	id: string;

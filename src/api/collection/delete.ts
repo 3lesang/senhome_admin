@@ -1,5 +1,4 @@
-import pocketClient from "@/pocketbase/client";
-import { COLLECTION_COLLECTION } from "@/pocketbase/constants";
+import { COLLECTION_COLLECTION, pocketClient } from "@/pocketbase";
 
 export async function deleteCollectionsHandler(ids: string[]) {
 	const batch = pocketClient.createBatch();

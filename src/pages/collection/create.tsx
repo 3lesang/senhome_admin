@@ -1,13 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { ImagePlusIcon } from "lucide-react";
+import { Activity } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 import { createCollectionHander } from "@/api/collection/create";
-import { FileDialog } from "@/components/dialog/file";
+import { CollectionConditionInput } from "@/components/form/collection/conditions";
+import { CollectionImageInput } from "@/components/form/collection/image";
+import { CollectionProductInput } from "@/components/form/collection/product";
+import ScheduleInput from "@/components/form/collection/schedule";
 import { TextEditor } from "@/components/input/editor";
-import ScheduleInput from "@/components/input/schedule";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -28,21 +30,35 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 
 const schema = z.object({
 	name: z.string().min(1, "Name is required"),
+	slug: z.string(),
 	content: z.union([z.string(), z.record(z.string(), z.any()), z.null()]),
 	type: z.enum(["manual", "smart"]),
 	file: z.object({ id: z.string(), url: z.string() }).nullable(),
 	schedule: z.date().nullable(),
-	slug: z.string(),
-	title: z.string(),
-	description: z.string(),
+	seo: z.object({
+		title: z.string(),
+		description: z.string(),
+	}),
+	conditions: z.string(),
+	layout: z.enum(["default", "hero", "home"]),
+	products: z.array(
+		z.object({ id: z.string(), name: z.string(), thumbnail: z.string() }),
+	),
 });
 
-export type FormValues = z.infer<typeof schema>;
+type FormValues = z.infer<typeof schema>;
 
 export function CollectionCreatePage() {
 	const form = useForm<FormValues>({
@@ -52,14 +68,19 @@ export function CollectionCreatePage() {
 			content: null,
 			slug: "",
 			type: "manual",
-			title: "",
-			description: "",
+			seo: {
+				title: "",
+				description: "",
+			},
 			file: null,
 			schedule: null,
+			layout: "default",
+			conditions: "",
+			products: [],
 		},
 	});
 
-	const { isPending } = useMutation({
+	const { mutate, isPending } = useMutation({
 		mutationFn: createCollectionHander,
 		onSuccess: () => {
 			toast.success("Tạo bộ sưu tập thành công");
@@ -67,7 +88,7 @@ export function CollectionCreatePage() {
 	});
 
 	function handleSubmit(values: FormValues) {
-		console.log(values);
+		mutate(values);
 	}
 
 	return (
@@ -158,6 +179,57 @@ export function CollectionCreatePage() {
 									/>
 								</CardContent>
 							</Card>
+							<Activity
+								mode={form.watch("type") === "manual" ? "visible" : "hidden"}
+							>
+								<Card className="border-0 shadow-none">
+									<CardHeader>
+										<CardTitle>Sản phẩm</CardTitle>
+										<CardDescription>
+											Thêm từng sản phẩm vào bộ sưu tập này.
+										</CardDescription>
+									</CardHeader>
+									<CardContent>
+										<FormField
+											control={form.control}
+											name="products"
+											render={({ field }) => (
+												<FormItem>
+													<FormControl>
+														<CollectionProductInput {...field} />
+													</FormControl>
+												</FormItem>
+											)}
+										/>
+									</CardContent>
+								</Card>
+							</Activity>
+							<Activity
+								mode={form.watch("type") === "smart" ? "visible" : "hidden"}
+							>
+								<Card className="border-0 shadow-none">
+									<CardHeader>
+										<CardTitle>Điều kiện</CardTitle>
+										<CardDescription>
+											Các sản phẩm sẽ được tự động đưa vào danh mục này dựa vào
+											các điều kiện bên dưới.
+										</CardDescription>
+									</CardHeader>
+									<CardContent>
+										<FormField
+											control={form.control}
+											name="conditions"
+											render={({ field }) => (
+												<FormItem>
+													<FormControl>
+														<CollectionConditionInput {...field} />
+													</FormControl>
+												</FormItem>
+											)}
+										/>
+									</CardContent>
+								</Card>
+							</Activity>
 							<Card className="border-0 shadow-none">
 								<CardHeader>
 									<CardTitle>Tối ưu SEO</CardTitle>
@@ -169,7 +241,7 @@ export function CollectionCreatePage() {
 								<CardContent className="space-y-4">
 									<FormField
 										control={form.control}
-										name="title"
+										name="seo.title"
 										render={({ field }) => (
 											<FormItem>
 												<FormLabel>Tiêu đề trang</FormLabel>
@@ -182,7 +254,7 @@ export function CollectionCreatePage() {
 									/>
 									<FormField
 										control={form.control}
-										name="description"
+										name="seo.description"
 										render={({ field }) => (
 											<FormItem>
 												<FormLabel>Mô tả trang</FormLabel>
@@ -240,18 +312,42 @@ export function CollectionCreatePage() {
 									<FormField
 										control={form.control}
 										name="file"
-										render={() => (
+										render={({ field }) => (
 											<FormItem>
 												<FormControl>
-													<FileDialog value={[]}>
-														<button
-															type="button"
-															className="flex justify-center items-center aspect-square border border-dashed bg-neutral-50/20 rounded-md hover:bg-neutral-50/30 transition-colors hover:cursor-pointer"
-														>
-															<ImagePlusIcon size={16} />
-														</button>
-													</FileDialog>
+													<CollectionImageInput {...field} />
 												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</CardContent>
+							</Card>
+							<Card className="border-0 shadow-none">
+								<CardHeader>
+									<CardTitle>Bố cục</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<FormField
+										control={form.control}
+										name="layout"
+										render={({ field }) => (
+											<FormItem>
+												<Select
+													onValueChange={field.onChange}
+													defaultValue={field.value}
+												>
+													<FormControl>
+														<SelectTrigger className="w-full">
+															<SelectValue placeholder="" />
+														</SelectTrigger>
+													</FormControl>
+													<SelectContent>
+														<SelectItem value="default">Default</SelectItem>
+														<SelectItem value="hero">Hero</SelectItem>
+														<SelectItem value="home">Home page</SelectItem>
+													</SelectContent>
+												</Select>
 												<FormMessage />
 											</FormItem>
 										)}

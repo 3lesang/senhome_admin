@@ -6,12 +6,12 @@ import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
 import z from "zod";
 import { createProductHandler } from "@/api/product/create";
+import { CollectionInput } from "@/components/form/product/collection";
+import { MediaInput } from "@/components/form/product/media";
 import { ProductOptions } from "@/components/form/product/options";
+import { TagInput } from "@/components/form/product/tag";
 import { ProductVariant } from "@/components/form/product/variant";
-import { CollectionInput } from "@/components/input/collection";
 import { TextEditor } from "@/components/input/editor";
-import { MediaInput } from "@/components/input/media";
-import { TagInput } from "@/components/input/tag";
 import { Button } from "@/components/ui/button";
 import {
 	Card,

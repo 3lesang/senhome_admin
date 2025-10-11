@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import { STORE_COLLECTION } from "@/pocketbase/constants";
+import { STORE_COLLECTION } from "@/pocketbase";
 
 export const getStoreQueryOptions = () =>
 	queryOptions({

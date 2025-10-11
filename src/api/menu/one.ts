@@ -1,6 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import pocketClient from "@/pocketbase/client";
-import { MENU_COLLECTION } from "@/pocketbase/constants";
+import { MENU_COLLECTION, pocketClient } from "@/pocketbase";
 
 type MenuDataType = {
 	id: string;

@@ -1,6 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import pocketClient from "@/pocketbase/client";
-import { ORDER_COLLECTION } from "@/pocketbase/constants";
+import { ORDER_COLLECTION, pocketClient } from "@/pocketbase";
 
 type OrderDataType = {
 	id: string;

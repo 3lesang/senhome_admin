@@ -1,13 +1,13 @@
 import z from "zod";
 import { slugify } from "@/lib/utils";
-import pocketClient from "@/pocketbase/client";
 import {
 	COLLECTION_PRODUCT_COLLECTION,
 	PRODUCT_COLLECTION,
 	PRODUCT_OPTION_COLLECTION,
 	PRODUCT_OPTION_VALUE_COLLECTION,
 	PRODUCT_VARIANT_COLLECTION,
-} from "@/pocketbase/constants";
+	pocketClient,
+} from "@/pocketbase";
 
 const schema = z.object({
 	id: z.string(),

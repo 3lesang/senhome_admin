@@ -1,7 +1,6 @@
 import type { Editor } from "@tiptap/react";
 import { LinkIcon } from "lucide-react";
-import { useId } from "react";
-import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -12,14 +11,6 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
 interface Props {
@@ -27,38 +18,16 @@ interface Props {
 }
 
 export function EditorLinkButton({ editor }: Props) {
-	const form = useForm({
-		defaultValues: {
-			url: "",
-		},
-	});
-
-	const url = form.watch("url");
-
-	const handleSubmit = (url: string) => {
-		try {
-			editor
-				.chain()
-				.focus()
-				.extendMarkRange("link")
-				.setLink({ href: url })
-				.run();
-		} catch (e) {
-			console.log(e);
-		}
-	};
-
-	const id = useId();
-
+	const [href, setHref] = useState("");
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
 				<Button
 					type="button"
 					variant="ghost"
-					size="sm"
+					size="icon-sm"
 					onClick={() => {
-						form.setValue("url", editor.getAttributes("link").href || "");
+						setHref(editor.getAttributes("link").href);
 					}}
 				>
 					<LinkIcon />
@@ -68,25 +37,10 @@ export function EditorLinkButton({ editor }: Props) {
 				<DialogHeader>
 					<DialogTitle>Chèn link</DialogTitle>
 				</DialogHeader>
-				<Form {...form}>
-					<form className="space-y-4">
-						<FormField
-							control={form.control}
-							name="url"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel htmlFor="url">Link to</FormLabel>
-									<FormControl>
-										<Input id={id} {...field} placeholder="http://" />
-									</FormControl>
-									<FormDescription>
-										Link sẽ được chèn vào nội dung đã chọn
-									</FormDescription>
-								</FormItem>
-							)}
-						/>
-					</form>
-				</Form>
+				<Input
+					placeholder="http://"
+					onChange={(e) => setHref(e.currentTarget.value)}
+				/>
 				<DialogFooter>
 					<DialogClose asChild>
 						<Button type="button" variant="outline">
@@ -94,7 +48,17 @@ export function EditorLinkButton({ editor }: Props) {
 						</Button>
 					</DialogClose>
 					<DialogClose asChild>
-						<Button type="button" onClick={() => handleSubmit(url)}>
+						<Button
+							type="button"
+							onClick={() => {
+								editor
+									.chain()
+									.focus()
+									.extendMarkRange("link")
+									.setLink({ href })
+									.run();
+							}}
+						>
 							Chèn Link
 						</Button>
 					</DialogClose>

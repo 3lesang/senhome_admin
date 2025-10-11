@@ -1,6 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import pocketClient from "@/pocketbase/client";
-import { CATEGORY_COLLECTION } from "@/pocketbase/constants";
+import { CATEGORY_COLLECTION, pocketClient } from "@/pocketbase";
 
 export function getFullListCategoryQueryOptions() {
 	return queryOptions({

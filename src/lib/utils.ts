@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import type z from "zod";
-import { API_KEY } from "@/pocketbase/client";
+import { API_KEY } from "@/pocketbase";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));

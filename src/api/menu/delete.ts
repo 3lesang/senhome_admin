@@ -1,5 +1,4 @@
-import pocketClient from "@/pocketbase/client";
-import { MENU_COLLECTION } from "@/pocketbase/constants";
+import { MENU_COLLECTION, pocketClient } from "@/pocketbase";
 
 export async function deleteMenusHandler(ids: string[]) {
 	const batch = pocketClient.createBatch();

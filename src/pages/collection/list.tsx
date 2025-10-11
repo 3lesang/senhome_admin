@@ -8,6 +8,7 @@ import TablePagination, {
 	type TablePaginationDataChange,
 } from "@/components/table/pagination";
 import { TabsButton } from "@/components/table/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -34,7 +35,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+import { cn, convertToFileUrl } from "@/lib/utils";
 
 export function CollectionListPage() {
 	const navigate = useNavigate();
@@ -116,9 +117,10 @@ export function CollectionListPage() {
 					<Table className="bg-white rounded-md">
 						<TableHeader className="bg-sidebar">
 							<TableRow>
-								<TableHead className="w-16 pl-6">
+								<TableHead className="w-16 text-center">
 									<Checkbox />
 								</TableHead>
+								<TableHead></TableHead>
 								<TableHead>Tên</TableHead>
 								<TableHead>Ngày tạo</TableHead>
 							</TableRow>
@@ -128,8 +130,16 @@ export function CollectionListPage() {
 								<ContextMenu key={item.id}>
 									<ContextMenuTrigger asChild>
 										<TableRow>
-											<TableCell className="pl-6">
+											<TableCell className="text-center">
 												<Checkbox />
+											</TableCell>
+											<TableCell className="w-8">
+												<Avatar className="rounded">
+													<AvatarImage
+														src={convertToFileUrl(item.expand.file)}
+													/>
+													<AvatarFallback className="rounded" />
+												</Avatar>
 											</TableCell>
 											<TableCell>
 												<Link

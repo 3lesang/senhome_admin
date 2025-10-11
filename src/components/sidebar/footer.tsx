@@ -19,7 +19,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import pocketClient from "@/pocketbase/client";
+import { pocketClient } from "@/pocketbase";
 
 export default function FooterSidebar() {
 	const user = {

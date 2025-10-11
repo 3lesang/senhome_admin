@@ -1,6 +1,6 @@
 import type { Editor } from "@tiptap/react";
 import { PlayIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useState } from "react";
 import VideoPlayer from "@/components/player/video";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,14 +12,6 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
 interface Props {
@@ -27,13 +19,7 @@ interface Props {
 }
 
 export function EditorVideoButton({ editor }: Props) {
-	const form = useForm({
-		defaultValues: {
-			src: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-		},
-	});
-
-	const src = form.watch("src");
+	const [src, setSrc] = useState("");
 
 	const handleAddVideo = () => {
 		editor.commands.setYoutubeVideo({
@@ -44,7 +30,7 @@ export function EditorVideoButton({ editor }: Props) {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button variant="ghost" size="sm" type="button">
+				<Button variant="ghost" size="icon-sm" type="button">
 					<PlayIcon />
 				</Button>
 			</DialogTrigger>
@@ -52,27 +38,10 @@ export function EditorVideoButton({ editor }: Props) {
 				<DialogHeader>
 					<DialogTitle>Chèn video</DialogTitle>
 				</DialogHeader>
-
-				<Form {...form}>
-					<form>
-						<FormField
-							control={form.control}
-							name="src"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Video URL</FormLabel>
-									<FormControl>
-										<Input
-											placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</form>
-				</Form>
+				<Input
+					placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+					onChange={(e) => setSrc(e.currentTarget.value)}
+				/>
 				{src && <VideoPlayer src={src} />}
 				<DialogFooter>
 					<DialogClose asChild>

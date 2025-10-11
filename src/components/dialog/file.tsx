@@ -1,6 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { type ReactNode, useEffect, useState } from "react";
 import { useIntersectionObserver } from "usehooks-ts";
+import { getFilesInfinityQueyrOptions } from "@/api/file/list";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -16,8 +17,6 @@ import {
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { convertToFileUrl } from "@/lib/utils";
-import pocketClient from "@/pocketbase/client";
-import { FILE_COLLECTION } from "@/pocketbase/constants";
 
 interface FileDialogProps {
 	open?: boolean;
@@ -41,18 +40,8 @@ export function FileDialog({
 
 	const { isIntersecting, ref } = useIntersectionObserver({ threshold: 0.5 });
 
-	const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
-		queryKey: [FILE_COLLECTION],
-		queryFn: async ({ pageParam }) =>
-			pocketClient
-				.collection<{ id: string; collectionName: string; file: string }>(
-					FILE_COLLECTION,
-				)
-				.getList(pageParam, 20, { sort: "-created" }),
-		initialPageParam: 1,
-		getNextPageParam: (lastPage) =>
-			lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
-	});
+	const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
+		useInfiniteQuery(getFilesInfinityQueyrOptions());
 
 	const isSelected = (id: string) => selectedFiles.some((f) => f.id === id);
 
@@ -129,10 +118,11 @@ export function FileDialog({
 							}),
 						)}
 					</div>
-
-					<div ref={ref} className="flex justify-center items-center h-16">
-						{isFetchingNextPage && <Spinner />}
-					</div>
+					{hasNextPage && (
+						<div ref={ref} className="flex justify-center items-center h-16">
+							{isFetchingNextPage && <Spinner />}
+						</div>
+					)}
 				</div>
 
 				<DialogFooter>

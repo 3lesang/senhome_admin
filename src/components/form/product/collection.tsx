@@ -1,5 +1,6 @@
 import type { CheckedState } from "@radix-ui/react-checkbox";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { XIcon } from "lucide-react";
 import { useState } from "react";
 import { getCollectionsQueryOptions } from "@/api/collection/list";
@@ -27,7 +28,7 @@ interface CollectionInputProps {
 export function CollectionInput({ value, onChange }: CollectionInputProps) {
 	const [selected, setSelected] = useState<Collection[]>(value ?? []);
 
-	const { data: collections } = useSuspenseQuery(
+	const { data: collections } = useQuery(
 		getCollectionsQueryOptions({ page: 1, limit: 10, query: "" }),
 	);
 
@@ -61,7 +62,7 @@ export function CollectionInput({ value, onChange }: CollectionInputProps) {
 					</Button>
 				</PopoverTrigger>
 				<PopoverContent>
-					{collections.items.map((item: Collection) => {
+					{collections?.items.map((item: Collection) => {
 						const checked = selected.some((s) => s.id === item.id);
 						return (
 							<Label
@@ -83,9 +84,11 @@ export function CollectionInput({ value, onChange }: CollectionInputProps) {
 			</Popover>
 			<div className="space-x-1">
 				{selected.map((item) => (
-					<div
+					<Link
 						key={item.id}
 						className={cn(badgeVariants({ variant: "secondary" }))}
+						to="/products/collections/$id"
+						params={{ id: item.id }}
 					>
 						{item.name}
 						<Button
@@ -96,7 +99,7 @@ export function CollectionInput({ value, onChange }: CollectionInputProps) {
 						>
 							<XIcon />
 						</Button>
-					</div>
+					</Link>
 				))}
 			</div>
 		</div>

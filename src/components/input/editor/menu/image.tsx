@@ -12,7 +12,7 @@ export function EditorImageButton({ editor }: { editor: Editor }) {
 				if (file?.id) editor.chain().focus().setImage({ src: file.url }).run();
 			}}
 		>
-			<Button type="button" variant="ghost" size="sm">
+			<Button type="button" variant="ghost" size="icon-sm">
 				<ImagePlusIcon />
 			</Button>
 		</FileDialog>

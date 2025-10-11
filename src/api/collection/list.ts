@@ -1,14 +1,15 @@
 import { queryOptions } from "@tanstack/react-query";
-import pocketClient from "@/pocketbase/client";
 import {
 	COLLECTION_COLLECTION,
 	COLLECTION_PRODUCT_COLLECTION,
-} from "@/pocketbase/constants";
+	pocketClient,
+} from "@/pocketbase";
 
 type CollectionsDataType = {
 	id: string;
 	name: string;
 	created: Date;
+	expand: { file: { id: string; collectionName: string; file: string } };
 };
 
 export function getCollectionsQueryOptions({
@@ -25,7 +26,11 @@ export function getCollectionsQueryOptions({
 		queryFn: () => {
 			return pocketClient
 				.collection<CollectionsDataType>(COLLECTION_COLLECTION)
-				.getList(page, limit, { filter: query, fields: "id,name,created" });
+				.getList(page, limit, {
+					filter: query,
+					fields: "id,name,created,expand",
+					expand: "file",
+				});
 		},
 	});
 }

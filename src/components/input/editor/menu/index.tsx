@@ -15,7 +15,7 @@ export function EditorMenu({ editor }: { editor: Editor }) {
 			<Button
 				type="button"
 				variant="ghost"
-				size="sm"
+				size="icon-sm"
 				aria-label="Toggle bold"
 				onClick={() => editor.chain().focus().toggleBold().run()}
 			>
@@ -24,7 +24,7 @@ export function EditorMenu({ editor }: { editor: Editor }) {
 			<Button
 				type="button"
 				variant="ghost"
-				size="sm"
+				size="icon-sm"
 				aria-label="Toggle italic"
 				onClick={() => editor.chain().focus().toggleItalic().run()}
 			>
@@ -33,7 +33,7 @@ export function EditorMenu({ editor }: { editor: Editor }) {
 			<Button
 				type="button"
 				variant="ghost"
-				size="sm"
+				size="icon-sm"
 				aria-label="Toggle strikethrough"
 				onClick={() => editor.chain().focus().toggleUnderline().run()}
 			>

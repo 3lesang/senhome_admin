@@ -1,9 +1,8 @@
-import type { CheckedState } from "@radix-ui/react-checkbox";
 import { useQuery } from "@tanstack/react-query";
 import { type ReactNode, useState } from "react";
 import { getListProductQueryOptions } from "@/api/product/list";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
 	Dialog,
@@ -17,116 +16,106 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { convertToFileUrl } from "@/lib/utils";
+import { cn, convertToFileUrl } from "@/lib/utils";
 
-export type ListProductDialogDataType = {
+type ProductDataType = {
 	id: string;
 	name: string;
 	thumbnail: string;
 };
 
-interface ListProductDialogProps {
-	children: ReactNode;
-	onConfirm?: (value: Record<string, ListProductDialogDataType>) => void;
+interface ProductDialogProps {
+	value?: ProductDataType[];
+	onConfirm?: (value: ProductDataType[]) => void;
+	children?: ReactNode;
 }
 
-export default function ListProductDialog({
+export function ProductDialog({
+	value: initialValue = [],
 	onConfirm,
 	children,
-}: ListProductDialogProps) {
-	const [value, setValue] = useState<Record<string, ListProductDialogDataType>>(
-		{},
-	);
+}: ProductDialogProps) {
+	const [value, setValue] = useState<ProductDataType[]>(initialValue);
+	const [query, setQuery] = useState("");
 
 	const { data } = useQuery(
-		getListProductQueryOptions({ page: 1, limit: 10, query: "" }),
+		getListProductQueryOptions({ page: 1, limit: 10, query }),
 	);
 
-	const handleCheck = (
-		checked: CheckedState,
-		data: ListProductDialogDataType,
-	) => {
-		if (checked.valueOf()) {
-			setValue((prev) => ({ ...prev, [data.id]: data }));
-		} else {
-			setValue((prev) => {
-				const { [data.id]: _, ...rest } = prev;
-				return rest;
-			});
-		}
-	};
+	function handleToggle(item: ProductDataType) {
+		setValue((prev) => {
+			const exists = prev.some((p) => p.id === item.id);
+			if (exists) return prev.filter((p) => p.id !== item.id);
+			return [...prev, item];
+		});
+	}
 
-	const handleConfirm = () => {
+	function handleConfirm() {
 		onConfirm?.(value);
-		setValue({});
-	};
+	}
 
-	const handleCancel = () => {
-		setValue({});
-	};
+	function handleCancel() {
+		setValue(initialValue);
+	}
 
 	return (
 		<Dialog>
-			<DialogTrigger asChild>{children}</DialogTrigger>
+			{children && <DialogTrigger asChild>{children}</DialogTrigger>}
+
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Chọn sản phẩm</DialogTitle>
-					<DialogDescription></DialogDescription>
+					<DialogDescription>
+						Chọn một hoặc nhiều sản phẩm từ danh sách.
+					</DialogDescription>
 				</DialogHeader>
-				<div className="flex gap-2">
-					<Input placeholder="Tìm kiếm sản phẩm"></Input>
-					<Select>
-						<SelectTrigger className="w-64">
-							<SelectValue placeholder="Sắp xếp" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="light">Light</SelectItem>
-							<SelectItem value="dark">Dark</SelectItem>
-							<SelectItem value="system">System</SelectItem>
-						</SelectContent>
-					</Select>
+
+				<Input
+					placeholder="Tìm kiếm sản phẩm..."
+					value={query}
+					onChange={(e) => setQuery(e.target.value)}
+				/>
+
+				<div className="space-y-2">
+					{data?.items?.map((item) => {
+						const selected = initialValue.some((v) => v.id === item.id);
+						const src = convertToFileUrl(item.expand.thumbnail);
+						return (
+							<Label
+								key={item.id}
+								className={cn(
+									buttonVariants({ variant: "ghost" }),
+									"w-full justify-start whitespace-normal",
+								)}
+							>
+								<Checkbox
+									defaultChecked={selected}
+									onCheckedChange={() =>
+										handleToggle({
+											id: item.id,
+											name: item.name,
+											thumbnail: src,
+										})
+									}
+								/>
+								<Avatar className="rounded-md">
+									<AvatarImage src={src} />
+									<AvatarFallback>SP</AvatarFallback>
+								</Avatar>
+								<span className="line-clamp-1">{item.name}</span>
+							</Label>
+						);
+					})}
 				</div>
-				<Separator />
-				<ScrollArea className="-mx-6 h-96">
-					{data?.items.map((item) => (
-						<Label key={item.id} className="px-6 py-3 rounded hover:bg-gray-50">
-							<Checkbox
-								id={item.id}
-								onCheckedChange={(checked) =>
-									handleCheck(checked, {
-										id: item.id,
-										thumbnail: convertToFileUrl(item.expand.thumbnail),
-										name: item.name,
-									})
-								}
-							/>
-							<Avatar className="rounded">
-								<AvatarImage src={convertToFileUrl(item.expand.thumbnail)} />
-								<AvatarFallback>CN</AvatarFallback>
-							</Avatar>
-							<p>{item.name}</p>
-						</Label>
-					))}
-				</ScrollArea>
-				<Separator />
 				<DialogFooter>
 					<DialogClose asChild>
 						<Button type="button" variant="outline" onClick={handleCancel}>
-							Hủy
+							Hủy bỏ
 						</Button>
 					</DialogClose>
 					<DialogClose asChild>
 						<Button type="button" onClick={handleConfirm}>
-							Chọn
+							Xác nhận
 						</Button>
 					</DialogClose>
 				</DialogFooter>

@@ -93,10 +93,10 @@ export function TextEditor({ value, onChange, ...props }: TextEditorProps) {
 			)}
 			{...props}
 		>
-			<div className="p-2">
+			<div className="p-1 bg-neutral-50/20">
 				<EditorMenu editor={editor} />
 			</div>
-			<div className="max-h-80 min-h-44 overflow-scroll p-4">
+			<div className="max-h-80 min-h-44 overflow-scroll px-4">
 				<EditorContent editor={editor} />
 			</div>
 		</div>

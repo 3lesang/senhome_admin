@@ -161,7 +161,7 @@ export function ProductListPage() {
 					<Table>
 						<TableHeader className="bg-gray-50">
 							<TableRow>
-								<TableHead className="w-16 pl-6">
+								<TableHead className="w-16 text-center">
 									<Checkbox
 										checked={isIndeterminate ? "indeterminate" : allChecked}
 										onCheckedChange={(checked) => {
@@ -177,6 +177,7 @@ export function ProductListPage() {
 										}}
 									/>
 								</TableHead>
+								<TableHead></TableHead>
 								<TableHead>Tên sản phẩm</TableHead>
 								<TableHead>Trạng thái</TableHead>
 							</TableRow>
@@ -189,7 +190,7 @@ export function ProductListPage() {
 									<ContextMenu key={item.id}>
 										<ContextMenuTrigger asChild>
 											<TableRow>
-												<TableCell className="pl-6">
+												<TableCell className="text-center">
 													<Checkbox
 														checked={isSelected}
 														onCheckedChange={(checked) =>
@@ -197,22 +198,22 @@ export function ProductListPage() {
 														}
 													/>
 												</TableCell>
+												<TableCell className="w-8">
+													<Avatar className="rounded">
+														<AvatarImage
+															src={convertToFileUrl(item.expand.thumbnail)}
+														/>
+														<AvatarFallback className="rounded" />
+													</Avatar>
+												</TableCell>
 												<TableCell className="min-w-96 max-w-96">
-													<div className="flex items-center gap-2">
-														<Avatar className="rounded">
-															<AvatarImage
-																src={convertToFileUrl(item.expand.thumbnail)}
-															/>
-															<AvatarFallback className="rounded" />
-														</Avatar>
-														<Link
-															to="/products/$id"
-															params={{ id: item.id }}
-															className="hover:underline"
-														>
-															{item.name}
-														</Link>
-													</div>
+													<Link
+														to="/products/$id"
+														params={{ id: item.id }}
+														className="hover:underline"
+													>
+														{item.name}
+													</Link>
 												</TableCell>
 												<TableCell>
 													{item.status && (
