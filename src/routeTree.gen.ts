@@ -23,6 +23,7 @@ import { Route as appCategoriesIndexRouteImport } from './routes/(app)/categorie
 import { Route as appAnalyticsIndexRouteImport } from './routes/(app)/analytics/index'
 import { Route as appProductsCreateRouteImport } from './routes/(app)/products/create'
 import { Route as appProductsIdRouteImport } from './routes/(app)/products/$id'
+import { Route as appOrdersIdRouteImport } from './routes/(app)/orders/$id'
 import { Route as appDiscountsPromotionsRouteImport } from './routes/(app)/discounts/promotions'
 import { Route as appDiscountsCouponsRouteImport } from './routes/(app)/discounts/coupons'
 import { Route as appCustomersRatingRouteImport } from './routes/(app)/customers/rating'
@@ -110,6 +111,11 @@ const appProductsCreateRoute = appProductsCreateRouteImport.update({
 const appProductsIdRoute = appProductsIdRouteImport.update({
   id: '/products/$id',
   path: '/products/$id',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appOrdersIdRoute = appOrdersIdRouteImport.update({
+  id: '/orders/$id',
+  path: '/orders/$id',
   getParentRoute: () => appRouteRoute,
 } as any)
 const appDiscountsPromotionsRoute = appDiscountsPromotionsRouteImport.update({
@@ -227,6 +233,7 @@ export interface FileRoutesByFullPath {
   '/customers/rating': typeof appCustomersRatingRoute
   '/discounts/coupons': typeof appDiscountsCouponsRoute
   '/discounts/promotions': typeof appDiscountsPromotionsRoute
+  '/orders/$id': typeof appOrdersIdRoute
   '/products/$id': typeof appProductsIdRoute
   '/products/create': typeof appProductsCreateRoute
   '/analytics': typeof appAnalyticsIndexRoute
@@ -261,6 +268,7 @@ export interface FileRoutesByTo {
   '/customers/rating': typeof appCustomersRatingRoute
   '/discounts/coupons': typeof appDiscountsCouponsRoute
   '/discounts/promotions': typeof appDiscountsPromotionsRoute
+  '/orders/$id': typeof appOrdersIdRoute
   '/products/$id': typeof appProductsIdRoute
   '/products/create': typeof appProductsCreateRoute
   '/analytics': typeof appAnalyticsIndexRoute
@@ -298,6 +306,7 @@ export interface FileRoutesById {
   '/(app)/customers/rating': typeof appCustomersRatingRoute
   '/(app)/discounts/coupons': typeof appDiscountsCouponsRoute
   '/(app)/discounts/promotions': typeof appDiscountsPromotionsRoute
+  '/(app)/orders/$id': typeof appOrdersIdRoute
   '/(app)/products/$id': typeof appProductsIdRoute
   '/(app)/products/create': typeof appProductsCreateRoute
   '/(app)/analytics/': typeof appAnalyticsIndexRoute
@@ -334,6 +343,7 @@ export interface FileRouteTypes {
     | '/customers/rating'
     | '/discounts/coupons'
     | '/discounts/promotions'
+    | '/orders/$id'
     | '/products/$id'
     | '/products/create'
     | '/analytics'
@@ -368,6 +378,7 @@ export interface FileRouteTypes {
     | '/customers/rating'
     | '/discounts/coupons'
     | '/discounts/promotions'
+    | '/orders/$id'
     | '/products/$id'
     | '/products/create'
     | '/analytics'
@@ -404,6 +415,7 @@ export interface FileRouteTypes {
     | '/(app)/customers/rating'
     | '/(app)/discounts/coupons'
     | '/(app)/discounts/promotions'
+    | '/(app)/orders/$id'
     | '/(app)/products/$id'
     | '/(app)/products/create'
     | '/(app)/analytics/'
@@ -534,6 +546,13 @@ declare module '@tanstack/react-router' {
       path: '/products/$id'
       fullPath: '/products/$id'
       preLoaderRoute: typeof appProductsIdRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/orders/$id': {
+      id: '/(app)/orders/$id'
+      path: '/orders/$id'
+      fullPath: '/orders/$id'
+      preLoaderRoute: typeof appOrdersIdRouteImport
       parentRoute: typeof appRouteRoute
     }
     '/(app)/discounts/promotions': {
@@ -717,6 +736,7 @@ interface appRouteRouteChildren {
   appCustomersRatingRoute: typeof appCustomersRatingRoute
   appDiscountsCouponsRoute: typeof appDiscountsCouponsRoute
   appDiscountsPromotionsRoute: typeof appDiscountsPromotionsRoute
+  appOrdersIdRoute: typeof appOrdersIdRoute
   appProductsIdRoute: typeof appProductsIdRoute
   appProductsCreateRoute: typeof appProductsCreateRoute
   appAnalyticsIndexRoute: typeof appAnalyticsIndexRoute
@@ -739,6 +759,7 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appCustomersRatingRoute: appCustomersRatingRoute,
   appDiscountsCouponsRoute: appDiscountsCouponsRoute,
   appDiscountsPromotionsRoute: appDiscountsPromotionsRoute,
+  appOrdersIdRoute: appOrdersIdRoute,
   appProductsIdRoute: appProductsIdRoute,
   appProductsCreateRoute: appProductsCreateRoute,
   appAnalyticsIndexRoute: appAnalyticsIndexRoute,

@@ -1,13 +1,20 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useNavigate, useSearch } from "@tanstack/react-router";
-import { ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
-import { format } from "timeago.js";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import {
+	InfoIcon,
+	ListFilterIcon,
+	SearchIcon,
+	Trash2Icon,
+	UserCircleIcon,
+} from "lucide-react";
+import * as timeago from "timeago.js";
+import vi from "timeago.js/lib/lang/vi";
+import TimeAgo from "timeago-react";
 import { getListOrderQueryOptions } from "@/api/order/list";
 import TablePagination, {
 	type TablePaginationDataChange,
 } from "@/components/table/pagination";
 import { TabsButton } from "@/components/table/tabs";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,11 +34,6 @@ import {
 	ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import {
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import {
 	Table,
 	TableBody,
 	TableCell,
@@ -40,6 +42,52 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { formatVND } from "@/lib/utils";
+
+timeago.register("vi", vi);
+
+export function getPaymentStatus(
+	key:
+		| "pending"
+		| "processing"
+		| "paid"
+		| "failed"
+		| "cancelled"
+		| "refunded"
+		| "expired",
+) {
+	const PAYMENT_STATUS: Record<string, string> = {
+		pending: "Chờ thanh toán",
+		processing: "Đang xử lý thanh toán",
+		paid: "Đã thanh toán",
+		failed: "Thanh toán thất bại",
+		cancelled: "Đã hủy thanh toán",
+		refunded: "Đã hoàn tiền",
+		expired: "Hết hạn thanh toán",
+	};
+
+	return PAYMENT_STATUS[key];
+}
+
+export function getShippingStatus(
+	key:
+		| "pending"
+		| "processing"
+		| "shipped"
+		| "delivered"
+		| "returned"
+		| "cancelled",
+) {
+	const SHIPPING_STATUS: Record<string, string> = {
+		pending: "Chờ xử lý",
+		processing: "Đang chuẩn bị hàng",
+		shipped: "Đã gửi hàng",
+		delivered: "Đã giao hàng",
+		returned: "Đã hoàn hàng",
+		cancelled: "Đã hủy giao hàng",
+	};
+
+	return SHIPPING_STATUS[key];
+}
 
 export function OrderListPage() {
 	const navigate = useNavigate();
@@ -78,8 +126,11 @@ export function OrderListPage() {
 								tabs={[
 									{ label: "Tất cả đơn hàng", value: "" },
 									{ label: "Đơn hàng mới", value: `status="created"` },
-									{ label: "Chưa giao hàng", value: `status="completed"` },
-									{ label: "Chưa thanh toán", value: `status="canceled"` },
+									{
+										label: "Chưa giao hàng",
+										value: `shipping_status!="delivered"`,
+									},
+									{ label: "Chưa thanh toán", value: `payment_status!="paid"` },
 								]}
 								value={query}
 								onChange={handleTabChange}
@@ -100,16 +151,15 @@ export function OrderListPage() {
 					<Table>
 						<TableHeader className="bg-gray-50">
 							<TableRow className="">
-								<TableHead className="w-8"></TableHead>
-								<TableHead>
+								<TableHead className="w-16 text-center">
 									<Checkbox />
 								</TableHead>
-								<TableHead>Mã</TableHead>
-								<TableHead>Ngày tạo</TableHead>
+								<TableHead>Mã đơn hàng</TableHead>
 								<TableHead>Khách hàng</TableHead>
 								<TableHead>Thanh toán</TableHead>
 								<TableHead>Giao hàng</TableHead>
 								<TableHead>Tổng tiền</TableHead>
+								<TableHead>Ngày tạo</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
@@ -117,50 +167,47 @@ export function OrderListPage() {
 								<ContextMenu key={item.id}>
 									<ContextMenuTrigger asChild>
 										<TableRow className="group">
-											<TableCell></TableCell>
-											<TableCell>
+											<TableCell className="text-center w-16">
 												<Checkbox />
 											</TableCell>
-											<TableCell>{item.id}</TableCell>
-											<TableCell>{format(new Date(item.created))}</TableCell>
 											<TableCell>
-												<HoverCard>
-													<HoverCardTrigger asChild>
-														<Badge
-															variant="secondary"
-															className="cursor-pointer"
-														>
-															{item.name}
-														</Badge>
-													</HoverCardTrigger>
-													<HoverCardContent>
-														<div className="flex justify-between gap-2">
-															<Avatar>
-																<AvatarFallback>U</AvatarFallback>
-															</Avatar>
-															<div className="space-y-1">
-																<h4 className="text-sm font-semibold">
-																	{item.name}
-																</h4>
-																<p className="text-sm">{item.email}</p>
-																<div className="text-muted-foreground text-xs">
-																	{item.phone}
-																</div>
-															</div>
-														</div>
-													</HoverCardContent>
-												</HoverCard>
+												<Link
+													to="/orders/$id"
+													params={{ id: item.id }}
+													className="hover:underline"
+												>
+													{item.id}
+												</Link>
 											</TableCell>
 											<TableCell>
-												<Badge variant="secondary">Chờ xử lý</Badge>
+												<Badge variant="secondary">
+													<UserCircleIcon />
+													{item.customer.name}
+												</Badge>
 											</TableCell>
 											<TableCell>
-												<Badge variant="outline">Chưa giao hàng</Badge>
+												<Badge variant="secondary">
+													{getPaymentStatus(item.payment_status)}
+												</Badge>
+											</TableCell>
+											<TableCell>
+												<Badge variant="secondary">
+													{getShippingStatus(item.shipping_status)}
+												</Badge>
 											</TableCell>
 											<TableCell>{formatVND(item.final_price)}</TableCell>
+											<TableCell>
+												<TimeAgo datetime={item.created} locale="vi" />
+											</TableCell>
 										</TableRow>
 									</ContextMenuTrigger>
 									<ContextMenuContent>
+										<Link to="/orders/$id" params={{ id: item.id }}>
+											<ContextMenuItem>
+												<InfoIcon />
+												Chi tiết
+											</ContextMenuItem>
+										</Link>
 										<ContextMenuItem>
 											<Trash2Icon />
 											Xóa

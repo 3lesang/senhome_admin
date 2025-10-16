@@ -21,7 +21,7 @@ export function getListFileQueryOptions({
 		queryFn: () => {
 			return pocketClient
 				.collection<FileDataType>(FILE_COLLECTION)
-				.getList(page, limit, { filter: query });
+				.getList(page, limit, { filter: query, sort: "-created" });
 		},
 	});
 }

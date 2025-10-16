@@ -9,8 +9,6 @@ NProgress.configure({
 	trickleSpeed: 100,
 });
 
-export default NProgress;
-
 export const router = createRouter({
 	routeTree,
 	context: { queryClient },

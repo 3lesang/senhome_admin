@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "@tanstack/react-router";
 import { ShoppingCartIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -13,9 +14,16 @@ import {
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { ORDER_COLLECTION, pocketClient } from "@/pocketbase";
 
 export default function OrderMenu() {
 	const location = useLocation();
+	const { data } = useQuery({
+		queryKey: [ORDER_COLLECTION, "count"],
+		queryFn: () => {
+			return pocketClient.collection(ORDER_COLLECTION).getList(1, 1);
+		},
+	});
 	return (
 		<Collapsible
 			asChild
@@ -28,9 +36,11 @@ export default function OrderMenu() {
 						<SidebarMenuButton>
 							<ShoppingCartIcon />
 							<span className="select-none">Đơn hàng</span>
-							<Badge variant="secondary" className="ml-auto">
-								10
-							</Badge>
+							{Number(data?.totalItems) > 0 && (
+								<Badge variant="secondary" className="ml-auto">
+									{data?.totalItems}
+								</Badge>
+							)}
 						</SidebarMenuButton>
 					</Link>
 				</CollapsibleTrigger>

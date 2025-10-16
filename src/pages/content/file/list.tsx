@@ -1,13 +1,23 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { InfoIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
+import {
+	CheckIcon,
+	InfoIcon,
+	ListFilterIcon,
+	SearchIcon,
+	Trash2Icon,
+	XIcon,
+} from "lucide-react";
+import { Activity, useState } from "react";
+import { createFileHandler } from "@/api/file/create";
+import { deleteFilesHandler } from "@/api/file/delete";
 import { getListFileQueryOptions } from "@/api/file/list";
 import TablePagination, {
 	type TablePaginationDataChange,
 } from "@/components/table/pagination";
 import { TabsButton } from "@/components/table/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
 	Card,
 	CardAction,
@@ -23,12 +33,17 @@ import {
 	ContextMenuItem,
 	ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { convertToFileUrl } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+import { Spinner } from "@/components/ui/spinner";
+import { cn, convertToFileUrl } from "@/lib/utils";
 
 export function FileListPage() {
 	const navigate = useNavigate();
+	const [open, setOpen] = useState(false);
+	const [files, setFiles] = useState<FileList | null>(null);
+
 	const { page, limit, query } = useSearch({ from: "/(app)/content/files/" });
-	const { data } = useSuspenseQuery(
+	const { data, refetch } = useSuspenseQuery(
 		getListFileQueryOptions({ page, limit, query }),
 	);
 
@@ -46,22 +61,91 @@ export function FileListPage() {
 		});
 	};
 
+	const { mutate: createMutate, isPending } = useMutation({
+		mutationFn: createFileHandler,
+		onSuccess() {
+			refetch();
+		},
+	});
+
+	const { mutate: deleteMutate } = useMutation({
+		mutationFn: deleteFilesHandler,
+		onSuccess() {
+			refetch();
+		},
+	});
+
+	function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+		const files = event.target.files;
+		setFiles(files);
+		setOpen(true);
+		files && createMutate(files);
+	}
+
+	function handleRemove(ids: string[]) {
+		deleteMutate(ids);
+	}
+
 	return (
 		<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
+			{open && (
+				<div className="fixed bottom-8 right-8 rounded-md bg-neutral-950 text-white px-4 py-2 shadow w-80 space-y-4">
+					<Activity mode={isPending ? "visible" : "hidden"}>
+						{files &&
+							Array.from(files).map((item) => (
+								<div className="flex items-center gap-1 w-full" key={item.name}>
+									<img
+										src={URL.createObjectURL(item)}
+										alt=""
+										className="size-8 rounded"
+									/>
+									<p className="w-full line-clamp-1">{item.name}</p>
+									<div>
+										<Spinner />
+									</div>
+								</div>
+							))}
+					</Activity>
+					<Activity mode={!isPending ? "visible" : "hidden"}>
+						<div className="flex items-center">
+							<CheckIcon className="size-4 mr-2" />
+							<p className="flex-1">Tập tin đã được tải lên</p>
+							<Button
+								type="button"
+								size="icon-sm"
+								variant="ghost"
+								onClick={() => setOpen(false)}
+							>
+								<XIcon />
+							</Button>
+						</div>
+					</Activity>
+				</div>
+			)}
 			<CardHeader>
 				<CardTitle>Quản lý danh sách files</CardTitle>
 				<CardDescription>
 					Những hình ảnh tải lên ở đây có thể được thêm cho sản phẩm, nhóm sản
 					phẩm, trang và các bài blog.
 				</CardDescription>
-				<CardAction></CardAction>
+				<CardAction>
+					<Label className={cn(buttonVariants())}>
+						<input
+							type="file"
+							className="hidden"
+							multiple
+							onChange={handleFileChange}
+						/>
+						Tải lên
+					</Label>
+				</CardAction>
 			</CardHeader>
 			<CardContent>
 				<Card className="border-0 shadow-none">
 					<CardHeader>
 						<CardTitle>
 							<TabsButton
-								tabs={[{ label: "Tất cả file", value: "" }]}
+								tabs={[{ label: "Tất cả", value: "" }]}
 								value={query}
 								onChange={handleTabChange}
 							/>
@@ -99,7 +183,7 @@ export function FileListPage() {
 										<InfoIcon />
 										Xem chi tiết
 									</ContextMenuItem>
-									<ContextMenuItem>
+									<ContextMenuItem onClick={() => handleRemove([item.id])}>
 										<Trash2Icon />
 										Xóa
 									</ContextMenuItem>
