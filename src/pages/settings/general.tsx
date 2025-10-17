@@ -1,8 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
+import { getStoreQueryOptions } from "@/api/store/one";
+import { updateStoreHandler } from "@/api/store/update";
+import { DistrictSelect } from "@/components/address/district";
+import { ProvinceSelect } from "@/components/address/province";
+import { WardSelect } from "@/components/address/ward";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -22,16 +27,11 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 
 const schema = z.object({
+	id: z.string(),
 	name: z.string().min(1, { message: "Vui lòng nhập tên cửa hàng" }),
 	description: z.string().optional(),
 	email: z
@@ -40,90 +40,54 @@ const schema = z.object({
 	phone: z.string().min(1, { message: "Vui lòng nhập số điện thoại" }),
 	street: z.string().min(2).max(100),
 	province: z.object({
-		id: z.string().min(1, "Vui lòng chọn tỉnh/thành phố"),
-		name: z.string().min(1, "Tên tỉnh/thành phố không hợp lệ"),
+		value: z.string(),
+		label: z.string().min(1, "Name is required"),
 	}),
 	district: z.object({
-		id: z.string().min(1, "Vui lòng chọn quận/huyện"),
-		name: z.string().min(1, "Tên quận/huyện không hợp lệ"),
+		value: z.string(),
+		label: z.string().min(1, "Name is requied"),
 	}),
 	ward: z.object({
-		id: z.string().min(1, "Vui lòng chọn phường/xã"),
-		name: z.string().min(1, "Tên phường/xã không hợp lệ"),
+		value: z.string(),
+		label: z.string().min(1, "Name is requied"),
 	}),
 });
 
 export type FormValues = z.infer<typeof schema>;
 
 export function StoreSettingsGeneral() {
+	const { data: store } = useSuspenseQuery(getStoreQueryOptions());
+
 	const form = useForm<FormValues>({
 		resolver: zodResolver(schema),
 		defaultValues: {
-			name: "",
-			description: "",
-			email: "",
-			phone: "",
+			id: store.id,
+			name: store.name,
+			description: store.description,
+			email: store.email,
+			phone: store.phone,
+			street: store?.address?.street,
+			province: store?.address?.province,
+			district: store?.address?.district,
+			ward: store?.address?.ward,
 		},
 	});
 
-	const province = form.watch("province");
-	const district = form.watch("district");
-
-	const { data: provinces } = useQuery({
-		queryKey: ["provinces"],
-		queryFn: () =>
-			axios("https://open.oapi.vn/location/provinces", {
-				params: {
-					page: 0,
-					size: 100,
-				},
-			}),
-
-		select(data) {
-			return data.data?.data as { id: string; name: string }[];
+	const { mutate, isPending } = useMutation({
+		mutationFn: updateStoreHandler,
+		onSuccess: () => {
+			toast.success("Update success");
 		},
-	});
-
-	const { data: districts } = useQuery({
-		queryKey: ["districts", province.id],
-		queryFn: () =>
-			axios(`https://open.oapi.vn/location/districts/${province.id}`, {
-				params: {
-					page: 0,
-					size: 100,
-				},
-			}),
-
-		select(data) {
-			return data.data?.data as { id: string; name: string }[];
-		},
-		enabled: !!province.id,
-	});
-
-	const { data: wards } = useQuery({
-		queryKey: ["wards", district.id],
-		queryFn: () =>
-			axios(`https://open.oapi.vn/location/wards/${district.id}`, {
-				params: {
-					page: 0,
-					size: 100,
-				},
-			}),
-
-		select(data) {
-			return data.data?.data as { id: string; name: string }[];
-		},
-		enabled: !!district.id,
 	});
 
 	function handleSubmit(values: FormValues) {
-		console.log(values);
+		mutate(values);
 	}
 
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(handleSubmit)}>
-				<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
+				<Card className="bg-sidebar border-0 shadow-none max-w-3xl mx-auto">
 					<CardHeader>
 						<CardTitle>Cấu hình cửa hàng</CardTitle>
 						<CardDescription>
@@ -255,44 +219,21 @@ export function StoreSettingsGeneral() {
 									control={form.control}
 									name="province"
 									render={({ field }) => (
-										<FormItem className="col-span-4 lg:col-span-4 col-start-auto flex self-end flex-col gap-2 space-y-0 items-start">
-											<FormLabel className="flex shrink-0">
-												Tỉnh/Thành Phố
-											</FormLabel>
-
-											<div className="w-full">
-												<FormControl>
-													<Select
-														value={field.value.id}
-														onValueChange={(value) => {
-															const province = provinces?.find(
-																(p) => p.id === value,
-															);
-															field.onChange({
-																id: value,
-																name: province?.name,
-															});
-															form.setValue("district", {
-																id: "",
-																name: "",
-															});
-														}}
-													>
-														<SelectTrigger className="w-full ">
-															<SelectValue placeholder="Tỉnh/Thành Phố" />
-														</SelectTrigger>
-														<SelectContent>
-															{provinces?.map((item) => (
-																<SelectItem key={item?.id} value={item?.id}>
-																	{item?.name}
-																</SelectItem>
-															))}
-														</SelectContent>
-													</Select>
-												</FormControl>
-
-												<FormMessage />
-											</div>
+										<FormItem className="col-span-12 lg:col-span-4">
+											<FormLabel>Tỉnh/TP</FormLabel>
+											<FormControl>
+												<ProvinceSelect
+													value={field.value}
+													onChange={(value) => {
+														field.onChange(value);
+														form.setValue("district", {
+															label: "",
+															value: "",
+														});
+													}}
+												/>
+											</FormControl>
+											<FormMessage />
 										</FormItem>
 									)}
 								/>
@@ -300,47 +241,22 @@ export function StoreSettingsGeneral() {
 									control={form.control}
 									name="district"
 									render={({ field }) => (
-										<FormItem className="col-span-4 lg:col-span-4 col-start-auto flex self-end flex-col gap-2 space-y-0 items-start">
-											<FormLabel className="flex shrink-0">
-												Quận/Huyện
-											</FormLabel>
-
-											<div className="w-full">
-												<FormControl>
-													<Select
-														value={field.value.id}
-														onValueChange={(value) => {
-															const district = districts?.find(
-																(d: { id: string }) => d.id === value,
-															);
-															field.onChange({
-																id: value,
-																name: district?.name,
-															});
-															form.setValue("ward", {
-																id: "",
-																name: "",
-															});
-														}}
-													>
-														<SelectTrigger
-															className="w-full"
-															disabled={!province}
-														>
-															<SelectValue placeholder="Quận/Huyện" />
-														</SelectTrigger>
-														<SelectContent>
-															{districts?.map((item) => (
-																<SelectItem key={item?.id} value={item?.id}>
-																	{item?.name}
-																</SelectItem>
-															))}
-														</SelectContent>
-													</Select>
-												</FormControl>
-
-												<FormMessage />
-											</div>
+										<FormItem className="col-span-12 lg:col-span-4">
+											<FormLabel>Quận/Huyện</FormLabel>
+											<FormControl>
+												<DistrictSelect
+													value={field.value}
+													onChange={(value) => {
+														field.onChange(value);
+														form.setValue("ward", {
+															label: "",
+															value: "",
+														});
+													}}
+													id={form.watch("province")?.value}
+												/>
+											</FormControl>
+											<FormMessage />
 										</FormItem>
 									)}
 								/>
@@ -348,36 +264,16 @@ export function StoreSettingsGeneral() {
 									control={form.control}
 									name="ward"
 									render={({ field }) => (
-										<FormItem className="col-span-4 lg:col-span-4 col-start-auto flex self-end flex-col gap-2 space-y-0 items-start">
-											<FormLabel className="flex shrink-0">Pường/Xã</FormLabel>
-
-											<div className="w-full">
-												<FormControl>
-													<Select
-														value={field.value.id}
-														onValueChange={(value) => {
-															const ward = wards?.find((w) => w.id === value);
-															field.onChange({ id: value, name: ward?.name });
-														}}
-													>
-														<SelectTrigger
-															className="w-full"
-															disabled={!district}
-														>
-															<SelectValue placeholder="Pường/Xã" />
-														</SelectTrigger>
-														<SelectContent>
-															{wards?.map((item) => (
-																<SelectItem key={item?.id} value={item?.id}>
-																	{item?.name}
-																</SelectItem>
-															))}
-														</SelectContent>
-													</Select>
-												</FormControl>
-
-												<FormMessage />
-											</div>
+										<FormItem className="col-span-12 lg:col-span-4">
+											<FormLabel>Phường/Xã</FormLabel>
+											<FormControl>
+												<WardSelect
+													value={field.value}
+													onChange={field.onChange}
+													id={form.watch("district")?.value}
+												/>
+											</FormControl>
+											<FormMessage />
 										</FormItem>
 									)}
 								/>
@@ -385,7 +281,10 @@ export function StoreSettingsGeneral() {
 						</Card>
 					</CardContent>
 					<CardFooter className="flex justify-end">
-						<Button type="submit">Lưu</Button>
+						<Button type="submit" disabled={isPending}>
+							{isPending && <Spinner />}
+							Lưu
+						</Button>
 					</CardFooter>
 				</Card>
 			</form>

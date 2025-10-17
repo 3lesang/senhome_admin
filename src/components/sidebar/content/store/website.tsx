@@ -1,16 +1,10 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { EyeIcon, GlobeIcon, MoreHorizontalIcon } from "lucide-react";
+import { EyeIcon, GlobeIcon } from "lucide-react";
 import {
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
 	SidebarMenuAction,
 	SidebarMenuButton,
@@ -19,6 +13,11 @@ import {
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function WebsiteMenu() {
 	const location = useLocation();
@@ -30,12 +29,12 @@ export default function WebsiteMenu() {
 		>
 			<SidebarMenuItem>
 				<CollapsibleTrigger asChild>
-					<Link to="/store/pages">
-						<SidebarMenuButton>
+					<SidebarMenuButton asChild>
+						<Link to="/store/pages">
 							<GlobeIcon />
 							<span className="select-none">Website</span>
-						</SidebarMenuButton>
-					</Link>
+						</Link>
+					</SidebarMenuButton>
 				</CollapsibleTrigger>
 				<CollapsibleContent>
 					<SidebarMenuSub className="border-l-0">
@@ -71,20 +70,22 @@ export default function WebsiteMenu() {
 						</SidebarMenuSubItem>
 					</SidebarMenuSub>
 				</CollapsibleContent>
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<SidebarMenuAction showOnHover>
-							<MoreHorizontalIcon />
-							<span className="sr-only">More</span>
-						</SidebarMenuAction>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent className="w-48">
-						<DropdownMenuItem>
-							<EyeIcon className="text-muted-foreground" />
-							<span>Xem cửa hàng</span>
-						</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
+				<SidebarMenuAction>
+					<Tooltip>
+						<TooltipTrigger>
+							<a
+								href="https://web-dev.senhome.vn"
+								target="_blank"
+								rel="noopener"
+							>
+								<EyeIcon size={16} />
+							</a>
+						</TooltipTrigger>
+						<TooltipContent>
+							<p>View store</p>
+						</TooltipContent>
+					</Tooltip>
+				</SidebarMenuAction>
 			</SidebarMenuItem>
 		</Collapsible>
 	);
