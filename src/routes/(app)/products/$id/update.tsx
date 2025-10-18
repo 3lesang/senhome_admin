@@ -5,7 +5,7 @@ import { productQueryOptions } from "@/api/product/one";
 import { getVariantsProductQueryOptions } from "@/api/variant/list";
 import { ProductUpdatePage } from "@/pages/product/update";
 
-export const Route = createFileRoute("/(app)/products/$id")({
+export const Route = createFileRoute("/(app)/products/$id/update")({
 	component: ProductUpdatePage,
 	async loader({ context, params }) {
 		const id = params.id;

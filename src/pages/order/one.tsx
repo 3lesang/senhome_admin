@@ -3,6 +3,7 @@ import { Link, useParams } from "@tanstack/react-router";
 import { MailIcon, PhoneIcon } from "lucide-react";
 import { getItemsOrder } from "@/api/order/list";
 import { getOrder } from "@/api/order/one";
+import TablePagination from "@/components/table/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,9 +11,11 @@ import {
 	CardAction,
 	CardContent,
 	CardDescription,
+	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
 	Item,
 	ItemContent,
@@ -20,6 +23,7 @@ import {
 	ItemHeader,
 	ItemTitle,
 } from "@/components/ui/item";
+import { Separator } from "@/components/ui/separator";
 import {
 	Table,
 	TableBody,
@@ -59,8 +63,12 @@ export function OneOrderPage() {
 						<Table>
 							<TableHeader className="bg-sidebar">
 								<TableRow>
+									<TableHead className="w-16 text-center">
+										<Checkbox />
+									</TableHead>
 									<TableHead></TableHead>
 									<TableHead>Tên sản phẩm</TableHead>
+									<TableHead></TableHead>
 									<TableHead>Số lượng</TableHead>
 									<TableHead>Giá </TableHead>
 									<TableHead>Thành tiền</TableHead>
@@ -69,6 +77,9 @@ export function OneOrderPage() {
 							<TableBody>
 								{items.items.map((item) => (
 									<TableRow key={item.id}>
+										<TableCell className="w-16 text-center">
+											<Checkbox />
+										</TableCell>
 										<TableCell className="pl-6">
 											<Avatar className="rounded">
 												<AvatarImage
@@ -81,12 +92,14 @@ export function OneOrderPage() {
 										</TableCell>
 										<TableCell className="whitespace-normal">
 											<Link
-												to="/products/$id"
+												to="/products/$id/update"
 												params={{ id: item.expand.product.id }}
 												className="hover:underline line-clamp-1"
 											>
 												{item.expand.product.name}
 											</Link>
+										</TableCell>
+										<TableCell>
 											<div className="space-x-1">
 												{item.expand.variant.combos.split(",").map((item) => (
 													<Badge key={item} variant="secondary">
@@ -95,7 +108,9 @@ export function OneOrderPage() {
 												))}
 											</div>
 										</TableCell>
-										<TableCell>{item.quantity}</TableCell>
+										<TableCell className="text-center">
+											{item.quantity}
+										</TableCell>
 										<TableCell>
 											<span>{formatVND(item.sale_price)}</span>
 										</TableCell>
@@ -104,9 +119,12 @@ export function OneOrderPage() {
 								))}
 							</TableBody>
 						</Table>
+						<CardFooter>
+							<TablePagination total={items.totalItems} page={1} limit={10} />
+						</CardFooter>
 					</Card>
 				</div>
-				<div className="col-span-4">
+				<div className="col-span-4 space-y-4">
 					<Card className="border-0 shadow-none">
 						<CardHeader>
 							<CardTitle>Thông Tin Người Mua</CardTitle>
@@ -136,31 +154,33 @@ export function OneOrderPage() {
 							</Item>
 						</CardContent>
 					</Card>
+					<Card className="border-0 shadow-none lg:col-span-4 h-fit">
+						<CardHeader>
+							<CardTitle>Thông tin đơn hàng</CardTitle>
+						</CardHeader>
+						<CardContent className="text-neutral-600 text-sm space-y-2">
+							<div className="flex justify-between mb-4">
+								<p>Tạm tính</p>
+								<p>{formatVND(order.total_price)}</p>
+							</div>
+							<div className="flex justify-between">
+								<p>Giảm giá</p>
+								<p>{formatVND(order.total_discount)}</p>
+							</div>
+							<div className="flex justify-between">
+								<p>Phí giao hàng</p>
+								<p>Miễn phí</p>
+							</div>
+						</CardContent>
+						<Separator />
+						<CardFooter className="flex justify-between">
+							<p className="font-bold">Thành tiền</p>
+							<p className="font-bold text-lg">
+								{formatVND(order.final_price)}
+							</p>
+						</CardFooter>
+					</Card>
 				</div>
-				{/*<Card className="border-0 shadow-none lg:col-span-4 h-fit">
-					<CardHeader>
-						<CardTitle>Thông tin đơn hàng</CardTitle>
-					</CardHeader>
-					<CardContent className="text-neutral-600 text-sm space-y-2">
-						<div className="flex justify-between mb-4">
-							<p>Tạm tính</p>
-							<p>{formatVND(order.total_price)}</p>
-						</div>
-						<div className="flex justify-between">
-							<p>Giảm giá</p>
-							<p>{formatVND(order.total_discount)}</p>
-						</div>
-						<div className="flex justify-between">
-							<p>Phí giao hàng</p>
-							<p>Miễn phí</p>
-						</div>
-					</CardContent>
-					<Separator />
-					<CardFooter className="flex justify-between">
-						<p className="font-bold">Thành tiền</p>
-						<p className="font-bold text-lg">{formatVND(order.final_price)}</p>
-					</CardFooter>
-				</Card>*/}
 			</CardContent>
 		</Card>
 	);

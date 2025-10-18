@@ -105,7 +105,7 @@ const schema = z.object({
 export type FormValues = z.infer<typeof schema>;
 
 export function ProductUpdatePage() {
-	const { id } = useParams({ from: "/(app)/products/$id" });
+	const { id } = useParams({ from: "/(app)/products/$id/update" });
 	const { data: product } = useSuspenseQuery(productQueryOptions(id));
 	const { data: options } = useSuspenseQuery(getOptionsProductQueryOptions(id));
 	const { data: variants } = useSuspenseQuery(

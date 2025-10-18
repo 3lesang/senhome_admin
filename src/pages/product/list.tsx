@@ -1,6 +1,12 @@
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
-import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
+import {
+	EditIcon,
+	ListFilterIcon,
+	SearchIcon,
+	StarIcon,
+	Trash2Icon,
+} from "lucide-react";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { deleteProductsHandler } from "@/api/product/delete";
 import { getListProductQueryOptions } from "@/api/product/list";
@@ -209,7 +215,7 @@ export function ProductListPage() {
 												</TableCell>
 												<TableCell className="min-w-96 max-w-96">
 													<Link
-														to="/products/$id"
+														to="/products/$id/update"
 														params={{ id: item.id }}
 														className="hover:underline"
 													>
@@ -229,7 +235,17 @@ export function ProductListPage() {
 										<ContextMenuContent>
 											<ContextMenuItem asChild>
 												<Link
-													to="/products/$id"
+													to="/products/$id/reviews"
+													params={{ id: item.id }}
+													className="flex items-center gap-2"
+												>
+													<StarIcon />
+													Đánh giá
+												</Link>
+											</ContextMenuItem>
+											<ContextMenuItem asChild>
+												<Link
+													to="/products/$id/update"
 													params={{ id: item.id }}
 													className="flex items-center gap-2"
 												>

@@ -22,7 +22,6 @@ import { Route as appCustomersIndexRouteImport } from './routes/(app)/customers/
 import { Route as appCategoriesIndexRouteImport } from './routes/(app)/categories/index'
 import { Route as appAnalyticsIndexRouteImport } from './routes/(app)/analytics/index'
 import { Route as appProductsCreateRouteImport } from './routes/(app)/products/create'
-import { Route as appProductsIdRouteImport } from './routes/(app)/products/$id'
 import { Route as appOrdersIdRouteImport } from './routes/(app)/orders/$id'
 import { Route as appDiscountsPromotionsRouteImport } from './routes/(app)/discounts/promotions'
 import { Route as appDiscountsCouponsRouteImport } from './routes/(app)/discounts/coupons'
@@ -44,6 +43,9 @@ import { Route as appStoreMenusCreateRouteImport } from './routes/(app)/store/me
 import { Route as appStoreMenusIdRouteImport } from './routes/(app)/store/menus/$id'
 import { Route as appProductsCollectionsCreateRouteImport } from './routes/(app)/products/collections/create'
 import { Route as appProductsCollectionsIdRouteImport } from './routes/(app)/products/collections/$id'
+import { Route as appProductsIdUpdateRouteImport } from './routes/(app)/products/$id/update'
+import { Route as appProductsIdReviewsIndexRouteImport } from './routes/(app)/products/$id/reviews/index'
+import { Route as appProductsIdReviewsCreateRouteImport } from './routes/(app)/products/$id/reviews/create'
 
 const authRouteRoute = authRouteRouteImport.update({
   id: '/(auth)',
@@ -106,11 +108,6 @@ const appAnalyticsIndexRoute = appAnalyticsIndexRouteImport.update({
 const appProductsCreateRoute = appProductsCreateRouteImport.update({
   id: '/products/create',
   path: '/products/create',
-  getParentRoute: () => appRouteRoute,
-} as any)
-const appProductsIdRoute = appProductsIdRouteImport.update({
-  id: '/products/$id',
-  path: '/products/$id',
   getParentRoute: () => appRouteRoute,
 } as any)
 const appOrdersIdRoute = appOrdersIdRouteImport.update({
@@ -224,6 +221,23 @@ const appProductsCollectionsIdRoute =
     path: '/products/collections/$id',
     getParentRoute: () => appRouteRoute,
   } as any)
+const appProductsIdUpdateRoute = appProductsIdUpdateRouteImport.update({
+  id: '/products/$id/update',
+  path: '/products/$id/update',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appProductsIdReviewsIndexRoute =
+  appProductsIdReviewsIndexRouteImport.update({
+    id: '/products/$id/reviews/',
+    path: '/products/$id/reviews/',
+    getParentRoute: () => appRouteRoute,
+  } as any)
+const appProductsIdReviewsCreateRoute =
+  appProductsIdReviewsCreateRouteImport.update({
+    id: '/products/$id/reviews/create',
+    path: '/products/$id/reviews/create',
+    getParentRoute: () => appRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof appIndexRoute
@@ -234,7 +248,6 @@ export interface FileRoutesByFullPath {
   '/discounts/coupons': typeof appDiscountsCouponsRoute
   '/discounts/promotions': typeof appDiscountsPromotionsRoute
   '/orders/$id': typeof appOrdersIdRoute
-  '/products/$id': typeof appProductsIdRoute
   '/products/create': typeof appProductsCreateRoute
   '/analytics': typeof appAnalyticsIndexRoute
   '/categories': typeof appCategoriesIndexRoute
@@ -242,6 +255,7 @@ export interface FileRoutesByFullPath {
   '/discounts': typeof appDiscountsIndexRoute
   '/orders': typeof appOrdersIndexRoute
   '/products': typeof appProductsIndexRoute
+  '/products/$id/update': typeof appProductsIdUpdateRoute
   '/products/collections/$id': typeof appProductsCollectionsIdRoute
   '/products/collections/create': typeof appProductsCollectionsCreateRoute
   '/store/menus/$id': typeof appStoreMenusIdRoute
@@ -259,6 +273,8 @@ export interface FileRoutesByFullPath {
   '/store/menus': typeof appStoreMenusIndexRoute
   '/store/pages': typeof appStorePagesIndexRoute
   '/store/settings': typeof appStoreSettingsIndexRoute
+  '/products/$id/reviews/create': typeof appProductsIdReviewsCreateRoute
+  '/products/$id/reviews': typeof appProductsIdReviewsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof appIndexRoute
@@ -269,7 +285,6 @@ export interface FileRoutesByTo {
   '/discounts/coupons': typeof appDiscountsCouponsRoute
   '/discounts/promotions': typeof appDiscountsPromotionsRoute
   '/orders/$id': typeof appOrdersIdRoute
-  '/products/$id': typeof appProductsIdRoute
   '/products/create': typeof appProductsCreateRoute
   '/analytics': typeof appAnalyticsIndexRoute
   '/categories': typeof appCategoriesIndexRoute
@@ -277,6 +292,7 @@ export interface FileRoutesByTo {
   '/discounts': typeof appDiscountsIndexRoute
   '/orders': typeof appOrdersIndexRoute
   '/products': typeof appProductsIndexRoute
+  '/products/$id/update': typeof appProductsIdUpdateRoute
   '/products/collections/$id': typeof appProductsCollectionsIdRoute
   '/products/collections/create': typeof appProductsCollectionsCreateRoute
   '/store/menus/$id': typeof appStoreMenusIdRoute
@@ -294,6 +310,8 @@ export interface FileRoutesByTo {
   '/store/menus': typeof appStoreMenusIndexRoute
   '/store/pages': typeof appStorePagesIndexRoute
   '/store/settings': typeof appStoreSettingsIndexRoute
+  '/products/$id/reviews/create': typeof appProductsIdReviewsCreateRoute
+  '/products/$id/reviews': typeof appProductsIdReviewsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -307,7 +325,6 @@ export interface FileRoutesById {
   '/(app)/discounts/coupons': typeof appDiscountsCouponsRoute
   '/(app)/discounts/promotions': typeof appDiscountsPromotionsRoute
   '/(app)/orders/$id': typeof appOrdersIdRoute
-  '/(app)/products/$id': typeof appProductsIdRoute
   '/(app)/products/create': typeof appProductsCreateRoute
   '/(app)/analytics/': typeof appAnalyticsIndexRoute
   '/(app)/categories/': typeof appCategoriesIndexRoute
@@ -315,6 +332,7 @@ export interface FileRoutesById {
   '/(app)/discounts/': typeof appDiscountsIndexRoute
   '/(app)/orders/': typeof appOrdersIndexRoute
   '/(app)/products/': typeof appProductsIndexRoute
+  '/(app)/products/$id/update': typeof appProductsIdUpdateRoute
   '/(app)/products/collections/$id': typeof appProductsCollectionsIdRoute
   '/(app)/products/collections/create': typeof appProductsCollectionsCreateRoute
   '/(app)/store/menus/$id': typeof appStoreMenusIdRoute
@@ -332,6 +350,8 @@ export interface FileRoutesById {
   '/(app)/store/menus/': typeof appStoreMenusIndexRoute
   '/(app)/store/pages/': typeof appStorePagesIndexRoute
   '/(app)/store/settings/': typeof appStoreSettingsIndexRoute
+  '/(app)/products/$id/reviews/create': typeof appProductsIdReviewsCreateRoute
+  '/(app)/products/$id/reviews/': typeof appProductsIdReviewsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -344,7 +364,6 @@ export interface FileRouteTypes {
     | '/discounts/coupons'
     | '/discounts/promotions'
     | '/orders/$id'
-    | '/products/$id'
     | '/products/create'
     | '/analytics'
     | '/categories'
@@ -352,6 +371,7 @@ export interface FileRouteTypes {
     | '/discounts'
     | '/orders'
     | '/products'
+    | '/products/$id/update'
     | '/products/collections/$id'
     | '/products/collections/create'
     | '/store/menus/$id'
@@ -369,6 +389,8 @@ export interface FileRouteTypes {
     | '/store/menus'
     | '/store/pages'
     | '/store/settings'
+    | '/products/$id/reviews/create'
+    | '/products/$id/reviews'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -379,7 +401,6 @@ export interface FileRouteTypes {
     | '/discounts/coupons'
     | '/discounts/promotions'
     | '/orders/$id'
-    | '/products/$id'
     | '/products/create'
     | '/analytics'
     | '/categories'
@@ -387,6 +408,7 @@ export interface FileRouteTypes {
     | '/discounts'
     | '/orders'
     | '/products'
+    | '/products/$id/update'
     | '/products/collections/$id'
     | '/products/collections/create'
     | '/store/menus/$id'
@@ -404,6 +426,8 @@ export interface FileRouteTypes {
     | '/store/menus'
     | '/store/pages'
     | '/store/settings'
+    | '/products/$id/reviews/create'
+    | '/products/$id/reviews'
   id:
     | '__root__'
     | '/(app)'
@@ -416,7 +440,6 @@ export interface FileRouteTypes {
     | '/(app)/discounts/coupons'
     | '/(app)/discounts/promotions'
     | '/(app)/orders/$id'
-    | '/(app)/products/$id'
     | '/(app)/products/create'
     | '/(app)/analytics/'
     | '/(app)/categories/'
@@ -424,6 +447,7 @@ export interface FileRouteTypes {
     | '/(app)/discounts/'
     | '/(app)/orders/'
     | '/(app)/products/'
+    | '/(app)/products/$id/update'
     | '/(app)/products/collections/$id'
     | '/(app)/products/collections/create'
     | '/(app)/store/menus/$id'
@@ -441,6 +465,8 @@ export interface FileRouteTypes {
     | '/(app)/store/menus/'
     | '/(app)/store/pages/'
     | '/(app)/store/settings/'
+    | '/(app)/products/$id/reviews/create'
+    | '/(app)/products/$id/reviews/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -539,13 +565,6 @@ declare module '@tanstack/react-router' {
       path: '/products/create'
       fullPath: '/products/create'
       preLoaderRoute: typeof appProductsCreateRouteImport
-      parentRoute: typeof appRouteRoute
-    }
-    '/(app)/products/$id': {
-      id: '/(app)/products/$id'
-      path: '/products/$id'
-      fullPath: '/products/$id'
-      preLoaderRoute: typeof appProductsIdRouteImport
       parentRoute: typeof appRouteRoute
     }
     '/(app)/orders/$id': {
@@ -695,6 +714,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appProductsCollectionsIdRouteImport
       parentRoute: typeof appRouteRoute
     }
+    '/(app)/products/$id/update': {
+      id: '/(app)/products/$id/update'
+      path: '/products/$id/update'
+      fullPath: '/products/$id/update'
+      preLoaderRoute: typeof appProductsIdUpdateRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/products/$id/reviews/': {
+      id: '/(app)/products/$id/reviews/'
+      path: '/products/$id/reviews'
+      fullPath: '/products/$id/reviews'
+      preLoaderRoute: typeof appProductsIdReviewsIndexRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/products/$id/reviews/create': {
+      id: '/(app)/products/$id/reviews/create'
+      path: '/products/$id/reviews/create'
+      fullPath: '/products/$id/reviews/create'
+      preLoaderRoute: typeof appProductsIdReviewsCreateRouteImport
+      parentRoute: typeof appRouteRoute
+    }
   }
 }
 
@@ -737,7 +777,6 @@ interface appRouteRouteChildren {
   appDiscountsCouponsRoute: typeof appDiscountsCouponsRoute
   appDiscountsPromotionsRoute: typeof appDiscountsPromotionsRoute
   appOrdersIdRoute: typeof appOrdersIdRoute
-  appProductsIdRoute: typeof appProductsIdRoute
   appProductsCreateRoute: typeof appProductsCreateRoute
   appAnalyticsIndexRoute: typeof appAnalyticsIndexRoute
   appCategoriesIndexRoute: typeof appCategoriesIndexRoute
@@ -745,12 +784,15 @@ interface appRouteRouteChildren {
   appDiscountsIndexRoute: typeof appDiscountsIndexRoute
   appOrdersIndexRoute: typeof appOrdersIndexRoute
   appProductsIndexRoute: typeof appProductsIndexRoute
+  appProductsIdUpdateRoute: typeof appProductsIdUpdateRoute
   appProductsCollectionsIdRoute: typeof appProductsCollectionsIdRoute
   appProductsCollectionsCreateRoute: typeof appProductsCollectionsCreateRoute
   appContentBlogsIndexRoute: typeof appContentBlogsIndexRoute
   appContentFilesIndexRoute: typeof appContentFilesIndexRoute
   appOrdersDraftIndexRoute: typeof appOrdersDraftIndexRoute
   appProductsCollectionsIndexRoute: typeof appProductsCollectionsIndexRoute
+  appProductsIdReviewsCreateRoute: typeof appProductsIdReviewsCreateRoute
+  appProductsIdReviewsIndexRoute: typeof appProductsIdReviewsIndexRoute
 }
 
 const appRouteRouteChildren: appRouteRouteChildren = {
@@ -760,7 +802,6 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appDiscountsCouponsRoute: appDiscountsCouponsRoute,
   appDiscountsPromotionsRoute: appDiscountsPromotionsRoute,
   appOrdersIdRoute: appOrdersIdRoute,
-  appProductsIdRoute: appProductsIdRoute,
   appProductsCreateRoute: appProductsCreateRoute,
   appAnalyticsIndexRoute: appAnalyticsIndexRoute,
   appCategoriesIndexRoute: appCategoriesIndexRoute,
@@ -768,12 +809,15 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appDiscountsIndexRoute: appDiscountsIndexRoute,
   appOrdersIndexRoute: appOrdersIndexRoute,
   appProductsIndexRoute: appProductsIndexRoute,
+  appProductsIdUpdateRoute: appProductsIdUpdateRoute,
   appProductsCollectionsIdRoute: appProductsCollectionsIdRoute,
   appProductsCollectionsCreateRoute: appProductsCollectionsCreateRoute,
   appContentBlogsIndexRoute: appContentBlogsIndexRoute,
   appContentFilesIndexRoute: appContentFilesIndexRoute,
   appOrdersDraftIndexRoute: appOrdersDraftIndexRoute,
   appProductsCollectionsIndexRoute: appProductsCollectionsIndexRoute,
+  appProductsIdReviewsCreateRoute: appProductsIdReviewsCreateRoute,
+  appProductsIdReviewsIndexRoute: appProductsIdReviewsIndexRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
