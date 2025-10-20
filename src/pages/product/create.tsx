@@ -1,10 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
 import z from "zod";
+import { getFullListCategoryQueryOptions } from "@/api/category/list";
 import { createProductHandler } from "@/api/product/create";
 import { CollectionInput } from "@/components/form/product/collection";
 import { MediaInput } from "@/components/form/product/media";
@@ -94,6 +95,8 @@ const schema = z.object({
 		}),
 	),
 	collections: z.array(z.object({ id: z.string(), name: z.string() })),
+	category: z.string(),
+	brand: z.string(),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -119,8 +122,12 @@ export function ProductCreatePage() {
 			options: [],
 			variants: [],
 			collections: [],
+			category: "",
+			brand: "",
 		},
 	});
+
+	const { data: categories } = useQuery(getFullListCategoryQueryOptions());
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: createProductHandler,
@@ -147,12 +154,12 @@ export function ProductCreatePage() {
 								<CardHeader>
 									<CardTitle>Thông tin chung</CardTitle>
 								</CardHeader>
-								<CardContent className="space-y-4">
+								<CardContent className="grid grid-cols-2 gap-4">
 									<FormField
 										control={form.control}
 										name="name"
 										render={({ field }) => (
-											<FormItem>
+											<FormItem className="col-span-2">
 												<FormLabel>Tên sản phẩm</FormLabel>
 												<FormControl>
 													<Input placeholder="Tên sản phẩm" {...field} />
@@ -165,11 +172,61 @@ export function ProductCreatePage() {
 										control={form.control}
 										name="content"
 										render={({ field }) => (
-											<FormItem>
+											<FormItem className="col-span-2">
 												<FormLabel>Mô tả sản phẩm</FormLabel>
 												<FormControl>
 													<TextEditor {...field} />
 												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="category"
+										render={({ field }) => (
+											<FormItem className="col-span-1">
+												<FormLabel>Loại</FormLabel>
+												<Select
+													defaultValue={field.value}
+													onValueChange={field.onChange}
+												>
+													<SelectTrigger className="w-full">
+														<FormControl>
+															<SelectValue />
+														</FormControl>
+													</SelectTrigger>
+													<SelectContent>
+														{categories?.map((item) => (
+															<SelectItem key={item.id} value={item.id}>
+																{item.name}
+															</SelectItem>
+														))}
+													</SelectContent>
+												</Select>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="brand"
+										render={({ field }) => (
+											<FormItem className="col-span-1">
+												<FormLabel>Thương hiệu</FormLabel>
+												<Select
+													defaultValue={field.value}
+													onValueChange={field.onChange}
+												>
+													<SelectTrigger className="w-full">
+														<FormControl>
+															<SelectValue />
+														</FormControl>
+													</SelectTrigger>
+													<SelectContent>
+														<SelectItem value="senhome">Senhome</SelectItem>
+													</SelectContent>
+												</Select>
 												<FormMessage />
 											</FormItem>
 										)}
@@ -205,7 +262,7 @@ export function ProductCreatePage() {
 										name="price"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Giá so sánh</FormLabel>
+												<FormLabel>Giá gốc</FormLabel>
 												<FormControl>
 													<InputGroup>
 														<InputGroupAddon>

@@ -18,6 +18,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { calculateDiscount } from "@/lib/utils";
 import type { FormValues } from "@/pages/product/update";
 
 interface ProductVariantProps {
@@ -79,7 +80,7 @@ export function ProductVariant({ form }: ProductVariantProps) {
 			<TableHeader>
 				<TableRow>
 					<TableHead>Biến thể</TableHead>
-					<TableHead>Giá</TableHead>
+					<TableHead>Giá gốc</TableHead>
 					<TableHead>Giá bán</TableHead>
 					<TableHead>Giảm giá</TableHead>
 					<TableHead>Tồn kho</TableHead>
@@ -160,7 +161,13 @@ export function ProductVariant({ form }: ProductVariantProps) {
 							/>
 						</TableCell>
 						<TableCell>
-							<Badge variant="secondary">-20%</Badge>
+							<Badge variant="secondary">
+								{calculateDiscount(
+									form.watch(`variants.${index}.price`),
+									form.watch(`variants.${index}.sale_price`),
+								)}
+								%
+							</Badge>
 						</TableCell>
 						<TableCell>
 							<FormField

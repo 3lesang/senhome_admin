@@ -47,6 +47,7 @@ const schema = z.object({
 		}),
 	),
 	collections: z.array(z.object({ id: z.string(), name: z.string() })),
+	category: z.string(),
 });
 
 type UpdateProductPayload = z.infer<typeof schema>;
@@ -143,5 +144,6 @@ export async function updateProductHander(values: UpdateProductPayload) {
 		thumbnail: values.file?.[0]?.id,
 		file: values.file?.map((f) => f?.id),
 		tag: values.tag,
+		category: values.category,
 	});
 }

@@ -1,11 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
 import { ChevronDownIcon, Trash2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
 import z from "zod";
+import { getFullListCategoryQueryOptions } from "@/api/category/list";
 import { getCollectionsProductQueryOptions } from "@/api/collection/list";
 import { getOptionsProductQueryOptions } from "@/api/option/list";
 import { productQueryOptions } from "@/api/product/one";
@@ -100,6 +101,8 @@ const schema = z.object({
 		}),
 	),
 	collections: z.array(z.object({ id: z.string(), name: z.string() })),
+	category: z.string(),
+	brand: z.string(),
 });
 
 export type FormValues = z.infer<typeof schema>;
@@ -134,8 +137,12 @@ export function ProductUpdatePage() {
 			},
 			status: product.status,
 			tag: product.tag,
+			category: product.category,
+			brand: "",
 		},
 	});
+
+	const { data: categories } = useQuery(getFullListCategoryQueryOptions());
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: updateProductHander,
@@ -183,12 +190,12 @@ export function ProductUpdatePage() {
 								<CardHeader>
 									<CardTitle>Thông tin chung</CardTitle>
 								</CardHeader>
-								<CardContent className="space-y-4">
+								<CardContent className="grid grid-cols-2 gap-4">
 									<FormField
 										control={form.control}
 										name="name"
 										render={({ field }) => (
-											<FormItem>
+											<FormItem className="col-span-2">
 												<FormLabel>Tên sản phẩm</FormLabel>
 												<FormControl>
 													<Input placeholder="Tên sản phẩm" {...field} />
@@ -201,11 +208,61 @@ export function ProductUpdatePage() {
 										control={form.control}
 										name="content"
 										render={({ field }) => (
-											<FormItem>
+											<FormItem className="col-span-2">
 												<FormLabel>Mô tả sản phẩm</FormLabel>
 												<FormControl>
 													<TextEditor {...field} />
 												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="category"
+										render={({ field }) => (
+											<FormItem className="col-span-1">
+												<FormLabel>Loại</FormLabel>
+												<Select
+													defaultValue={field.value}
+													onValueChange={field.onChange}
+												>
+													<SelectTrigger className="w-full">
+														<FormControl>
+															<SelectValue />
+														</FormControl>
+													</SelectTrigger>
+													<SelectContent>
+														{categories?.map((item) => (
+															<SelectItem key={item.id} value={item.id}>
+																{item.name}
+															</SelectItem>
+														))}
+													</SelectContent>
+												</Select>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="brand"
+										render={({ field }) => (
+											<FormItem className="col-span-1">
+												<FormLabel>Thương hiệu</FormLabel>
+												<Select
+													defaultValue={field.value}
+													onValueChange={field.onChange}
+												>
+													<SelectTrigger className="w-full">
+														<FormControl>
+															<SelectValue />
+														</FormControl>
+													</SelectTrigger>
+													<SelectContent>
+														<SelectItem value="senhome">Senhome</SelectItem>
+													</SelectContent>
+												</Select>
 												<FormMessage />
 											</FormItem>
 										)}
@@ -241,7 +298,7 @@ export function ProductUpdatePage() {
 										name="price"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Giá so sánh</FormLabel>
+												<FormLabel>Giá gốc</FormLabel>
 												<FormControl>
 													<NumericFormat
 														value={field.value}

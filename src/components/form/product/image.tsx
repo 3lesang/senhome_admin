@@ -37,8 +37,8 @@ export function VariantImageInput({ value, onChange }: VariantImageInputProps) {
 				<Button
 					type="button"
 					variant="outline"
-					size="icon"
-					className="absolute top-1 right-1 size-4"
+					size="icon-sm"
+					className="absolute top-1 right-1 size-6 rounded-full"
 					onClick={handleRemove}
 				>
 					<XIcon />

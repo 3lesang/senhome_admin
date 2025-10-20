@@ -18,6 +18,7 @@ type ProductData = {
 	expand: {
 		file: { id: string; collectionName: string; file: string }[];
 	};
+	category: string;
 };
 
 export function productQueryOptions(id: string) {
@@ -27,7 +28,8 @@ export function productQueryOptions(id: string) {
 			return pocketClient
 				.collection<ProductData>(PRODUCT_COLLECTION)
 				.getOne(id, {
-					fields: "id,name,slug,content,price,sale_price,seo,status,tag,expand",
+					fields:
+						"id,name,slug,content,price,sale_price,seo,status,tag,expand,category",
 					expand: "file",
 				});
 		},
@@ -46,6 +48,7 @@ export function productQueryOptions(id: string) {
 				seo: { title: data.seo.title, description: data.seo.description },
 				status: data.status,
 				tag: data.tag,
+				category: data.category,
 			};
 		},
 	});

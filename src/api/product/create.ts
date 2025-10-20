@@ -47,6 +47,7 @@ const schema = z.object({
 		}),
 	),
 	collections: z.array(z.object({ id: z.string(), name: z.string() })),
+	category: z.string(),
 });
 
 type CreateProductPayload = z.infer<typeof schema>;
@@ -66,6 +67,7 @@ export async function createProductHandler(values: CreateProductPayload) {
 		thumbnail: values.file?.[0]?.id,
 		file: values.file?.map((f) => f?.id),
 		tag: values.tag,
+		category: values.category,
 	};
 
 	const res = await pocketClient.collection(PRODUCT_COLLECTION).create(body);

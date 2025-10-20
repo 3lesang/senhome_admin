@@ -63,3 +63,9 @@ export function checkDuplicateNames<T extends { name: string }>(
 		}
 	}
 }
+
+export function calculateDiscount(originPrice: number, salePrice: number) {
+	if (originPrice <= 0) return 0;
+	const discount = ((originPrice - salePrice) / originPrice) * 100;
+	return Math.round(discount);
+}

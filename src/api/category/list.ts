@@ -5,7 +5,9 @@ export function getFullListCategoryQueryOptions() {
 	return queryOptions({
 		queryKey: [CATEGORY_COLLECTION],
 		queryFn: () => {
-			return pocketClient.collection(CATEGORY_COLLECTION).getFullList();
+			return pocketClient
+				.collection<{ id: string; name: string }>(CATEGORY_COLLECTION)
+				.getFullList();
 		},
 	});
 }
