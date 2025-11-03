@@ -53,7 +53,7 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 export function UpdateMenuPage() {
-	const { id } = useParams({ from: "/(app)/store/menus/$id" });
+	const { id } = useParams({ from: "/(app)/store/menu/$id" });
 	const { data } = useSuspenseQuery(getOneMenuQueryOptions(id));
 
 	const form = useForm<FormValues>({

@@ -1,17 +1,18 @@
 import { queryOptions } from "@tanstack/react-query";
+import { MENU_QUERY_KEY } from "@/constants";
 import { MENU_COLLECTION, pocketClient } from "@/pocketbase";
-
-type MenuDataType = {
-	id: string;
-	name: string;
-	postion: "header" | "footer";
-};
 
 export function getOneMenuQueryOptions(id: string) {
 	return queryOptions({
-		queryKey: [MENU_COLLECTION, id],
+		queryKey: [MENU_QUERY_KEY, id],
 		queryFn: () => {
-			return pocketClient.collection<MenuDataType>(MENU_COLLECTION).getOne(id);
+			return pocketClient
+				.collection<{
+					id: string;
+					name: string;
+					postion: "header" | "footer";
+				}>(MENU_COLLECTION)
+				.getOne(id);
 		},
 	});
 }

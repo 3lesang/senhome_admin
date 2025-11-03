@@ -1,494 +1,275 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { useParams } from "@tanstack/react-router";
-import { ChevronDownIcon, Trash2Icon } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { NumericFormat } from "react-number-format";
+import axiosClient from "@/axios";
+import { ActiveFields } from "@/components/form/product/active-fields";
+import { CollectionFields } from "@/components/form/product/collection-fields";
+import { useAppForm } from "@/components/form/product/hooks/form";
+import { InfoFields } from "@/components/form/product/info-fields";
+import { MediaFields } from "@/components/form/product/media-fields";
+import { PriceFields } from "@/components/form/product/price-fields";
+import { SEOFields } from "@/components/form/product/seo-fields";
+import { TagFields } from "@/components/form/product/tag-fields";
+import { OptionSchema, VariantSchema } from "@/components/form/product/variant";
+import { VariantFields } from "@/components/form/product/variant-fields";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { PRODUCT_QUERY_KEY } from "@/constants";
+import { slugify } from "@/lib/utils";
+import {
+  getProductContentQueryOptions,
+  getProductQueryOptions,
+} from "@/queries/product";
+import { s3Client } from "@/s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { useBlocker, useParams } from "@tanstack/react-router";
 import { toast } from "sonner";
 import z from "zod";
-import { getFullListCategoryQueryOptions } from "@/api/category/list";
-import { getCollectionsProductQueryOptions } from "@/api/collection/list";
-import { getOptionsProductQueryOptions } from "@/api/option/list";
-import { productQueryOptions } from "@/api/product/one";
-import { updateProductHander } from "@/api/product/update";
-import { getVariantsProductQueryOptions } from "@/api/variant/list";
-import { CollectionInput } from "@/components/form/product/collection";
-import { MediaInput } from "@/components/form/product/media";
-import { ProductOptions } from "@/components/form/product/options";
-import { TagInput } from "@/components/form/product/tag";
-import { ProductVariant } from "@/components/form/product/variant";
-import { TextEditor } from "@/components/input/editor";
-import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardAction,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import { Spinner } from "@/components/ui/spinner";
-import { Textarea } from "@/components/ui/textarea";
-import { checkDuplicateNames } from "@/lib/utils";
+
+type UpdateProductRequest = {
+  name: string;
+  slug: string;
+  origin_price: number;
+  sale_price: number;
+  meta_title: string;
+  meta_description: string;
+  is_active: boolean;
+  category_id: number;
+  files: { name: string; no: number; is_primary: boolean }[];
+  tags: string[];
+  collection_ids: number[];
+  options?: {
+    name: string;
+    values?: { name: string }[];
+  }[];
+  variants: {
+    origin_price: number;
+    sale_price: number;
+    file: string;
+    stock: number;
+    sku: string;
+  }[];
+};
 
 const schema = z.object({
-	id: z.string(),
-	name: z.string().min(1, "Name is required"),
-	content: z.union([z.string(), z.record(z.string(), z.any()), z.null()]),
-	file: z.array(z.object({ id: z.string(), url: z.string() })),
-	price: z.number(),
-	sale_price: z.number(),
-	slug: z.string(),
-	seo: z.object({
-		title: z.string(),
-		description: z.string(),
-	}),
-	status: z.enum(["active", "draft"]),
-	tag: z.string(),
-	options: z
-		.array(
-			z.object({
-				id: z.string(),
-				name: z.string().min(1, "Name is required"),
-				values: z
-					.array(
-						z.object({
-							id: z.string(),
-							name: z.string().min(1, "Value name is required"),
-						}),
-					)
-					.superRefine((values, ctx) =>
-						checkDuplicateNames(values, ctx, "This value name already exists"),
-					),
-			}),
-		)
-		.superRefine((options, ctx) =>
-			checkDuplicateNames(options, ctx, "This value name already exists"),
-		),
-	variants: z.array(
-		z.object({
-			id: z.string(),
-			price: z.number(),
-			sale_price: z.number(),
-			stock: z.number(),
-			sku: z.string(),
-			combos: z.string(),
-			file: z.object({ id: z.string(), url: z.string() }).nullable(),
-		}),
-	),
-	collections: z.array(z.object({ id: z.string(), name: z.string() })),
-	category: z.string(),
-	brand: z.string(),
+  toastID: z.union([z.string(), z.number()]),
+  infoGroup: z.object({
+    name: z.string().min(1, "Name is required"),
+    description: z.record(z.string(), z.any()),
+    categoryID: z.number(),
+  }),
+  priceGroup: z.object({
+    originPrice: z.number(),
+    salePrice: z.number(),
+  }),
+  seoGroup: z.object({
+    slug: z.string(),
+    metaTitle: z.string(),
+    metaDescription: z.string(),
+  }),
+  activeGroup: z.object({
+    isActive: z.boolean(),
+  }),
+  collectionGroup: z.object({
+    collections: z.array(z.object({ id: z.number(), name: z.string() })),
+  }),
+  fileGroup: z.object({
+    files: z.array(z.string()),
+  }),
+  tagGroup: z.object({
+    tags: z.array(z.string()),
+  }),
+  variantGroup: z.object({
+    variantOptions: z.array(
+      z.array(z.object({ option_name: z.string(), value: z.string() })),
+    ),
+    options: OptionSchema,
+    variants: VariantSchema,
+  }),
 });
 
-export type FormValues = z.infer<typeof schema>;
+type FormValues = z.infer<typeof schema>;
 
 export function ProductUpdatePage() {
-	const { id } = useParams({ from: "/(app)/products/$id/update" });
-	const { data: product } = useSuspenseQuery(productQueryOptions(id));
-	const { data: options } = useSuspenseQuery(getOptionsProductQueryOptions(id));
-	const { data: variants } = useSuspenseQuery(
-		getVariantsProductQueryOptions(id),
-	);
-	const { data: collections } = useSuspenseQuery(
-		getCollectionsProductQueryOptions(id),
-	);
+  const queryClient = useQueryClient();
+  const { id } = useParams({ from: "/(app)/product/$id/update" });
+  const getProductQuery = useSuspenseQuery(getProductQueryOptions(id));
+  const getProductContentQuery = useSuspenseQuery(
+    getProductContentQueryOptions(getProductQuery.data.data.slug),
+  );
 
-	const form = useForm<FormValues>({
-		resolver: zodResolver(schema),
-		defaultValues: {
-			id: product.id,
-			name: product.name,
-			content: product.content,
-			file: product.file,
-			slug: product.slug,
-			price: product.price,
-			sale_price: product.sale_price,
-			options,
-			variants,
-			collections,
-			seo: {
-				title: product.seo?.title,
-				description: product.seo.description,
-			},
-			status: product.status,
-			tag: product.tag,
-			category: product.category,
-			brand: "",
-		},
-	});
+  const saveProductMutation = useMutation({
+    mutationFn: async (value: FormValues) => {
+      const slug = slugify(value.seoGroup.slug || value.infoGroup.name);
+      const collectionIDs = value.collectionGroup.collections.map((c) => c.id);
+      const files = value.fileGroup.files.map((f, i) => ({
+        no: i,
+        name: f,
+        is_primary: i === 0,
+      }));
+      const request: UpdateProductRequest = {
+        name: value.infoGroup.name,
+        slug: slug,
+        origin_price: value.priceGroup.originPrice,
+        sale_price: value.priceGroup.salePrice,
+        meta_title: value.seoGroup.metaTitle,
+        meta_description: value.seoGroup.metaDescription,
+        files: files,
+        is_active: value.activeGroup.isActive,
+        collection_ids: collectionIDs,
+        category_id: 0,
+        tags: value.tagGroup.tags,
+        options: value.variantGroup.options,
+        variants: value.variantGroup.variants,
+      };
+      s3Client.send(
+        new PutObjectCommand({
+          Bucket: "r2-bucket",
+          Key: `content/product/${slug}`,
+          Body: new Blob([JSON.stringify(value.infoGroup.description)], {
+            type: "application/json",
+          }),
+          ContentType: "application/json",
+        }),
+      );
+      return axiosClient.put(`/products/${id}`, request);
+    },
+    onSuccess: async () => {
+      toast.success("Update product successfully");
+      const toastID = form.getFieldValue("toastID");
+      toast.dismiss(toastID);
+      form.setFieldValue("toastID", "");
+      await queryClient.refetchQueries({
+        queryKey: [PRODUCT_QUERY_KEY, 1, 10],
+      });
+      getProductQuery.refetch();
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
 
-	const { data: categories } = useQuery(getFullListCategoryQueryOptions());
+  const defaultValues: FormValues = {
+    toastID: "",
+    infoGroup: {
+      name: getProductQuery.data.data.name,
+      description: getProductContentQuery.data.data,
+      categoryID: getProductQuery.data.data.category_id ?? 0,
+    },
+    priceGroup: {
+      originPrice: getProductQuery.data.data.origin_price,
+      salePrice: getProductQuery.data.data.sale_price,
+    },
+    seoGroup: {
+      slug: getProductQuery.data.data.slug,
+      metaTitle: getProductQuery.data.data.meta_title,
+      metaDescription: getProductQuery.data.data.meta_description,
+    },
+    activeGroup: {
+      isActive: getProductQuery.data.data.is_active,
+    },
+    fileGroup: {
+      files: getProductQuery.data.data.files ?? [],
+    },
+    tagGroup: {
+      tags: getProductQuery.data.data?.tags ?? [],
+    },
+    collectionGroup: {
+      collections: getProductQuery.data.data.collections ?? [],
+    },
+    variantGroup: {
+      options: getProductQuery.data.data.options ?? [],
+      variantOptions: [[]],
+      variants: getProductQuery.data.data.variants ?? [],
+    },
+  };
 
-	const { mutate, isPending } = useMutation({
-		mutationFn: updateProductHander,
-		onSuccess: () => {
-			toast.success("Update product successfully");
-		},
-	});
+  const form = useAppForm({
+    defaultValues,
+    validators: {
+      onSubmit: schema,
+    },
+    onSubmit: async ({ value }) => {
+      await saveProductMutation.mutateAsync(value);
+    },
+    listeners: {
+      onChange: ({ formApi }) => {
+        const toastID = formApi.getFieldValue("toastID");
+        if (form.state.isPristine || toastID) return;
+        const id = toast.info("You have unsaved changes", {
+          duration: Infinity,
+          position: "top-center",
+          closeButton: false,
+          action: {
+            label: "Lưu",
+            onClick: (event) => {
+              event.preventDefault();
+              form.handleSubmit();
+            },
+          },
+          cancel: {
+            label: "Hủy",
+            onClick: () => {
+              form.reset();
+              formApi.setFieldValue("toastID", "");
+            },
+          },
+        });
+        formApi.setFieldValue("toastID", id);
+      },
+    },
+    onSubmitInvalid({ formApi }) {
+      console.log(formApi.getAllErrors());
+      toast.error("Không hợp lệ, vui lòng nhập lại");
+    },
+  });
 
-	function handleSubmit(values: FormValues) {
-		mutate(values);
-	}
+  useBlocker({
+    shouldBlockFn: () => {
+      const toastID = form.getFieldValue("toastID");
+      return !!toastID;
+    },
+    enableBeforeUnload: true,
+  });
 
-	return (
-		<Form {...form}>
-			<form onSubmit={form.handleSubmit(handleSubmit)}>
-				<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
-					<CardHeader>
-						<CardTitle>{product.name}</CardTitle>
-						<CardAction className="flex gap-2">
-							<Button type="button" variant="secondary">
-								Xem trước
-							</Button>
-							<Button type="button" variant="secondary">
-								Nhân bản
-							</Button>
-							<DropdownMenu>
-								<DropdownMenuTrigger asChild>
-									<Button type="button" variant="secondary">
-										Thêm hành động
-										<ChevronDownIcon />
-									</Button>
-								</DropdownMenuTrigger>
-								<DropdownMenuContent>
-									<DropdownMenuItem>
-										<Trash2Icon />
-										Xóa sản phẩm
-									</DropdownMenuItem>
-								</DropdownMenuContent>
-							</DropdownMenu>
-						</CardAction>
-					</CardHeader>
-					<CardContent className="grid grid-cols-12 gap-4">
-						<div className="col-span-8 space-y-4">
-							<Card className="shadow-none border-0">
-								<CardHeader>
-									<CardTitle>Thông tin chung</CardTitle>
-								</CardHeader>
-								<CardContent className="grid grid-cols-2 gap-4">
-									<FormField
-										control={form.control}
-										name="name"
-										render={({ field }) => (
-											<FormItem className="col-span-2">
-												<FormLabel>Tên sản phẩm</FormLabel>
-												<FormControl>
-													<Input placeholder="Tên sản phẩm" {...field} />
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="content"
-										render={({ field }) => (
-											<FormItem className="col-span-2">
-												<FormLabel>Mô tả sản phẩm</FormLabel>
-												<FormControl>
-													<TextEditor {...field} />
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="category"
-										render={({ field }) => (
-											<FormItem className="col-span-1">
-												<FormLabel>Loại</FormLabel>
-												<Select
-													defaultValue={field.value}
-													onValueChange={field.onChange}
-												>
-													<SelectTrigger className="w-full">
-														<FormControl>
-															<SelectValue />
-														</FormControl>
-													</SelectTrigger>
-													<SelectContent>
-														{categories?.map((item) => (
-															<SelectItem key={item.id} value={item.id}>
-																{item.name}
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="brand"
-										render={({ field }) => (
-											<FormItem className="col-span-1">
-												<FormLabel>Thương hiệu</FormLabel>
-												<Select
-													defaultValue={field.value}
-													onValueChange={field.onChange}
-												>
-													<SelectTrigger className="w-full">
-														<FormControl>
-															<SelectValue />
-														</FormControl>
-													</SelectTrigger>
-													<SelectContent>
-														<SelectItem value="senhome">Senhome</SelectItem>
-													</SelectContent>
-												</Select>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-								</CardContent>
-							</Card>
-							<Card className="shadow-none border-0">
-								<CardHeader>
-									<CardTitle>Hình ảnh sản phẩm</CardTitle>
-								</CardHeader>
-								<CardContent>
-									<FormField
-										control={form.control}
-										name="file"
-										render={({ field }) => (
-											<FormItem>
-												<FormControl>
-													<MediaInput {...field} />
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-								</CardContent>
-							</Card>
-							<Card className="shadow-none border-0">
-								<CardHeader>
-									<CardTitle>Giá sản phẩm</CardTitle>
-								</CardHeader>
-								<CardContent className="grid grid-cols-2 gap-4">
-									<FormField
-										control={form.control}
-										name="price"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Giá gốc</FormLabel>
-												<FormControl>
-													<NumericFormat
-														value={field.value}
-														className="bg-white"
-														thousandSeparator
-														suffix=" đ"
-														customInput={Input}
-														onValueChange={(v) =>
-															field.onChange(Number(v.value))
-														}
-														inputMode="decimal"
-													/>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="sale_price"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Giá bán</FormLabel>
-												<FormControl>
-													<NumericFormat
-														value={field.value}
-														className="bg-white"
-														thousandSeparator
-														suffix=" đ"
-														customInput={Input}
-														onValueChange={(v) =>
-															field.onChange(Number(v.value))
-														}
-														inputMode="decimal"
-													/>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-								</CardContent>
-							</Card>
-							<Card className="shadow-none border-0">
-								<CardHeader>
-									<CardTitle>Biến thể</CardTitle>
-								</CardHeader>
-								<CardContent>
-									<ProductOptions form={form} />
-									<ProductVariant form={form} />
-								</CardContent>
-							</Card>
-							<Card className="border-0 shadow-none">
-								<CardHeader>
-									<CardTitle>Tối ưu SEO</CardTitle>
-									<CardDescription>
-										Thiết lập các thẻ mô tả giúp khách hàng dễ dàng tìm thấy
-										danh mục này trên công cụ tìm kiếm như Google.
-									</CardDescription>
-								</CardHeader>
-								<CardContent className="space-y-4">
-									<FormField
-										control={form.control}
-										name="seo.title"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Tiêu đề</FormLabel>
-												<FormControl>
-													<Input {...field} />
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="seo.description"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Mô tả</FormLabel>
-												<FormControl>
-													<Textarea className="resize-none" {...field} />
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="slug"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Đường dẫn</FormLabel>
-												<FormControl>
-													<Input {...field} />
-												</FormControl>
-												<FormMessage />
-												<FormDescription>
-													https://senhome.vn/products/{form.watch("slug")}
-												</FormDescription>
-											</FormItem>
-										)}
-									/>
-								</CardContent>
-							</Card>
-						</div>
-						<div className="col-span-4 space-y-4">
-							<Card className="shadow-none border-0">
-								<CardHeader>
-									<CardTitle>Trạng thái</CardTitle>
-								</CardHeader>
-								<CardContent>
-									<FormField
-										control={form.control}
-										name="status"
-										render={({ field }) => (
-											<FormItem>
-												<Select
-													value={field.value}
-													onValueChange={field.onChange}
-												>
-													<FormControl>
-														<SelectTrigger className="w-full">
-															<SelectValue placeholder="Chọn trạng thái" />
-														</SelectTrigger>
-													</FormControl>
-													<SelectContent>
-														<SelectItem value="active">Hoạt động</SelectItem>
-														<SelectItem value="draft">Bản nháp</SelectItem>
-													</SelectContent>
-												</Select>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-								</CardContent>
-							</Card>
-							<Card className="shadow-none border-0">
-								<CardHeader>
-									<CardTitle>Nhóm sản phẩm</CardTitle>
-								</CardHeader>
-								<CardContent>
-									<FormField
-										control={form.control}
-										name="collections"
-										render={({ field }) => (
-											<FormItem>
-												<FormControl>
-													<CollectionInput {...field} />
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-								</CardContent>
-							</Card>
-							<Card className="shadow-none border-0">
-								<CardHeader>
-									<CardTitle>Nhãn</CardTitle>
-									<CardDescription>
-										Nhập và nhấn enter để thêm thẻ
-									</CardDescription>
-								</CardHeader>
-								<CardContent>
-									<FormField
-										control={form.control}
-										name="tag"
-										render={({ field }) => (
-											<FormItem>
-												<FormControl>
-													<TagInput {...field} />
-												</FormControl>
-											</FormItem>
-										)}
-									/>
-								</CardContent>
-							</Card>
-						</div>
-					</CardContent>
-					<CardFooter>
-						<Button
-							type="submit"
-							className="ml-auto"
-							disabled={isPending || !form.formState.isDirty}
-						>
-							{isPending && <Spinner />}
-							Lưu
-						</Button>
-					</CardFooter>
-				</Card>
-			</form>
-		</Form>
-	);
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        form.handleSubmit();
+      }}
+    >
+      <Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
+        <CardHeader>
+          <CardTitle>{getProductQuery.data.data.name}</CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-12 gap-4">
+          <div className="col-span-8 space-y-4">
+            <InfoFields fields="infoGroup" form={form} />
+            <MediaFields fields="fileGroup" form={form} />
+            <PriceFields fields="priceGroup" form={form} />
+            <VariantFields fields="variantGroup" form={form} />
+            <SEOFields fields="seoGroup" form={form} />
+          </div>
+          <div className="col-span-4 space-y-4">
+            <ActiveFields fields="activeGroup" form={form} />
+            <CollectionFields fields="collectionGroup" form={form} />
+            <TagFields fields="tagGroup" form={form} />
+          </div>
+        </CardContent>
+        <CardFooter>
+          <form.AppForm>
+            <form.SubscribeButton label="Lưu" />
+          </form.AppForm>
+        </CardFooter>
+      </Card>
+    </form>
+  );
 }

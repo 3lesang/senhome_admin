@@ -56,9 +56,9 @@ import {
 import { cn } from "@/lib/utils";
 
 export function ListReviewPage() {
-	const { id } = useParams({ from: "/(app)/products/$id/reviews/" });
+	const { id } = useParams({ from: "/(app)/product/$id/review/" });
 	const navigate = useNavigate();
-	const { page, limit } = useSearch({ from: "/(app)/products/$id/reviews/" });
+	const { page, limit } = useSearch({ from: "/(app)/product/$id/review/" });
 	const { data: reviews, refetch } = useSuspenseQuery(
 		getReviewsProductQueryOptions({ page, limit, productId: id }),
 	);
@@ -68,7 +68,7 @@ export function ListReviewPage() {
 		page,
 	}: TablePaginationDataChange) => {
 		navigate({
-			to: "/products/$id/reviews",
+			to: "/product/$id/review",
 			params: { id },
 			search: { page: page, limit: limit },
 		});
@@ -92,7 +92,7 @@ export function ListReviewPage() {
 				<CardDescription>Danh sách đánh giá</CardDescription>
 				<CardAction>
 					<Link
-						to="/products/$id/reviews/create"
+						to="/product/$id/review/create"
 						params={{ id }}
 						type="button"
 						className={cn(buttonVariants())}
@@ -188,7 +188,7 @@ export function ListReviewPage() {
 						</EmptyHeader>
 						<EmptyContent>
 							<Link
-								to="/products/$id/reviews/create"
+								to="/product/$id/review/create"
 								params={{ id }}
 								type="button"
 								className={cn(buttonVariants())}

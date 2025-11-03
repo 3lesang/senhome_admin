@@ -1,23 +1,17 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { EyeIcon, GlobeIcon } from "lucide-react";
+import { GlobeIcon } from "lucide-react";
 import {
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
-	SidebarMenuAction,
 	SidebarMenuButton,
 	SidebarMenuItem,
 	SidebarMenuSub,
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 export default function WebsiteMenu() {
 	const location = useLocation();
@@ -29,21 +23,21 @@ export default function WebsiteMenu() {
 		>
 			<SidebarMenuItem>
 				<CollapsibleTrigger asChild>
-					<SidebarMenuButton asChild>
-						<Link to="/store/pages">
+					<Link to="/store/page">
+						<SidebarMenuButton>
 							<GlobeIcon />
 							<span className="select-none">Website</span>
-						</Link>
-					</SidebarMenuButton>
+						</SidebarMenuButton>
+					</Link>
 				</CollapsibleTrigger>
 				<CollapsibleContent>
 					<SidebarMenuSub className="border-l-0">
 						<SidebarMenuSubItem>
 							<SidebarMenuSubButton
 								asChild
-								isActive={location.pathname.includes("/store/pages")}
+								isActive={location.pathname.includes("/store/page")}
 							>
-								<Link to="/store/pages">
+								<Link to="/store/page">
 									<span className="select-none">Trang nội dung</span>
 								</Link>
 							</SidebarMenuSubButton>
@@ -51,9 +45,9 @@ export default function WebsiteMenu() {
 						<SidebarMenuSubItem>
 							<SidebarMenuSubButton
 								asChild
-								isActive={location.pathname.includes("/store/menus")}
+								isActive={location.pathname.includes("/store/menu")}
 							>
-								<Link to="/store/menus">
+								<Link to="/store/menu">
 									<span className="select-none">Menu</span>
 								</Link>
 							</SidebarMenuSubButton>
@@ -61,31 +55,15 @@ export default function WebsiteMenu() {
 						<SidebarMenuSubItem>
 							<SidebarMenuSubButton
 								asChild
-								isActive={location.pathname.includes("/store/settings")}
+								isActive={location.pathname.includes("/store/setting")}
 							>
-								<Link to="/store/settings">
+								<Link to="/store/setting">
 									<span className="select-none">Cấu hình</span>
 								</Link>
 							</SidebarMenuSubButton>
 						</SidebarMenuSubItem>
 					</SidebarMenuSub>
 				</CollapsibleContent>
-				<SidebarMenuAction>
-					<Tooltip>
-						<TooltipTrigger>
-							<a
-								href="https://web-dev.senhome.vn"
-								target="_blank"
-								rel="noopener"
-							>
-								<EyeIcon size={16} />
-							</a>
-						</TooltipTrigger>
-						<TooltipContent>
-							<p>View store</p>
-						</TooltipContent>
-					</Tooltip>
-				</SidebarMenuAction>
 			</SidebarMenuItem>
 		</Collapsible>
 	);

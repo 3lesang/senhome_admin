@@ -15,37 +15,37 @@ import { Route as appIndexRouteImport } from './routes/(app)/index'
 import { Route as authSignupRouteImport } from './routes/(auth)/signup'
 import { Route as authSigninRouteImport } from './routes/(auth)/signin'
 import { Route as appStoreRouteRouteImport } from './routes/(app)/store/route'
-import { Route as appProductsIndexRouteImport } from './routes/(app)/products/index'
-import { Route as appOrdersIndexRouteImport } from './routes/(app)/orders/index'
-import { Route as appDiscountsIndexRouteImport } from './routes/(app)/discounts/index'
-import { Route as appCustomersIndexRouteImport } from './routes/(app)/customers/index'
-import { Route as appCategoriesIndexRouteImport } from './routes/(app)/categories/index'
-import { Route as appAnalyticsIndexRouteImport } from './routes/(app)/analytics/index'
-import { Route as appProductsCreateRouteImport } from './routes/(app)/products/create'
-import { Route as appOrdersIdRouteImport } from './routes/(app)/orders/$id'
-import { Route as appDiscountsPromotionsRouteImport } from './routes/(app)/discounts/promotions'
-import { Route as appDiscountsCouponsRouteImport } from './routes/(app)/discounts/coupons'
-import { Route as appCustomersRatingRouteImport } from './routes/(app)/customers/rating'
-import { Route as appStoreSettingsIndexRouteImport } from './routes/(app)/store/settings/index'
-import { Route as appStorePagesIndexRouteImport } from './routes/(app)/store/pages/index'
-import { Route as appStoreMenusIndexRouteImport } from './routes/(app)/store/menus/index'
-import { Route as appProductsCollectionsIndexRouteImport } from './routes/(app)/products/collections/index'
-import { Route as appOrdersDraftIndexRouteImport } from './routes/(app)/orders/draft/index'
-import { Route as appContentFilesIndexRouteImport } from './routes/(app)/content/files/index'
-import { Route as appContentBlogsIndexRouteImport } from './routes/(app)/content/blogs/index'
-import { Route as appStoreSettingsShipmentsRouteImport } from './routes/(app)/store/settings/shipments'
-import { Route as appStoreSettingsPaymentsRouteImport } from './routes/(app)/store/settings/payments'
-import { Route as appStoreSettingsGeneralRouteImport } from './routes/(app)/store/settings/general'
-import { Route as appStoreSettingsCheckoutsRouteImport } from './routes/(app)/store/settings/checkouts'
-import { Route as appStorePagesCreateRouteImport } from './routes/(app)/store/pages/create'
-import { Route as appStorePagesIdRouteImport } from './routes/(app)/store/pages/$id'
-import { Route as appStoreMenusCreateRouteImport } from './routes/(app)/store/menus/create'
-import { Route as appStoreMenusIdRouteImport } from './routes/(app)/store/menus/$id'
-import { Route as appProductsCollectionsCreateRouteImport } from './routes/(app)/products/collections/create'
-import { Route as appProductsCollectionsIdRouteImport } from './routes/(app)/products/collections/$id'
-import { Route as appProductsIdUpdateRouteImport } from './routes/(app)/products/$id/update'
-import { Route as appProductsIdReviewsIndexRouteImport } from './routes/(app)/products/$id/reviews/index'
-import { Route as appProductsIdReviewsCreateRouteImport } from './routes/(app)/products/$id/reviews/create'
+import { Route as appProductIndexRouteImport } from './routes/(app)/product/index'
+import { Route as appOrderIndexRouteImport } from './routes/(app)/order/index'
+import { Route as appDiscountIndexRouteImport } from './routes/(app)/discount/index'
+import { Route as appCustomerIndexRouteImport } from './routes/(app)/customer/index'
+import { Route as appCategoryIndexRouteImport } from './routes/(app)/category/index'
+import { Route as appAnalyticIndexRouteImport } from './routes/(app)/analytic/index'
+import { Route as appProductCreateRouteImport } from './routes/(app)/product/create'
+import { Route as appOrderIdRouteImport } from './routes/(app)/order/$id'
+import { Route as appDiscountPromotionRouteImport } from './routes/(app)/discount/promotion'
+import { Route as appDiscountCouponRouteImport } from './routes/(app)/discount/coupon'
+import { Route as appCustomerRatingRouteImport } from './routes/(app)/customer/rating'
+import { Route as appStoreSettingIndexRouteImport } from './routes/(app)/store/setting/index'
+import { Route as appStorePageIndexRouteImport } from './routes/(app)/store/page/index'
+import { Route as appStoreMenuIndexRouteImport } from './routes/(app)/store/menu/index'
+import { Route as appProductCollectionIndexRouteImport } from './routes/(app)/product/collection/index'
+import { Route as appOrderDraftIndexRouteImport } from './routes/(app)/order/draft/index'
+import { Route as appContentFileIndexRouteImport } from './routes/(app)/content/file/index'
+import { Route as appContentBlogIndexRouteImport } from './routes/(app)/content/blog/index'
+import { Route as appStoreSettingShipmentsRouteImport } from './routes/(app)/store/setting/shipments'
+import { Route as appStoreSettingPaymentsRouteImport } from './routes/(app)/store/setting/payments'
+import { Route as appStoreSettingGeneralRouteImport } from './routes/(app)/store/setting/general'
+import { Route as appStoreSettingCheckoutsRouteImport } from './routes/(app)/store/setting/checkouts'
+import { Route as appStorePageCreateRouteImport } from './routes/(app)/store/page/create'
+import { Route as appStorePageIdRouteImport } from './routes/(app)/store/page/$id'
+import { Route as appStoreMenuCreateRouteImport } from './routes/(app)/store/menu/create'
+import { Route as appStoreMenuIdRouteImport } from './routes/(app)/store/menu/$id'
+import { Route as appProductCollectionCreateRouteImport } from './routes/(app)/product/collection/create'
+import { Route as appProductCollectionIdRouteImport } from './routes/(app)/product/collection/$id'
+import { Route as appProductIdUpdateRouteImport } from './routes/(app)/product/$id/update'
+import { Route as appProductIdReviewIndexRouteImport } from './routes/(app)/product/$id/review/index'
+import { Route as appProductIdReviewCreateRouteImport } from './routes/(app)/product/$id/review/create'
 
 const authRouteRoute = authRouteRouteImport.update({
   id: '/(auth)',
@@ -75,167 +75,164 @@ const appStoreRouteRoute = appStoreRouteRouteImport.update({
   path: '/store',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appProductsIndexRoute = appProductsIndexRouteImport.update({
-  id: '/products/',
-  path: '/products/',
+const appProductIndexRoute = appProductIndexRouteImport.update({
+  id: '/product/',
+  path: '/product/',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appOrdersIndexRoute = appOrdersIndexRouteImport.update({
-  id: '/orders/',
-  path: '/orders/',
+const appOrderIndexRoute = appOrderIndexRouteImport.update({
+  id: '/order/',
+  path: '/order/',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appDiscountsIndexRoute = appDiscountsIndexRouteImport.update({
-  id: '/discounts/',
-  path: '/discounts/',
+const appDiscountIndexRoute = appDiscountIndexRouteImport.update({
+  id: '/discount/',
+  path: '/discount/',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appCustomersIndexRoute = appCustomersIndexRouteImport.update({
-  id: '/customers/',
-  path: '/customers/',
+const appCustomerIndexRoute = appCustomerIndexRouteImport.update({
+  id: '/customer/',
+  path: '/customer/',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appCategoriesIndexRoute = appCategoriesIndexRouteImport.update({
-  id: '/categories/',
-  path: '/categories/',
+const appCategoryIndexRoute = appCategoryIndexRouteImport.update({
+  id: '/category/',
+  path: '/category/',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appAnalyticsIndexRoute = appAnalyticsIndexRouteImport.update({
-  id: '/analytics/',
-  path: '/analytics/',
+const appAnalyticIndexRoute = appAnalyticIndexRouteImport.update({
+  id: '/analytic/',
+  path: '/analytic/',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appProductsCreateRoute = appProductsCreateRouteImport.update({
-  id: '/products/create',
-  path: '/products/create',
+const appProductCreateRoute = appProductCreateRouteImport.update({
+  id: '/product/create',
+  path: '/product/create',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appOrdersIdRoute = appOrdersIdRouteImport.update({
-  id: '/orders/$id',
-  path: '/orders/$id',
+const appOrderIdRoute = appOrderIdRouteImport.update({
+  id: '/order/$id',
+  path: '/order/$id',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appDiscountsPromotionsRoute = appDiscountsPromotionsRouteImport.update({
-  id: '/discounts/promotions',
-  path: '/discounts/promotions',
+const appDiscountPromotionRoute = appDiscountPromotionRouteImport.update({
+  id: '/discount/promotion',
+  path: '/discount/promotion',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appDiscountsCouponsRoute = appDiscountsCouponsRouteImport.update({
-  id: '/discounts/coupons',
-  path: '/discounts/coupons',
+const appDiscountCouponRoute = appDiscountCouponRouteImport.update({
+  id: '/discount/coupon',
+  path: '/discount/coupon',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appCustomersRatingRoute = appCustomersRatingRouteImport.update({
-  id: '/customers/rating',
-  path: '/customers/rating',
+const appCustomerRatingRoute = appCustomerRatingRouteImport.update({
+  id: '/customer/rating',
+  path: '/customer/rating',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appStoreSettingsIndexRoute = appStoreSettingsIndexRouteImport.update({
-  id: '/settings/',
-  path: '/settings/',
+const appStoreSettingIndexRoute = appStoreSettingIndexRouteImport.update({
+  id: '/setting/',
+  path: '/setting/',
   getParentRoute: () => appStoreRouteRoute,
 } as any)
-const appStorePagesIndexRoute = appStorePagesIndexRouteImport.update({
-  id: '/pages/',
-  path: '/pages/',
+const appStorePageIndexRoute = appStorePageIndexRouteImport.update({
+  id: '/page/',
+  path: '/page/',
   getParentRoute: () => appStoreRouteRoute,
 } as any)
-const appStoreMenusIndexRoute = appStoreMenusIndexRouteImport.update({
-  id: '/menus/',
-  path: '/menus/',
+const appStoreMenuIndexRoute = appStoreMenuIndexRouteImport.update({
+  id: '/menu/',
+  path: '/menu/',
   getParentRoute: () => appStoreRouteRoute,
 } as any)
-const appProductsCollectionsIndexRoute =
-  appProductsCollectionsIndexRouteImport.update({
-    id: '/products/collections/',
-    path: '/products/collections/',
+const appProductCollectionIndexRoute =
+  appProductCollectionIndexRouteImport.update({
+    id: '/product/collection/',
+    path: '/product/collection/',
     getParentRoute: () => appRouteRoute,
   } as any)
-const appOrdersDraftIndexRoute = appOrdersDraftIndexRouteImport.update({
-  id: '/orders/draft/',
-  path: '/orders/draft/',
+const appOrderDraftIndexRoute = appOrderDraftIndexRouteImport.update({
+  id: '/order/draft/',
+  path: '/order/draft/',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appContentFilesIndexRoute = appContentFilesIndexRouteImport.update({
-  id: '/content/files/',
-  path: '/content/files/',
+const appContentFileIndexRoute = appContentFileIndexRouteImport.update({
+  id: '/content/file/',
+  path: '/content/file/',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appContentBlogsIndexRoute = appContentBlogsIndexRouteImport.update({
-  id: '/content/blogs/',
-  path: '/content/blogs/',
+const appContentBlogIndexRoute = appContentBlogIndexRouteImport.update({
+  id: '/content/blog/',
+  path: '/content/blog/',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appStoreSettingsShipmentsRoute =
-  appStoreSettingsShipmentsRouteImport.update({
-    id: '/settings/shipments',
-    path: '/settings/shipments',
+const appStoreSettingShipmentsRoute =
+  appStoreSettingShipmentsRouteImport.update({
+    id: '/setting/shipments',
+    path: '/setting/shipments',
     getParentRoute: () => appStoreRouteRoute,
   } as any)
-const appStoreSettingsPaymentsRoute =
-  appStoreSettingsPaymentsRouteImport.update({
-    id: '/settings/payments',
-    path: '/settings/payments',
+const appStoreSettingPaymentsRoute = appStoreSettingPaymentsRouteImport.update({
+  id: '/setting/payments',
+  path: '/setting/payments',
+  getParentRoute: () => appStoreRouteRoute,
+} as any)
+const appStoreSettingGeneralRoute = appStoreSettingGeneralRouteImport.update({
+  id: '/setting/general',
+  path: '/setting/general',
+  getParentRoute: () => appStoreRouteRoute,
+} as any)
+const appStoreSettingCheckoutsRoute =
+  appStoreSettingCheckoutsRouteImport.update({
+    id: '/setting/checkouts',
+    path: '/setting/checkouts',
     getParentRoute: () => appStoreRouteRoute,
   } as any)
-const appStoreSettingsGeneralRoute = appStoreSettingsGeneralRouteImport.update({
-  id: '/settings/general',
-  path: '/settings/general',
+const appStorePageCreateRoute = appStorePageCreateRouteImport.update({
+  id: '/page/create',
+  path: '/page/create',
   getParentRoute: () => appStoreRouteRoute,
 } as any)
-const appStoreSettingsCheckoutsRoute =
-  appStoreSettingsCheckoutsRouteImport.update({
-    id: '/settings/checkouts',
-    path: '/settings/checkouts',
-    getParentRoute: () => appStoreRouteRoute,
-  } as any)
-const appStorePagesCreateRoute = appStorePagesCreateRouteImport.update({
-  id: '/pages/create',
-  path: '/pages/create',
+const appStorePageIdRoute = appStorePageIdRouteImport.update({
+  id: '/page/$id',
+  path: '/page/$id',
   getParentRoute: () => appStoreRouteRoute,
 } as any)
-const appStorePagesIdRoute = appStorePagesIdRouteImport.update({
-  id: '/pages/$id',
-  path: '/pages/$id',
+const appStoreMenuCreateRoute = appStoreMenuCreateRouteImport.update({
+  id: '/menu/create',
+  path: '/menu/create',
   getParentRoute: () => appStoreRouteRoute,
 } as any)
-const appStoreMenusCreateRoute = appStoreMenusCreateRouteImport.update({
-  id: '/menus/create',
-  path: '/menus/create',
+const appStoreMenuIdRoute = appStoreMenuIdRouteImport.update({
+  id: '/menu/$id',
+  path: '/menu/$id',
   getParentRoute: () => appStoreRouteRoute,
 } as any)
-const appStoreMenusIdRoute = appStoreMenusIdRouteImport.update({
-  id: '/menus/$id',
-  path: '/menus/$id',
-  getParentRoute: () => appStoreRouteRoute,
-} as any)
-const appProductsCollectionsCreateRoute =
-  appProductsCollectionsCreateRouteImport.update({
-    id: '/products/collections/create',
-    path: '/products/collections/create',
+const appProductCollectionCreateRoute =
+  appProductCollectionCreateRouteImport.update({
+    id: '/product/collection/create',
+    path: '/product/collection/create',
     getParentRoute: () => appRouteRoute,
   } as any)
-const appProductsCollectionsIdRoute =
-  appProductsCollectionsIdRouteImport.update({
-    id: '/products/collections/$id',
-    path: '/products/collections/$id',
-    getParentRoute: () => appRouteRoute,
-  } as any)
-const appProductsIdUpdateRoute = appProductsIdUpdateRouteImport.update({
-  id: '/products/$id/update',
-  path: '/products/$id/update',
+const appProductCollectionIdRoute = appProductCollectionIdRouteImport.update({
+  id: '/product/collection/$id',
+  path: '/product/collection/$id',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appProductsIdReviewsIndexRoute =
-  appProductsIdReviewsIndexRouteImport.update({
-    id: '/products/$id/reviews/',
-    path: '/products/$id/reviews/',
-    getParentRoute: () => appRouteRoute,
-  } as any)
-const appProductsIdReviewsCreateRoute =
-  appProductsIdReviewsCreateRouteImport.update({
-    id: '/products/$id/reviews/create',
-    path: '/products/$id/reviews/create',
+const appProductIdUpdateRoute = appProductIdUpdateRouteImport.update({
+  id: '/product/$id/update',
+  path: '/product/$id/update',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appProductIdReviewIndexRoute = appProductIdReviewIndexRouteImport.update({
+  id: '/product/$id/review/',
+  path: '/product/$id/review/',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appProductIdReviewCreateRoute =
+  appProductIdReviewCreateRouteImport.update({
+    id: '/product/$id/review/create',
+    path: '/product/$id/review/create',
     getParentRoute: () => appRouteRoute,
   } as any)
 
@@ -244,74 +241,74 @@ export interface FileRoutesByFullPath {
   '/store': typeof appStoreRouteRouteWithChildren
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
-  '/customers/rating': typeof appCustomersRatingRoute
-  '/discounts/coupons': typeof appDiscountsCouponsRoute
-  '/discounts/promotions': typeof appDiscountsPromotionsRoute
-  '/orders/$id': typeof appOrdersIdRoute
-  '/products/create': typeof appProductsCreateRoute
-  '/analytics': typeof appAnalyticsIndexRoute
-  '/categories': typeof appCategoriesIndexRoute
-  '/customers': typeof appCustomersIndexRoute
-  '/discounts': typeof appDiscountsIndexRoute
-  '/orders': typeof appOrdersIndexRoute
-  '/products': typeof appProductsIndexRoute
-  '/products/$id/update': typeof appProductsIdUpdateRoute
-  '/products/collections/$id': typeof appProductsCollectionsIdRoute
-  '/products/collections/create': typeof appProductsCollectionsCreateRoute
-  '/store/menus/$id': typeof appStoreMenusIdRoute
-  '/store/menus/create': typeof appStoreMenusCreateRoute
-  '/store/pages/$id': typeof appStorePagesIdRoute
-  '/store/pages/create': typeof appStorePagesCreateRoute
-  '/store/settings/checkouts': typeof appStoreSettingsCheckoutsRoute
-  '/store/settings/general': typeof appStoreSettingsGeneralRoute
-  '/store/settings/payments': typeof appStoreSettingsPaymentsRoute
-  '/store/settings/shipments': typeof appStoreSettingsShipmentsRoute
-  '/content/blogs': typeof appContentBlogsIndexRoute
-  '/content/files': typeof appContentFilesIndexRoute
-  '/orders/draft': typeof appOrdersDraftIndexRoute
-  '/products/collections': typeof appProductsCollectionsIndexRoute
-  '/store/menus': typeof appStoreMenusIndexRoute
-  '/store/pages': typeof appStorePagesIndexRoute
-  '/store/settings': typeof appStoreSettingsIndexRoute
-  '/products/$id/reviews/create': typeof appProductsIdReviewsCreateRoute
-  '/products/$id/reviews': typeof appProductsIdReviewsIndexRoute
+  '/customer/rating': typeof appCustomerRatingRoute
+  '/discount/coupon': typeof appDiscountCouponRoute
+  '/discount/promotion': typeof appDiscountPromotionRoute
+  '/order/$id': typeof appOrderIdRoute
+  '/product/create': typeof appProductCreateRoute
+  '/analytic': typeof appAnalyticIndexRoute
+  '/category': typeof appCategoryIndexRoute
+  '/customer': typeof appCustomerIndexRoute
+  '/discount': typeof appDiscountIndexRoute
+  '/order': typeof appOrderIndexRoute
+  '/product': typeof appProductIndexRoute
+  '/product/$id/update': typeof appProductIdUpdateRoute
+  '/product/collection/$id': typeof appProductCollectionIdRoute
+  '/product/collection/create': typeof appProductCollectionCreateRoute
+  '/store/menu/$id': typeof appStoreMenuIdRoute
+  '/store/menu/create': typeof appStoreMenuCreateRoute
+  '/store/page/$id': typeof appStorePageIdRoute
+  '/store/page/create': typeof appStorePageCreateRoute
+  '/store/setting/checkouts': typeof appStoreSettingCheckoutsRoute
+  '/store/setting/general': typeof appStoreSettingGeneralRoute
+  '/store/setting/payments': typeof appStoreSettingPaymentsRoute
+  '/store/setting/shipments': typeof appStoreSettingShipmentsRoute
+  '/content/blog': typeof appContentBlogIndexRoute
+  '/content/file': typeof appContentFileIndexRoute
+  '/order/draft': typeof appOrderDraftIndexRoute
+  '/product/collection': typeof appProductCollectionIndexRoute
+  '/store/menu': typeof appStoreMenuIndexRoute
+  '/store/page': typeof appStorePageIndexRoute
+  '/store/setting': typeof appStoreSettingIndexRoute
+  '/product/$id/review/create': typeof appProductIdReviewCreateRoute
+  '/product/$id/review': typeof appProductIdReviewIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof appIndexRoute
   '/store': typeof appStoreRouteRouteWithChildren
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
-  '/customers/rating': typeof appCustomersRatingRoute
-  '/discounts/coupons': typeof appDiscountsCouponsRoute
-  '/discounts/promotions': typeof appDiscountsPromotionsRoute
-  '/orders/$id': typeof appOrdersIdRoute
-  '/products/create': typeof appProductsCreateRoute
-  '/analytics': typeof appAnalyticsIndexRoute
-  '/categories': typeof appCategoriesIndexRoute
-  '/customers': typeof appCustomersIndexRoute
-  '/discounts': typeof appDiscountsIndexRoute
-  '/orders': typeof appOrdersIndexRoute
-  '/products': typeof appProductsIndexRoute
-  '/products/$id/update': typeof appProductsIdUpdateRoute
-  '/products/collections/$id': typeof appProductsCollectionsIdRoute
-  '/products/collections/create': typeof appProductsCollectionsCreateRoute
-  '/store/menus/$id': typeof appStoreMenusIdRoute
-  '/store/menus/create': typeof appStoreMenusCreateRoute
-  '/store/pages/$id': typeof appStorePagesIdRoute
-  '/store/pages/create': typeof appStorePagesCreateRoute
-  '/store/settings/checkouts': typeof appStoreSettingsCheckoutsRoute
-  '/store/settings/general': typeof appStoreSettingsGeneralRoute
-  '/store/settings/payments': typeof appStoreSettingsPaymentsRoute
-  '/store/settings/shipments': typeof appStoreSettingsShipmentsRoute
-  '/content/blogs': typeof appContentBlogsIndexRoute
-  '/content/files': typeof appContentFilesIndexRoute
-  '/orders/draft': typeof appOrdersDraftIndexRoute
-  '/products/collections': typeof appProductsCollectionsIndexRoute
-  '/store/menus': typeof appStoreMenusIndexRoute
-  '/store/pages': typeof appStorePagesIndexRoute
-  '/store/settings': typeof appStoreSettingsIndexRoute
-  '/products/$id/reviews/create': typeof appProductsIdReviewsCreateRoute
-  '/products/$id/reviews': typeof appProductsIdReviewsIndexRoute
+  '/customer/rating': typeof appCustomerRatingRoute
+  '/discount/coupon': typeof appDiscountCouponRoute
+  '/discount/promotion': typeof appDiscountPromotionRoute
+  '/order/$id': typeof appOrderIdRoute
+  '/product/create': typeof appProductCreateRoute
+  '/analytic': typeof appAnalyticIndexRoute
+  '/category': typeof appCategoryIndexRoute
+  '/customer': typeof appCustomerIndexRoute
+  '/discount': typeof appDiscountIndexRoute
+  '/order': typeof appOrderIndexRoute
+  '/product': typeof appProductIndexRoute
+  '/product/$id/update': typeof appProductIdUpdateRoute
+  '/product/collection/$id': typeof appProductCollectionIdRoute
+  '/product/collection/create': typeof appProductCollectionCreateRoute
+  '/store/menu/$id': typeof appStoreMenuIdRoute
+  '/store/menu/create': typeof appStoreMenuCreateRoute
+  '/store/page/$id': typeof appStorePageIdRoute
+  '/store/page/create': typeof appStorePageCreateRoute
+  '/store/setting/checkouts': typeof appStoreSettingCheckoutsRoute
+  '/store/setting/general': typeof appStoreSettingGeneralRoute
+  '/store/setting/payments': typeof appStoreSettingPaymentsRoute
+  '/store/setting/shipments': typeof appStoreSettingShipmentsRoute
+  '/content/blog': typeof appContentBlogIndexRoute
+  '/content/file': typeof appContentFileIndexRoute
+  '/order/draft': typeof appOrderDraftIndexRoute
+  '/product/collection': typeof appProductCollectionIndexRoute
+  '/store/menu': typeof appStoreMenuIndexRoute
+  '/store/page': typeof appStorePageIndexRoute
+  '/store/setting': typeof appStoreSettingIndexRoute
+  '/product/$id/review/create': typeof appProductIdReviewCreateRoute
+  '/product/$id/review': typeof appProductIdReviewIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -321,37 +318,37 @@ export interface FileRoutesById {
   '/(auth)/signin': typeof authSigninRoute
   '/(auth)/signup': typeof authSignupRoute
   '/(app)/': typeof appIndexRoute
-  '/(app)/customers/rating': typeof appCustomersRatingRoute
-  '/(app)/discounts/coupons': typeof appDiscountsCouponsRoute
-  '/(app)/discounts/promotions': typeof appDiscountsPromotionsRoute
-  '/(app)/orders/$id': typeof appOrdersIdRoute
-  '/(app)/products/create': typeof appProductsCreateRoute
-  '/(app)/analytics/': typeof appAnalyticsIndexRoute
-  '/(app)/categories/': typeof appCategoriesIndexRoute
-  '/(app)/customers/': typeof appCustomersIndexRoute
-  '/(app)/discounts/': typeof appDiscountsIndexRoute
-  '/(app)/orders/': typeof appOrdersIndexRoute
-  '/(app)/products/': typeof appProductsIndexRoute
-  '/(app)/products/$id/update': typeof appProductsIdUpdateRoute
-  '/(app)/products/collections/$id': typeof appProductsCollectionsIdRoute
-  '/(app)/products/collections/create': typeof appProductsCollectionsCreateRoute
-  '/(app)/store/menus/$id': typeof appStoreMenusIdRoute
-  '/(app)/store/menus/create': typeof appStoreMenusCreateRoute
-  '/(app)/store/pages/$id': typeof appStorePagesIdRoute
-  '/(app)/store/pages/create': typeof appStorePagesCreateRoute
-  '/(app)/store/settings/checkouts': typeof appStoreSettingsCheckoutsRoute
-  '/(app)/store/settings/general': typeof appStoreSettingsGeneralRoute
-  '/(app)/store/settings/payments': typeof appStoreSettingsPaymentsRoute
-  '/(app)/store/settings/shipments': typeof appStoreSettingsShipmentsRoute
-  '/(app)/content/blogs/': typeof appContentBlogsIndexRoute
-  '/(app)/content/files/': typeof appContentFilesIndexRoute
-  '/(app)/orders/draft/': typeof appOrdersDraftIndexRoute
-  '/(app)/products/collections/': typeof appProductsCollectionsIndexRoute
-  '/(app)/store/menus/': typeof appStoreMenusIndexRoute
-  '/(app)/store/pages/': typeof appStorePagesIndexRoute
-  '/(app)/store/settings/': typeof appStoreSettingsIndexRoute
-  '/(app)/products/$id/reviews/create': typeof appProductsIdReviewsCreateRoute
-  '/(app)/products/$id/reviews/': typeof appProductsIdReviewsIndexRoute
+  '/(app)/customer/rating': typeof appCustomerRatingRoute
+  '/(app)/discount/coupon': typeof appDiscountCouponRoute
+  '/(app)/discount/promotion': typeof appDiscountPromotionRoute
+  '/(app)/order/$id': typeof appOrderIdRoute
+  '/(app)/product/create': typeof appProductCreateRoute
+  '/(app)/analytic/': typeof appAnalyticIndexRoute
+  '/(app)/category/': typeof appCategoryIndexRoute
+  '/(app)/customer/': typeof appCustomerIndexRoute
+  '/(app)/discount/': typeof appDiscountIndexRoute
+  '/(app)/order/': typeof appOrderIndexRoute
+  '/(app)/product/': typeof appProductIndexRoute
+  '/(app)/product/$id/update': typeof appProductIdUpdateRoute
+  '/(app)/product/collection/$id': typeof appProductCollectionIdRoute
+  '/(app)/product/collection/create': typeof appProductCollectionCreateRoute
+  '/(app)/store/menu/$id': typeof appStoreMenuIdRoute
+  '/(app)/store/menu/create': typeof appStoreMenuCreateRoute
+  '/(app)/store/page/$id': typeof appStorePageIdRoute
+  '/(app)/store/page/create': typeof appStorePageCreateRoute
+  '/(app)/store/setting/checkouts': typeof appStoreSettingCheckoutsRoute
+  '/(app)/store/setting/general': typeof appStoreSettingGeneralRoute
+  '/(app)/store/setting/payments': typeof appStoreSettingPaymentsRoute
+  '/(app)/store/setting/shipments': typeof appStoreSettingShipmentsRoute
+  '/(app)/content/blog/': typeof appContentBlogIndexRoute
+  '/(app)/content/file/': typeof appContentFileIndexRoute
+  '/(app)/order/draft/': typeof appOrderDraftIndexRoute
+  '/(app)/product/collection/': typeof appProductCollectionIndexRoute
+  '/(app)/store/menu/': typeof appStoreMenuIndexRoute
+  '/(app)/store/page/': typeof appStorePageIndexRoute
+  '/(app)/store/setting/': typeof appStoreSettingIndexRoute
+  '/(app)/product/$id/review/create': typeof appProductIdReviewCreateRoute
+  '/(app)/product/$id/review/': typeof appProductIdReviewIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -360,74 +357,74 @@ export interface FileRouteTypes {
     | '/store'
     | '/signin'
     | '/signup'
-    | '/customers/rating'
-    | '/discounts/coupons'
-    | '/discounts/promotions'
-    | '/orders/$id'
-    | '/products/create'
-    | '/analytics'
-    | '/categories'
-    | '/customers'
-    | '/discounts'
-    | '/orders'
-    | '/products'
-    | '/products/$id/update'
-    | '/products/collections/$id'
-    | '/products/collections/create'
-    | '/store/menus/$id'
-    | '/store/menus/create'
-    | '/store/pages/$id'
-    | '/store/pages/create'
-    | '/store/settings/checkouts'
-    | '/store/settings/general'
-    | '/store/settings/payments'
-    | '/store/settings/shipments'
-    | '/content/blogs'
-    | '/content/files'
-    | '/orders/draft'
-    | '/products/collections'
-    | '/store/menus'
-    | '/store/pages'
-    | '/store/settings'
-    | '/products/$id/reviews/create'
-    | '/products/$id/reviews'
+    | '/customer/rating'
+    | '/discount/coupon'
+    | '/discount/promotion'
+    | '/order/$id'
+    | '/product/create'
+    | '/analytic'
+    | '/category'
+    | '/customer'
+    | '/discount'
+    | '/order'
+    | '/product'
+    | '/product/$id/update'
+    | '/product/collection/$id'
+    | '/product/collection/create'
+    | '/store/menu/$id'
+    | '/store/menu/create'
+    | '/store/page/$id'
+    | '/store/page/create'
+    | '/store/setting/checkouts'
+    | '/store/setting/general'
+    | '/store/setting/payments'
+    | '/store/setting/shipments'
+    | '/content/blog'
+    | '/content/file'
+    | '/order/draft'
+    | '/product/collection'
+    | '/store/menu'
+    | '/store/page'
+    | '/store/setting'
+    | '/product/$id/review/create'
+    | '/product/$id/review'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/store'
     | '/signin'
     | '/signup'
-    | '/customers/rating'
-    | '/discounts/coupons'
-    | '/discounts/promotions'
-    | '/orders/$id'
-    | '/products/create'
-    | '/analytics'
-    | '/categories'
-    | '/customers'
-    | '/discounts'
-    | '/orders'
-    | '/products'
-    | '/products/$id/update'
-    | '/products/collections/$id'
-    | '/products/collections/create'
-    | '/store/menus/$id'
-    | '/store/menus/create'
-    | '/store/pages/$id'
-    | '/store/pages/create'
-    | '/store/settings/checkouts'
-    | '/store/settings/general'
-    | '/store/settings/payments'
-    | '/store/settings/shipments'
-    | '/content/blogs'
-    | '/content/files'
-    | '/orders/draft'
-    | '/products/collections'
-    | '/store/menus'
-    | '/store/pages'
-    | '/store/settings'
-    | '/products/$id/reviews/create'
-    | '/products/$id/reviews'
+    | '/customer/rating'
+    | '/discount/coupon'
+    | '/discount/promotion'
+    | '/order/$id'
+    | '/product/create'
+    | '/analytic'
+    | '/category'
+    | '/customer'
+    | '/discount'
+    | '/order'
+    | '/product'
+    | '/product/$id/update'
+    | '/product/collection/$id'
+    | '/product/collection/create'
+    | '/store/menu/$id'
+    | '/store/menu/create'
+    | '/store/page/$id'
+    | '/store/page/create'
+    | '/store/setting/checkouts'
+    | '/store/setting/general'
+    | '/store/setting/payments'
+    | '/store/setting/shipments'
+    | '/content/blog'
+    | '/content/file'
+    | '/order/draft'
+    | '/product/collection'
+    | '/store/menu'
+    | '/store/page'
+    | '/store/setting'
+    | '/product/$id/review/create'
+    | '/product/$id/review'
   id:
     | '__root__'
     | '/(app)'
@@ -436,37 +433,37 @@ export interface FileRouteTypes {
     | '/(auth)/signin'
     | '/(auth)/signup'
     | '/(app)/'
-    | '/(app)/customers/rating'
-    | '/(app)/discounts/coupons'
-    | '/(app)/discounts/promotions'
-    | '/(app)/orders/$id'
-    | '/(app)/products/create'
-    | '/(app)/analytics/'
-    | '/(app)/categories/'
-    | '/(app)/customers/'
-    | '/(app)/discounts/'
-    | '/(app)/orders/'
-    | '/(app)/products/'
-    | '/(app)/products/$id/update'
-    | '/(app)/products/collections/$id'
-    | '/(app)/products/collections/create'
-    | '/(app)/store/menus/$id'
-    | '/(app)/store/menus/create'
-    | '/(app)/store/pages/$id'
-    | '/(app)/store/pages/create'
-    | '/(app)/store/settings/checkouts'
-    | '/(app)/store/settings/general'
-    | '/(app)/store/settings/payments'
-    | '/(app)/store/settings/shipments'
-    | '/(app)/content/blogs/'
-    | '/(app)/content/files/'
-    | '/(app)/orders/draft/'
-    | '/(app)/products/collections/'
-    | '/(app)/store/menus/'
-    | '/(app)/store/pages/'
-    | '/(app)/store/settings/'
-    | '/(app)/products/$id/reviews/create'
-    | '/(app)/products/$id/reviews/'
+    | '/(app)/customer/rating'
+    | '/(app)/discount/coupon'
+    | '/(app)/discount/promotion'
+    | '/(app)/order/$id'
+    | '/(app)/product/create'
+    | '/(app)/analytic/'
+    | '/(app)/category/'
+    | '/(app)/customer/'
+    | '/(app)/discount/'
+    | '/(app)/order/'
+    | '/(app)/product/'
+    | '/(app)/product/$id/update'
+    | '/(app)/product/collection/$id'
+    | '/(app)/product/collection/create'
+    | '/(app)/store/menu/$id'
+    | '/(app)/store/menu/create'
+    | '/(app)/store/page/$id'
+    | '/(app)/store/page/create'
+    | '/(app)/store/setting/checkouts'
+    | '/(app)/store/setting/general'
+    | '/(app)/store/setting/payments'
+    | '/(app)/store/setting/shipments'
+    | '/(app)/content/blog/'
+    | '/(app)/content/file/'
+    | '/(app)/order/draft/'
+    | '/(app)/product/collection/'
+    | '/(app)/store/menu/'
+    | '/(app)/store/page/'
+    | '/(app)/store/setting/'
+    | '/(app)/product/$id/review/create'
+    | '/(app)/product/$id/review/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -518,252 +515,252 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appStoreRouteRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/products/': {
-      id: '/(app)/products/'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof appProductsIndexRouteImport
+    '/(app)/product/': {
+      id: '/(app)/product/'
+      path: '/product'
+      fullPath: '/product'
+      preLoaderRoute: typeof appProductIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/orders/': {
-      id: '/(app)/orders/'
-      path: '/orders'
-      fullPath: '/orders'
-      preLoaderRoute: typeof appOrdersIndexRouteImport
+    '/(app)/order/': {
+      id: '/(app)/order/'
+      path: '/order'
+      fullPath: '/order'
+      preLoaderRoute: typeof appOrderIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/discounts/': {
-      id: '/(app)/discounts/'
-      path: '/discounts'
-      fullPath: '/discounts'
-      preLoaderRoute: typeof appDiscountsIndexRouteImport
+    '/(app)/discount/': {
+      id: '/(app)/discount/'
+      path: '/discount'
+      fullPath: '/discount'
+      preLoaderRoute: typeof appDiscountIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/customers/': {
-      id: '/(app)/customers/'
-      path: '/customers'
-      fullPath: '/customers'
-      preLoaderRoute: typeof appCustomersIndexRouteImport
+    '/(app)/customer/': {
+      id: '/(app)/customer/'
+      path: '/customer'
+      fullPath: '/customer'
+      preLoaderRoute: typeof appCustomerIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/categories/': {
-      id: '/(app)/categories/'
-      path: '/categories'
-      fullPath: '/categories'
-      preLoaderRoute: typeof appCategoriesIndexRouteImport
+    '/(app)/category/': {
+      id: '/(app)/category/'
+      path: '/category'
+      fullPath: '/category'
+      preLoaderRoute: typeof appCategoryIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/analytics/': {
-      id: '/(app)/analytics/'
-      path: '/analytics'
-      fullPath: '/analytics'
-      preLoaderRoute: typeof appAnalyticsIndexRouteImport
+    '/(app)/analytic/': {
+      id: '/(app)/analytic/'
+      path: '/analytic'
+      fullPath: '/analytic'
+      preLoaderRoute: typeof appAnalyticIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/products/create': {
-      id: '/(app)/products/create'
-      path: '/products/create'
-      fullPath: '/products/create'
-      preLoaderRoute: typeof appProductsCreateRouteImport
+    '/(app)/product/create': {
+      id: '/(app)/product/create'
+      path: '/product/create'
+      fullPath: '/product/create'
+      preLoaderRoute: typeof appProductCreateRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/orders/$id': {
-      id: '/(app)/orders/$id'
-      path: '/orders/$id'
-      fullPath: '/orders/$id'
-      preLoaderRoute: typeof appOrdersIdRouteImport
+    '/(app)/order/$id': {
+      id: '/(app)/order/$id'
+      path: '/order/$id'
+      fullPath: '/order/$id'
+      preLoaderRoute: typeof appOrderIdRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/discounts/promotions': {
-      id: '/(app)/discounts/promotions'
-      path: '/discounts/promotions'
-      fullPath: '/discounts/promotions'
-      preLoaderRoute: typeof appDiscountsPromotionsRouteImport
+    '/(app)/discount/promotion': {
+      id: '/(app)/discount/promotion'
+      path: '/discount/promotion'
+      fullPath: '/discount/promotion'
+      preLoaderRoute: typeof appDiscountPromotionRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/discounts/coupons': {
-      id: '/(app)/discounts/coupons'
-      path: '/discounts/coupons'
-      fullPath: '/discounts/coupons'
-      preLoaderRoute: typeof appDiscountsCouponsRouteImport
+    '/(app)/discount/coupon': {
+      id: '/(app)/discount/coupon'
+      path: '/discount/coupon'
+      fullPath: '/discount/coupon'
+      preLoaderRoute: typeof appDiscountCouponRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/customers/rating': {
-      id: '/(app)/customers/rating'
-      path: '/customers/rating'
-      fullPath: '/customers/rating'
-      preLoaderRoute: typeof appCustomersRatingRouteImport
+    '/(app)/customer/rating': {
+      id: '/(app)/customer/rating'
+      path: '/customer/rating'
+      fullPath: '/customer/rating'
+      preLoaderRoute: typeof appCustomerRatingRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/store/settings/': {
-      id: '/(app)/store/settings/'
-      path: '/settings'
-      fullPath: '/store/settings'
-      preLoaderRoute: typeof appStoreSettingsIndexRouteImport
+    '/(app)/store/setting/': {
+      id: '/(app)/store/setting/'
+      path: '/setting'
+      fullPath: '/store/setting'
+      preLoaderRoute: typeof appStoreSettingIndexRouteImport
       parentRoute: typeof appStoreRouteRoute
     }
-    '/(app)/store/pages/': {
-      id: '/(app)/store/pages/'
-      path: '/pages'
-      fullPath: '/store/pages'
-      preLoaderRoute: typeof appStorePagesIndexRouteImport
+    '/(app)/store/page/': {
+      id: '/(app)/store/page/'
+      path: '/page'
+      fullPath: '/store/page'
+      preLoaderRoute: typeof appStorePageIndexRouteImport
       parentRoute: typeof appStoreRouteRoute
     }
-    '/(app)/store/menus/': {
-      id: '/(app)/store/menus/'
-      path: '/menus'
-      fullPath: '/store/menus'
-      preLoaderRoute: typeof appStoreMenusIndexRouteImport
+    '/(app)/store/menu/': {
+      id: '/(app)/store/menu/'
+      path: '/menu'
+      fullPath: '/store/menu'
+      preLoaderRoute: typeof appStoreMenuIndexRouteImport
       parentRoute: typeof appStoreRouteRoute
     }
-    '/(app)/products/collections/': {
-      id: '/(app)/products/collections/'
-      path: '/products/collections'
-      fullPath: '/products/collections'
-      preLoaderRoute: typeof appProductsCollectionsIndexRouteImport
+    '/(app)/product/collection/': {
+      id: '/(app)/product/collection/'
+      path: '/product/collection'
+      fullPath: '/product/collection'
+      preLoaderRoute: typeof appProductCollectionIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/orders/draft/': {
-      id: '/(app)/orders/draft/'
-      path: '/orders/draft'
-      fullPath: '/orders/draft'
-      preLoaderRoute: typeof appOrdersDraftIndexRouteImport
+    '/(app)/order/draft/': {
+      id: '/(app)/order/draft/'
+      path: '/order/draft'
+      fullPath: '/order/draft'
+      preLoaderRoute: typeof appOrderDraftIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/content/files/': {
-      id: '/(app)/content/files/'
-      path: '/content/files'
-      fullPath: '/content/files'
-      preLoaderRoute: typeof appContentFilesIndexRouteImport
+    '/(app)/content/file/': {
+      id: '/(app)/content/file/'
+      path: '/content/file'
+      fullPath: '/content/file'
+      preLoaderRoute: typeof appContentFileIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/content/blogs/': {
-      id: '/(app)/content/blogs/'
-      path: '/content/blogs'
-      fullPath: '/content/blogs'
-      preLoaderRoute: typeof appContentBlogsIndexRouteImport
+    '/(app)/content/blog/': {
+      id: '/(app)/content/blog/'
+      path: '/content/blog'
+      fullPath: '/content/blog'
+      preLoaderRoute: typeof appContentBlogIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/store/settings/shipments': {
-      id: '/(app)/store/settings/shipments'
-      path: '/settings/shipments'
-      fullPath: '/store/settings/shipments'
-      preLoaderRoute: typeof appStoreSettingsShipmentsRouteImport
+    '/(app)/store/setting/shipments': {
+      id: '/(app)/store/setting/shipments'
+      path: '/setting/shipments'
+      fullPath: '/store/setting/shipments'
+      preLoaderRoute: typeof appStoreSettingShipmentsRouteImport
       parentRoute: typeof appStoreRouteRoute
     }
-    '/(app)/store/settings/payments': {
-      id: '/(app)/store/settings/payments'
-      path: '/settings/payments'
-      fullPath: '/store/settings/payments'
-      preLoaderRoute: typeof appStoreSettingsPaymentsRouteImport
+    '/(app)/store/setting/payments': {
+      id: '/(app)/store/setting/payments'
+      path: '/setting/payments'
+      fullPath: '/store/setting/payments'
+      preLoaderRoute: typeof appStoreSettingPaymentsRouteImport
       parentRoute: typeof appStoreRouteRoute
     }
-    '/(app)/store/settings/general': {
-      id: '/(app)/store/settings/general'
-      path: '/settings/general'
-      fullPath: '/store/settings/general'
-      preLoaderRoute: typeof appStoreSettingsGeneralRouteImport
+    '/(app)/store/setting/general': {
+      id: '/(app)/store/setting/general'
+      path: '/setting/general'
+      fullPath: '/store/setting/general'
+      preLoaderRoute: typeof appStoreSettingGeneralRouteImport
       parentRoute: typeof appStoreRouteRoute
     }
-    '/(app)/store/settings/checkouts': {
-      id: '/(app)/store/settings/checkouts'
-      path: '/settings/checkouts'
-      fullPath: '/store/settings/checkouts'
-      preLoaderRoute: typeof appStoreSettingsCheckoutsRouteImport
+    '/(app)/store/setting/checkouts': {
+      id: '/(app)/store/setting/checkouts'
+      path: '/setting/checkouts'
+      fullPath: '/store/setting/checkouts'
+      preLoaderRoute: typeof appStoreSettingCheckoutsRouteImport
       parentRoute: typeof appStoreRouteRoute
     }
-    '/(app)/store/pages/create': {
-      id: '/(app)/store/pages/create'
-      path: '/pages/create'
-      fullPath: '/store/pages/create'
-      preLoaderRoute: typeof appStorePagesCreateRouteImport
+    '/(app)/store/page/create': {
+      id: '/(app)/store/page/create'
+      path: '/page/create'
+      fullPath: '/store/page/create'
+      preLoaderRoute: typeof appStorePageCreateRouteImport
       parentRoute: typeof appStoreRouteRoute
     }
-    '/(app)/store/pages/$id': {
-      id: '/(app)/store/pages/$id'
-      path: '/pages/$id'
-      fullPath: '/store/pages/$id'
-      preLoaderRoute: typeof appStorePagesIdRouteImport
+    '/(app)/store/page/$id': {
+      id: '/(app)/store/page/$id'
+      path: '/page/$id'
+      fullPath: '/store/page/$id'
+      preLoaderRoute: typeof appStorePageIdRouteImport
       parentRoute: typeof appStoreRouteRoute
     }
-    '/(app)/store/menus/create': {
-      id: '/(app)/store/menus/create'
-      path: '/menus/create'
-      fullPath: '/store/menus/create'
-      preLoaderRoute: typeof appStoreMenusCreateRouteImport
+    '/(app)/store/menu/create': {
+      id: '/(app)/store/menu/create'
+      path: '/menu/create'
+      fullPath: '/store/menu/create'
+      preLoaderRoute: typeof appStoreMenuCreateRouteImport
       parentRoute: typeof appStoreRouteRoute
     }
-    '/(app)/store/menus/$id': {
-      id: '/(app)/store/menus/$id'
-      path: '/menus/$id'
-      fullPath: '/store/menus/$id'
-      preLoaderRoute: typeof appStoreMenusIdRouteImport
+    '/(app)/store/menu/$id': {
+      id: '/(app)/store/menu/$id'
+      path: '/menu/$id'
+      fullPath: '/store/menu/$id'
+      preLoaderRoute: typeof appStoreMenuIdRouteImport
       parentRoute: typeof appStoreRouteRoute
     }
-    '/(app)/products/collections/create': {
-      id: '/(app)/products/collections/create'
-      path: '/products/collections/create'
-      fullPath: '/products/collections/create'
-      preLoaderRoute: typeof appProductsCollectionsCreateRouteImport
+    '/(app)/product/collection/create': {
+      id: '/(app)/product/collection/create'
+      path: '/product/collection/create'
+      fullPath: '/product/collection/create'
+      preLoaderRoute: typeof appProductCollectionCreateRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/products/collections/$id': {
-      id: '/(app)/products/collections/$id'
-      path: '/products/collections/$id'
-      fullPath: '/products/collections/$id'
-      preLoaderRoute: typeof appProductsCollectionsIdRouteImport
+    '/(app)/product/collection/$id': {
+      id: '/(app)/product/collection/$id'
+      path: '/product/collection/$id'
+      fullPath: '/product/collection/$id'
+      preLoaderRoute: typeof appProductCollectionIdRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/products/$id/update': {
-      id: '/(app)/products/$id/update'
-      path: '/products/$id/update'
-      fullPath: '/products/$id/update'
-      preLoaderRoute: typeof appProductsIdUpdateRouteImport
+    '/(app)/product/$id/update': {
+      id: '/(app)/product/$id/update'
+      path: '/product/$id/update'
+      fullPath: '/product/$id/update'
+      preLoaderRoute: typeof appProductIdUpdateRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/products/$id/reviews/': {
-      id: '/(app)/products/$id/reviews/'
-      path: '/products/$id/reviews'
-      fullPath: '/products/$id/reviews'
-      preLoaderRoute: typeof appProductsIdReviewsIndexRouteImport
+    '/(app)/product/$id/review/': {
+      id: '/(app)/product/$id/review/'
+      path: '/product/$id/review'
+      fullPath: '/product/$id/review'
+      preLoaderRoute: typeof appProductIdReviewIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/products/$id/reviews/create': {
-      id: '/(app)/products/$id/reviews/create'
-      path: '/products/$id/reviews/create'
-      fullPath: '/products/$id/reviews/create'
-      preLoaderRoute: typeof appProductsIdReviewsCreateRouteImport
+    '/(app)/product/$id/review/create': {
+      id: '/(app)/product/$id/review/create'
+      path: '/product/$id/review/create'
+      fullPath: '/product/$id/review/create'
+      preLoaderRoute: typeof appProductIdReviewCreateRouteImport
       parentRoute: typeof appRouteRoute
     }
   }
 }
 
 interface appStoreRouteRouteChildren {
-  appStoreMenusIdRoute: typeof appStoreMenusIdRoute
-  appStoreMenusCreateRoute: typeof appStoreMenusCreateRoute
-  appStorePagesIdRoute: typeof appStorePagesIdRoute
-  appStorePagesCreateRoute: typeof appStorePagesCreateRoute
-  appStoreSettingsCheckoutsRoute: typeof appStoreSettingsCheckoutsRoute
-  appStoreSettingsGeneralRoute: typeof appStoreSettingsGeneralRoute
-  appStoreSettingsPaymentsRoute: typeof appStoreSettingsPaymentsRoute
-  appStoreSettingsShipmentsRoute: typeof appStoreSettingsShipmentsRoute
-  appStoreMenusIndexRoute: typeof appStoreMenusIndexRoute
-  appStorePagesIndexRoute: typeof appStorePagesIndexRoute
-  appStoreSettingsIndexRoute: typeof appStoreSettingsIndexRoute
+  appStoreMenuIdRoute: typeof appStoreMenuIdRoute
+  appStoreMenuCreateRoute: typeof appStoreMenuCreateRoute
+  appStorePageIdRoute: typeof appStorePageIdRoute
+  appStorePageCreateRoute: typeof appStorePageCreateRoute
+  appStoreSettingCheckoutsRoute: typeof appStoreSettingCheckoutsRoute
+  appStoreSettingGeneralRoute: typeof appStoreSettingGeneralRoute
+  appStoreSettingPaymentsRoute: typeof appStoreSettingPaymentsRoute
+  appStoreSettingShipmentsRoute: typeof appStoreSettingShipmentsRoute
+  appStoreMenuIndexRoute: typeof appStoreMenuIndexRoute
+  appStorePageIndexRoute: typeof appStorePageIndexRoute
+  appStoreSettingIndexRoute: typeof appStoreSettingIndexRoute
 }
 
 const appStoreRouteRouteChildren: appStoreRouteRouteChildren = {
-  appStoreMenusIdRoute: appStoreMenusIdRoute,
-  appStoreMenusCreateRoute: appStoreMenusCreateRoute,
-  appStorePagesIdRoute: appStorePagesIdRoute,
-  appStorePagesCreateRoute: appStorePagesCreateRoute,
-  appStoreSettingsCheckoutsRoute: appStoreSettingsCheckoutsRoute,
-  appStoreSettingsGeneralRoute: appStoreSettingsGeneralRoute,
-  appStoreSettingsPaymentsRoute: appStoreSettingsPaymentsRoute,
-  appStoreSettingsShipmentsRoute: appStoreSettingsShipmentsRoute,
-  appStoreMenusIndexRoute: appStoreMenusIndexRoute,
-  appStorePagesIndexRoute: appStorePagesIndexRoute,
-  appStoreSettingsIndexRoute: appStoreSettingsIndexRoute,
+  appStoreMenuIdRoute: appStoreMenuIdRoute,
+  appStoreMenuCreateRoute: appStoreMenuCreateRoute,
+  appStorePageIdRoute: appStorePageIdRoute,
+  appStorePageCreateRoute: appStorePageCreateRoute,
+  appStoreSettingCheckoutsRoute: appStoreSettingCheckoutsRoute,
+  appStoreSettingGeneralRoute: appStoreSettingGeneralRoute,
+  appStoreSettingPaymentsRoute: appStoreSettingPaymentsRoute,
+  appStoreSettingShipmentsRoute: appStoreSettingShipmentsRoute,
+  appStoreMenuIndexRoute: appStoreMenuIndexRoute,
+  appStorePageIndexRoute: appStorePageIndexRoute,
+  appStoreSettingIndexRoute: appStoreSettingIndexRoute,
 }
 
 const appStoreRouteRouteWithChildren = appStoreRouteRoute._addFileChildren(
@@ -773,51 +770,51 @@ const appStoreRouteRouteWithChildren = appStoreRouteRoute._addFileChildren(
 interface appRouteRouteChildren {
   appStoreRouteRoute: typeof appStoreRouteRouteWithChildren
   appIndexRoute: typeof appIndexRoute
-  appCustomersRatingRoute: typeof appCustomersRatingRoute
-  appDiscountsCouponsRoute: typeof appDiscountsCouponsRoute
-  appDiscountsPromotionsRoute: typeof appDiscountsPromotionsRoute
-  appOrdersIdRoute: typeof appOrdersIdRoute
-  appProductsCreateRoute: typeof appProductsCreateRoute
-  appAnalyticsIndexRoute: typeof appAnalyticsIndexRoute
-  appCategoriesIndexRoute: typeof appCategoriesIndexRoute
-  appCustomersIndexRoute: typeof appCustomersIndexRoute
-  appDiscountsIndexRoute: typeof appDiscountsIndexRoute
-  appOrdersIndexRoute: typeof appOrdersIndexRoute
-  appProductsIndexRoute: typeof appProductsIndexRoute
-  appProductsIdUpdateRoute: typeof appProductsIdUpdateRoute
-  appProductsCollectionsIdRoute: typeof appProductsCollectionsIdRoute
-  appProductsCollectionsCreateRoute: typeof appProductsCollectionsCreateRoute
-  appContentBlogsIndexRoute: typeof appContentBlogsIndexRoute
-  appContentFilesIndexRoute: typeof appContentFilesIndexRoute
-  appOrdersDraftIndexRoute: typeof appOrdersDraftIndexRoute
-  appProductsCollectionsIndexRoute: typeof appProductsCollectionsIndexRoute
-  appProductsIdReviewsCreateRoute: typeof appProductsIdReviewsCreateRoute
-  appProductsIdReviewsIndexRoute: typeof appProductsIdReviewsIndexRoute
+  appCustomerRatingRoute: typeof appCustomerRatingRoute
+  appDiscountCouponRoute: typeof appDiscountCouponRoute
+  appDiscountPromotionRoute: typeof appDiscountPromotionRoute
+  appOrderIdRoute: typeof appOrderIdRoute
+  appProductCreateRoute: typeof appProductCreateRoute
+  appAnalyticIndexRoute: typeof appAnalyticIndexRoute
+  appCategoryIndexRoute: typeof appCategoryIndexRoute
+  appCustomerIndexRoute: typeof appCustomerIndexRoute
+  appDiscountIndexRoute: typeof appDiscountIndexRoute
+  appOrderIndexRoute: typeof appOrderIndexRoute
+  appProductIndexRoute: typeof appProductIndexRoute
+  appProductIdUpdateRoute: typeof appProductIdUpdateRoute
+  appProductCollectionIdRoute: typeof appProductCollectionIdRoute
+  appProductCollectionCreateRoute: typeof appProductCollectionCreateRoute
+  appContentBlogIndexRoute: typeof appContentBlogIndexRoute
+  appContentFileIndexRoute: typeof appContentFileIndexRoute
+  appOrderDraftIndexRoute: typeof appOrderDraftIndexRoute
+  appProductCollectionIndexRoute: typeof appProductCollectionIndexRoute
+  appProductIdReviewCreateRoute: typeof appProductIdReviewCreateRoute
+  appProductIdReviewIndexRoute: typeof appProductIdReviewIndexRoute
 }
 
 const appRouteRouteChildren: appRouteRouteChildren = {
   appStoreRouteRoute: appStoreRouteRouteWithChildren,
   appIndexRoute: appIndexRoute,
-  appCustomersRatingRoute: appCustomersRatingRoute,
-  appDiscountsCouponsRoute: appDiscountsCouponsRoute,
-  appDiscountsPromotionsRoute: appDiscountsPromotionsRoute,
-  appOrdersIdRoute: appOrdersIdRoute,
-  appProductsCreateRoute: appProductsCreateRoute,
-  appAnalyticsIndexRoute: appAnalyticsIndexRoute,
-  appCategoriesIndexRoute: appCategoriesIndexRoute,
-  appCustomersIndexRoute: appCustomersIndexRoute,
-  appDiscountsIndexRoute: appDiscountsIndexRoute,
-  appOrdersIndexRoute: appOrdersIndexRoute,
-  appProductsIndexRoute: appProductsIndexRoute,
-  appProductsIdUpdateRoute: appProductsIdUpdateRoute,
-  appProductsCollectionsIdRoute: appProductsCollectionsIdRoute,
-  appProductsCollectionsCreateRoute: appProductsCollectionsCreateRoute,
-  appContentBlogsIndexRoute: appContentBlogsIndexRoute,
-  appContentFilesIndexRoute: appContentFilesIndexRoute,
-  appOrdersDraftIndexRoute: appOrdersDraftIndexRoute,
-  appProductsCollectionsIndexRoute: appProductsCollectionsIndexRoute,
-  appProductsIdReviewsCreateRoute: appProductsIdReviewsCreateRoute,
-  appProductsIdReviewsIndexRoute: appProductsIdReviewsIndexRoute,
+  appCustomerRatingRoute: appCustomerRatingRoute,
+  appDiscountCouponRoute: appDiscountCouponRoute,
+  appDiscountPromotionRoute: appDiscountPromotionRoute,
+  appOrderIdRoute: appOrderIdRoute,
+  appProductCreateRoute: appProductCreateRoute,
+  appAnalyticIndexRoute: appAnalyticIndexRoute,
+  appCategoryIndexRoute: appCategoryIndexRoute,
+  appCustomerIndexRoute: appCustomerIndexRoute,
+  appDiscountIndexRoute: appDiscountIndexRoute,
+  appOrderIndexRoute: appOrderIndexRoute,
+  appProductIndexRoute: appProductIndexRoute,
+  appProductIdUpdateRoute: appProductIdUpdateRoute,
+  appProductCollectionIdRoute: appProductCollectionIdRoute,
+  appProductCollectionCreateRoute: appProductCollectionCreateRoute,
+  appContentBlogIndexRoute: appContentBlogIndexRoute,
+  appContentFileIndexRoute: appContentFileIndexRoute,
+  appOrderDraftIndexRoute: appOrderDraftIndexRoute,
+  appProductCollectionIndexRoute: appProductCollectionIndexRoute,
+  appProductIdReviewCreateRoute: appProductIdReviewCreateRoute,
+  appProductIdReviewIndexRoute: appProductIdReviewIndexRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(

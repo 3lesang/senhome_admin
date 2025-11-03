@@ -1,9 +1,10 @@
 import { queryOptions } from "@tanstack/react-query";
+import { STORE_QUERY_KEY } from "@/constants";
 import { pocketClient, STORE_COLLECTION } from "@/pocketbase";
 
 export const getStoreQueryOptions = () =>
 	queryOptions({
-		queryKey: [STORE_COLLECTION],
+		queryKey: [STORE_QUERY_KEY],
 		queryFn: () => {
 			return pocketClient
 				.collection<{

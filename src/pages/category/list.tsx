@@ -1,11 +1,8 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useSearch } from "@tanstack/react-router";
 import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { format } from "timeago.js";
-import { getListCategoryQueryOptions } from "@/api/category/list";
-import TablePagination, {
-	type TablePaginationDataChange,
-} from "@/components/table/pagination";
+import TablePagination from "@/components/table/pagination";
 import { TabsButton } from "@/components/table/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -33,25 +30,12 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { getCategoriesQueryOptions } from "@/queries/category";
 
 export function CategoryListPage() {
-	const navigate = useNavigate();
-	const { page, limit, query } = useSearch({ from: "/(app)/categories/" });
+	const { page, limit, query } = useSearch({ from: "/(app)/category/" });
 
-	const { data } = useSuspenseQuery(
-		getListCategoryQueryOptions({ page, limit, query }),
-	);
-
-	const handlePaginationChange = ({
-		limit,
-		page,
-	}: TablePaginationDataChange) => {
-		navigate({ to: "/products", search: { page, limit } });
-	};
-
-	const handleTabChange = (query: string) => {
-		navigate({ to: "/products", search: { page: 1, limit, query } });
-	};
+	const getCategoriesQuery = useSuspenseQuery(getCategoriesQueryOptions());
 
 	return (
 		<Card className="bg-sidebar border-0 shadow-none max-w-7xl mx-auto">
@@ -69,11 +53,10 @@ export function CategoryListPage() {
 							<TabsButton
 								tabs={[{ label: "Tất cả danh mục", value: "" }]}
 								value={query}
-								onChange={handleTabChange}
 							/>
 						</CardTitle>
 						<CardDescription>
-							<Badge variant="secondary">{data?.totalItems} danh mục</Badge>
+							<Badge variant="secondary"> danh mục</Badge>
 						</CardDescription>
 						<CardAction className="flex items-center gap-2">
 							<Button variant="outline" size="icon">
@@ -95,7 +78,7 @@ export function CategoryListPage() {
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{data.items?.map((item) => (
+							{getCategoriesQuery.data.data?.map((item: any) => (
 								<ContextMenu key={item.id}>
 									<ContextMenuTrigger asChild>
 										<TableRow>
@@ -123,10 +106,9 @@ export function CategoryListPage() {
 					</Table>
 					<CardFooter>
 						<TablePagination
-							total={data?.totalItems}
+							total={getCategoriesQuery.data.data.length}
 							page={page}
 							limit={limit}
-							onChange={handlePaginationChange}
 						/>
 					</CardFooter>
 				</Card>

@@ -1,15 +1,13 @@
 import { createRouter } from "@tanstack/react-router";
-import NProgress from "nprogress";
+import topbar from "topbar";
 import { queryClient } from "./queryClient";
 import { routeTree } from "./routeTree.gen";
-import "nprogress/nprogress.css";
 
-NProgress.configure({
-	showSpinner: false,
-	trickleSpeed: 100,
+topbar.config({
+	barThickness: 2,
 });
 
-export const router = createRouter({
+const router = createRouter({
 	routeTree,
 	context: { queryClient },
 	defaultPreload: "intent",
@@ -18,12 +16,14 @@ export const router = createRouter({
 });
 
 router.subscribe("onBeforeLoad", () => {
-	NProgress.start();
+	topbar.show();
 });
 
 router.subscribe("onLoad", () => {
-	NProgress.done();
+	topbar.hide();
 });
+
+export { router };
 
 declare module "@tanstack/react-router" {
 	interface Register {

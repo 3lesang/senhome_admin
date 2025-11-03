@@ -23,7 +23,7 @@ export default function DiscountMenu() {
 		>
 			<SidebarMenuItem>
 				<CollapsibleTrigger asChild>
-					<Link to="/discounts/coupons">
+					<Link to="/discount/coupon">
 						<SidebarMenuButton>
 							<PercentIcon />
 							<span className="select-none">Khuyến mãi</span>
@@ -33,18 +33,18 @@ export default function DiscountMenu() {
 				<CollapsibleContent>
 					<SidebarMenuSub className="border-l-0">
 						<SidebarMenuSubItem>
-							<Link to="/discounts/coupons">
+							<Link to="/discount/coupon">
 								<SidebarMenuSubButton
-									isActive={location.pathname === "/discounts/coupons"}
+									isActive={location.pathname === "/discount/coupon"}
 								>
 									<span className="select-none">Coupons</span>
 								</SidebarMenuSubButton>
 							</Link>
 						</SidebarMenuSubItem>
 						<SidebarMenuSubItem>
-							<Link to="/discounts/promotions">
+							<Link to="/discount/promotion">
 								<SidebarMenuSubButton
-									isActive={location.pathname === "/discounts/promotions"}
+									isActive={location.pathname === "/discount/promotion"}
 								>
 									<span className="select-none">Promotions</span>
 								</SidebarMenuSubButton>

@@ -19,12 +19,12 @@ import {
 	ItemMedia,
 	ItemTitle,
 } from "@/components/ui/item";
-import { cn } from "@/lib/utils";
+import { cn, convertToFileUrl } from "@/lib/utils";
 
 type ProductDataType = {
-	id: string;
+	id: number;
 	name: string;
-	thumbnail: string;
+	file: string;
 };
 
 interface CollectionProductInputProps {
@@ -43,7 +43,7 @@ export function CollectionProductInput({
 		setProducts(value);
 	}
 
-	function handleRemove(id: string) {
+	function handleRemove(id: number) {
 		const newProducts = products?.filter((p) => p.id !== id);
 		onChange?.(newProducts);
 		setProducts(newProducts);
@@ -63,7 +63,7 @@ export function CollectionProductInput({
 				</EmptyHeader>
 				<EmptyContent>
 					<div className="flex gap-2">
-						<Link to="/products/create" className={cn(buttonVariants())}>
+						<Link to="/product/create" className={cn(buttonVariants())}>
 							Tạo sản phẩm
 						</Link>
 						<ProductDialog value={products} onConfirm={handleConfirm}>
@@ -82,7 +82,7 @@ export function CollectionProductInput({
 				<Item key={item.id} size="sm" variant="muted">
 					<ItemMedia>
 						<Avatar className="rounded-md">
-							<AvatarImage src={item.thumbnail} />
+							<AvatarImage src={convertToFileUrl(item.file)} />
 							<AvatarFallback>SP</AvatarFallback>
 						</Avatar>
 					</ItemMedia>

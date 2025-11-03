@@ -5,7 +5,7 @@ import {
 	UserCircleIcon,
 } from "lucide-react";
 import SettingsDialog from "@/components/dialog/setting";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -19,13 +19,11 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { pocketClient } from "@/pocketbase";
 
 export default function FooterSidebar() {
 	const user = {
-		name: pocketClient.authStore.record?.name,
-		email: pocketClient.authStore.record?.email,
-		avatar: "https://github.com/shadcn.png",
+		name: "Sang Le",
+		email: "3lesang@gmail.com",
 	};
 	return (
 		<SidebarFooter>
@@ -41,9 +39,8 @@ export default function FooterSidebar() {
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<SidebarMenuButton size="lg">
-								<Avatar className="rounded-lg select-none">
-									<AvatarImage src={user.avatar} alt={user.name} />
-									<AvatarFallback className="rounded-lg">CN</AvatarFallback>
+								<Avatar>
+									<AvatarFallback>CN</AvatarFallback>
 								</Avatar>
 								<span className="truncate font-medium select-none">
 									{user.name}

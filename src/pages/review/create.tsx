@@ -44,7 +44,7 @@ type FormValues = z.infer<typeof schema>;
 
 export function CreateReviewPage() {
 	const navigate = useNavigate();
-	const { id } = useParams({ from: "/(app)/products/$id/reviews/create" });
+	const { id } = useParams({ from: "/(app)/product/$id/review/create" });
 	const { data: users } = useQuery(getFullListUsersQueryOptions());
 
 	const form = useForm<FormValues>({
@@ -60,7 +60,7 @@ export function CreateReviewPage() {
 	const { mutate, isPending } = useMutation({
 		mutationFn: createReviewHandler,
 		onSuccess: () => {
-			navigate({ to: "/products/$id/reviews", params: { id } });
+			navigate({ to: "/product/$id/review", params: { id } });
 		},
 	});
 

@@ -1,14 +1,12 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { type ReactNode, useEffect, useState } from "react";
 import { useIntersectionObserver } from "usehooks-ts";
-import { getFilesInfinityQueyrOptions } from "@/api/file/list";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
 	Dialog,
 	DialogClose,
 	DialogContent,
-	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
@@ -16,104 +14,71 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
-import { convertToFileUrl } from "@/lib/utils";
+import { getFilesInfinityQueryOptions } from "@/queries/file";
 
 interface FileDialogProps {
-	open?: boolean;
-	onOpenChange?: (open: boolean) => void;
-	value: { id: string; url: string }[];
-	onConfirm?: (data: { id: string; url: string }[]) => void;
+	value: string[];
+	onConfirm?: (data: string[]) => void;
 	multiple?: boolean;
-	children?: ReactNode;
+	children: ReactNode;
 }
 
 export function FileDialog({
 	value,
-	open,
-	onOpenChange,
 	onConfirm,
 	multiple,
 	children,
 }: FileDialogProps) {
-	const [selectedFiles, setSelectedFiles] =
-		useState<{ id: string; url: string }[]>(value);
-
+	const [files, setFiles] = useState<string[]>(value ?? []);
 	const { isIntersecting, ref } = useIntersectionObserver({ threshold: 0.5 });
-
 	const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
-		useInfiniteQuery(getFilesInfinityQueyrOptions());
+		useInfiniteQuery(getFilesInfinityQueryOptions());
 
-	const isSelected = (id: string) => selectedFiles.some((f) => f.id === id);
-
-	function handleToggle(item: {
-		id: string;
-		collectionName: string;
-		file: string;
-	}) {
-		const fileObj = { id: item.id, url: convertToFileUrl(item) ?? "" };
-
-		setSelectedFiles((prev) => {
-			const exists = prev.some((f) => f.id === item.id);
-
-			if (multiple) {
-				if (exists) return prev.filter((f) => f.id !== item.id);
-				return [...prev, fileObj];
-			}
-
-			if (exists) return [];
-			return [fileObj];
-		});
+	function handleChange(checked: boolean, value: string) {
+		if (checked) {
+			setFiles((prev) => {
+				if (multiple) return [...prev, value];
+				return [value];
+			});
+		} else {
+			setFiles((prev) => {
+				if (multiple) return prev.filter((f) => f !== value);
+				return [];
+			});
+		}
 	}
 
 	function handleConfirm() {
-		onConfirm?.(selectedFiles);
-	}
-
-	function handleCancel() {
-		setSelectedFiles([]);
+		onConfirm?.(files);
 	}
 
 	useEffect(() => {
-		setSelectedFiles(value);
+		setFiles(value);
 	}, [value]);
 
 	useEffect(() => {
-		if (isIntersecting && !isFetchingNextPage) {
-			fetchNextPage();
-		}
+		if (isIntersecting && !isFetchingNextPage) fetchNextPage();
 	}, [isIntersecting, isFetchingNextPage, fetchNextPage]);
 
 	return (
-		<Dialog open={open} onOpenChange={onOpenChange}>
-			{children && <DialogTrigger asChild>{children}</DialogTrigger>}
-
+		<Dialog>
+			<DialogTrigger asChild>{children}</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Chọn tệp</DialogTitle>
-					<DialogDescription />
 				</DialogHeader>
 
 				<div className="max-h-96 overflow-scroll">
 					<div className="grid grid-cols-5 gap-1 min-h-96">
-						{data?.pages.flatMap((page) =>
-							page.items.map((item) => {
-								const selected = isSelected(item.id);
+						{data?.pages.map((page) =>
+							page.Contents?.map((item) => {
 								return (
-									<Label
-										key={item.id}
-										className="aspect-square bg-neutral-50 relative rounded-md overflow-hidden border cursor-pointer"
-									>
-										<img
-											src={convertToFileUrl(item)}
-											alt=""
-											className="object-contain h-full w-full"
-										/>
-										<Checkbox
-											checked={selected}
-											onCheckedChange={() => handleToggle(item)}
-											className="absolute top-1 right-1 bg-white"
-										/>
-									</Label>
+									<FileItem
+										key={item.Key}
+										value={item.Key}
+										onChange={handleChange}
+										checked={files.includes(item.Key ?? "")}
+									/>
 								);
 							}),
 						)}
@@ -124,19 +89,14 @@ export function FileDialog({
 						</div>
 					)}
 				</div>
-
 				<DialogFooter>
 					<DialogClose asChild>
-						<Button variant="outline" onClick={handleCancel}>
+						<Button variant="outline" type="button">
 							Hủy
 						</Button>
 					</DialogClose>
 					<DialogClose asChild>
-						<Button
-							type="button"
-							onClick={handleConfirm}
-							disabled={selectedFiles.length === 0}
-						>
+						<Button type="button" onClick={handleConfirm}>
 							Xác nhận
 						</Button>
 					</DialogClose>
@@ -145,3 +105,29 @@ export function FileDialog({
 		</Dialog>
 	);
 }
+
+interface FileItemProps {
+	value?: string;
+	onChange?: (checked: boolean, value: string) => void;
+	checked?: boolean;
+}
+
+const FileItem = ({ value, onChange, checked }: FileItemProps) => {
+	function handleChange(checked: boolean) {
+		value && onChange?.(checked, value);
+	}
+	return (
+		<Label className="aspect-square bg-neutral-50 relative rounded-md overflow-hidden border cursor-pointer">
+			<img
+				src={`https://bucket.senhome.vn/${value}`}
+				alt=""
+				className="object-contain h-full w-full"
+			/>
+			<Checkbox
+				defaultChecked={checked}
+				className="absolute top-1 right-1 bg-white"
+				onCheckedChange={handleChange}
+			/>
+		</Label>
+	);
+};

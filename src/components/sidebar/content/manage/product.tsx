@@ -19,11 +19,11 @@ export default function ProductMenu() {
 		<Collapsible
 			asChild
 			className="group/collapsible"
-			open={location.href.includes("/products")}
+			open={location.href.includes("/product")}
 		>
 			<SidebarMenuItem>
 				<CollapsibleTrigger asChild>
-					<Link to="/products">
+					<Link to="/product">
 						<SidebarMenuButton>
 							<TagIcon />
 							<span className="select-none">Sản phẩm</span>
@@ -35,9 +35,9 @@ export default function ProductMenu() {
 						<SidebarMenuSubItem>
 							<SidebarMenuSubButton
 								asChild
-								isActive={location.pathname === "/products"}
+								isActive={location.pathname === "/product"}
 							>
-								<Link to="/products">
+								<Link to="/product">
 									<span className="select-none">Tất cả sản phẩm</span>
 								</Link>
 							</SidebarMenuSubButton>
@@ -45,9 +45,9 @@ export default function ProductMenu() {
 						<SidebarMenuSubItem>
 							<SidebarMenuSubButton
 								asChild
-								isActive={location.pathname.includes("/products/collections")}
+								isActive={location.pathname.includes("/product/collection")}
 							>
-								<Link to="/products/collections">
+								<Link to="/product/collection">
 									<span className="select-none">Nhóm sản phẩm</span>
 								</Link>
 							</SidebarMenuSubButton>
@@ -55,9 +55,9 @@ export default function ProductMenu() {
 						<SidebarMenuSubItem>
 							<SidebarMenuSubButton
 								asChild
-								isActive={location.pathname.includes("/products/create")}
+								isActive={location.pathname.includes("/product/create")}
 							>
-								<Link to="/products/create">
+								<Link to="/product/create">
 									<span className="select-none">Tạo sản phẩm</span>
 								</Link>
 							</SidebarMenuSubButton>

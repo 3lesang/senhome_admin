@@ -2,48 +2,36 @@ import { ImagePlusIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { FileDialog } from "@/components/dialog/file";
 import { Button } from "@/components/ui/button";
-
-type FileType = {
-	id: string;
-	url: string;
-};
+import { convertToFileUrl } from "@/lib/utils";
 
 interface CollectionImageInputProps {
-	value?: FileType | null;
-	onChange?: (data: FileType | null) => void;
+	value?: string;
+	onChange?: (data: string) => void;
 }
 
 export function CollectionImageInput({
 	value,
 	onChange,
 }: CollectionImageInputProps) {
-	const [open, setOpen] = useState(false);
-	const [file, setFile] = useState<
-		{ id: string; url: string } | null | undefined
-	>(value);
+	const [file, setFile] = useState<string>(value ?? "");
 
-	function handleConfirm(files: { id: string; url: string }[]) {
-		const file = files?.[0];
+	function handleConfirm(files: string[]) {
+		const [file] = files;
 		setFile(file);
 		onChange?.(file);
 	}
 
 	function handleRemove() {
-		setFile(null);
-		onChange?.(null);
+		setFile("");
+		onChange?.("");
 	}
 
-	if (file?.id) {
+	if (value) {
 		return (
 			<div className="aspect-square w-full relative">
-				<FileDialog
-					value={file ? [file] : []}
-					open={open}
-					onOpenChange={setOpen}
-					onConfirm={handleConfirm}
-				>
+				<FileDialog value={[file]} onConfirm={handleConfirm}>
 					<img
-						src={file.url}
+						src={convertToFileUrl(file)}
 						alt=""
 						className="w-full h-full object-contain rounded-md bg-neutral-50/30"
 					/>
@@ -51,8 +39,8 @@ export function CollectionImageInput({
 				<Button
 					type="button"
 					variant="outline"
-					size="icon"
-					className="absolute top-1 right-1 rounded-full"
+					size="icon-sm"
+					className="absolute top-2 right-2 rounded-full"
 					onClick={handleRemove}
 				>
 					<XIcon />
@@ -63,17 +51,9 @@ export function CollectionImageInput({
 	return (
 		<div className="aspect-square w-full flex justify-center items-center rounded-md bg-neutral-50/10 border border-dashed relative">
 			<ImagePlusIcon />
-			<button
-				type="button"
-				className="absolute inset-0"
-				onClick={() => setOpen(true)}
-			/>
-			<FileDialog
-				value={file ? [file] : []}
-				open={open}
-				onOpenChange={setOpen}
-				onConfirm={handleConfirm}
-			/>
+			<FileDialog value={[file]} onConfirm={handleConfirm}>
+				<button type="button" className="absolute inset-0" />
+			</FileDialog>
 		</div>
 	);
 }

@@ -1,11 +1,9 @@
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useSearch } from "@tanstack/react-router";
 import { EditIcon, ListFilterIcon, SearchIcon, TrashIcon } from "lucide-react";
 import { deleteMenusHandler } from "@/api/menu/delete";
 import { getListMenuQueryOptions } from "@/api/menu/list";
-import TablePagination, {
-	type TablePaginationDataChange,
-} from "@/components/table/pagination";
+import TablePagination from "@/components/table/pagination";
 import { TabsButton } from "@/components/table/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -36,8 +34,7 @@ import {
 import { cn } from "@/lib/utils";
 
 export function MenuListPage() {
-	const navigate = useNavigate();
-	const { page, limit, query } = useSearch({ from: "/(app)/store/menus/" });
+	const { page, limit, query } = useSearch({ from: "/(app)/store/menu/" });
 
 	const { data, refetch } = useSuspenseQuery(
 		getListMenuQueryOptions({ page, limit, query: query }),
@@ -49,17 +46,6 @@ export function MenuListPage() {
 			refetch();
 		},
 	});
-
-	const handlePaginationChange = ({
-		limit,
-		page,
-	}: TablePaginationDataChange) => {
-		navigate({ to: "/store/menus", search: { page, limit, query } });
-	};
-
-	const handleTabChange = (query: string) => {
-		navigate({ to: "/store/menus", search: { page: 1, limit: limit, query } });
-	};
 
 	const handleDelete = (id: string) => {
 		mutate([id]);
@@ -75,7 +61,7 @@ export function MenuListPage() {
 					drop-down menus
 				</CardDescription>
 				<CardAction>
-					<Link to="/store/menus/create" className={cn(buttonVariants())}>
+					<Link to="/store/menu/create" className={cn(buttonVariants())}>
 						Tạo menu
 					</Link>
 				</CardAction>
@@ -84,11 +70,7 @@ export function MenuListPage() {
 				<Card className="shadow-none border-0">
 					<CardHeader>
 						<CardTitle>
-							<TabsButton
-								tabs={[{ label: "Tất cả", value: "" }]}
-								value=""
-								onChange={handleTabChange}
-							/>
+							<TabsButton tabs={[{ label: "Tất cả", value: "" }]} value="" />
 						</CardTitle>
 						<CardDescription>
 							<Badge variant="secondary">{data.totalItems} menu</Badge>
@@ -122,7 +104,7 @@ export function MenuListPage() {
 											</TableCell>
 											<TableCell>
 												<Link
-													to="/store/menus/$id"
+													to="/store/menu/$id"
 													params={{ id: item.id }}
 													className="hover:underline"
 												>
@@ -133,7 +115,7 @@ export function MenuListPage() {
 										</TableRow>
 									</ContextMenuTrigger>
 									<ContextMenuContent>
-										<Link to="/store/menus/$id" params={{ id: item.id }}>
+										<Link to="/store/menu/$id" params={{ id: item.id }}>
 											<ContextMenuItem>
 												<EditIcon />
 												Chỉnh sửa
@@ -153,7 +135,6 @@ export function MenuListPage() {
 							total={data.totalItems}
 							page={page}
 							limit={limit}
-							onChange={handlePaginationChange}
 						/>
 					</CardFooter>
 				</Card>

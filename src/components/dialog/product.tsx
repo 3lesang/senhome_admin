@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { type ReactNode, useState } from "react";
-import { getListProductQueryOptions } from "@/api/product/list";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -17,17 +16,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn, convertToFileUrl } from "@/lib/utils";
+import { getProductsQueryOptions } from "@/queries/product";
 
 type ProductDataType = {
-	id: string;
+	id: number;
 	name: string;
-	thumbnail: string;
+	file: string;
 };
 
 interface ProductDialogProps {
 	value?: ProductDataType[];
 	onConfirm?: (value: ProductDataType[]) => void;
-	children?: ReactNode;
+	children: ReactNode;
 }
 
 export function ProductDialog({
@@ -38,9 +38,7 @@ export function ProductDialog({
 	const [value, setValue] = useState<ProductDataType[]>(initialValue);
 	const [query, setQuery] = useState("");
 
-	const { data } = useQuery(
-		getListProductQueryOptions({ page: 1, limit: 10, query }),
-	);
+	const { data } = useQuery(getProductsQueryOptions({ page: 1, size: 10 }));
 
 	function handleToggle(item: ProductDataType) {
 		setValue((prev) => {
@@ -60,8 +58,7 @@ export function ProductDialog({
 
 	return (
 		<Dialog>
-			{children && <DialogTrigger asChild>{children}</DialogTrigger>}
-
+			<DialogTrigger asChild>{children}</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Chọn sản phẩm</DialogTitle>
@@ -69,17 +66,14 @@ export function ProductDialog({
 						Chọn một hoặc nhiều sản phẩm từ danh sách.
 					</DialogDescription>
 				</DialogHeader>
-
 				<Input
 					placeholder="Tìm kiếm sản phẩm..."
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
 				/>
-
 				<div className="space-y-2">
-					{data?.items?.map((item) => {
+					{data?.data.data?.map((item) => {
 						const selected = initialValue.some((v) => v.id === item.id);
-						const src = convertToFileUrl(item.expand.thumbnail);
 						return (
 							<Label
 								key={item.id}
@@ -92,14 +86,14 @@ export function ProductDialog({
 									defaultChecked={selected}
 									onCheckedChange={() =>
 										handleToggle({
-											id: item.id,
-											name: item.name,
-											thumbnail: src,
+											id: item.id ?? 0,
+											name: item.name ?? "",
+											file: item.file ?? "",
 										})
 									}
 								/>
 								<Avatar className="rounded-md">
-									<AvatarImage src={src} />
+									<AvatarImage src={convertToFileUrl(item.file)} />
 									<AvatarFallback>SP</AvatarFallback>
 								</Avatar>
 								<span className="line-clamp-1">{item.name}</span>

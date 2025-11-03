@@ -15,8 +15,9 @@ export const FILE_COLLECTION = "sen_files";
 export const STORE_COLLECTION = "sen_store";
 export const MENU_COLLECTION = "sen_menus";
 export const STORE_PAGE_COLLECTION = "sen_pages";
-export const API_KEY = "https://b0m772h91854471.pocketbasecloud.com";
 
-const pocketClient = new PocketBase(API_KEY);
+const pocketClient = new PocketBase(
+	"https://b0m772h91854471.pocketbasecloud.com",
+);
 pocketClient.autoCancellation(false);
 export { pocketClient };

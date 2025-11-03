@@ -23,7 +23,7 @@ export default function ContentMenu() {
 		>
 			<SidebarMenuItem>
 				<CollapsibleTrigger asChild>
-					<Link to="/content/blogs">
+					<Link to="/content/blog">
 						<SidebarMenuButton>
 							<ImageIcon />
 							<span className="select-none">Nội dung</span>
@@ -35,9 +35,9 @@ export default function ContentMenu() {
 						<SidebarMenuSubItem>
 							<SidebarMenuSubButton
 								asChild
-								isActive={location.pathname === "/content/blogs"}
+								isActive={location.pathname === "/content/blog"}
 							>
-								<Link to="/content/blogs">
+								<Link to="/content/blog">
 									<span className="select-none">Bài viết Blogs</span>
 								</Link>
 							</SidebarMenuSubButton>
@@ -45,9 +45,9 @@ export default function ContentMenu() {
 						<SidebarMenuSubItem>
 							<SidebarMenuSubButton
 								asChild
-								isActive={location.pathname === "/content/files"}
+								isActive={location.pathname === "/content/file"}
 							>
-								<Link to="/content/files">
+								<Link to="/content/file">
 									<span className="select-none">Files</span>
 								</Link>
 							</SidebarMenuSubButton>

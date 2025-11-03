@@ -12,9 +12,9 @@ import Underline from "@tiptap/extension-underline";
 import Youtube from "@tiptap/extension-youtube";
 import { Placeholder, UndoRedo } from "@tiptap/extensions";
 import {
-	type Content,
 	type Editor,
 	EditorContent,
+	type JSONContent,
 	useEditor,
 } from "@tiptap/react";
 import { useState } from "react";
@@ -23,49 +23,14 @@ import { EditorMenu } from "./menu";
 import "./styles.css";
 
 interface TextEditorProps {
-	value?: Content;
-	onChange?: (value: Content) => void;
+	value?: JSONContent;
+	onChange?: (value: JSONContent) => void;
 }
 
 export function TextEditor({ value, onChange, ...props }: TextEditorProps) {
 	const [focus, setFocus] = useState(false);
 	const editor: Editor = useEditor({
-		extensions: [
-			Document,
-			Paragraph,
-			Text,
-			Bold,
-			Italic,
-			Underline,
-			Heading.configure({ levels: [1, 2, 3, 4, 5, 6] }),
-			Placeholder.configure({
-				placeholder: "Nhập nội dung...",
-			}),
-			TextAlign.configure({
-				types: ["heading", "paragraph"],
-			}),
-			Image,
-			Link.configure({
-				openOnClick: false,
-				autolink: true,
-			}),
-			BulletList,
-			OrderedList,
-			ListItem,
-			UndoRedo,
-			Youtube.configure({
-				nocookie: true,
-			}).extend({
-				addAttributes() {
-					return {
-						...this.parent?.(),
-						width: {
-							default: "100%",
-						},
-					};
-				},
-			}),
-		],
+		extensions,
 		editorProps: {
 			attributes: {
 				class: "typography max-w-none text-sm outline-none",
@@ -73,8 +38,7 @@ export function TextEditor({ value, onChange, ...props }: TextEditorProps) {
 		},
 		content: value,
 		onUpdate: ({ editor }) => {
-			const value = editor.getJSON();
-			onChange?.(value);
+			onChange?.(editor.getJSON());
 		},
 		onFocus() {
 			setFocus(true);
@@ -93,12 +57,48 @@ export function TextEditor({ value, onChange, ...props }: TextEditorProps) {
 			)}
 			{...props}
 		>
-			<div className="p-1 bg-neutral-50/20">
-				<EditorMenu editor={editor} />
-			</div>
-			<div className="max-h-80 min-h-44 overflow-scroll px-4">
-				<EditorContent editor={editor} />
-			</div>
+			<EditorMenu editor={editor} />
+			<EditorContent
+				editor={editor}
+				className="max-h-80 min-h-44 overflow-scroll px-4"
+			/>
 		</div>
 	);
 }
+
+const extensions = [
+	Document,
+	Paragraph,
+	Text,
+	Bold,
+	Italic,
+	Underline,
+	Heading.configure({ levels: [1, 2, 3, 4, 5, 6] }),
+	Placeholder.configure({
+		placeholder: "Nhập nội dung...",
+	}),
+	TextAlign.configure({
+		types: ["heading", "paragraph"],
+	}),
+	Image,
+	Link.configure({
+		openOnClick: false,
+		autolink: true,
+	}),
+	BulletList,
+	OrderedList,
+	ListItem,
+	UndoRedo,
+	Youtube.configure({
+		nocookie: true,
+	}).extend({
+		addAttributes() {
+			return {
+				...this.parent?.(),
+				width: {
+					default: "100%",
+				},
+			};
+		},
+	}),
+];

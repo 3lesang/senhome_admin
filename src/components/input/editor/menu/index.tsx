@@ -1,5 +1,6 @@
 import type { Editor } from "@tiptap/react";
 import { Bold, Italic, UnderlineIcon } from "lucide-react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { EditorAlignButton } from "./align";
 import { EditorImageButton } from "./image";
@@ -8,9 +9,9 @@ import { EditorMoreButton } from "./more";
 import { EditorParagraphButton } from "./paragraph";
 import { EditorVideoButton } from "./video";
 
-export function EditorMenu({ editor }: { editor: Editor }) {
+function EditorMenuComponent({ editor }: { editor: Editor }) {
 	return (
-		<div className="flex items-center">
+		<div className="flex items-center p-1 bg-neutral-50/20">
 			<EditorParagraphButton editor={editor} />
 			<Button
 				type="button"
@@ -47,3 +48,5 @@ export function EditorMenu({ editor }: { editor: Editor }) {
 		</div>
 	);
 }
+
+export const EditorMenu = React.memo(EditorMenuComponent);

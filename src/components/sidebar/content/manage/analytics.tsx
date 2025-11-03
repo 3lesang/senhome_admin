@@ -19,11 +19,11 @@ export default function AnalyticsMenu() {
 		<Collapsible
 			asChild
 			className="group/collapsible"
-			open={location.href.includes("/analytics")}
+			open={location.href.includes("/analytic")}
 		>
 			<SidebarMenuItem>
 				<CollapsibleTrigger asChild>
-					<Link to="/analytics">
+					<Link to="/analytic">
 						<SidebarMenuButton>
 							<ChartColumnIcon />
 							<span className="select-none">Báo cáo</span>
@@ -35,9 +35,9 @@ export default function AnalyticsMenu() {
 						<SidebarMenuSubItem>
 							<SidebarMenuSubButton
 								asChild
-								isActive={location.pathname === "/analytics"}
+								isActive={location.pathname === "/analytic"}
 							>
-								<Link to="/analytics">
+								<Link to="/analytic">
 									<span className="select-none">Phân tích bán hàng</span>
 								</Link>
 							</SidebarMenuSubButton>

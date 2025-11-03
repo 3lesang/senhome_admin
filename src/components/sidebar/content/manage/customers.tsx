@@ -19,11 +19,11 @@ export default function CustomersMenu() {
 		<Collapsible
 			asChild
 			className="group/collapsible"
-			open={location.href.includes("/customers")}
+			open={location.href.includes("/customer")}
 		>
 			<SidebarMenuItem>
 				<CollapsibleTrigger asChild>
-					<Link to="/customers">
+					<Link to="/customer">
 						<SidebarMenuButton>
 							<UserIcon />
 							<span className="select-none">Khách hàng</span>
@@ -35,9 +35,9 @@ export default function CustomersMenu() {
 						<SidebarMenuSubItem>
 							<SidebarMenuSubButton
 								asChild
-								isActive={location.pathname === "/customers"}
+								isActive={location.pathname === "/customer"}
 							>
-								<Link to="/customers">
+								<Link to="/customer">
 									<span className="select-none">Tất cả khách hàng</span>
 								</Link>
 							</SidebarMenuSubButton>
@@ -45,9 +45,9 @@ export default function CustomersMenu() {
 						<SidebarMenuSubItem>
 							<SidebarMenuSubButton
 								asChild
-								isActive={location.pathname === "/customers/rating"}
+								isActive={location.pathname === "/customer/rating"}
 							>
-								<Link to="/customers/rating">
+								<Link to="/customer/rating">
 									<span className="select-none">Quản lý đánh giá</span>
 								</Link>
 							</SidebarMenuSubButton>

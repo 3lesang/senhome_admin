@@ -20,25 +20,18 @@ import {
 } from "@/components/ui/empty";
 import { cn } from "@/lib/utils";
 
-interface MediaItem {
-	id: string;
-	url: string;
-}
-
 interface MediaInputProps {
-	value?: MediaItem[];
-	onChange?: (value: MediaItem[]) => void;
+	value?: string[] | null;
+	onChange?: (value: string[]) => void;
 }
 
-function SortableImageItem({
-	item,
-	index,
-	onRemove,
-}: {
-	item: MediaItem;
+interface SortableImageItemProps {
+	id: string;
 	index: number;
 	onRemove: (index: number) => void;
-}) {
+}
+
+function SortableImageItem({ id, index, onRemove }: SortableImageItemProps) {
 	const {
 		attributes,
 		listeners,
@@ -46,7 +39,7 @@ function SortableImageItem({
 		transform,
 		transition,
 		isDragging,
-	} = useSortable({ id: item.id });
+	} = useSortable({ id });
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
@@ -64,14 +57,14 @@ function SortableImageItem({
 			)}
 		>
 			<div
-				className="w-full h-full rounded-md overflow-hidden cursor-grab active:cursor-grabbing"
+				className="w-full h-full rounded-md overflow-hidden cursor-grab active:cursor-grabbing bg-neutral-50"
 				{...attributes}
 				{...listeners}
 			>
 				<img
-					src={item.url}
+					src={`https://bucket.senhome.vn/${id}`}
 					alt=""
-					className="w-full h-full object-cover pointer-events-none"
+					className="w-full h-full object-contain pointer-events-none"
 				/>
 			</div>
 
@@ -92,9 +85,9 @@ function SortableImageItem({
 }
 
 export function MediaInput({ value, onChange }: MediaInputProps) {
-	const [files, setFiles] = useState<MediaItem[]>(() => value ?? []);
+	const [files, setFiles] = useState<string[]>(() => value ?? []);
 
-	const handleAdd = (newFiles: MediaItem[]) => {
+	const handleAdd = (newFiles: string[]) => {
 		setFiles(newFiles);
 		onChange?.(newFiles);
 	};
@@ -108,8 +101,8 @@ export function MediaInput({ value, onChange }: MediaInputProps) {
 	const handleDragEnd = (event: DragEndEvent) => {
 		const { active, over } = event;
 		if (active.id !== over?.id) {
-			const oldIndex = files.findIndex((i) => i.id === active.id);
-			const newIndex = files.findIndex((i) => i.id === over?.id);
+			const oldIndex = files.indexOf(active.id.toString());
+			const newIndex = files.indexOf(over ? over.id.toString() : "");
 			const reordered = arrayMove(files, oldIndex, newIndex);
 			setFiles(reordered);
 			onChange?.(reordered);
@@ -143,15 +136,12 @@ export function MediaInput({ value, onChange }: MediaInputProps) {
 
 	return (
 		<DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-			<SortableContext
-				items={files.map((f) => f.id)}
-				strategy={verticalListSortingStrategy}
-			>
+			<SortableContext items={files} strategy={verticalListSortingStrategy}>
 				<div className="grid grid-cols-12 gap-1">
 					{files.map((item, index) => (
 						<SortableImageItem
-							key={item.id}
-							item={item}
+							key={item}
+							id={item}
 							index={index}
 							onRemove={handleRemove}
 						/>

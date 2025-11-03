@@ -1,11 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
+import { STORE_PAGE_QUERY_KEY } from "@/constants";
 import { pocketClient, STORE_PAGE_COLLECTION } from "@/pocketbase";
-
-type StorePageDateType = {
-	id: string;
-	title: string;
-	created: Date;
-};
 
 export const getStorePagesQueryOptions = ({
 	page,
@@ -17,10 +12,14 @@ export const getStorePagesQueryOptions = ({
 	query: string;
 }) => {
 	return queryOptions({
-		queryKey: [STORE_PAGE_COLLECTION, page, limit, query],
+		queryKey: [STORE_PAGE_QUERY_KEY, page, limit, query],
 		queryFn: () => {
 			return pocketClient
-				.collection<StorePageDateType>(STORE_PAGE_COLLECTION)
+				.collection<{
+					id: string;
+					title: string;
+					created: Date;
+				}>(STORE_PAGE_COLLECTION)
 				.getList(page, limit, { filter: query });
 		},
 	});

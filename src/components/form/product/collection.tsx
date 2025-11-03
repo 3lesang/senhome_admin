@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { XIcon } from "lucide-react";
 import { useState } from "react";
-import { getCollectionsQueryOptions } from "@/api/collection/list";
 import { badgeVariants } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -14,14 +13,15 @@ import {
 	PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { getCollectionsQueryOptions } from "@/queries/collection";
 
 interface Collection {
-	id: string;
+	id: number;
 	name: string;
 }
 
 interface CollectionInputProps {
-	value?: Collection[];
+	value?: Collection[] | null;
 	onChange?: (value: Collection[]) => void;
 }
 
@@ -37,13 +37,13 @@ export function CollectionInput({ value, onChange }: CollectionInputProps) {
 		if (!checked) {
 			updated = selected.filter((i) => i.id !== item.id);
 		} else {
-			updated = [...selected, item];
+			updated = [...selected, { ...item, id: item.id }];
 		}
 		setSelected(updated);
 		onChange?.(updated);
 	}
 
-	function handleRemove(id: string) {
+	function handleRemove(id: number) {
 		const updated = selected.filter((i) => i.id !== id);
 		setSelected(updated);
 		onChange?.(updated);
@@ -58,11 +58,11 @@ export function CollectionInput({ value, onChange }: CollectionInputProps) {
 						role="combobox"
 						className="w-full justify-between"
 					>
-						Collection
+						Chọn nhóm sản phẩm
 					</Button>
 				</PopoverTrigger>
 				<PopoverContent>
-					{collections?.items.map((item: Collection) => {
+					{collections?.data?.data?.map((item) => {
 						const checked = selected.some((s) => s.id === item.id);
 						return (
 							<Label
@@ -84,13 +84,17 @@ export function CollectionInput({ value, onChange }: CollectionInputProps) {
 			</Popover>
 			<div className="space-x-1">
 				{selected.map((item) => (
-					<Link
+					<div
 						key={item.id}
 						className={cn(badgeVariants({ variant: "secondary" }))}
-						to="/products/collections/$id"
-						params={{ id: item.id }}
 					>
-						{item.name}
+						<Link
+							to="/product/collection/$id"
+							params={{ id: item.id.toString() }}
+							className="hover:underline"
+						>
+							{item.name}
+						</Link>
 						<Button
 							variant="ghost"
 							size="icon"
@@ -99,7 +103,7 @@ export function CollectionInput({ value, onChange }: CollectionInputProps) {
 						>
 							<XIcon />
 						</Button>
-					</Link>
+					</div>
 				))}
 			</div>
 		</div>

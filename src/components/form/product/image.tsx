@@ -3,37 +3,36 @@ import { useState } from "react";
 import { FileDialog } from "@/components/dialog/file";
 import { Button } from "@/components/ui/button";
 
-type FileType = {
-	id: string;
-	url: string;
-};
-
 interface VariantImageInputProps {
-	value?: FileType | null;
-	onChange?: (data: FileType | null) => void;
+	value?: string;
+	onChange?: (data: string) => void;
 }
 
-export function VariantImageInput({ value, onChange }: VariantImageInputProps) {
-	const [open, setOpen] = useState(false);
-	const [file, setFile] = useState<
-		{ id: string; url: string } | null | undefined
-	>(value);
+export function VariantImageInput({
+	value = "",
+	onChange,
+}: VariantImageInputProps) {
+	const [file, setFile] = useState<string>(value);
 
-	function handleConfirm(files: { id: string; url: string }[]) {
-		const file = files?.[0];
+	function handleConfirm(files: string[]) {
+		const [file] = files;
 		setFile(file);
 		onChange?.(file);
 	}
 
 	function handleRemove() {
-		setFile(null);
-		onChange?.(null);
+		setFile("");
+		onChange?.("");
 	}
 
-	if (file?.id) {
+	if (file) {
 		return (
-			<div className="size-14 rounded-md overflow-hidden relative">
-				<img src={file.url} alt="" className="w-full h-full object-cover" />
+			<div className="size-14 rounded-md overflow-hidden relative bg-neutral-50">
+				<img
+					src={`https://bucket.senhome.vn/${file}`}
+					alt=""
+					className="w-full h-full object-contain"
+				/>
 				<Button
 					type="button"
 					variant="outline"
@@ -46,20 +45,13 @@ export function VariantImageInput({ value, onChange }: VariantImageInputProps) {
 			</div>
 		);
 	}
+
 	return (
 		<div className="flex justify-center items-center size-14 rounded-md bg-neutral-50/10 border border-dashed relative">
 			<ImagePlusIcon size={16} />
-			<button
-				type="button"
-				className="absolute inset-0"
-				onClick={() => setOpen(true)}
-			/>
-			<FileDialog
-				value={file ? [file] : []}
-				open={open}
-				onOpenChange={setOpen}
-				onConfirm={handleConfirm}
-			/>
+			<FileDialog value={file ? [file] : []} onConfirm={handleConfirm}>
+				<button type="button" className="absolute inset-0" />
+			</FileDialog>
 		</div>
 	);
 }

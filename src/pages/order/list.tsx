@@ -1,19 +1,11 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
-import {
-	InfoIcon,
-	ListFilterIcon,
-	SearchIcon,
-	Trash2Icon,
-	UserCircleIcon,
-} from "lucide-react";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { Link, useSearch } from "@tanstack/react-router";
+import { InfoIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import * as timeago from "timeago.js";
 import vi from "timeago.js/lib/lang/vi";
 import TimeAgo from "timeago-react";
-import { getListOrderQueryOptions } from "@/api/order/list";
-import TablePagination, {
-	type TablePaginationDataChange,
-} from "@/components/table/pagination";
+import axiosClient from "@/axios";
+import TablePagination from "@/components/table/pagination";
 import { TabsButton } from "@/components/table/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -42,6 +34,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { formatVND } from "@/lib/utils";
+import { getOrdersQueryOptions } from "@/queries/order";
 
 timeago.register("vi", vi);
 
@@ -90,23 +83,18 @@ export function getShippingStatus(
 }
 
 export function OrderListPage() {
-	const navigate = useNavigate();
-	const { page, limit, query } = useSearch({ from: "/(app)/orders/" });
+	const { page, limit, query } = useSearch({ from: "/(app)/order/" });
 
-	const { data } = useSuspenseQuery(
-		getListOrderQueryOptions({ page, limit, query }),
-	);
+	const getOrdersQuery = useSuspenseQuery(getOrdersQueryOptions());
 
-	const handlePaginationChange = ({
-		limit,
-		page,
-	}: TablePaginationDataChange) => {
-		navigate({ to: "/orders", search: { page, limit, query } });
-	};
-
-	const handleTabChange = (query: string) => {
-		navigate({ to: "/orders", search: { page: 1, limit: limit, query } });
-	};
+	const deleteOrdersMutation = useMutation({
+		mutationFn: (ids: number[]) => {
+			return axiosClient.delete("/orders", { data: { ids } });
+		},
+		onSuccess: () => {
+			getOrdersQuery.refetch();
+		},
+	});
 
 	return (
 		<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
@@ -133,11 +121,12 @@ export function OrderListPage() {
 									{ label: "Chưa thanh toán", value: `payment_status!="paid"` },
 								]}
 								value={query}
-								onChange={handleTabChange}
 							/>
 						</CardTitle>
 						<CardDescription>
-							<Badge variant="secondary">{data.totalItems} đơn hàng</Badge>
+							<Badge variant="secondary">
+								{getOrdersQuery.data.data.total_items} đơn hàng
+							</Badge>
 						</CardDescription>
 						<CardAction className="flex items-center gap-2">
 							<Button size="icon" variant="outline">
@@ -154,61 +143,36 @@ export function OrderListPage() {
 								<TableHead className="w-16 text-center">
 									<Checkbox />
 								</TableHead>
-								<TableHead>Mã đơn hàng</TableHead>
-								<TableHead>Khách hàng</TableHead>
-								<TableHead>Thanh toán</TableHead>
-								<TableHead>Giao hàng</TableHead>
 								<TableHead>Tổng tiền</TableHead>
 								<TableHead>Ngày tạo</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{data?.items.map((item) => (
+							{getOrdersQuery.data.data.data?.map((item) => (
 								<ContextMenu key={item.id}>
 									<ContextMenuTrigger asChild>
 										<TableRow className="group">
 											<TableCell className="text-center w-16">
 												<Checkbox />
 											</TableCell>
-											<TableCell>
-												<Link
-													to="/orders/$id"
-													params={{ id: item.id }}
-													className="hover:underline"
-												>
-													{item.id}
-												</Link>
-											</TableCell>
-											<TableCell>
-												<Badge variant="secondary">
-													<UserCircleIcon />
-													{item.customer.name}
-												</Badge>
-											</TableCell>
-											<TableCell>
-												<Badge variant="secondary">
-													{getPaymentStatus(item.payment_status)}
-												</Badge>
-											</TableCell>
-											<TableCell>
-												<Badge variant="secondary">
-													{getShippingStatus(item.shipping_status)}
-												</Badge>
-											</TableCell>
-											<TableCell>{formatVND(item.final_price)}</TableCell>
+											<TableCell>{formatVND(item.total_amount)}</TableCell>
 											<TableCell>
 												<TimeAgo datetime={item.created} locale="vi" />
 											</TableCell>
 										</TableRow>
 									</ContextMenuTrigger>
 									<ContextMenuContent>
-										<Link to="/orders/$id" params={{ id: item.id }}>
+										<Link to="/order/$id" params={{ id: item.id.toString() }}>
 											<ContextMenuItem>
 												<InfoIcon />
 												Chi tiết
 											</ContextMenuItem>
 										</Link>
-										<ContextMenuItem>
+										<ContextMenuItem
+											onClick={() =>
+												deleteOrdersMutation.mutateAsync([item.id])
+											}
+										>
 											<Trash2Icon />
 											Xóa
 										</ContextMenuItem>
@@ -221,8 +185,7 @@ export function OrderListPage() {
 						<TablePagination
 							page={page}
 							limit={limit}
-							total={data.totalItems}
-							onChange={handlePaginationChange}
+							total={getOrdersQuery.data.data.total_items}
 						/>
 					</CardFooter>
 				</Card>
