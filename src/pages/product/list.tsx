@@ -1,12 +1,3 @@
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { Link, useSearch } from "@tanstack/react-router";
-import {
-  EditIcon,
-  ListFilterIcon,
-  SearchIcon,
-  StarIcon,
-  Trash2Icon,
-} from "lucide-react";
 import axiosClient from "@/axios";
 import TablePagination, {
   type TablePaginationDataChange,
@@ -41,8 +32,15 @@ import {
 } from "@/components/ui/table";
 import { cn, convertToFileUrl } from "@/lib/utils";
 import { getProductsQueryOptions } from "@/queries/product";
-import { s3Client } from "@/s3";
-import { DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { Link, useSearch } from "@tanstack/react-router";
+import {
+  EditIcon,
+  ListFilterIcon,
+  SearchIcon,
+  StarIcon,
+  Trash2Icon,
+} from "lucide-react";
 
 export function ProductListPage() {
   const { page, size } = useSearch({ from: "/(app)/product/" });
