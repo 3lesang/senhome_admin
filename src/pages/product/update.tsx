@@ -133,9 +133,7 @@ export function ProductUpdatePage() {
         new PutObjectCommand({
           Bucket: "r2-bucket",
           Key: `content/product/${slug}`,
-          Body: new Blob([JSON.stringify(value.infoGroup.description)], {
-            type: "application/json",
-          }),
+          Body: JSON.stringify(value.infoGroup.description),
           ContentType: "application/json",
         }),
       );
