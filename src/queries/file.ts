@@ -1,40 +1,52 @@
-import { ListObjectsV2Command } from "@aws-sdk/client-s3";
-import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
+import axiosClient from "@/axios";
 import { FILE_QUERY_KEY } from "@/constants";
-import { s3Client } from "@/s3";
+import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 
 type Params = {
-	page: number;
-	limit: number;
-	query: string;
+  page: number;
+  limit: number;
 };
 
-export function getFilesQueryOptions({ page, limit, query }: Params) {
-	return queryOptions({
-		queryKey: [FILE_QUERY_KEY, page, limit, query],
-		queryFn: () => {
-			const command = new ListObjectsV2Command({
-				Bucket: "r2-bucket",
-				Prefix: "media",
-			});
-			return s3Client.send(command);
-		},
-	});
+type FileData = {
+  id: number;
+  name: string;
+};
+
+type PaginationResponse<T> = {
+  data: T[];
+  page: number;
+  page_size: number;
+  total_items: number;
+  total_pages: number;
+};
+
+export function getFilesQueryOptions({ page, limit }: Params) {
+  return queryOptions({
+    queryKey: [FILE_QUERY_KEY, page, limit],
+    queryFn: () => {
+      return axiosClient.get<PaginationResponse<FileData>>("/files", {
+        params: { page, page_size: limit },
+      });
+    },
+  });
 }
 
 export function getFilesInfinityQueryOptions() {
-	return infiniteQueryOptions({
-		queryKey: [FILE_QUERY_KEY],
-		queryFn: () => {
-			const command = new ListObjectsV2Command({
-				Bucket: "r2-bucket",
-				Prefix: "media",
-			});
-			return s3Client.send(command);
-		},
-		initialPageParam: 1,
-		getNextPageParam: () => {
-			return undefined;
-		},
-	});
+  return infiniteQueryOptions({
+    queryKey: [FILE_QUERY_KEY],
+    queryFn: async ({ pageParam }) => {
+      const res = await axiosClient.get<PaginationResponse<FileData>>(
+        "/files",
+        {
+          params: { page: pageParam, page_size: 20 },
+        },
+      );
+      return res.data;
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      const { page, total_pages } = lastPage;
+      return page < total_pages ? page + 1 : undefined;
+    },
+  });
 }
