@@ -9,6 +9,7 @@ export const COLLECTION_PRODUCT_QUERY_KEY = "collection_products";
 export const ORDER_QUERY_KEY = "orders";
 export const ORDER_ITEM_QUERY_KEY = "order_items";
 export const USER_QUERY_KEY = "users";
+export const CUSTOMER_QUERY_KEY = "customers";
 export const FILE_QUERY_KEY = "files";
 export const STORE_QUERY_KEY = "store";
 export const MENU_QUERY_KEY = "menus";

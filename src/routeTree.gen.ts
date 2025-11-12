@@ -26,6 +26,8 @@ import { Route as appOrderIdRouteImport } from './routes/(app)/order/$id'
 import { Route as appDiscountPromotionRouteImport } from './routes/(app)/discount/promotion'
 import { Route as appDiscountCouponRouteImport } from './routes/(app)/discount/coupon'
 import { Route as appCustomerRatingRouteImport } from './routes/(app)/customer/rating'
+import { Route as appCustomerCreateRouteImport } from './routes/(app)/customer/create'
+import { Route as appCustomerIdRouteImport } from './routes/(app)/customer/$id'
 import { Route as appStoreSettingIndexRouteImport } from './routes/(app)/store/setting/index'
 import { Route as appStorePageIndexRouteImport } from './routes/(app)/store/page/index'
 import { Route as appStoreMenuIndexRouteImport } from './routes/(app)/store/menu/index'
@@ -128,6 +130,16 @@ const appDiscountCouponRoute = appDiscountCouponRouteImport.update({
 const appCustomerRatingRoute = appCustomerRatingRouteImport.update({
   id: '/customer/rating',
   path: '/customer/rating',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appCustomerCreateRoute = appCustomerCreateRouteImport.update({
+  id: '/customer/create',
+  path: '/customer/create',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appCustomerIdRoute = appCustomerIdRouteImport.update({
+  id: '/customer/$id',
+  path: '/customer/$id',
   getParentRoute: () => appRouteRoute,
 } as any)
 const appStoreSettingIndexRoute = appStoreSettingIndexRouteImport.update({
@@ -241,6 +253,8 @@ export interface FileRoutesByFullPath {
   '/store': typeof appStoreRouteRouteWithChildren
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
+  '/customer/$id': typeof appCustomerIdRoute
+  '/customer/create': typeof appCustomerCreateRoute
   '/customer/rating': typeof appCustomerRatingRoute
   '/discount/coupon': typeof appDiscountCouponRoute
   '/discount/promotion': typeof appDiscountPromotionRoute
@@ -278,6 +292,8 @@ export interface FileRoutesByTo {
   '/store': typeof appStoreRouteRouteWithChildren
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
+  '/customer/$id': typeof appCustomerIdRoute
+  '/customer/create': typeof appCustomerCreateRoute
   '/customer/rating': typeof appCustomerRatingRoute
   '/discount/coupon': typeof appDiscountCouponRoute
   '/discount/promotion': typeof appDiscountPromotionRoute
@@ -318,6 +334,8 @@ export interface FileRoutesById {
   '/(auth)/signin': typeof authSigninRoute
   '/(auth)/signup': typeof authSignupRoute
   '/(app)/': typeof appIndexRoute
+  '/(app)/customer/$id': typeof appCustomerIdRoute
+  '/(app)/customer/create': typeof appCustomerCreateRoute
   '/(app)/customer/rating': typeof appCustomerRatingRoute
   '/(app)/discount/coupon': typeof appDiscountCouponRoute
   '/(app)/discount/promotion': typeof appDiscountPromotionRoute
@@ -357,6 +375,8 @@ export interface FileRouteTypes {
     | '/store'
     | '/signin'
     | '/signup'
+    | '/customer/$id'
+    | '/customer/create'
     | '/customer/rating'
     | '/discount/coupon'
     | '/discount/promotion'
@@ -394,6 +414,8 @@ export interface FileRouteTypes {
     | '/store'
     | '/signin'
     | '/signup'
+    | '/customer/$id'
+    | '/customer/create'
     | '/customer/rating'
     | '/discount/coupon'
     | '/discount/promotion'
@@ -433,6 +455,8 @@ export interface FileRouteTypes {
     | '/(auth)/signin'
     | '/(auth)/signup'
     | '/(app)/'
+    | '/(app)/customer/$id'
+    | '/(app)/customer/create'
     | '/(app)/customer/rating'
     | '/(app)/discount/coupon'
     | '/(app)/discount/promotion'
@@ -590,6 +614,20 @@ declare module '@tanstack/react-router' {
       path: '/customer/rating'
       fullPath: '/customer/rating'
       preLoaderRoute: typeof appCustomerRatingRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/customer/create': {
+      id: '/(app)/customer/create'
+      path: '/customer/create'
+      fullPath: '/customer/create'
+      preLoaderRoute: typeof appCustomerCreateRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/customer/$id': {
+      id: '/(app)/customer/$id'
+      path: '/customer/$id'
+      fullPath: '/customer/$id'
+      preLoaderRoute: typeof appCustomerIdRouteImport
       parentRoute: typeof appRouteRoute
     }
     '/(app)/store/setting/': {
@@ -770,6 +808,8 @@ const appStoreRouteRouteWithChildren = appStoreRouteRoute._addFileChildren(
 interface appRouteRouteChildren {
   appStoreRouteRoute: typeof appStoreRouteRouteWithChildren
   appIndexRoute: typeof appIndexRoute
+  appCustomerIdRoute: typeof appCustomerIdRoute
+  appCustomerCreateRoute: typeof appCustomerCreateRoute
   appCustomerRatingRoute: typeof appCustomerRatingRoute
   appDiscountCouponRoute: typeof appDiscountCouponRoute
   appDiscountPromotionRoute: typeof appDiscountPromotionRoute
@@ -795,6 +835,8 @@ interface appRouteRouteChildren {
 const appRouteRouteChildren: appRouteRouteChildren = {
   appStoreRouteRoute: appStoreRouteRouteWithChildren,
   appIndexRoute: appIndexRoute,
+  appCustomerIdRoute: appCustomerIdRoute,
+  appCustomerCreateRoute: appCustomerCreateRoute,
   appCustomerRatingRoute: appCustomerRatingRoute,
   appDiscountCouponRoute: appDiscountCouponRoute,
   appDiscountPromotionRoute: appDiscountPromotionRoute,

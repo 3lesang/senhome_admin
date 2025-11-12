@@ -1,9 +1,13 @@
+import { CustomerListPage } from "@/pages/customer/list";
 import { createFileRoute } from "@tanstack/react-router";
+import z from "zod";
 
-export const Route = createFileRoute("/(app)/customer/")({
-	component: RouteComponent,
+const schema = z.object({
+  page: z.number().default(1),
+  limit: z.number().default(10),
 });
 
-function RouteComponent() {
-	return <div>Hello "/(app)/customers/"!</div>;
-}
+export const Route = createFileRoute("/(app)/customer/")({
+  component: CustomerListPage,
+  validateSearch: schema,
+});

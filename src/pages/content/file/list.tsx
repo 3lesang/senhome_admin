@@ -24,7 +24,7 @@ import { cn, convertToFileUrl } from "@/lib/utils";
 import { getFilesQueryOptions } from "@/queries/file";
 import { s3Client } from "@/s3";
 import { DeleteObjectsCommand, PutObjectCommand } from "@aws-sdk/client-s3";
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSearch } from "@tanstack/react-router";
 import { InfoIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
@@ -38,7 +38,7 @@ export function FilesPage() {
     limit,
   });
 
-  const getFilesQuery = useSuspenseQuery(
+  const getFilesQuery = useQuery(
     getFilesQueryOptions({ page: pagination.page, limit: pagination.limit }),
   );
 
@@ -129,7 +129,7 @@ export function FilesPage() {
             </CardAction>
           </CardHeader>
           <CardContent className="grid grid-cols-10 gap-1">
-            {getFilesQuery.data.data.data?.map((item) => (
+            {getFilesQuery.data?.data.data?.map((item) => (
               <ContextMenu key={item.id}>
                 <ContextMenuTrigger>
                   <div className="rounded-md border overflow-hidden bg-neutral-50">
@@ -168,7 +168,7 @@ export function FilesPage() {
             <TablePagination
               page={pagination.page}
               limit={pagination.limit}
-              total={getFilesQuery.data.data.total_items}
+              total={getFilesQuery.data?.data.total_items ?? 0}
               onChange={handlePaginationChange}
             />
           </CardFooter>

@@ -1,8 +1,8 @@
-import axiosClient from "@/axios";
 import TablePagination, {
   type TablePaginationDataChange,
 } from "@/components/table/pagination";
 import { TabsButton } from "@/components/table/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -30,60 +30,41 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { getReviewsByProductQueryOptions } from "@/queries/review";
-import { s3Client } from "@/s3";
-import { DeleteObjectsCommand } from "@aws-sdk/client-s3";
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { Link, useParams, useSearch } from "@tanstack/react-router";
-import { ListFilterIcon, SearchIcon, StarIcon, Trash2Icon } from "lucide-react";
+import { getCustomersQueryOptions } from "@/queries/customer";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { Link, useSearch } from "@tanstack/react-router";
+import { ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 
-export function ReviewListPage() {
-  const { page, limit } = useSearch({ from: "/(app)/product/$id/review/" });
+export function CustomerListPage() {
+  const { page, limit } = useSearch({ from: "/(app)/customer/" });
   const [params, setParams] = useState({
     page,
     limit,
   });
-  const { id } = useParams({ from: "/(app)/product/$id/review/" });
 
-  const getReviewsQuery = useSuspenseQuery(
-    getReviewsByProductQueryOptions({ page, limit, productId: id }),
-  );
+  const getCustomerQuery = useSuspenseQuery(getCustomersQueryOptions(params));
 
-  const deleteReviewsMutation = useMutation({
-    mutationFn: (value: { ids: number[]; files: string[] }) => {
-      s3Client.send(
-        new DeleteObjectsCommand({
-          Bucket: "r2-bucket",
-          Delete: {
-            Objects: value.files.map((f) => ({ Key: f })),
-          },
-        }),
-      );
-      return axiosClient.delete("/reviews", { data: { ids: value.ids } });
-    },
-    onSuccess: () => {
-      getReviewsQuery.refetch();
-    },
-  });
+  function handlePaginationChange(data: TablePaginationDataChange) {
+    setParams(data);
+  }
 
-  const handlePaginationChange = (value: TablePaginationDataChange) => {
-    setParams(value);
-  };
+  function handleRemove(id: number[]) {
+    console.log(id);
+  }
 
   return (
     <Card className="border-0 shadow-none max-w-6xl mx-auto bg-transparent">
       <CardHeader>
-        <CardTitle>Quản lý đánh giá</CardTitle>
-        <CardDescription>Danh sách đánh giá</CardDescription>
+        <CardTitle>Quản lý khách hàng</CardTitle>
+        <CardDescription>Danh sách khách hàng</CardDescription>
         <CardAction>
           <Link
-            to="/product/$id/review/create"
-            params={{ id }}
+            to="/customer/create"
             type="button"
             className={cn(buttonVariants())}
           >
-            Thêm đánh giá
+            Thêm khách hàng
           </Link>
         </CardAction>
       </CardHeader>
@@ -95,7 +76,7 @@ export function ReviewListPage() {
             </CardTitle>
             <CardDescription>
               <Badge variant="secondary">
-                {getReviewsQuery.data.data.total_items} đánh giá
+                {getCustomerQuery.data.data.total_items} khách hàng
               </Badge>
             </CardDescription>
             <CardAction className="flex items-center gap-2">
@@ -114,50 +95,30 @@ export function ReviewListPage() {
                   <Checkbox />
                 </TableHead>
                 <TableHead></TableHead>
-                <TableHead>Đánh giá</TableHead>
-                <TableHead>Nội dung</TableHead>
-                <TableHead>Khách hàng</TableHead>
+                <TableHead>Tên khách hàng</TableHead>
+                <TableHead>Số điện thoại</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {getReviewsQuery.data.data.data?.map((item) => (
+              {getCustomerQuery.data.data.data.map((item) => (
                 <ContextMenu key={item.id}>
                   <ContextMenuTrigger asChild>
                     <TableRow>
                       <TableCell className="w-16 text-center">
                         <Checkbox />
                       </TableCell>
-                      <TableCell></TableCell>
-                      <TableCell>
-                        <Badge variant="secondary">
-                          {item.rating}
-                          <StarIcon className="fill-primary" />
-                        </Badge>
+                      <TableCell className="w-8">
+                        <Avatar>
+                          <AvatarImage src="" />
+                          <AvatarFallback>U</AvatarFallback>
+                        </Avatar>
                       </TableCell>
-                      <TableCell className="whitespace-normal">
-                        <p className="line-clamp-1">{item.comment}</p>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="secondary">
-                          <Link
-                            to="/customer/$id"
-                            params={{ id: item.customer.id.toString() }}
-                          >
-                            {item.customer.name}
-                          </Link>
-                        </Badge>
-                      </TableCell>
+                      <TableCell>{item.name}</TableCell>
+                      <TableCell>{item.phone}</TableCell>
                     </TableRow>
                   </ContextMenuTrigger>
                   <ContextMenuContent>
-                    <ContextMenuItem
-                      onClick={() =>
-                        deleteReviewsMutation.mutateAsync({
-                          ids: [item.id],
-                          files: item.files,
-                        })
-                      }
-                    >
+                    <ContextMenuItem onClick={() => handleRemove([item.id])}>
                       <Trash2Icon />
                       Xóa
                     </ContextMenuItem>
@@ -170,7 +131,7 @@ export function ReviewListPage() {
             <TablePagination
               page={params.page}
               limit={params.limit}
-              total={getReviewsQuery.data.data.total_items}
+              total={getCustomerQuery.data.data.total_items}
               onChange={handlePaginationChange}
             />
           </CardFooter>
