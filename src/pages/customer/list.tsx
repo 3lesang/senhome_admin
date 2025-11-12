@@ -100,7 +100,7 @@ export function CustomerListPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {getCustomerQuery.data.data.data.map((item) => (
+              {getCustomerQuery.data.data.data?.map((item) => (
                 <ContextMenu key={item.id}>
                   <ContextMenuTrigger asChild>
                     <TableRow>
