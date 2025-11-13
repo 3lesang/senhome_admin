@@ -1,5 +1,5 @@
 import axiosClient from "@/axios";
-import { TextEditor } from "@/components/input/editor";
+import { TextEditor } from "@/components/text-editor";
 import { Button } from "@/components/ui/button";
 import {
   Card,

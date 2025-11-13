@@ -1,4 +1,5 @@
 import { CustomerListPage } from "@/pages/customer/list";
+import { getCustomersQueryOptions } from "@/queries/customer";
 import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
 
@@ -10,4 +11,7 @@ const schema = z.object({
 export const Route = createFileRoute("/(app)/customer/")({
   component: CustomerListPage,
   validateSearch: schema,
+  loader: ({ context }) => {
+    return context.queryClient?.ensureQueryData(getCustomersQueryOptions());
+  },
 });
