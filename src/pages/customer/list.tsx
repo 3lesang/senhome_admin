@@ -1,3 +1,4 @@
+import axiosClient from "@/axios";
 import TablePagination, {
   type TablePaginationDataChange,
 } from "@/components/table/pagination";
@@ -31,7 +32,7 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { getCustomersQueryOptions } from "@/queries/customer";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useSearch } from "@tanstack/react-router";
 import { ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
@@ -44,13 +45,17 @@ export function CustomerListPage() {
   });
 
   const getCustomerQuery = useSuspenseQuery(getCustomersQueryOptions(params));
+  const deleteCustomerMutation = useMutation({
+    mutationFn: (ids: number[]) => {
+      return axiosClient.delete("/customers", { data: { ids } });
+    },
+    onSuccess: () => {
+      getCustomerQuery.refetch();
+    },
+  });
 
   function handlePaginationChange(data: TablePaginationDataChange) {
     setParams(data);
-  }
-
-  function handleRemove(id: number[]) {
-    console.log(id);
   }
 
   return (
@@ -118,7 +123,11 @@ export function CustomerListPage() {
                     </TableRow>
                   </ContextMenuTrigger>
                   <ContextMenuContent>
-                    <ContextMenuItem onClick={() => handleRemove([item.id])}>
+                    <ContextMenuItem
+                      onClick={() =>
+                        deleteCustomerMutation.mutateAsync([item.id])
+                      }
+                    >
                       <Trash2Icon />
                       Xóa
                     </ContextMenuItem>

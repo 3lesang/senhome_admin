@@ -1,126 +1,144 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import z from "zod";
-import { createStorePageHandler } from "@/api/page/create";
+import axiosClient from "@/axios";
+import { TextEditor } from "@/components/input/editor";
 import { Button } from "@/components/ui/button";
 import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
+import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { slugify } from "@/lib/utils";
+import { s3Client } from "@/s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import type { JSONContent } from "@tiptap/core";
+import { toast } from "sonner";
+import z from "zod";
 
 const schema = z.object({
-	title: z.string().min(1),
-	content: z.union([z.string(), z.record(z.string(), z.any()), z.null()]),
-	slug: z.string().min(1),
+  name: z.string().min(1),
+  slug: z.string(),
+  content: z.record(z.string(), z.any()),
 });
 
-export type FormValues = z.infer<typeof schema>;
+type FormValues = z.infer<typeof schema>;
 
 export function StorePageCreatePage() {
-	const form = useForm<FormValues>({
-		resolver: zodResolver(schema),
-		defaultValues: { title: "", slug: "", content: null },
-	});
+  const navigate = useNavigate();
+  const savePageMutation = useMutation({
+    mutationFn: async (value: FormValues) => {
+      const slug = value.slug || slugify(value.name);
+      const res = await axiosClient.post<{ id: number }>("/pages", {
+        name: value.name,
+        slug,
+      });
+      s3Client.send(
+        new PutObjectCommand({
+          Bucket: "r2-bucket",
+          Key: `page/${res.data.id}`,
+          Body: JSON.stringify(value.content),
+          ContentType: "application/json",
+        }),
+      );
+      return res;
+    },
+    onSuccess: () => {
+      toast("Trang đã được tạo thành công!");
+      navigate({ to: "/store/page" });
+    },
+  });
 
-	const { mutate, isPending } = useMutation({
-		mutationFn: createStorePageHandler,
-		onSuccess: () => {
-			toast("Trang đã được tạo thành công!");
-		},
-	});
+  const form = useForm({
+    defaultValues: {
+      name: "",
+      slug: "",
+      content: { type: "doc", content: [] } as JSONContent,
+    },
+    validators: {
+      onSubmit: schema,
+    },
+    onSubmit: ({ value }) => savePageMutation.mutateAsync(value),
+  });
 
-	function handleSubmit(values: FormValues) {
-		mutate(values);
-	}
-
-	return (
-		<Form {...form}>
-			<form onSubmit={form.handleSubmit(handleSubmit)}>
-				<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
-					<CardHeader>
-						<CardTitle>Thêm trang mới</CardTitle>
-					</CardHeader>
-					<CardContent className="grid grid-cols-12 gap-4">
-						<div className="col-span-8">
-							<Card className="border-0 shadow-none">
-								<CardContent className="space-y-4">
-									<FormField
-										control={form.control}
-										name="title"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Tiêu đề trang</FormLabel>
-												<FormControl>
-													<div className="p-2">
-														<Input placeholder="" type="" {...field} />
-													</div>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<FormField
-										control={form.control}
-										name="content"
-										render={() => (
-											<FormItem>
-												<FormLabel>Nội dung</FormLabel>
-												<FormControl>
-													<div className="p-2">
-													</div>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-								</CardContent>
-							</Card>
-						</div>
-						<div className="col-span-4">
-							<Card className="border-0 shadow-none">
-								<CardContent>
-									<FormField
-										control={form.control}
-										name="slug"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Đường dẫn</FormLabel>
-												<FormControl>
-													<div className="p-2">
-														<Input placeholder="" type="" {...field} />
-													</div>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-								</CardContent>
-							</Card>
-						</div>
-					</CardContent>
-					<CardFooter>
-						<Button type="submit" disabled={isPending} className="ml-auto">
-							{isPending && <Spinner />}
-							Lưu
-						</Button>
-					</CardFooter>
-				</Card>
-			</form>
-		</Form>
-	);
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        form.handleSubmit();
+      }}
+    >
+      <Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
+        <CardHeader>
+          <CardTitle>Thêm trang mới</CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-12 gap-4">
+          <div className="col-span-8">
+            <Card className="border-0 shadow-none">
+              <CardContent className="grid gap-4">
+                <form.Field name="name">
+                  {(field) => (
+                    <Field>
+                      <FieldLabel>Tiêu đề trang</FieldLabel>
+                      <Input
+                        value={field.state.value}
+                        onChange={(e) =>
+                          field.handleChange(e.currentTarget.value)
+                        }
+                      />
+                    </Field>
+                  )}
+                </form.Field>
+                <form.Field name="content">
+                  {(field) => (
+                    <Field>
+                      <FieldLabel>Nội dung</FieldLabel>
+                      <TextEditor
+                        value={field.state.value}
+                        onChange={field.handleChange}
+                      />
+                    </Field>
+                  )}
+                </form.Field>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="col-span-4">
+            <Card className="border-0 shadow-none">
+              <CardContent>
+                <form.Field name="slug">
+                  {(field) => (
+                    <Field>
+                      <FieldLabel>Đường dẫn</FieldLabel>
+                      <Input
+                        value={field.state.value}
+                        onChange={(e) =>
+                          field.handleChange(e.currentTarget.value)
+                        }
+                      />
+                    </Field>
+                  )}
+                </form.Field>
+              </CardContent>
+            </Card>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button
+            type="submit"
+            disabled={savePageMutation.isPending}
+            className="ml-auto"
+          >
+            {savePageMutation.isPending && <Spinner />}
+            Lưu
+          </Button>
+        </CardFooter>
+      </Card>
+    </form>
+  );
 }
