@@ -49,7 +49,7 @@ export function MenuCreatePage() {
         name: value.name,
         position: value.position,
       });
-      s3Client.send(
+      await s3Client.send(
         new PutObjectCommand({
           Bucket: "r2-bucket",
           Key: `menu/${res.data.id}`,
@@ -57,6 +57,7 @@ export function MenuCreatePage() {
           ContentType: "application/json",
         }),
       );
+      return res;
     },
     onSuccess: () => {
       toast.success("Tạo menu thành công");
