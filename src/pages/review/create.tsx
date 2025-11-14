@@ -104,11 +104,7 @@ export function ReviewCreatePage() {
       formData.append("customer_id", value.customer_id.toString());
       formData.append("product_id", id);
       value.files?.forEach((f) => formData.append("files", f));
-      return axiosClient.post("/reviews", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      return axiosClient.post("/reviews", formData);
     },
     onSuccess: () => {
       navigate({ to: "/product/$id/review", params: { id } });
