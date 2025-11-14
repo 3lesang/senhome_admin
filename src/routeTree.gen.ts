@@ -28,6 +28,7 @@ import { Route as appDiscountCouponRouteImport } from './routes/(app)/discount/c
 import { Route as appCustomerRatingRouteImport } from './routes/(app)/customer/rating'
 import { Route as appCustomerCreateRouteImport } from './routes/(app)/customer/create'
 import { Route as appCustomerIdRouteImport } from './routes/(app)/customer/$id'
+import { Route as appStoreSettingRouteRouteImport } from './routes/(app)/store/setting/route'
 import { Route as appStoreSettingIndexRouteImport } from './routes/(app)/store/setting/index'
 import { Route as appStorePageIndexRouteImport } from './routes/(app)/store/page/index'
 import { Route as appStoreMenuIndexRouteImport } from './routes/(app)/store/menu/index'
@@ -142,10 +143,15 @@ const appCustomerIdRoute = appCustomerIdRouteImport.update({
   path: '/customer/$id',
   getParentRoute: () => appRouteRoute,
 } as any)
-const appStoreSettingIndexRoute = appStoreSettingIndexRouteImport.update({
-  id: '/setting/',
-  path: '/setting/',
+const appStoreSettingRouteRoute = appStoreSettingRouteRouteImport.update({
+  id: '/setting',
+  path: '/setting',
   getParentRoute: () => appStoreRouteRoute,
+} as any)
+const appStoreSettingIndexRoute = appStoreSettingIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => appStoreSettingRouteRoute,
 } as any)
 const appStorePageIndexRoute = appStorePageIndexRouteImport.update({
   id: '/page/',
@@ -180,25 +186,25 @@ const appContentBlogIndexRoute = appContentBlogIndexRouteImport.update({
 } as any)
 const appStoreSettingShipmentsRoute =
   appStoreSettingShipmentsRouteImport.update({
-    id: '/setting/shipments',
-    path: '/setting/shipments',
-    getParentRoute: () => appStoreRouteRoute,
+    id: '/shipments',
+    path: '/shipments',
+    getParentRoute: () => appStoreSettingRouteRoute,
   } as any)
 const appStoreSettingPaymentsRoute = appStoreSettingPaymentsRouteImport.update({
-  id: '/setting/payments',
-  path: '/setting/payments',
-  getParentRoute: () => appStoreRouteRoute,
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => appStoreSettingRouteRoute,
 } as any)
 const appStoreSettingGeneralRoute = appStoreSettingGeneralRouteImport.update({
-  id: '/setting/general',
-  path: '/setting/general',
-  getParentRoute: () => appStoreRouteRoute,
+  id: '/general',
+  path: '/general',
+  getParentRoute: () => appStoreSettingRouteRoute,
 } as any)
 const appStoreSettingCheckoutsRoute =
   appStoreSettingCheckoutsRouteImport.update({
-    id: '/setting/checkouts',
-    path: '/setting/checkouts',
-    getParentRoute: () => appStoreRouteRoute,
+    id: '/checkouts',
+    path: '/checkouts',
+    getParentRoute: () => appStoreSettingRouteRoute,
   } as any)
 const appStorePageCreateRoute = appStorePageCreateRouteImport.update({
   id: '/page/create',
@@ -253,6 +259,7 @@ export interface FileRoutesByFullPath {
   '/store': typeof appStoreRouteRouteWithChildren
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
+  '/store/setting': typeof appStoreSettingRouteRouteWithChildren
   '/customer/$id': typeof appCustomerIdRoute
   '/customer/create': typeof appCustomerCreateRoute
   '/customer/rating': typeof appCustomerRatingRoute
@@ -283,7 +290,7 @@ export interface FileRoutesByFullPath {
   '/product/collection': typeof appProductCollectionIndexRoute
   '/store/menu': typeof appStoreMenuIndexRoute
   '/store/page': typeof appStorePageIndexRoute
-  '/store/setting': typeof appStoreSettingIndexRoute
+  '/store/setting/': typeof appStoreSettingIndexRoute
   '/product/$id/review/create': typeof appProductIdReviewCreateRoute
   '/product/$id/review': typeof appProductIdReviewIndexRoute
 }
@@ -334,6 +341,7 @@ export interface FileRoutesById {
   '/(auth)/signin': typeof authSigninRoute
   '/(auth)/signup': typeof authSignupRoute
   '/(app)/': typeof appIndexRoute
+  '/(app)/store/setting': typeof appStoreSettingRouteRouteWithChildren
   '/(app)/customer/$id': typeof appCustomerIdRoute
   '/(app)/customer/create': typeof appCustomerCreateRoute
   '/(app)/customer/rating': typeof appCustomerRatingRoute
@@ -375,6 +383,7 @@ export interface FileRouteTypes {
     | '/store'
     | '/signin'
     | '/signup'
+    | '/store/setting'
     | '/customer/$id'
     | '/customer/create'
     | '/customer/rating'
@@ -405,7 +414,7 @@ export interface FileRouteTypes {
     | '/product/collection'
     | '/store/menu'
     | '/store/page'
-    | '/store/setting'
+    | '/store/setting/'
     | '/product/$id/review/create'
     | '/product/$id/review'
   fileRoutesByTo: FileRoutesByTo
@@ -455,6 +464,7 @@ export interface FileRouteTypes {
     | '/(auth)/signin'
     | '/(auth)/signup'
     | '/(app)/'
+    | '/(app)/store/setting'
     | '/(app)/customer/$id'
     | '/(app)/customer/create'
     | '/(app)/customer/rating'
@@ -630,12 +640,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appCustomerIdRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/store/setting/': {
-      id: '/(app)/store/setting/'
+    '/(app)/store/setting': {
+      id: '/(app)/store/setting'
       path: '/setting'
       fullPath: '/store/setting'
-      preLoaderRoute: typeof appStoreSettingIndexRouteImport
+      preLoaderRoute: typeof appStoreSettingRouteRouteImport
       parentRoute: typeof appStoreRouteRoute
+    }
+    '/(app)/store/setting/': {
+      id: '/(app)/store/setting/'
+      path: '/'
+      fullPath: '/store/setting/'
+      preLoaderRoute: typeof appStoreSettingIndexRouteImport
+      parentRoute: typeof appStoreSettingRouteRoute
     }
     '/(app)/store/page/': {
       id: '/(app)/store/page/'
@@ -681,31 +698,31 @@ declare module '@tanstack/react-router' {
     }
     '/(app)/store/setting/shipments': {
       id: '/(app)/store/setting/shipments'
-      path: '/setting/shipments'
+      path: '/shipments'
       fullPath: '/store/setting/shipments'
       preLoaderRoute: typeof appStoreSettingShipmentsRouteImport
-      parentRoute: typeof appStoreRouteRoute
+      parentRoute: typeof appStoreSettingRouteRoute
     }
     '/(app)/store/setting/payments': {
       id: '/(app)/store/setting/payments'
-      path: '/setting/payments'
+      path: '/payments'
       fullPath: '/store/setting/payments'
       preLoaderRoute: typeof appStoreSettingPaymentsRouteImport
-      parentRoute: typeof appStoreRouteRoute
+      parentRoute: typeof appStoreSettingRouteRoute
     }
     '/(app)/store/setting/general': {
       id: '/(app)/store/setting/general'
-      path: '/setting/general'
+      path: '/general'
       fullPath: '/store/setting/general'
       preLoaderRoute: typeof appStoreSettingGeneralRouteImport
-      parentRoute: typeof appStoreRouteRoute
+      parentRoute: typeof appStoreSettingRouteRoute
     }
     '/(app)/store/setting/checkouts': {
       id: '/(app)/store/setting/checkouts'
-      path: '/setting/checkouts'
+      path: '/checkouts'
       fullPath: '/store/setting/checkouts'
       preLoaderRoute: typeof appStoreSettingCheckoutsRouteImport
-      parentRoute: typeof appStoreRouteRoute
+      parentRoute: typeof appStoreSettingRouteRoute
     }
     '/(app)/store/page/create': {
       id: '/(app)/store/page/create'
@@ -773,32 +790,43 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface appStoreRouteRouteChildren {
-  appStoreMenuIdRoute: typeof appStoreMenuIdRoute
-  appStoreMenuCreateRoute: typeof appStoreMenuCreateRoute
-  appStorePageIdRoute: typeof appStorePageIdRoute
-  appStorePageCreateRoute: typeof appStorePageCreateRoute
+interface appStoreSettingRouteRouteChildren {
   appStoreSettingCheckoutsRoute: typeof appStoreSettingCheckoutsRoute
   appStoreSettingGeneralRoute: typeof appStoreSettingGeneralRoute
   appStoreSettingPaymentsRoute: typeof appStoreSettingPaymentsRoute
   appStoreSettingShipmentsRoute: typeof appStoreSettingShipmentsRoute
-  appStoreMenuIndexRoute: typeof appStoreMenuIndexRoute
-  appStorePageIndexRoute: typeof appStorePageIndexRoute
   appStoreSettingIndexRoute: typeof appStoreSettingIndexRoute
 }
 
-const appStoreRouteRouteChildren: appStoreRouteRouteChildren = {
-  appStoreMenuIdRoute: appStoreMenuIdRoute,
-  appStoreMenuCreateRoute: appStoreMenuCreateRoute,
-  appStorePageIdRoute: appStorePageIdRoute,
-  appStorePageCreateRoute: appStorePageCreateRoute,
+const appStoreSettingRouteRouteChildren: appStoreSettingRouteRouteChildren = {
   appStoreSettingCheckoutsRoute: appStoreSettingCheckoutsRoute,
   appStoreSettingGeneralRoute: appStoreSettingGeneralRoute,
   appStoreSettingPaymentsRoute: appStoreSettingPaymentsRoute,
   appStoreSettingShipmentsRoute: appStoreSettingShipmentsRoute,
+  appStoreSettingIndexRoute: appStoreSettingIndexRoute,
+}
+
+const appStoreSettingRouteRouteWithChildren =
+  appStoreSettingRouteRoute._addFileChildren(appStoreSettingRouteRouteChildren)
+
+interface appStoreRouteRouteChildren {
+  appStoreSettingRouteRoute: typeof appStoreSettingRouteRouteWithChildren
+  appStoreMenuIdRoute: typeof appStoreMenuIdRoute
+  appStoreMenuCreateRoute: typeof appStoreMenuCreateRoute
+  appStorePageIdRoute: typeof appStorePageIdRoute
+  appStorePageCreateRoute: typeof appStorePageCreateRoute
+  appStoreMenuIndexRoute: typeof appStoreMenuIndexRoute
+  appStorePageIndexRoute: typeof appStorePageIndexRoute
+}
+
+const appStoreRouteRouteChildren: appStoreRouteRouteChildren = {
+  appStoreSettingRouteRoute: appStoreSettingRouteRouteWithChildren,
+  appStoreMenuIdRoute: appStoreMenuIdRoute,
+  appStoreMenuCreateRoute: appStoreMenuCreateRoute,
+  appStorePageIdRoute: appStorePageIdRoute,
+  appStorePageCreateRoute: appStorePageCreateRoute,
   appStoreMenuIndexRoute: appStoreMenuIndexRoute,
   appStorePageIndexRoute: appStorePageIndexRoute,
-  appStoreSettingIndexRoute: appStoreSettingIndexRoute,
 }
 
 const appStoreRouteRouteWithChildren = appStoreRouteRoute._addFileChildren(

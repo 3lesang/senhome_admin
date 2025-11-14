@@ -60,8 +60,7 @@ export function MenuListPage() {
         <CardTitle>Menu</CardTitle>
         <CardDescription>
           Menu hoặc danh sách liên kết website , giúp khách hàng chuyển trang
-          trong cửa hàng của bạn. Bạn có thể tạo các menu lồng nhau để hiện thị
-          drop-down menus
+          trong cửa hàng của bạn. Bạn có thể tạo các menu lồng nhau.
         </CardDescription>
         <CardAction>
           <Link to="/store/menu/create" className={cn(buttonVariants())}>

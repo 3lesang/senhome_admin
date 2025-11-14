@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -70,13 +70,17 @@ export function StoreSettingsGeneral() {
         e.preventDefault();
         form.handleSubmit();
       }}
+      className="w-full"
     >
-      <Card className="bg-sidebar border-0 shadow-none max-w-3xl mx-auto">
+      <Card className="bg-sidebar border-0 shadow-none p-0">
         <CardHeader>
           <CardTitle>Cấu hình cửa hàng</CardTitle>
-          <CardDescription>
-            Cấu hình thông tin chung của cửa hàng
-          </CardDescription>
+          <CardAction>
+            <Button type="submit" disabled={saveMutation.isPending}>
+              {saveMutation.isPending && <Spinner />}
+              Lưu
+            </Button>
+          </CardAction>
         </CardHeader>
         <CardContent className="space-y-4">
           <Card className="border-0 shadow-none">
@@ -190,12 +194,6 @@ export function StoreSettingsGeneral() {
             </CardContent>
           </Card>
         </CardContent>
-        <CardFooter className="flex justify-end">
-          <Button type="submit" disabled={saveMutation.isPending}>
-            {saveMutation.isPending && <Spinner />}
-            Lưu
-          </Button>
-        </CardFooter>
       </Card>
     </form>
   );
