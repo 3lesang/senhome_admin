@@ -1,9 +1,14 @@
+import { BlogListPage } from "@/pages/blog/list";
 import { createFileRoute } from "@tanstack/react-router";
+import z from "zod";
 
-export const Route = createFileRoute("/(app)/content/blog/")({
-	component: RouteComponent,
+const schema = z.object({
+  page: z.number().default(1),
+  limit: z.number().default(10),
 });
 
-function RouteComponent() {
-	return <div>Hello "/(app)/store/articles/"!</div>;
-}
+export const Route = createFileRoute("/(app)/content/blog/")({
+  validateSearch: schema,
+  loaderDeps: ({ search }) => search,
+  component: BlogListPage,
+});

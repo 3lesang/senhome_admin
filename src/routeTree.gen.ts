@@ -47,6 +47,8 @@ import { Route as appStoreMenuIdRouteImport } from './routes/(app)/store/menu/$i
 import { Route as appProductCollectionCreateRouteImport } from './routes/(app)/product/collection/create'
 import { Route as appProductCollectionIdRouteImport } from './routes/(app)/product/collection/$id'
 import { Route as appProductIdUpdateRouteImport } from './routes/(app)/product/$id/update'
+import { Route as appContentBlogCreateRouteImport } from './routes/(app)/content/blog/create'
+import { Route as appContentBlogIdRouteImport } from './routes/(app)/content/blog/$id'
 import { Route as appProductIdReviewIndexRouteImport } from './routes/(app)/product/$id/review/index'
 import { Route as appProductIdReviewCreateRouteImport } from './routes/(app)/product/$id/review/create'
 
@@ -242,6 +244,16 @@ const appProductIdUpdateRoute = appProductIdUpdateRouteImport.update({
   path: '/product/$id/update',
   getParentRoute: () => appRouteRoute,
 } as any)
+const appContentBlogCreateRoute = appContentBlogCreateRouteImport.update({
+  id: '/content/blog/create',
+  path: '/content/blog/create',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appContentBlogIdRoute = appContentBlogIdRouteImport.update({
+  id: '/content/blog/$id',
+  path: '/content/blog/$id',
+  getParentRoute: () => appRouteRoute,
+} as any)
 const appProductIdReviewIndexRoute = appProductIdReviewIndexRouteImport.update({
   id: '/product/$id/review/',
   path: '/product/$id/review/',
@@ -273,6 +285,8 @@ export interface FileRoutesByFullPath {
   '/discount': typeof appDiscountIndexRoute
   '/order': typeof appOrderIndexRoute
   '/product': typeof appProductIndexRoute
+  '/content/blog/$id': typeof appContentBlogIdRoute
+  '/content/blog/create': typeof appContentBlogCreateRoute
   '/product/$id/update': typeof appProductIdUpdateRoute
   '/product/collection/$id': typeof appProductCollectionIdRoute
   '/product/collection/create': typeof appProductCollectionCreateRoute
@@ -312,6 +326,8 @@ export interface FileRoutesByTo {
   '/discount': typeof appDiscountIndexRoute
   '/order': typeof appOrderIndexRoute
   '/product': typeof appProductIndexRoute
+  '/content/blog/$id': typeof appContentBlogIdRoute
+  '/content/blog/create': typeof appContentBlogCreateRoute
   '/product/$id/update': typeof appProductIdUpdateRoute
   '/product/collection/$id': typeof appProductCollectionIdRoute
   '/product/collection/create': typeof appProductCollectionCreateRoute
@@ -355,6 +371,8 @@ export interface FileRoutesById {
   '/(app)/discount/': typeof appDiscountIndexRoute
   '/(app)/order/': typeof appOrderIndexRoute
   '/(app)/product/': typeof appProductIndexRoute
+  '/(app)/content/blog/$id': typeof appContentBlogIdRoute
+  '/(app)/content/blog/create': typeof appContentBlogCreateRoute
   '/(app)/product/$id/update': typeof appProductIdUpdateRoute
   '/(app)/product/collection/$id': typeof appProductCollectionIdRoute
   '/(app)/product/collection/create': typeof appProductCollectionCreateRoute
@@ -397,6 +415,8 @@ export interface FileRouteTypes {
     | '/discount'
     | '/order'
     | '/product'
+    | '/content/blog/$id'
+    | '/content/blog/create'
     | '/product/$id/update'
     | '/product/collection/$id'
     | '/product/collection/create'
@@ -436,6 +456,8 @@ export interface FileRouteTypes {
     | '/discount'
     | '/order'
     | '/product'
+    | '/content/blog/$id'
+    | '/content/blog/create'
     | '/product/$id/update'
     | '/product/collection/$id'
     | '/product/collection/create'
@@ -478,6 +500,8 @@ export interface FileRouteTypes {
     | '/(app)/discount/'
     | '/(app)/order/'
     | '/(app)/product/'
+    | '/(app)/content/blog/$id'
+    | '/(app)/content/blog/create'
     | '/(app)/product/$id/update'
     | '/(app)/product/collection/$id'
     | '/(app)/product/collection/create'
@@ -773,6 +797,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appProductIdUpdateRouteImport
       parentRoute: typeof appRouteRoute
     }
+    '/(app)/content/blog/create': {
+      id: '/(app)/content/blog/create'
+      path: '/content/blog/create'
+      fullPath: '/content/blog/create'
+      preLoaderRoute: typeof appContentBlogCreateRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/content/blog/$id': {
+      id: '/(app)/content/blog/$id'
+      path: '/content/blog/$id'
+      fullPath: '/content/blog/$id'
+      preLoaderRoute: typeof appContentBlogIdRouteImport
+      parentRoute: typeof appRouteRoute
+    }
     '/(app)/product/$id/review/': {
       id: '/(app)/product/$id/review/'
       path: '/product/$id/review'
@@ -849,6 +887,8 @@ interface appRouteRouteChildren {
   appDiscountIndexRoute: typeof appDiscountIndexRoute
   appOrderIndexRoute: typeof appOrderIndexRoute
   appProductIndexRoute: typeof appProductIndexRoute
+  appContentBlogIdRoute: typeof appContentBlogIdRoute
+  appContentBlogCreateRoute: typeof appContentBlogCreateRoute
   appProductIdUpdateRoute: typeof appProductIdUpdateRoute
   appProductCollectionIdRoute: typeof appProductCollectionIdRoute
   appProductCollectionCreateRoute: typeof appProductCollectionCreateRoute
@@ -876,6 +916,8 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appDiscountIndexRoute: appDiscountIndexRoute,
   appOrderIndexRoute: appOrderIndexRoute,
   appProductIndexRoute: appProductIndexRoute,
+  appContentBlogIdRoute: appContentBlogIdRoute,
+  appContentBlogCreateRoute: appContentBlogCreateRoute,
   appProductIdUpdateRoute: appProductIdUpdateRoute,
   appProductCollectionIdRoute: appProductCollectionIdRoute,
   appProductCollectionCreateRoute: appProductCollectionCreateRoute,

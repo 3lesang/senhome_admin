@@ -83,7 +83,7 @@ export function MenuItemRow({ item, onChange, onRemove }: Props) {
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 border p-4 rounded-md shadow-xs">
       <div className="flex items-center gap-2">
         <Input
           placeholder="Tên liên kết"
@@ -95,24 +95,9 @@ export function MenuItemRow({ item, onChange, onRemove }: Props) {
           value={item.url}
           onChange={(e) => handleFieldChange("url", e.target.value)}
         />
-        <div className="flex items-center gap-2">
-          <Button
-            type="button"
-            size="icon-sm"
-            variant="ghost"
-            onClick={handleAddNested}
-          >
-            <PlusIcon />
-          </Button>
-          <Button
-            type="button"
-            size="icon-sm"
-            variant="ghost"
-            onClick={onRemove}
-          >
-            <Trash2Icon />
-          </Button>
-        </div>
+        <Button type="button" size="icon-sm" variant="ghost" onClick={onRemove}>
+          <Trash2Icon />
+        </Button>
       </div>
       {item.items.map((nested, index) => (
         <div key={index} className="ml-6">
@@ -123,6 +108,14 @@ export function MenuItemRow({ item, onChange, onRemove }: Props) {
           />
         </div>
       ))}
+      <Button
+        type="button"
+        variant="outline"
+        className="ml-6"
+        onClick={handleAddNested}
+      >
+        <PlusIcon className="mr-2" />
+      </Button>
     </div>
   );
 }
