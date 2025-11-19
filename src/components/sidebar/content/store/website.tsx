@@ -19,11 +19,11 @@ export default function WebsiteMenu() {
     <Collapsible
       asChild
       className="group/collapsible"
-      open={location.href.includes("/store")}
+      open={location.href.includes("/stores")}
     >
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
-          <Link to="/store/page">
+          <Link to="/stores/pages">
             <SidebarMenuButton>
               <GlobeIcon />
               <span className="select-none">Website</span>
@@ -35,9 +35,9 @@ export default function WebsiteMenu() {
             <SidebarMenuSubItem>
               <SidebarMenuSubButton
                 asChild
-                isActive={location.pathname.includes("/store/page")}
+                isActive={location.pathname.includes("/stores/pages")}
               >
-                <Link to="/store/page">
+                <Link to="/stores/pages">
                   <span className="select-none">Trang nội dung</span>
                 </Link>
               </SidebarMenuSubButton>
@@ -45,9 +45,9 @@ export default function WebsiteMenu() {
             <SidebarMenuSubItem>
               <SidebarMenuSubButton
                 asChild
-                isActive={location.pathname.includes("/store/menu")}
+                isActive={location.pathname.includes("/stores/menus")}
               >
-                <Link to="/store/menu">
+                <Link to="/stores/menus">
                   <span className="select-none">Menu</span>
                 </Link>
               </SidebarMenuSubButton>
@@ -55,9 +55,9 @@ export default function WebsiteMenu() {
             <SidebarMenuSubItem>
               <SidebarMenuSubButton
                 asChild
-                isActive={location.pathname.includes("/store/setting")}
+                isActive={location.pathname.includes("/stores/settings")}
               >
-                <Link to="/store/setting/general">
+                <Link to="/stores/settings/general">
                   <span className="select-none">Cấu hình</span>
                 </Link>
               </SidebarMenuSubButton>

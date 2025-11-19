@@ -16,18 +16,18 @@ export function SettingLayout() {
     {
       name: "Cấu hình chung",
       icon: SettingsIcon,
-      to: "/store/setting/general",
+      to: "/stores/settings/general",
     },
     {
       name: "Thanh toán",
       icon: ShoppingCartIcon,
-      to: "/store/setting/checkouts",
+      to: "/stores/settings/checkouts",
     },
-    { name: "Vận chuyển", icon: TruckIcon, to: "/store/setting/shipments" },
+    { name: "Vận chuyển", icon: TruckIcon, to: "/stores/settings/shipments" },
     {
       name: "Phương thức thanh toán",
       icon: CreditCardIcon,
-      to: "/store/setting/payments",
+      to: "/stores/settings/payments",
     },
   ];
   return (

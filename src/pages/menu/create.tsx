@@ -61,7 +61,7 @@ export function MenuCreatePage() {
     },
     onSuccess: () => {
       toast.success("Tạo menu thành công");
-      navigate({ to: "/store/menu" });
+      navigate({ to: "/stores/menus" });
     },
   });
 

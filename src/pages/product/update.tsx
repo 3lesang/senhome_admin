@@ -1,5 +1,6 @@
 import axiosClient from "@/axios";
 import { ActiveFields } from "@/components/form/product/active-fields";
+import { CategoryFields } from "@/components/form/product/category-fields";
 import { CollectionFields } from "@/components/form/product/collection-fields";
 import { useAppForm } from "@/components/form/product/hooks/form";
 import { InfoFields } from "@/components/form/product/info-fields";
@@ -63,6 +64,8 @@ const schema = z.object({
   infoGroup: z.object({
     name: z.string().min(1, "Name is required"),
     description: z.record(z.string(), z.any()),
+  }),
+  categoryGroup: z.object({
     categoryID: z.number(),
   }),
   priceGroup: z.object({
@@ -99,7 +102,7 @@ type FormValues = z.infer<typeof schema>;
 
 export function ProductUpdatePage() {
   const queryClient = useQueryClient();
-  const { id } = useParams({ from: "/(app)/product/$id/update" });
+  const { id } = useParams({ from: "/(app)/products/$id/update" });
   const getProductQuery = useSuspenseQuery(getProductQueryOptions(id));
   const getProductContentQuery = useSuspenseQuery(
     getProductContentQueryOptions(getProductQuery.data.data.slug),
@@ -124,7 +127,7 @@ export function ProductUpdatePage() {
         files: files,
         is_active: value.activeGroup.isActive,
         collection_ids: collectionIDs,
-        category_id: 0,
+        category_id: value.categoryGroup.categoryID,
         tags: value.tagGroup.tags,
         options: value.variantGroup.options,
         variants: value.variantGroup.variants,
@@ -159,6 +162,8 @@ export function ProductUpdatePage() {
     infoGroup: {
       name: getProductQuery.data.data.name,
       description: getProductContentQuery.data.data,
+    },
+    categoryGroup: {
       categoryID: getProductQuery.data.data.category_id ?? 0,
     },
     priceGroup: {
@@ -258,6 +263,7 @@ export function ProductUpdatePage() {
           </div>
           <div className="col-span-4 space-y-4">
             <ActiveFields fields="activeGroup" form={form} />
+            <CategoryFields fields="categoryGroup" form={form} />
             <CollectionFields fields="collectionGroup" form={form} />
             <TagFields fields="tagGroup" form={form} />
           </div>

@@ -63,7 +63,7 @@ export function BlogCreatePage() {
     },
     onSuccess: () => {
       toast("Bài viết đã được tạo thành công!");
-      navigate({ to: "/content/blog" });
+      navigate({ to: "/contents/blogs" });
     },
   });
 

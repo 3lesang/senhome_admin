@@ -38,7 +38,7 @@ import { ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 
 export function CustomerListPage() {
-  const { page, limit } = useSearch({ from: "/(app)/customer/" });
+  const { page, limit } = useSearch({ from: "/(app)/customers/" });
   const [params, setParams] = useState({
     page,
     limit,
@@ -65,7 +65,7 @@ export function CustomerListPage() {
         <CardDescription>Danh sách khách hàng</CardDescription>
         <CardAction>
           <Link
-            to="/customer/create"
+            to="/customers/create"
             type="button"
             className={cn(buttonVariants())}
           >

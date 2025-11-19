@@ -46,13 +46,6 @@ export const InfoFields = withFieldGroup({
               </Field>
             )}
           </group.AppField>
-          {/*<group.AppField name="categoryID">
-						{() => (
-							<Field className="col-span-1">
-								<FieldLabel>Loại</FieldLabel>
-							</Field>
-						)}
-					</group.AppField>*/}
         </CardContent>
       </Card>
     );

@@ -50,7 +50,7 @@ export function StorePageCreatePage() {
     },
     onSuccess: () => {
       toast("Trang đã được tạo thành công!");
-      navigate({ to: "/store/page" });
+      navigate({ to: "/stores/pages" });
     },
   });
 

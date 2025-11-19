@@ -36,7 +36,7 @@ import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 
 export function PageStoreListPage() {
-  const { page, limit, query } = useSearch({ from: "/(app)/store/page/" });
+  const { page, limit, query } = useSearch({ from: "/(app)/stores/pages/" });
   const [pagination, setPagination] = useState({
     page,
     limit,
@@ -66,7 +66,7 @@ export function PageStoreListPage() {
           Các trang nội dung của bạn, quản lý và tạo trang mới.
         </CardDescription>
         <CardAction>
-          <Link to="/store/page/create" className={cn(buttonVariants())}>
+          <Link to="/stores/pages/create" className={cn(buttonVariants())}>
             Tạo trang
           </Link>
         </CardAction>
@@ -111,7 +111,7 @@ export function PageStoreListPage() {
                       </TableCell>
                       <TableCell>
                         <Link
-                          to="/store/page/$id"
+                          to="/stores/pages/$id"
                           params={{ id: item?.id.toString() }}
                           className="hover:underline"
                         >
@@ -123,7 +123,7 @@ export function PageStoreListPage() {
                   </ContextMenuTrigger>
                   <ContextMenuContent>
                     <Link
-                      to="/store/page/$id"
+                      to="/stores/pages/$id"
                       params={{ id: item?.id.toString() }}
                     >
                       <ContextMenuItem>

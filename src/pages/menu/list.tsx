@@ -35,7 +35,7 @@ import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 
 export function MenuListPage() {
-  const { page, limit, query } = useSearch({ from: "/(app)/store/menu/" });
+  const { page, limit, query } = useSearch({ from: "/(app)/stores/menus/" });
   const [pagination, setPagination] = useState({
     page,
     limit,
@@ -63,7 +63,7 @@ export function MenuListPage() {
           trong cửa hàng của bạn. Bạn có thể tạo các menu lồng nhau.
         </CardDescription>
         <CardAction>
-          <Link to="/store/menu/create" className={cn(buttonVariants())}>
+          <Link to="/stores/menus/create" className={cn(buttonVariants())}>
             Tạo menu
           </Link>
         </CardAction>
@@ -108,7 +108,7 @@ export function MenuListPage() {
                       </TableCell>
                       <TableCell>
                         <Link
-                          to="/store/menu/$id"
+                          to="/stores/menus/$id"
                           params={{ id: item.id.toString() }}
                           className="hover:underline"
                         >
@@ -120,7 +120,7 @@ export function MenuListPage() {
                   </ContextMenuTrigger>
                   <ContextMenuContent>
                     <Link
-                      to="/store/menu/$id"
+                      to="/stores/menus/$id"
                       params={{ id: item.id.toString() }}
                     >
                       <ContextMenuItem>

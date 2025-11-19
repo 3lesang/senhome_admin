@@ -16,7 +16,7 @@ import { s3Client } from "@/s3";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "@tanstack/react-router";
+import { useParams } from "@tanstack/react-router";
 
 import {
   getPostContentQueryOptions,
@@ -37,8 +37,7 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 export function BlogUpdatePage() {
-  const navigate = useNavigate();
-  const { id } = useParams({ from: "/(app)/content/blog/$id" });
+  const { id } = useParams({ from: "/(app)/contents/blogs/$id" });
 
   const getPostQuery = useSuspenseQuery(getPostQueryOptions(id));
   const getPostContentQuery = useSuspenseQuery(getPostContentQueryOptions(id));
@@ -72,7 +71,8 @@ export function BlogUpdatePage() {
     },
     onSuccess: () => {
       toast("Bài viết đã được tạo thành công!");
-      navigate({ to: "/content/blog" });
+      getPostQuery.refetch();
+      getPostContentQuery.refetch();
     },
   });
 

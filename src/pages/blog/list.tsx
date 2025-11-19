@@ -39,7 +39,7 @@ import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 
 export function BlogListPage() {
-  const { page, limit } = useSearch({ from: "/(app)/content/blog/" });
+  const { page, limit } = useSearch({ from: "/(app)/contents/blogs/" });
   const [pagination, setPagination] = useState({
     page,
     limit,
@@ -80,7 +80,7 @@ export function BlogListPage() {
           Các bài viết của bạn, quản lý và tạo bài viết mới.
         </CardDescription>
         <CardAction>
-          <Link to="/content/blog/create" className={cn(buttonVariants())}>
+          <Link to="/contents/blogs/create" className={cn(buttonVariants())}>
             Tạo bài viết
           </Link>
         </CardAction>
@@ -134,7 +134,7 @@ export function BlogListPage() {
                       </TableCell>
                       <TableCell>
                         <Link
-                          to="/content/blog/$id"
+                          to="/contents/blogs/$id"
                           params={{ id: item?.id.toString() }}
                           className="hover:underline"
                         >
@@ -145,7 +145,7 @@ export function BlogListPage() {
                   </ContextMenuTrigger>
                   <ContextMenuContent>
                     <Link
-                      to="/content/blog/$id"
+                      to="/contents/blogs/$id"
                       params={{ id: item?.id.toString() }}
                     >
                       <ContextMenuItem>

@@ -43,7 +43,7 @@ import {
 } from "lucide-react";
 
 export function ProductListPage() {
-  const { page, size } = useSearch({ from: "/(app)/product/" });
+  const { page, size } = useSearch({ from: "/(app)/products/" });
 
   const { data, refetch } = useSuspenseQuery(
     getProductsQueryOptions({ page, size }),
@@ -70,7 +70,13 @@ export function ProductListPage() {
         <CardTitle>Quản lý sản phẩm</CardTitle>
         <CardDescription>Danh sách sản phẩm</CardDescription>
         <CardAction className="flex gap-2 items-center">
-          <Link to="/product/create" className={cn(buttonVariants())}>
+          <Link
+            to="/categories"
+            className={cn(buttonVariants({ variant: "secondary" }))}
+          >
+            Danh mục sản phẩm
+          </Link>
+          <Link to="/products/create" className={cn(buttonVariants())}>
             Tạo sản phẩm
           </Link>
         </CardAction>
@@ -149,7 +155,7 @@ export function ProductListPage() {
                         </TableCell>
                         <TableCell className="min-w-96 max-w-96">
                           <Link
-                            to="/product/$id/update"
+                            to="/products/$id/update"
                             params={{ id: item.id.toString() }}
                             className="hover:underline"
                           >
@@ -166,7 +172,7 @@ export function ProductListPage() {
                     <ContextMenuContent>
                       <ContextMenuItem asChild>
                         <Link
-                          to="/product/$id/review"
+                          to="/products/$id/reviews"
                           params={{ id: item.id.toString() }}
                           className="flex items-center gap-2"
                         >
@@ -176,7 +182,7 @@ export function ProductListPage() {
                       </ContextMenuItem>
                       <ContextMenuItem asChild>
                         <Link
-                          to="/product/$id/update"
+                          to="/products/$id/update"
                           params={{ id: item.id.toString() }}
                           className="flex items-center gap-2"
                         >

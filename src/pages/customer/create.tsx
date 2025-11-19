@@ -30,7 +30,7 @@ export function CustomerCreatePage() {
       return axiosClient.post("/customers", value);
     },
     onSuccess: () => {
-      navigate({ to: "/customer" });
+      navigate({ to: "/customers" });
     },
   });
 

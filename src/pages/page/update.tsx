@@ -32,7 +32,7 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 export function StorePageUpdatePage() {
-  const { id } = useParams({ from: "/(app)/store/page/$id" });
+  const { id } = useParams({ from: "/(app)/stores/pages/$id" });
   const getPageQuery = useSuspenseQuery(getPageQueryOptions(id));
   const getPageContentQuery = useSuspenseQuery(getPageContentQueryOptions(id));
   const savePageMutation = useMutation({

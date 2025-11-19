@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -75,12 +75,6 @@ export function StoreSettingsGeneral() {
       <Card className="bg-sidebar border-0 shadow-none p-0">
         <CardHeader>
           <CardTitle>Cấu hình cửa hàng</CardTitle>
-          <CardAction>
-            <Button type="submit" disabled={saveMutation.isPending}>
-              {saveMutation.isPending && <Spinner />}
-              Lưu
-            </Button>
-          </CardAction>
         </CardHeader>
         <CardContent className="space-y-4">
           <Card className="border-0 shadow-none">
@@ -194,6 +188,16 @@ export function StoreSettingsGeneral() {
             </CardContent>
           </Card>
         </CardContent>
+        <CardFooter>
+          <Button
+            type="submit"
+            className="ml-auto"
+            disabled={saveMutation.isPending}
+          >
+            {saveMutation.isPending && <Spinner />}
+            Lưu
+          </Button>
+        </CardFooter>
       </Card>
     </form>
   );

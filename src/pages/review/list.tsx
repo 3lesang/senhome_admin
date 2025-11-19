@@ -39,12 +39,12 @@ import { ListFilterIcon, SearchIcon, StarIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 
 export function ReviewListPage() {
-  const { page, limit } = useSearch({ from: "/(app)/product/$id/review/" });
+  const { page, limit } = useSearch({ from: "/(app)/products/$id/reviews/" });
   const [params, setParams] = useState({
     page,
     limit,
   });
-  const { id } = useParams({ from: "/(app)/product/$id/review/" });
+  const { id } = useParams({ from: "/(app)/products/$id/reviews/" });
 
   const getReviewsQuery = useSuspenseQuery(
     getReviewsByProductQueryOptions({ page, limit, productId: id }),
@@ -78,7 +78,7 @@ export function ReviewListPage() {
         <CardDescription>Danh sách đánh giá</CardDescription>
         <CardAction>
           <Link
-            to="/product/$id/review/create"
+            to="/products/$id/reviews/create"
             params={{ id }}
             type="button"
             className={cn(buttonVariants())}
@@ -140,7 +140,7 @@ export function ReviewListPage() {
                       <TableCell>
                         <Badge variant="secondary">
                           <Link
-                            to="/customer/$id"
+                            to="/customers/$id"
                             params={{ id: item.customer.id.toString() }}
                           >
                             {item.customer.name}

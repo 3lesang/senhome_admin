@@ -93,7 +93,7 @@ const ReviewFile = ({ onChange }: ReviewFileProps) => {
 
 export function ReviewCreatePage() {
   const navigate = useNavigate();
-  const { id } = useParams({ from: "/(app)/product/$id/review/create" });
+  const { id } = useParams({ from: "/(app)/products/$id/reviews/create" });
   const getCustomersQuery = useQuery(getCustomersQueryOptions());
 
   const saveRatingMuation = useMutation({
@@ -107,7 +107,7 @@ export function ReviewCreatePage() {
       return axiosClient.post("/reviews", formData);
     },
     onSuccess: () => {
-      navigate({ to: "/product/$id/review", params: { id } });
+      navigate({ to: "/products/$id/reviews", params: { id } });
     },
   });
 

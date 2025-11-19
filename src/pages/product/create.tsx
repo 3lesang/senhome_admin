@@ -1,5 +1,6 @@
 import axiosClient from "@/axios";
 import { ActiveFields } from "@/components/form/product/active-fields";
+import { CategoryFields } from "@/components/form/product/category-fields";
 import { CollectionFields } from "@/components/form/product/collection-fields";
 import { useAppForm } from "@/components/form/product/hooks/form";
 import { InfoFields } from "@/components/form/product/info-fields";
@@ -55,6 +56,8 @@ const schema = z.object({
   infoGroup: z.object({
     name: z.string().min(1, "Name is required"),
     description: z.record(z.string(), z.any()),
+  }),
+  categoryGroup: z.object({
     categoryID: z.number(),
   }),
   priceGroup: z.object({
@@ -109,7 +112,7 @@ export function ProductCreatePage() {
         meta_title: value.seoGroup.metaTitle,
         meta_description: value.seoGroup.metaDescription,
         is_active: value.activeGroup.isActive,
-        category_id: value.infoGroup.categoryID,
+        category_id: value.categoryGroup.categoryID,
         files: files,
         tags: value.tagGroup.tags,
         collection_ids: collectionIDs,
@@ -130,7 +133,7 @@ export function ProductCreatePage() {
       await queryClient.refetchQueries({
         queryKey: [PRODUCT_QUERY_KEY, 1, 10],
       });
-      navigate({ to: "/product", search: { page: 1, size: 10 } });
+      navigate({ to: "/products", search: { page: 1, size: 10 } });
     },
     onError: (err) => {
       toast.error(err.message);
@@ -152,6 +155,8 @@ export function ProductCreatePage() {
           },
         ],
       } as JSONContent,
+    },
+    categoryGroup: {
       categoryID: 0,
     },
     priceGroup: {
@@ -219,6 +224,7 @@ export function ProductCreatePage() {
           </div>
           <div className="col-span-4 space-y-4">
             <ActiveFields fields="activeGroup" form={form} />
+            <CategoryFields fields="categoryGroup" form={form} />
             <CollectionFields fields="collectionGroup" form={form} />
             <TagFields fields="tagGroup" form={form} />
           </div>
