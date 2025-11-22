@@ -33,7 +33,7 @@ const schema = z.object({
 	logo_url: z.string(),
 	certificates: z.array(
 		z.object({
-			id: z.string(),
+			id: z.string().optional(),
 			url: z.string(),
 			file: z.instanceof(File).nullable().optional(),
 			file_url: z.string(),
@@ -48,14 +48,14 @@ export function StoreSettingsGeneral() {
 
 	const saveMutation = useMutation({
 		mutationFn: (value: FormValues) => {
-			let fileKey = value.logo_url;
+			let logoURL = getStoreQuery.data.data.logo;
 			if (value.logo) {
 				const ext = value.logo?.name.split(".")[1];
-				fileKey = `logo.${ext}`;
+				logoURL = `logo.${ext}`;
 				s3Client.send(
 					new PutObjectCommand({
 						Bucket: "r2-bucket",
-						Key: fileKey,
+						Key: logoURL,
 						Body: value.logo,
 						ContentType: value.logo.type,
 					}),
@@ -82,11 +82,11 @@ export function StoreSettingsGeneral() {
 				address: value.address,
 				hotline: value.hotline,
 				zalo: value.zalo,
-				logo: fileKey,
+				logo: logoURL,
 				certificates: value.certificates.map((c) => ({
 					id: c.id,
 					url: c.url,
-					file_url: `certificates/${c.file?.name}`,
+					file_url: c.file?.name ? `certificates/${c.file?.name}` : c.file_url,
 				})),
 			};
 			return s3Client.send(
@@ -112,9 +112,8 @@ export function StoreSettingsGeneral() {
 		zalo: getStoreQuery.data.data.zalo ?? "",
 		hotline: getStoreQuery.data.data.hotline ?? "",
 		logo_url: convertToFileUrl(getStoreQuery.data.data.logo) ?? "",
-		certificates: getStoreQuery.data.data.certificates ?? [],
+		certificates: getStoreQuery.data.data.certificates,
 	};
-
 	const form = useForm({
 		defaultValues,
 		validators: {
@@ -308,11 +307,25 @@ export function StoreSettingsGeneral() {
 																	}}
 																/>
 																{fileField.state.value ? (
-																	<img
-																		src={fileField.state.value}
-																		alt=""
-																		className="w-full h-full object-contain"
-																	/>
+																	<form.Subscribe
+																		selector={(state) =>
+																			state.values.certificates[i].file
+																		}
+																	>
+																		{(file) => (
+																			<img
+																				src={
+																					file
+																						? fileField.state.value
+																						: convertToFileUrl(
+																								fileField.state.value,
+																							)
+																				}
+																				alt=""
+																				className="w-full h-full object-contain"
+																			/>
+																		)}
+																	</form.Subscribe>
 																) : (
 																	<ImagePlusIcon size={18} />
 																)}
