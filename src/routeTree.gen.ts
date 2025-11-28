@@ -52,6 +52,7 @@ import { Route as appProductsIdUpdateRouteImport } from './routes/(app)/products
 import { Route as appContentsBlogsCreateRouteImport } from './routes/(app)/contents/blogs/create'
 import { Route as appContentsBlogsIdRouteImport } from './routes/(app)/contents/blogs/$id'
 import { Route as appProductsIdReviewsIndexRouteImport } from './routes/(app)/products/$id/reviews/index'
+import { Route as appProductsCollectionsAlbumCreateRouteImport } from './routes/(app)/products/collections/album/create'
 import { Route as appProductsIdReviewsCreateRouteImport } from './routes/(app)/products/$id/reviews/create'
 
 const authRouteRoute = authRouteRouteImport.update({
@@ -275,6 +276,12 @@ const appProductsIdReviewsIndexRoute =
     path: '/products/$id/reviews/',
     getParentRoute: () => appRouteRoute,
   } as any)
+const appProductsCollectionsAlbumCreateRoute =
+  appProductsCollectionsAlbumCreateRouteImport.update({
+    id: '/products/collections/album/create',
+    path: '/products/collections/album/create',
+    getParentRoute: () => appRouteRoute,
+  } as any)
 const appProductsIdReviewsCreateRoute =
   appProductsIdReviewsCreateRouteImport.update({
     id: '/products/$id/reviews/create',
@@ -324,6 +331,7 @@ export interface FileRoutesByFullPath {
   '/stores/pages': typeof appStoresPagesIndexRoute
   '/stores/settings/': typeof appStoresSettingsIndexRoute
   '/products/$id/reviews/create': typeof appProductsIdReviewsCreateRoute
+  '/products/collections/album/create': typeof appProductsCollectionsAlbumCreateRoute
   '/products/$id/reviews': typeof appProductsIdReviewsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -367,6 +375,7 @@ export interface FileRoutesByTo {
   '/stores/pages': typeof appStoresPagesIndexRoute
   '/stores/settings': typeof appStoresSettingsIndexRoute
   '/products/$id/reviews/create': typeof appProductsIdReviewsCreateRoute
+  '/products/collections/album/create': typeof appProductsCollectionsAlbumCreateRoute
   '/products/$id/reviews': typeof appProductsIdReviewsIndexRoute
 }
 export interface FileRoutesById {
@@ -414,6 +423,7 @@ export interface FileRoutesById {
   '/(app)/stores/pages/': typeof appStoresPagesIndexRoute
   '/(app)/stores/settings/': typeof appStoresSettingsIndexRoute
   '/(app)/products/$id/reviews/create': typeof appProductsIdReviewsCreateRoute
+  '/(app)/products/collections/album/create': typeof appProductsCollectionsAlbumCreateRoute
   '/(app)/products/$id/reviews/': typeof appProductsIdReviewsIndexRoute
 }
 export interface FileRouteTypes {
@@ -460,6 +470,7 @@ export interface FileRouteTypes {
     | '/stores/pages'
     | '/stores/settings/'
     | '/products/$id/reviews/create'
+    | '/products/collections/album/create'
     | '/products/$id/reviews'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -503,6 +514,7 @@ export interface FileRouteTypes {
     | '/stores/pages'
     | '/stores/settings'
     | '/products/$id/reviews/create'
+    | '/products/collections/album/create'
     | '/products/$id/reviews'
   id:
     | '__root__'
@@ -549,6 +561,7 @@ export interface FileRouteTypes {
     | '/(app)/stores/pages/'
     | '/(app)/stores/settings/'
     | '/(app)/products/$id/reviews/create'
+    | '/(app)/products/collections/album/create'
     | '/(app)/products/$id/reviews/'
   fileRoutesById: FileRoutesById
 }
@@ -860,6 +873,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appProductsIdReviewsIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
+    '/(app)/products/collections/album/create': {
+      id: '/(app)/products/collections/album/create'
+      path: '/products/collections/album/create'
+      fullPath: '/products/collections/album/create'
+      preLoaderRoute: typeof appProductsCollectionsAlbumCreateRouteImport
+      parentRoute: typeof appRouteRoute
+    }
     '/(app)/products/$id/reviews/create': {
       id: '/(app)/products/$id/reviews/create'
       path: '/products/$id/reviews/create'
@@ -944,6 +964,7 @@ interface appRouteRouteChildren {
   appOrdersDraftIndexRoute: typeof appOrdersDraftIndexRoute
   appProductsCollectionsIndexRoute: typeof appProductsCollectionsIndexRoute
   appProductsIdReviewsCreateRoute: typeof appProductsIdReviewsCreateRoute
+  appProductsCollectionsAlbumCreateRoute: typeof appProductsCollectionsAlbumCreateRoute
   appProductsIdReviewsIndexRoute: typeof appProductsIdReviewsIndexRoute
 }
 
@@ -975,6 +996,8 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appOrdersDraftIndexRoute: appOrdersDraftIndexRoute,
   appProductsCollectionsIndexRoute: appProductsCollectionsIndexRoute,
   appProductsIdReviewsCreateRoute: appProductsIdReviewsCreateRoute,
+  appProductsCollectionsAlbumCreateRoute:
+    appProductsCollectionsAlbumCreateRoute,
   appProductsIdReviewsIndexRoute: appProductsIdReviewsIndexRoute,
 }
 

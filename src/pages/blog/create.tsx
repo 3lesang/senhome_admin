@@ -1,3 +1,10 @@
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import type { JSONContent } from "@tiptap/core";
+import { toast } from "sonner";
+import z from "zod";
 import axiosClient from "@/axios";
 import { TextEditor } from "@/components/text-editor";
 import { Button } from "@/components/ui/button";
@@ -13,14 +20,6 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { slugify } from "@/lib/utils";
 import { s3Client } from "@/s3";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { useForm } from "@tanstack/react-form";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
-import type { JSONContent } from "@tiptap/core";
-
-import { toast } from "sonner";
-import z from "zod";
 import { FileInput } from "./components/file-input";
 
 const schema = z.object({
