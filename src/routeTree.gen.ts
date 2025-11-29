@@ -51,8 +51,10 @@ import { Route as appProductsCollectionsIdRouteImport } from './routes/(app)/pro
 import { Route as appProductsIdUpdateRouteImport } from './routes/(app)/products/$id/update'
 import { Route as appContentsBlogsCreateRouteImport } from './routes/(app)/contents/blogs/create'
 import { Route as appContentsBlogsIdRouteImport } from './routes/(app)/contents/blogs/$id'
+import { Route as appProductsCollectionsHotspotsIndexRouteImport } from './routes/(app)/products/collections/hotspots/index'
 import { Route as appProductsIdReviewsIndexRouteImport } from './routes/(app)/products/$id/reviews/index'
-import { Route as appProductsCollectionsAlbumCreateRouteImport } from './routes/(app)/products/collections/album/create'
+import { Route as appProductsCollectionsHotspotsCreateRouteImport } from './routes/(app)/products/collections/hotspots/create'
+import { Route as appProductsCollectionsHotspotsIdRouteImport } from './routes/(app)/products/collections/hotspots/$id'
 import { Route as appProductsIdReviewsCreateRouteImport } from './routes/(app)/products/$id/reviews/create'
 
 const authRouteRoute = authRouteRouteImport.update({
@@ -270,16 +272,28 @@ const appContentsBlogsIdRoute = appContentsBlogsIdRouteImport.update({
   path: '/contents/blogs/$id',
   getParentRoute: () => appRouteRoute,
 } as any)
+const appProductsCollectionsHotspotsIndexRoute =
+  appProductsCollectionsHotspotsIndexRouteImport.update({
+    id: '/products/collections/hotspots/',
+    path: '/products/collections/hotspots/',
+    getParentRoute: () => appRouteRoute,
+  } as any)
 const appProductsIdReviewsIndexRoute =
   appProductsIdReviewsIndexRouteImport.update({
     id: '/products/$id/reviews/',
     path: '/products/$id/reviews/',
     getParentRoute: () => appRouteRoute,
   } as any)
-const appProductsCollectionsAlbumCreateRoute =
-  appProductsCollectionsAlbumCreateRouteImport.update({
-    id: '/products/collections/album/create',
-    path: '/products/collections/album/create',
+const appProductsCollectionsHotspotsCreateRoute =
+  appProductsCollectionsHotspotsCreateRouteImport.update({
+    id: '/products/collections/hotspots/create',
+    path: '/products/collections/hotspots/create',
+    getParentRoute: () => appRouteRoute,
+  } as any)
+const appProductsCollectionsHotspotsIdRoute =
+  appProductsCollectionsHotspotsIdRouteImport.update({
+    id: '/products/collections/hotspots/$id',
+    path: '/products/collections/hotspots/$id',
     getParentRoute: () => appRouteRoute,
   } as any)
 const appProductsIdReviewsCreateRoute =
@@ -331,8 +345,10 @@ export interface FileRoutesByFullPath {
   '/stores/pages': typeof appStoresPagesIndexRoute
   '/stores/settings/': typeof appStoresSettingsIndexRoute
   '/products/$id/reviews/create': typeof appProductsIdReviewsCreateRoute
-  '/products/collections/album/create': typeof appProductsCollectionsAlbumCreateRoute
+  '/products/collections/hotspots/$id': typeof appProductsCollectionsHotspotsIdRoute
+  '/products/collections/hotspots/create': typeof appProductsCollectionsHotspotsCreateRoute
   '/products/$id/reviews': typeof appProductsIdReviewsIndexRoute
+  '/products/collections/hotspots': typeof appProductsCollectionsHotspotsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof appIndexRoute
@@ -375,8 +391,10 @@ export interface FileRoutesByTo {
   '/stores/pages': typeof appStoresPagesIndexRoute
   '/stores/settings': typeof appStoresSettingsIndexRoute
   '/products/$id/reviews/create': typeof appProductsIdReviewsCreateRoute
-  '/products/collections/album/create': typeof appProductsCollectionsAlbumCreateRoute
+  '/products/collections/hotspots/$id': typeof appProductsCollectionsHotspotsIdRoute
+  '/products/collections/hotspots/create': typeof appProductsCollectionsHotspotsCreateRoute
   '/products/$id/reviews': typeof appProductsIdReviewsIndexRoute
+  '/products/collections/hotspots': typeof appProductsCollectionsHotspotsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -423,8 +441,10 @@ export interface FileRoutesById {
   '/(app)/stores/pages/': typeof appStoresPagesIndexRoute
   '/(app)/stores/settings/': typeof appStoresSettingsIndexRoute
   '/(app)/products/$id/reviews/create': typeof appProductsIdReviewsCreateRoute
-  '/(app)/products/collections/album/create': typeof appProductsCollectionsAlbumCreateRoute
+  '/(app)/products/collections/hotspots/$id': typeof appProductsCollectionsHotspotsIdRoute
+  '/(app)/products/collections/hotspots/create': typeof appProductsCollectionsHotspotsCreateRoute
   '/(app)/products/$id/reviews/': typeof appProductsIdReviewsIndexRoute
+  '/(app)/products/collections/hotspots/': typeof appProductsCollectionsHotspotsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -470,8 +490,10 @@ export interface FileRouteTypes {
     | '/stores/pages'
     | '/stores/settings/'
     | '/products/$id/reviews/create'
-    | '/products/collections/album/create'
+    | '/products/collections/hotspots/$id'
+    | '/products/collections/hotspots/create'
     | '/products/$id/reviews'
+    | '/products/collections/hotspots'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -514,8 +536,10 @@ export interface FileRouteTypes {
     | '/stores/pages'
     | '/stores/settings'
     | '/products/$id/reviews/create'
-    | '/products/collections/album/create'
+    | '/products/collections/hotspots/$id'
+    | '/products/collections/hotspots/create'
     | '/products/$id/reviews'
+    | '/products/collections/hotspots'
   id:
     | '__root__'
     | '/(app)'
@@ -561,8 +585,10 @@ export interface FileRouteTypes {
     | '/(app)/stores/pages/'
     | '/(app)/stores/settings/'
     | '/(app)/products/$id/reviews/create'
-    | '/(app)/products/collections/album/create'
+    | '/(app)/products/collections/hotspots/$id'
+    | '/(app)/products/collections/hotspots/create'
     | '/(app)/products/$id/reviews/'
+    | '/(app)/products/collections/hotspots/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -866,6 +892,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appContentsBlogsIdRouteImport
       parentRoute: typeof appRouteRoute
     }
+    '/(app)/products/collections/hotspots/': {
+      id: '/(app)/products/collections/hotspots/'
+      path: '/products/collections/hotspots'
+      fullPath: '/products/collections/hotspots'
+      preLoaderRoute: typeof appProductsCollectionsHotspotsIndexRouteImport
+      parentRoute: typeof appRouteRoute
+    }
     '/(app)/products/$id/reviews/': {
       id: '/(app)/products/$id/reviews/'
       path: '/products/$id/reviews'
@@ -873,11 +906,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appProductsIdReviewsIndexRouteImport
       parentRoute: typeof appRouteRoute
     }
-    '/(app)/products/collections/album/create': {
-      id: '/(app)/products/collections/album/create'
-      path: '/products/collections/album/create'
-      fullPath: '/products/collections/album/create'
-      preLoaderRoute: typeof appProductsCollectionsAlbumCreateRouteImport
+    '/(app)/products/collections/hotspots/create': {
+      id: '/(app)/products/collections/hotspots/create'
+      path: '/products/collections/hotspots/create'
+      fullPath: '/products/collections/hotspots/create'
+      preLoaderRoute: typeof appProductsCollectionsHotspotsCreateRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/products/collections/hotspots/$id': {
+      id: '/(app)/products/collections/hotspots/$id'
+      path: '/products/collections/hotspots/$id'
+      fullPath: '/products/collections/hotspots/$id'
+      preLoaderRoute: typeof appProductsCollectionsHotspotsIdRouteImport
       parentRoute: typeof appRouteRoute
     }
     '/(app)/products/$id/reviews/create': {
@@ -964,8 +1004,10 @@ interface appRouteRouteChildren {
   appOrdersDraftIndexRoute: typeof appOrdersDraftIndexRoute
   appProductsCollectionsIndexRoute: typeof appProductsCollectionsIndexRoute
   appProductsIdReviewsCreateRoute: typeof appProductsIdReviewsCreateRoute
-  appProductsCollectionsAlbumCreateRoute: typeof appProductsCollectionsAlbumCreateRoute
+  appProductsCollectionsHotspotsIdRoute: typeof appProductsCollectionsHotspotsIdRoute
+  appProductsCollectionsHotspotsCreateRoute: typeof appProductsCollectionsHotspotsCreateRoute
   appProductsIdReviewsIndexRoute: typeof appProductsIdReviewsIndexRoute
+  appProductsCollectionsHotspotsIndexRoute: typeof appProductsCollectionsHotspotsIndexRoute
 }
 
 const appRouteRouteChildren: appRouteRouteChildren = {
@@ -996,9 +1038,12 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appOrdersDraftIndexRoute: appOrdersDraftIndexRoute,
   appProductsCollectionsIndexRoute: appProductsCollectionsIndexRoute,
   appProductsIdReviewsCreateRoute: appProductsIdReviewsCreateRoute,
-  appProductsCollectionsAlbumCreateRoute:
-    appProductsCollectionsAlbumCreateRoute,
+  appProductsCollectionsHotspotsIdRoute: appProductsCollectionsHotspotsIdRoute,
+  appProductsCollectionsHotspotsCreateRoute:
+    appProductsCollectionsHotspotsCreateRoute,
   appProductsIdReviewsIndexRoute: appProductsIdReviewsIndexRoute,
+  appProductsCollectionsHotspotsIndexRoute:
+    appProductsCollectionsHotspotsIndexRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(

@@ -1,7 +1,9 @@
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useSearch } from "@tanstack/react-router";
 import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
+import { useState } from "react";
 import axiosClient from "@/axios";
+import type { TablePaginationDataChange } from "@/components/table/pagination";
 import TablePagination from "@/components/table/pagination";
 import { TabsButton } from "@/components/table/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -32,45 +34,47 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { cn, convertToFileUrl } from "@/lib/utils";
-import { getCollectionsQueryOptions } from "@/queries/collection";
+import { getHotspotsQueryOptions } from "@/queries/hotspot";
 
-export function CollectionListPage() {
-	const { page, limit, query } = useSearch({
-		from: "/(app)/products/collections/",
+export function HotSpotListPage() {
+	const { page, limit } = useSearch({
+		from: "/(app)/products/collections/hotspots/",
+	});
+	const [pagination, setPagination] = useState({
+		page,
+		limit,
 	});
 
-	const getCollectionsQuery = useSuspenseQuery(
-		getCollectionsQueryOptions({ page, limit, query }),
+	const getHotspotsQuery = useSuspenseQuery(
+		getHotspotsQueryOptions({ page, limit }),
 	);
 
-	const deleteCollectionMutation = useMutation({
-		mutationFn: (ids: number[]) =>
-			axiosClient.delete("/collections", { data: { ids } }),
+	const deletePageMutaion = useMutation({
+		mutationFn: (ids: number[]) => {
+			return axiosClient.delete("/hotspots", { data: { ids } });
+		},
 		onSuccess: () => {
-			getCollectionsQuery.refetch();
+			getHotspotsQuery.refetch();
 		},
 	});
+
+	const handlePaginationChange = (value: TablePaginationDataChange) => {
+		setPagination(value);
+	};
 
 	return (
 		<Card className="bg-sidebar border-0 shadow-none max-w-6xl mx-auto">
 			<CardHeader>
-				<CardTitle>Quản lý nhóm sản phẩm</CardTitle>
+				<CardTitle>Quản lý bộ sưu tập</CardTitle>
 				<CardDescription>
-					Nhóm sản phẩm giúp quản lý sản phẩm và khách hàng tìm kiếm sản phẩm
-					một cách dễ dàng.
+					Các bộ sưu tập của bạn, quản lý và tạo bộ sưu tập mới.
 				</CardDescription>
-				<CardAction className="space-x-2">
+				<CardAction>
 					<Link
-						to="/products/collections/hotspots"
-						className={cn(buttonVariants({ variant: "secondary" }))}
-					>
-						Bộ sưu tập
-					</Link>
-					<Link
-						to="/products/collections/create"
+						to="/products/collections/hotspots/create"
 						className={cn(buttonVariants())}
 					>
-						Tạo nhóm sản phẩm
+						Tạo bộ sưu tập
 					</Link>
 				</CardAction>
 			</CardHeader>
@@ -78,13 +82,12 @@ export function CollectionListPage() {
 				<Card className="border-0 shadow-none">
 					<CardHeader>
 						<CardTitle>
-							<TabsButton
-								tabs={[{ label: "Tất cả", value: "" }]}
-								value={query}
-							/>
+							<TabsButton tabs={[{ label: "Tất cả", value: "" }]} value="" />
 						</CardTitle>
 						<CardDescription>
-							<Badge variant="secondary">nhóm sản phẩm</Badge>
+							<Badge variant="secondary">
+								{getHotspotsQuery.data.data.total_items} bộ sưu tập
+							</Badge>
 						</CardDescription>
 						<CardAction className="flex items-center gap-2">
 							<Button variant="outline" size="icon">
@@ -98,46 +101,34 @@ export function CollectionListPage() {
 					<Table className="bg-white rounded-md">
 						<TableHeader className="bg-sidebar">
 							<TableRow>
-								<TableHead className="w-16 text-center">
+								<TableHead className="w-16 pl-6">
 									<Checkbox />
 								</TableHead>
-								<TableHead></TableHead>
-								<TableHead>Tên</TableHead>
-								<TableHead>Ngày tạo</TableHead>
+								<TableHead>Hình ảnh</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{getCollectionsQuery?.data?.data.data?.map((item) => (
+							{getHotspotsQuery.data.data.data?.map((item) => (
 								<ContextMenu key={item.id}>
 									<ContextMenuTrigger asChild>
 										<TableRow>
-											<TableCell className="text-center">
+											<TableCell className="pl-6">
 												<Checkbox />
 											</TableCell>
-											<TableCell className="w-8">
-												<Avatar className="rounded overflow-hidden bg-neutral-50">
+											<TableCell>
+												<Avatar className="rounded bg-neutral-100">
 													<AvatarImage
-														src={convertToFileUrl(item.file)}
 														className="object-contain"
+														src={convertToFileUrl(item.file)}
 													/>
-													<AvatarFallback className="rounded" />
+													<AvatarFallback className="rounded">B</AvatarFallback>
 												</Avatar>
 											</TableCell>
-											<TableCell>
-												<Link
-													to="/products/collections/$id"
-													params={{ id: item?.id.toString() }}
-													className="hover:underline"
-												>
-													{item?.name}
-												</Link>
-											</TableCell>
-											<TableCell></TableCell>
 										</TableRow>
 									</ContextMenuTrigger>
 									<ContextMenuContent>
 										<Link
-											to="/products/collections/$id"
+											to="/products/collections/hotspots/$id"
 											params={{ id: item?.id.toString() }}
 										>
 											<ContextMenuItem>
@@ -145,11 +136,8 @@ export function CollectionListPage() {
 												Chỉnh sửa
 											</ContextMenuItem>
 										</Link>
-
 										<ContextMenuItem
-											onClick={() =>
-												deleteCollectionMutation.mutateAsync([item.id])
-											}
+											onClick={() => deletePageMutaion.mutateAsync([item.id])}
 										>
 											<Trash2Icon />
 											Xóa
@@ -161,9 +149,10 @@ export function CollectionListPage() {
 					</Table>
 					<CardFooter>
 						<TablePagination
-							total={getCollectionsQuery.data?.data.total_items}
-							page={page}
-							limit={limit}
+							page={pagination.page}
+							limit={pagination.limit}
+							total={getHotspotsQuery.data.data.total_items}
+							onChange={handlePaginationChange}
 						/>
 					</CardFooter>
 				</Card>

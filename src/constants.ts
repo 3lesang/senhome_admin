@@ -16,3 +16,4 @@ export const MENU_QUERY_KEY = "menus";
 export const STORE_PAGE_QUERY_KEY = "pages";
 export const POST_QUERY_KEY = "posts";
 export const DISCOUNT_QUERY_KEY = "discounts";
+export const HOTSPOT_QUERY_KEY = "hotspots";
