@@ -39,7 +39,7 @@ const schema = z.object({
 				.object({
 					id: z.number(),
 					name: z.string(),
-					file: z.string(),
+					file: z.string().optional(),
 				})
 				.optional(),
 		}),

@@ -73,12 +73,14 @@ function ProductDialog({ children, onSelect }: ProductDialogProps) {
 						onClick={() => handleSelect(item)}
 						className="justify-start"
 					>
-						<Avatar className="rounded-md">
-							<AvatarImage
-								src={convertToFileUrl(item.file)}
-								alt=""
-							></AvatarImage>
-						</Avatar>
+						{item.file && (
+							<Avatar className="rounded-md">
+								<AvatarImage
+									src={convertToFileUrl(item.file)}
+									alt=""
+								></AvatarImage>
+							</Avatar>
+						)}
 						{item.name}
 					</Button>
 				))}
@@ -163,11 +165,13 @@ export function SpotInput({ value, onChange, children }: SpotInputProps) {
 											"hover:underline flex-1",
 										)}
 									>
-										<Avatar>
-											<AvatarImage
-												src={convertToFileUrl(spot.product.file)}
-											></AvatarImage>
-										</Avatar>
+										{spot.product.file && (
+											<Avatar>
+												<AvatarImage
+													src={convertToFileUrl(spot.product?.file)}
+												></AvatarImage>
+											</Avatar>
+										)}
 										{spot.product.name}
 									</Link>
 									<Button
