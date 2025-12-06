@@ -71,7 +71,7 @@ function ProductDialog({ children, onSelect }: ProductDialogProps) {
 						type="button"
 						variant="ghost"
 						onClick={() => handleSelect(item)}
-						className="justify-start"
+						className="justify-start whitespace-normal line-clamp-1"
 					>
 						{item.file && (
 							<Avatar className="rounded-md">
