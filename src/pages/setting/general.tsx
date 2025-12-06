@@ -39,6 +39,12 @@ const schema = z.object({
 			file_url: z.string(),
 		}),
 	),
+	social: z.object({
+		facebook: z.string(),
+		youtube: z.string(),
+		instagram: z.string(),
+		tiktok: z.string(),
+	}),
 });
 
 export type FormValues = z.infer<typeof schema>;
@@ -88,6 +94,7 @@ export function StoreSettingsGeneral() {
 					url: c.url,
 					file_url: c.file?.name ? `certificates/${c.file?.name}` : c.file_url,
 				})),
+				social: value.social,
 			};
 			return s3Client.send(
 				new PutObjectCommand({
@@ -113,6 +120,7 @@ export function StoreSettingsGeneral() {
 		hotline: getStoreQuery.data.data.hotline ?? "",
 		logo_url: convertToFileUrl(getStoreQuery.data.data.logo) ?? "",
 		certificates: getStoreQuery.data.data.certificates,
+		social: getStoreQuery.data.data.social,
 	};
 	const form = useForm({
 		defaultValues,
@@ -286,7 +294,7 @@ export function StoreSettingsGeneral() {
 							<form.Field name="certificates" mode="array">
 								{(field) => (
 									<Field className="col-span-12">
-										<FieldLabel>Chứng chỉ</FieldLabel>
+										<FieldLabel>Chứng nhận</FieldLabel>
 										<div className="space-y-2">
 											{field.state.value.map((item, i) => (
 												<div key={item.id} className="flex gap-2 items-center">
@@ -368,6 +376,66 @@ export function StoreSettingsGeneral() {
 												<PlusIcon />
 											</Button>
 										</div>
+									</Field>
+								)}
+							</form.Field>
+						</CardContent>
+					</Card>
+					<Card className="border-0 shadow-none">
+						<CardHeader>
+							<CardTitle>Mạng xã hội</CardTitle>
+							<CardDescription></CardDescription>
+						</CardHeader>
+						<CardContent className="space-y-4">
+							<form.Field name="social.facebook">
+								{(field) => (
+									<Field>
+										<FieldLabel>Facebook</FieldLabel>
+										<Input
+											value={field.state.value}
+											onChange={(e) =>
+												field.handleChange(e.currentTarget.value)
+											}
+										/>
+									</Field>
+								)}
+							</form.Field>
+							<form.Field name="social.youtube">
+								{(field) => (
+									<Field>
+										<FieldLabel>Youtube</FieldLabel>
+										<Input
+											value={field.state.value}
+											onChange={(e) =>
+												field.handleChange(e.currentTarget.value)
+											}
+										/>
+									</Field>
+								)}
+							</form.Field>
+							<form.Field name="social.instagram">
+								{(field) => (
+									<Field>
+										<FieldLabel>Instagram</FieldLabel>
+										<Input
+											value={field.state.value}
+											onChange={(e) =>
+												field.handleChange(e.currentTarget.value)
+											}
+										/>
+									</Field>
+								)}
+							</form.Field>
+							<form.Field name="social.tiktok">
+								{(field) => (
+									<Field>
+										<FieldLabel>Tiktok</FieldLabel>
+										<Input
+											value={field.state.value}
+											onChange={(e) =>
+												field.handleChange(e.currentTarget.value)
+											}
+										/>
 									</Field>
 								)}
 							</form.Field>

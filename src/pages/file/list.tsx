@@ -43,14 +43,11 @@ export function FilesPage() {
 	);
 
 	const createMutation = useMutation({
-		mutationFn: async (files: FileList | never[]) => {
-			const fileMap = await Promise.all(
-				Array.from(files).map((f) => encodeToAvif(f)),
-			);
-			const fileNames = fileMap.map((f) => `media/${f.name}`);
+		mutationFn: async (files: File[]) => {
+			const fileNames = files.map((f) => `media/${f.name}`);
 			axiosClient.post("/files", { names: fileNames });
 			return Promise.all(
-				fileMap.map((f) => {
+				files.map((f) => {
 					const command = new PutObjectCommand({
 						Bucket: "r2-bucket",
 						Key: `media/${f.name}`,
@@ -103,9 +100,14 @@ export function FilesPage() {
 						type="file"
 						className="hidden"
 						multiple
-						onChange={(e) => {
-							const files = e.currentTarget.files ?? [];
-							createMutation.mutateAsync(files);
+						onChange={async (e) => {
+							const fileList = e.currentTarget.files ?? [];
+							const files = Array.from(fileList);
+							const avifFiles = await Promise.all(
+								Array.from(files).map((f) => encodeToAvif(f)),
+							);
+
+							createMutation.mutateAsync(avifFiles);
 						}}
 					/>
 					<Button
