@@ -71,7 +71,7 @@ function ProductDialog({ children, onSelect }: ProductDialogProps) {
 						type="button"
 						variant="ghost"
 						onClick={() => handleSelect(item)}
-						className="justify-start whitespace-normal line-clamp-1"
+						className="justify-start whitespace-normal"
 					>
 						{item.file && (
 							<Avatar className="rounded-md">
@@ -81,7 +81,7 @@ function ProductDialog({ children, onSelect }: ProductDialogProps) {
 								></AvatarImage>
 							</Avatar>
 						)}
-						{item.name}
+						<p className="line-clamp-1">{item.name}</p>
 					</Button>
 				))}
 			</DialogContent>
@@ -162,7 +162,7 @@ export function SpotInput({ value, onChange, children }: SpotInputProps) {
 										params={{ id: spot.product.id.toString() }}
 										className={cn(
 											buttonVariants({ variant: "ghost" }),
-											"hover:underline flex-1",
+											"hover:underline whitespace-normal w-44",
 										)}
 									>
 										{spot.product.file && (
@@ -172,7 +172,7 @@ export function SpotInput({ value, onChange, children }: SpotInputProps) {
 												></AvatarImage>
 											</Avatar>
 										)}
-										{spot.product.name}
+										<p className="line-clamp-1">{spot.product.name}</p>
 									</Link>
 									<Button
 										variant="ghost"
