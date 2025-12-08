@@ -41,6 +41,7 @@ const schema = z.object({
 	),
 	social: z.object({
 		facebook: z.string(),
+		zalo: z.string(),
 		youtube: z.string(),
 		instagram: z.string(),
 		tiktok: z.string(),
@@ -391,6 +392,19 @@ export function StoreSettingsGeneral() {
 								{(field) => (
 									<Field>
 										<FieldLabel>Facebook</FieldLabel>
+										<Input
+											value={field.state.value}
+											onChange={(e) =>
+												field.handleChange(e.currentTarget.value)
+											}
+										/>
+									</Field>
+								)}
+							</form.Field>
+							<form.Field name="social.zalo">
+								{(field) => (
+									<Field>
+										<FieldLabel>Zalo</FieldLabel>
 										<Input
 											value={field.state.value}
 											onChange={(e) =>

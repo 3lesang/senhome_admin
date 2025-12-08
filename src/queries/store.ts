@@ -14,6 +14,7 @@ type StoreData = {
 	certificates: { id: string; url: string; file_url: string }[];
 	social: {
 		facebook: string;
+		zalo: string;
 		youtube: string;
 		instagram: string;
 		tiktok: string;
