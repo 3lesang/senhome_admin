@@ -2,6 +2,8 @@ import { ImagePlusIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { FileDialog } from "@/components/dialog/file";
 import { Button } from "@/components/ui/button";
+import { FilePreview } from "@/components/file-preview";
+import { convertToFileUrl } from "@/lib/utils";
 
 interface VariantImageInputProps {
 	value?: string;
@@ -28,11 +30,23 @@ export function VariantImageInput({
 	if (file) {
 		return (
 			<div className="size-14 rounded-md overflow-hidden relative bg-neutral-50">
-				<img
-					src={`https://bucket.senhome.vn/${file}`}
-					alt=""
-					className="w-full h-full object-contain"
-				/>
+				<FilePreview
+					render={() => {
+						return (
+							<img
+								src={convertToFileUrl(file)}
+								alt=""
+								className="object-contain"
+							/>
+						);
+					}}
+				>
+					<img
+						src={convertToFileUrl(file)}
+						alt=""
+						className="w-full h-full object-contain cursor-pointer"
+					/>
+				</FilePreview>
 				<Button
 					type="button"
 					variant="outline"

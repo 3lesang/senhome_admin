@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/table";
 import { calculateDiscount } from "@/lib/utils";
 import { withFieldGroup } from "./hooks/form";
-import { generateOptions, VariantSchema } from "./variant";
+import { generateOptions, type VariantSchema } from "./variant";
 
 export const VariantFields = withFieldGroup({
   defaultValues: {
