@@ -120,11 +120,13 @@ export function HotSpotCreatePage() {
 																spotField.handleChange(value)
 															}
 														>
-															<img
-																src={field.state.value}
-																alt=""
-																className="object-contain"
-															/>
+															<div className="h-[600px] bg-neutral-50">
+																<img
+																	src={field.state.value}
+																	alt=""
+																	className="object-contain h-full"
+																/>
+															</div>
 														</SpotInput>
 														<Button
 															type="button"
