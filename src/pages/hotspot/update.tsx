@@ -111,7 +111,7 @@ export function HotSpotUpdatePage() {
 															<img
 																src={field.state.value}
 																alt=""
-																className="object-contain h-full"
+																className="object-contain h-full w-full"
 															/>
 														</div>
 													</SpotInput>
