@@ -7,6 +7,7 @@ import { InfoFields } from "@/components/form/product/info-fields";
 import { MediaFields } from "@/components/form/product/media-fields";
 import { PriceFields } from "@/components/form/product/price-fields";
 import { SEOFields } from "@/components/form/product/seo-fields";
+import { StockFields } from "@/components/form/product/stock-fields";
 import { TagFields } from "@/components/form/product/tag-fields";
 import { OptionSchema, VariantSchema } from "@/components/form/product/variant";
 import { VariantFields } from "@/components/form/product/variant-fields";
@@ -32,6 +33,8 @@ type CreateProductRequest = {
   slug: string;
   origin_price: number;
   sale_price: number;
+  stock: number;
+  sku: string;
   meta_title: string;
   meta_description: string;
   is_active: boolean;
@@ -81,6 +84,10 @@ const schema = z.object({
   tagGroup: z.object({
     tags: z.array(z.string()),
   }),
+  stockGroup: z.object({
+    stock: z.number(),
+    sku: z.string(),
+  }),
   variantGroup: z.object({
     variantOptions: z.array(
       z.array(z.object({ option_name: z.string(), value: z.string() })),
@@ -109,6 +116,8 @@ export function ProductCreatePage() {
         slug: slug,
         origin_price: value.priceGroup.originPrice,
         sale_price: value.priceGroup.salePrice,
+        stock: value.stockGroup.stock,
+        sku: value.stockGroup.sku,
         meta_title: value.seoGroup.metaTitle,
         meta_description: value.seoGroup.metaDescription,
         is_active: value.activeGroup.isActive,
@@ -174,6 +183,10 @@ export function ProductCreatePage() {
     fileGroup: {
       files: [],
     },
+    stockGroup: {
+      stock: 0,
+      sku: ""
+    },
     tagGroup: {
       tags: [],
     },
@@ -220,6 +233,7 @@ export function ProductCreatePage() {
             <MediaFields fields="fileGroup" form={form} />
             <PriceFields fields="priceGroup" form={form} />
             <VariantFields fields="variantGroup" form={form} />
+            <StockFields fields="stockGroup" form={form} />
             <SEOFields fields="seoGroup" form={form} />
           </div>
           <div className="col-span-4 space-y-4">

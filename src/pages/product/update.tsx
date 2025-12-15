@@ -7,6 +7,7 @@ import { InfoFields } from "@/components/form/product/info-fields";
 import { MediaFields } from "@/components/form/product/media-fields";
 import { PriceFields } from "@/components/form/product/price-fields";
 import { SEOFields } from "@/components/form/product/seo-fields";
+import { StockFields } from "@/components/form/product/stock-fields";
 import { TagFields } from "@/components/form/product/tag-fields";
 import { OptionSchema, VariantSchema } from "@/components/form/product/variant";
 import { VariantFields } from "@/components/form/product/variant-fields";
@@ -39,6 +40,8 @@ type UpdateProductRequest = {
   slug: string;
   origin_price: number;
   sale_price: number;
+  stock: number;
+  sku: string;
   meta_title: string;
   meta_description: string;
   is_active: boolean;
@@ -76,6 +79,10 @@ const schema = z.object({
     slug: z.string(),
     metaTitle: z.string(),
     metaDescription: z.string(),
+  }),
+  stockGroup: z.object({
+    stock: z.number(),
+    sku: z.string()
   }),
   activeGroup: z.object({
     isActive: z.boolean(),
@@ -122,6 +129,8 @@ export function ProductUpdatePage() {
         slug: slug,
         origin_price: value.priceGroup.originPrice,
         sale_price: value.priceGroup.salePrice,
+        stock: value.stockGroup.stock,
+        sku: value.stockGroup.sku,
         meta_title: value.seoGroup.metaTitle,
         meta_description: value.seoGroup.metaDescription,
         files: files,
@@ -174,6 +183,10 @@ export function ProductUpdatePage() {
       slug: getProductQuery.data.data.slug,
       metaTitle: getProductQuery.data.data.meta_title,
       metaDescription: getProductQuery.data.data.meta_description,
+    },
+    stockGroup: {
+      stock: getProductQuery.data.data.stock,
+      sku: getProductQuery.data.data.sku,
     },
     activeGroup: {
       isActive: getProductQuery.data.data.is_active,
@@ -259,6 +272,7 @@ export function ProductUpdatePage() {
             <MediaFields fields="fileGroup" form={form} />
             <PriceFields fields="priceGroup" form={form} />
             <VariantFields fields="variantGroup" form={form} />
+            <StockFields fields="stockGroup" form={form} />
             <SEOFields fields="seoGroup" form={form} />
           </div>
           <div className="col-span-4 space-y-4">

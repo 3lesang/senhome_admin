@@ -1,6 +1,6 @@
-import { queryOptions } from "@tanstack/react-query";
 import axiosClient from "@/axios";
 import { PRODUCT_QUERY_KEY } from "@/constants";
+import { queryOptions } from "@tanstack/react-query";
 import type { JSONContent } from "@tiptap/core";
 
 type Params = {
@@ -29,6 +29,8 @@ type OneProduct = {
   slug: string;
   origin_price: number;
   sale_price: number;
+  stock: number;
+  sku: string;
   meta_title: string;
   meta_description: string;
   category_id: number;
