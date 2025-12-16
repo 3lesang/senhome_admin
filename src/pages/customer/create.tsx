@@ -10,8 +10,9 @@ import {
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { CUSTOMER_QUERY_KEY } from "@/constants";
 import { useForm } from "@tanstack/react-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import z from "zod";
 
@@ -25,12 +26,16 @@ type FormValues = z.infer<typeof schema>;
 
 export function CustomerCreatePage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient()
   const saveCustomerMuation = useMutation({
     mutationFn: (value: FormValues) => {
       return axiosClient.post("/customers", value);
     },
     onSuccess: () => {
-      navigate({ to: "/customers" });
+      queryClient.invalidateQueries({
+        queryKey: [CUSTOMER_QUERY_KEY, 1, 10]
+      })
+      navigate({ to: "/customers", search: { page: 1, limit: 10 } });
     },
   });
 
@@ -93,6 +98,7 @@ export function CustomerCreatePage() {
                   <Field className="col-span-12">
                     <FieldLabel>Mật khẩu</FieldLabel>
                     <Input
+                      type="password"
                       value={field.state.value}
                       onChange={(e) =>
                         field.handleChange(e.currentTarget.value)

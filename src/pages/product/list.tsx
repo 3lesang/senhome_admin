@@ -172,22 +172,22 @@ export function ProductListPage() {
                     <ContextMenuContent>
                       <ContextMenuItem asChild>
                         <Link
-                          to="/products/$id/reviews"
-                          params={{ id: item.id.toString() }}
-                          className="flex items-center gap-2"
-                        >
-                          <StarIcon />
-                          Đánh giá
-                        </Link>
-                      </ContextMenuItem>
-                      <ContextMenuItem asChild>
-                        <Link
                           to="/products/$id/update"
                           params={{ id: item.id.toString() }}
                           className="flex items-center gap-2"
                         >
                           <EditIcon />
                           Chỉnh sửa
+                        </Link>
+                      </ContextMenuItem>
+                      <ContextMenuItem asChild>
+                        <Link
+                          to="/products/$id/reviews"
+                          params={{ id: item.id.toString() }}
+                          className="flex items-center gap-2"
+                        >
+                          <StarIcon />
+                          Đánh giá
                         </Link>
                       </ContextMenuItem>
                       <ContextMenuItem

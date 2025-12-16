@@ -47,7 +47,7 @@ export function ReviewListPage() {
   const { id } = useParams({ from: "/(app)/products/$id/reviews/" });
 
   const getReviewsQuery = useSuspenseQuery(
-    getReviewsByProductQueryOptions({ page, limit, productId: id }),
+    getReviewsByProductQueryOptions({ page, limit, productId: Number(id) }),
   );
 
   const deleteReviewsMutation = useMutation({

@@ -28,10 +28,10 @@ export function getReviewsByProductQueryOptions({
 }: {
   page: number;
   limit: number;
-  productId: string;
+  productId: number;
 }) {
   return queryOptions({
-    queryKey: [PRODUCT_REVIEW_QUERY_KEY, productId],
+    queryKey: [PRODUCT_REVIEW_QUERY_KEY, productId, page, limit],
     queryFn: () => {
       return axiosClient.get<PaginationResponse<ReviewData>>(
         `/reviews/products/${productId}`,

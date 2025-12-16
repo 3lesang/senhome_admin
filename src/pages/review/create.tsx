@@ -1,6 +1,6 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { useForm } from "@tanstack/react-form";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import _ from "lodash";
 import { ImagePlusIcon, XIcon } from "lucide-react";
@@ -30,6 +30,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { encodeToAvif } from "@/lib/utils";
 import { getCustomersQueryOptions } from "@/queries/customer";
 import { s3Client } from "@/s3";
+import { PRODUCT_REVIEW_QUERY_KEY } from "@/constants";
 
 const schema = z.object({
 	rating: z.number().max(5).min(1),
@@ -101,6 +102,8 @@ const ReviewFile = ({ onChange }: ReviewFileProps) => {
 
 export function ReviewCreatePage() {
 	const navigate = useNavigate();
+	const queryClient = useQueryClient()
+
 	const { id } = useParams({ from: "/(app)/products/$id/reviews/create" });
 	const getCustomersQuery = useQuery(getCustomersQueryOptions());
 
@@ -126,7 +129,10 @@ export function ReviewCreatePage() {
 			return axiosClient.post("/reviews", formData);
 		},
 		onSuccess: () => {
-			navigate({ to: "/products/$id/reviews", params: { id } });
+			queryClient.refetchQueries({
+				queryKey: [PRODUCT_REVIEW_QUERY_KEY, id, 1, 10]
+			})
+			navigate({ to: "/products/$id/reviews", params: { id }, search: { page: 1, limit: 10 } });
 		},
 	});
 

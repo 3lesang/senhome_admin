@@ -21,7 +21,7 @@ export function getCustomersQueryOptions(params?: {
   limit: number;
 }) {
   return queryOptions({
-    queryKey: [CUSTOMER_QUERY_KEY],
+    queryKey: [CUSTOMER_QUERY_KEY, params?.page, params?.limit],
     queryFn: () => {
       return axiosClient.get<PaginationResponse<CustomerData>>("/customers", {
         params,
