@@ -128,7 +128,8 @@ export function ProductCreatePage() {
         options: value.variantGroup.options,
         variants: value.variantGroup.variants,
       };
-      s3Client.send(
+      const res = await axiosClient.post("/products", request);
+      await s3Client.send(
         new PutObjectCommand({
           Bucket: "r2-bucket",
           Key: `content/product/${slug}`,
@@ -136,7 +137,7 @@ export function ProductCreatePage() {
           ContentType: "application/json",
         }),
       );
-      return axiosClient.post("/products", request);
+      return res.data
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({

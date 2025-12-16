@@ -22,7 +22,7 @@ import { PRODUCT_QUERY_KEY } from "@/constants";
 import { slugify } from "@/lib/utils";
 import {
   getProductContentQueryOptions,
-  getProductQueryOptions,
+  getProductQueryOptions
 } from "@/queries/product";
 import { s3Client } from "@/s3";
 import { PutObjectCommand } from "@aws-sdk/client-s3";

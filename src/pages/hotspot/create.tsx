@@ -1,10 +1,3 @@
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { useForm } from "@tanstack/react-form";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
-import { Trash2Icon, UploadIcon } from "lucide-react";
-import { toast } from "sonner";
-import z from "zod";
 import axiosClient from "@/axios";
 import { SpotInput } from "@/components/spot-input";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -24,8 +17,16 @@ import {
 	EmptyTitle,
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
+import { HOTSPOT_QUERY_KEY } from "@/constants";
 import { cn, encodeToAvif } from "@/lib/utils";
 import { s3Client } from "@/s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { useForm } from "@tanstack/react-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import { Trash2Icon, UploadIcon } from "lucide-react";
+import { toast } from "sonner";
+import z from "zod";
 
 const schema = z.object({
 	file: z.instanceof(File).optional().nullable(),
@@ -50,6 +51,7 @@ type FormValues = z.infer<typeof schema>;
 
 export function HotSpotCreatePage() {
 	const navigate = useNavigate();
+	const queryClient = useQueryClient()
 	const savePageMutation = useMutation({
 		mutationFn: async (value: FormValues) => {
 			const fileKey = `hotspot/${value.file?.name}`;
@@ -62,18 +64,21 @@ export function HotSpotCreatePage() {
 				})),
 			};
 			if (value.file?.name) {
-				s3Client.send(
+				await s3Client.send(
 					new PutObjectCommand({
 						Bucket: "r2-bucket",
 						Key: fileKey,
 						Body: value.file,
+						ContentType: value.file.type
 					}),
 				);
 			}
-			return axiosClient.post("/hotspots", spotParams);
+			const res = await axiosClient.post("/hotspots", spotParams);
+			return res.data
 		},
 		onSuccess: () => {
 			toast("Bộ sưu tập đã được tạo thành công!");
+			queryClient.invalidateQueries({ queryKey: [HOTSPOT_QUERY_KEY, 1, 10] })
 			navigate({ to: "/products/collections/hotspots" });
 		},
 	});
