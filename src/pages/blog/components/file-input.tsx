@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { encodeToAvif } from "@/lib/utils";
 import { ImagePlusIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -31,8 +32,9 @@ export function FileInput({ onChange, value }: FileInputProps) {
       <input
         type="file"
         className="hidden"
-        onChange={(e) => {
-          const [file] = e.currentTarget.files ?? [];
+        onChange={async (e) => {
+          const [fileRaw] = e.currentTarget.files ?? [];
+          const file = await encodeToAvif(fileRaw)
           onChange?.(file);
           setFile(file);
         }}

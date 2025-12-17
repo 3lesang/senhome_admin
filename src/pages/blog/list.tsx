@@ -29,7 +29,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+import { cn, convertToFileUrl } from "@/lib/utils";
 import { getPostsQueryOptions } from "@/queries/post";
 import { s3Client } from "@/s3";
 import { DeleteObjectsCommand } from "@aws-sdk/client-s3";
@@ -48,11 +48,12 @@ export function BlogListPage() {
   const getPostsQuery = useSuspenseQuery(getPostsQueryOptions({ page, limit }));
 
   const deletePageMutaion = useMutation({
-    mutationFn: (ids: number[]) => {
-      const keys = ids.flatMap((id) => [
-        { Key: `post/content/${id}` },
-        { Key: `post/file/${id}` },
+    mutationFn: (items: { id: number, slug: string, file: string }[]) => {
+      const keys = items.flatMap((i) => [
+        { Key: `post/content/${i.slug}` },
+        { Key: i.file },
       ]);
+      const ids = items.map((i) => i.id)
       s3Client.send(
         new DeleteObjectsCommand({
           Bucket: "r2-bucket",
@@ -127,7 +128,7 @@ export function BlogListPage() {
                         <Avatar className="rounded bg-neutral-100">
                           <AvatarImage
                             className="object-contain"
-                            src={`https://bucket.senhome.vn/post/file/${item.id}`}
+                            src={convertToFileUrl(item.file)}
                           />
                           <AvatarFallback className="rounded">B</AvatarFallback>
                         </Avatar>
@@ -154,7 +155,7 @@ export function BlogListPage() {
                       </ContextMenuItem>
                     </Link>
                     <ContextMenuItem
-                      onClick={() => deletePageMutaion.mutateAsync([item.id])}
+                      onClick={() => deletePageMutaion.mutateAsync([item])}
                     >
                       <Trash2Icon />
                       Xóa

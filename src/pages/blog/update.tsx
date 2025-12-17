@@ -11,7 +11,7 @@ import {
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
-import { slugify } from "@/lib/utils";
+import { convertToFileUrl, slugify } from "@/lib/utils";
 import { s3Client } from "@/s3";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { useForm } from "@tanstack/react-form";
@@ -40,34 +40,34 @@ export function BlogUpdatePage() {
   const { id } = useParams({ from: "/(app)/contents/blogs/$id" });
 
   const getPostQuery = useSuspenseQuery(getPostQueryOptions(id));
-  const getPostContentQuery = useSuspenseQuery(getPostContentQueryOptions(id));
+  const getPostContentQuery = useSuspenseQuery(getPostContentQueryOptions(getPostQuery.data.data.slug));
 
   const savePageMutation = useMutation({
     mutationFn: async (value: FormValues) => {
       const slug = value.slug || slugify(value.title);
-      const res = await axiosClient.put<{ id: number }>(`/posts/${id}`, {
-        title: value.title,
-        slug,
-      });
+      const fileKey = value.file?.name ? `post/file/${value.file.name}` : ""
       s3Client.send(
         new PutObjectCommand({
           Bucket: "r2-bucket",
-          Key: `post/content/${id}`,
+          Key: `post/content/${slug}`,
           Body: JSON.stringify(value.content),
           ContentType: "application/json",
         }),
       );
-
-      value.file &&
+      value.file?.name &&
         s3Client.send(
           new PutObjectCommand({
             Bucket: "r2-bucket",
-            Key: `post/file/${id}`,
+            Key: fileKey,
             Body: value.file,
             ContentType: value.file?.type,
           }),
         );
-      return res;
+      return axiosClient.put<{ id: number }>(`/posts/${id}`, {
+        title: value.title,
+        slug,
+        file: fileKey
+      });
     },
     onSuccess: () => {
       toast("Bài viết đã được tạo thành công!");
@@ -80,7 +80,7 @@ export function BlogUpdatePage() {
     title: getPostQuery.data.data.title,
     slug: getPostQuery.data.data.slug,
     content: getPostContentQuery.data.data,
-    file_url: `https://bucket.senhome.vn/post/file/${id}`,
+    file_url: convertToFileUrl(getPostQuery.data.data.file),
   };
 
   const form = useForm({

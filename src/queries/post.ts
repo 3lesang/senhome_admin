@@ -7,6 +7,7 @@ type PostData = {
   id: number;
   title: string;
   slug: string;
+  file: string;
 };
 
 type PaginationResponse<T> = {

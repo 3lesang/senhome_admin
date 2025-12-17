@@ -11,7 +11,8 @@ const schema = z.object({
 export const Route = createFileRoute("/(app)/customers/")({
   component: CustomerListPage,
   validateSearch: schema,
-  loader: ({ context }) => {
-    return context.queryClient?.ensureQueryData(getCustomersQueryOptions());
+  loaderDeps: ({ search }) => search,
+  loader: ({ context, deps }) => {
+    return context.queryClient?.ensureQueryData(getCustomersQueryOptions(deps));
   },
 });

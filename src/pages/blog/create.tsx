@@ -1,10 +1,3 @@
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { useForm } from "@tanstack/react-form";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
-import type { JSONContent } from "@tiptap/core";
-import { toast } from "sonner";
-import z from "zod";
 import axiosClient from "@/axios";
 import { TextEditor } from "@/components/text-editor";
 import { Button } from "@/components/ui/button";
@@ -20,6 +13,13 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { slugify } from "@/lib/utils";
 import { s3Client } from "@/s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import type { JSONContent } from "@tiptap/core";
+import { toast } from "sonner";
+import z from "zod";
 import { FileInput } from "./components/file-input";
 
 const schema = z.object({
@@ -37,14 +37,11 @@ export function BlogCreatePage() {
   const savePageMutation = useMutation({
     mutationFn: async (value: FormValues) => {
       const slug = value.slug || slugify(value.title);
-      const res = await axiosClient.post<{ id: number }>("/posts", {
-        title: value.title,
-        slug,
-      });
+      const fileKey = value.file?.name ? `post/file/${value.file.name}` : ""
       s3Client.send(
         new PutObjectCommand({
           Bucket: "r2-bucket",
-          Key: `post/content/${res.data.id}`,
+          Key: `post/content/${slug}`,
           Body: JSON.stringify(value.content),
           ContentType: "application/json",
         }),
@@ -53,12 +50,16 @@ export function BlogCreatePage() {
         s3Client.send(
           new PutObjectCommand({
             Bucket: "r2-bucket",
-            Key: `post/file/${res.data.id}`,
+            Key: fileKey,
             Body: value.file,
             ContentType: value.file?.type,
           }),
         );
-      return res;
+      return axiosClient.post<{ id: number }>("/posts", {
+        title: value.title,
+        slug,
+        file: fileKey
+      });
     },
     onSuccess: () => {
       toast("Bài viết đã được tạo thành công!");
@@ -150,8 +151,9 @@ export function BlogCreatePage() {
                   {(field) => (
                     <FileInput
                       value={field.state.value}
-                      onChange={(file) =>
+                      onChange={(file) => {
                         field.form.setFieldValue("file", file)
+                      }
                       }
                     />
                   )}
