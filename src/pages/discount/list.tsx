@@ -1,3 +1,7 @@
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { Link, useSearch } from "@tanstack/react-router";
+import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
+import { useState } from "react";
 import axiosClient from "@/axios";
 import type { TablePaginationDataChange } from "@/components/table/pagination";
 import TablePagination from "@/components/table/pagination";
@@ -30,10 +34,6 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { getDiscountsQueryOptions } from "@/queries/discount";
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { Link, useSearch } from "@tanstack/react-router";
-import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
-import { useState } from "react";
 
 function getDiscountStatus(status: string) {
   const STATUS: Record<string, string> = {

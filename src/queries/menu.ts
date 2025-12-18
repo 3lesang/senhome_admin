@@ -1,7 +1,7 @@
-import axiosClient from "@/axios";
-import { MENU_QUERY_KEY } from "@/constants";
 import { queryOptions } from "@tanstack/react-query";
 import axios from "axios";
+import axiosClient from "@/axios";
+import { MENU_QUERY_KEY } from "@/constants";
 
 type Params = {
   page: number;

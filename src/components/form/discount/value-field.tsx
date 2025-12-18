@@ -1,3 +1,5 @@
+import { Link } from "@tanstack/react-router";
+import { NumericFormat } from "react-number-format";
 import { CollectionDialog } from "@/components/dialog/collection";
 import { ProductDialog } from "@/components/dialog/product";
 import { Button } from "@/components/ui/button";
@@ -16,8 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Link } from "@tanstack/react-router";
-import { NumericFormat } from "react-number-format";
 import { withFieldGroup } from "./hooks/form";
 
 export const ValueField = withFieldGroup({
@@ -138,6 +138,7 @@ export const ValueField = withFieldGroup({
                       <div className="space-y-4">
                         {field.state.value.map((i) => (
                           <Button
+                            key={i.id}
                             type="button"
                             className="w-full"
                             variant="secondary"
@@ -175,6 +176,7 @@ export const ValueField = withFieldGroup({
                       <div className="space-y-4">
                         {field.state.value.map((i) => (
                           <Button
+                            key={i.id}
                             type="button"
                             className="w-full"
                             variant="secondary"

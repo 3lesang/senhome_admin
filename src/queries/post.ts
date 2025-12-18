@@ -1,7 +1,7 @@
-import axiosClient from "@/axios";
-import { POST_QUERY_KEY } from "@/constants";
 import { queryOptions } from "@tanstack/react-query";
 import type { JSONContent } from "@tiptap/core";
+import axiosClient from "@/axios";
+import { POST_QUERY_KEY } from "@/constants";
 
 type PostData = {
   id: number;

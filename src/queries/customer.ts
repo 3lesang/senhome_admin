@@ -1,6 +1,6 @@
+import { queryOptions } from "@tanstack/react-query";
 import axiosClient from "@/axios";
 import { CUSTOMER_QUERY_KEY } from "@/constants";
-import { queryOptions } from "@tanstack/react-query";
 
 type CustomerData = {
   id: number;

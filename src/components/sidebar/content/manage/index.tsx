@@ -6,6 +6,7 @@ import {
 import AnalyticsMenu from "./analytics";
 import ContentMenu from "./content";
 import CustomersMenu from "./customers";
+import DeliveryMenu from "./delivery";
 import DiscountMenu from "./discounts";
 import OrderMenu from "./order";
 import ProductMenu from "./product";
@@ -17,6 +18,7 @@ export default function ManageMenuGroup() {
 			<SidebarMenu>
 				<ProductMenu />
 				<OrderMenu />
+				<DeliveryMenu/>
 				<CustomersMenu />
 				<DiscountMenu />
 				<ContentMenu />

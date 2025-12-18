@@ -1,7 +1,7 @@
-import { DiscountListPage } from "@/pages/discount/list";
-import { getDiscountsQueryOptions } from "@/queries/discount";
 import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
+import { DiscountListPage } from "@/pages/discount/list";
+import { getDiscountsQueryOptions } from "@/queries/discount";
 
 const schema = z.object({
   page: z.number().default(1),

@@ -17,3 +17,4 @@ export const STORE_PAGE_QUERY_KEY = "pages";
 export const POST_QUERY_KEY = "posts";
 export const DISCOUNT_QUERY_KEY = "discounts";
 export const HOTSPOT_QUERY_KEY = "hotspots";
+export const SHIPPING_FEE_QUERY_KEY = "shipping_fees";

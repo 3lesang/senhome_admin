@@ -1,6 +1,6 @@
-import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Link, useLocation } from "@tanstack/react-router";
 import { PercentIcon } from "lucide-react";
+import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 
 export default function DiscountMenu() {
   const location = useLocation();
