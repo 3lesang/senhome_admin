@@ -95,9 +95,12 @@ export function DeliveryListPage() {
 								<TableHead className="w-16 pl-6">
 									<Checkbox />
 								</TableHead>
+								<TableHead>Tên</TableHead>
 								<TableHead>Cân nặng thấp nhất(gr)</TableHead>
 								<TableHead>Cân nặng cao nhất(gr)</TableHead>
 								<TableHead>Phí vận chuyển</TableHead>
+								<TableHead>Đơn tối thiểu</TableHead>
+								<TableHead>Miễn phí vận chuyển</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
@@ -108,9 +111,14 @@ export function DeliveryListPage() {
 											<TableCell className="pl-6">
 												<Checkbox />
 											</TableCell>
+											<TableCell>{item.name}</TableCell>
 											<TableCell>{item.min_weight}</TableCell>
 											<TableCell>{item.max_weight}</TableCell>
 											<TableCell>{formatVND(item.fee_amount)}</TableCell>
+											<TableCell>{formatVND(item.min_order_value)}</TableCell>
+											<TableCell>
+												{item.free_shipping && <Badge>Miễn phí</Badge>}
+											</TableCell>
 										</TableRow>
 									</ContextMenuTrigger>
 									<ContextMenuContent>

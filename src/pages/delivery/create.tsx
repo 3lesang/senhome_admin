@@ -25,6 +25,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 
 const schema = z.object({
+	name: z.string(),
 	minWeight: z.number(),
 	maxWeight: z.number(),
 	feeAmount: z.number(),
@@ -39,6 +40,7 @@ export function DeliveryCreatePage() {
 	const saveMenuMutation = useMutation({
 		mutationFn: async (value: FormValues) => {
 			return axiosClient.post<{ id: number }>("/shipping-fees", {
+				name: value.name,
 				min_weight: value.minWeight,
 				max_weight: value.maxWeight,
 				fee_amount: value.feeAmount,
@@ -53,6 +55,7 @@ export function DeliveryCreatePage() {
 	});
 
 	const defaultValues: FormValues = {
+		name: "",
 		minWeight: 0,
 		maxWeight: 0,
 		feeAmount: 0,
@@ -83,6 +86,20 @@ export function DeliveryCreatePage() {
 					<div className="col-span-8 space-y-4">
 						<Card className="shadow-none border-0">
 							<CardContent className="grid grid-cols-2 gap-4">
+								<form.Field name="name">
+									{(field) => (
+										<Field className="col-span-2">
+											<FieldLabel>Tên</FieldLabel>
+											<Input
+												type="text"
+												value={field.state.value}
+												onChange={(e) =>
+													field.handleChange(e.currentTarget.value)
+												}
+											/>
+										</Field>
+									)}
+								</form.Field>
 								<form.Field name="minWeight">
 									{(field) => (
 										<Field>

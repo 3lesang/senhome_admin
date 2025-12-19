@@ -26,6 +26,7 @@ import { Switch } from "@/components/ui/switch";
 import { getShippingFeeQueryOptions } from "@/queries/shipping-fee";
 
 const schema = z.object({
+	name: z.string(),
 	minWeight: z.number(),
 	maxWeight: z.number(),
 	feeAmount: z.number(),
@@ -43,6 +44,7 @@ export function DeliveryUpdatePage() {
 	const saveMenuMutation = useMutation({
 		mutationFn: async (value: FormValues) => {
 			return axiosClient.put(`/shipping-fees/${id}`, {
+				name: value.name,
 				min_weight: value.minWeight,
 				max_weight: value.maxWeight,
 				fee_amount: value.feeAmount,
@@ -57,6 +59,7 @@ export function DeliveryUpdatePage() {
 	});
 
 	const defaultValues: FormValues = {
+		name: getShippingFeeQuery.data.data.name ?? "",
 		minWeight: getShippingFeeQuery.data.data.min_weight ?? 0,
 		maxWeight: getShippingFeeQuery.data.data.max_weight ?? 0,
 		feeAmount: getShippingFeeQuery.data.data.fee_amount ?? 0,
@@ -87,6 +90,20 @@ export function DeliveryUpdatePage() {
 					<div className="col-span-8 space-y-4">
 						<Card className="shadow-none border-0">
 							<CardContent className="grid grid-cols-2 gap-4">
+								<form.Field name="name">
+									{(field) => (
+										<Field className="col-span-2">
+											<FieldLabel>Tên</FieldLabel>
+											<Input
+												type="text"
+												value={field.state.value}
+												onChange={(e) =>
+													field.handleChange(e.currentTarget.value)
+												}
+											/>
+										</Field>
+									)}
+								</form.Field>
 								<form.Field name="minWeight">
 									{(field) => (
 										<Field>

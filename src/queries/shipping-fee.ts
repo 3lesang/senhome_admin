@@ -12,6 +12,7 @@ type PaginationResponse<T> = {
 
 type ShippingFeeListData = {
 	id: number;
+	name: string;
 	min_weight: number;
 	max_weight: number;
 	fee_amount: number;
@@ -38,6 +39,7 @@ export function getShippingFeesQueryOptions(params: Params) {
 
 type ShippingFeeData = {
 	id: number;
+	name: string;
 	min_weight: number;
 	max_weight: number;
 	fee_amount: number;
