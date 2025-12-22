@@ -40,52 +40,40 @@ import {
 import { formatVND } from "@/lib/utils";
 import { getOrdersQueryOptions } from "@/queries/order";
 
-export function getPaymentStatus(
-	key:
-		| "pending"
-		| "processing"
-		| "paid"
-		| "failed"
-		| "cancelled"
-		| "refunded"
-		| "expired",
-) {
+type PaymentStatus = "pending" | "paid" | "failed" | "cancelled";
+export type OrderStatus =
+	| "pending"
+	| "confirmed"
+	| "shipping"
+	| "shipped"
+	| "cancelled";
+
+function getPaymentStatus(key: PaymentStatus) {
 	const PAYMENT_STATUS: Record<string, string> = {
 		pending: "Chờ thanh toán",
-		processing: "Đang xử lý thanh toán",
 		paid: "Đã thanh toán",
 		failed: "Thanh toán thất bại",
 		cancelled: "Đã hủy thanh toán",
-		refunded: "Đã hoàn tiền",
-		expired: "Hết hạn thanh toán",
 	};
-
 	return PAYMENT_STATUS[key];
 }
 
-export function getShippingStatus(
-	key:
-		| "pending"
-		| "processing"
-		| "shipped"
-		| "delivered"
-		| "returned"
-		| "cancelled",
-) {
-	const SHIPPING_STATUS: Record<string, string> = {
-		pending: "Chờ xử lý",
-		processing: "Đang chuẩn bị hàng",
-		shipped: "Đã gửi hàng",
-		delivered: "Đã giao hàng",
-		returned: "Đã hoàn hàng",
-		cancelled: "Đã hủy giao hàng",
+function getOrderStatus(key: OrderStatus) {
+	const ORDER_STATUS: Record<string, string> = {
+		pending: "Chờ lấy hàng",
+		confirmed: "Đã xử lý",
+		shipping: "Đang vận chuyển",
+		shipped: "Giao hàng thành công",
+		cancelled: "Đơn hủy",
 	};
-
-	return SHIPPING_STATUS[key];
+	return ORDER_STATUS[key];
 }
 
 export function OrderListPage() {
 	const navigate = useNavigate();
+	const [orderStatus, setOrderStatus] = useState<OrderStatus>();
+	const [isConfirm, setIsConfirm] = useState(false);
+
 	const { page, limit, query } = useSearch({ from: "/(app)/orders/" });
 
 	const [pagination, setPagination] = useState({
@@ -94,12 +82,30 @@ export function OrderListPage() {
 	});
 
 	const getOrdersQuery = useSuspenseQuery(
-		getOrdersQueryOptions({ page: pagination.page, limit: pagination.limit }),
+		getOrdersQueryOptions({
+			page: pagination.page,
+			limit: pagination.limit,
+			status:
+				orderStatus === "pending" && isConfirm
+					? "confirmed"
+					: (orderStatus as string),
+		}),
 	);
 
 	const deleteOrdersMutation = useMutation({
 		mutationFn: (ids: number[]) => {
 			return axiosClient.delete("/orders", { data: { ids } });
+		},
+		onSuccess: () => {
+			getOrdersQuery.refetch();
+		},
+	});
+
+	const updateOrderStatusMutation = useMutation({
+		mutationFn: (value: { id: number; status: string }) => {
+			return axiosClient.put(`/orders/${value.id}/status`, {
+				status: value.status,
+			});
 		},
 		onSuccess: () => {
 			getOrdersQuery.refetch();
@@ -122,15 +128,22 @@ export function OrderListPage() {
 						<CardTitle>
 							<TabsButton
 								tabs={[
-									{ label: "Tất cả đơn hàng", value: "" },
-									{ label: "Đơn hàng mới", value: `status="created"` },
+									{ label: "Chờ lấy hàng", value: "pending" },
 									{
-										label: "Chưa giao hàng",
-										value: `shipping_status!="delivered"`,
+										label: "Đang vận chuyển",
+										value: "shipping",
 									},
-									{ label: "Chưa thanh toán", value: `payment_status!="paid"` },
+									{
+										label: "Giao hàng thành công",
+										value: "shipped",
+									},
+									{
+										label: "Đơn hủy",
+										value: "cancelled",
+									},
 								]}
 								value={query}
+								onChange={(value) => setOrderStatus(value as OrderStatus)}
 							/>
 						</CardTitle>
 						<CardDescription>
@@ -147,6 +160,26 @@ export function OrderListPage() {
 							</Button>
 						</CardAction>
 					</CardHeader>
+					<CardContent>
+						{orderStatus === "pending" && (
+							<div className="flex items-center gap-2">
+								<Button
+									type="button"
+									variant={!isConfirm ? "secondary" : "ghost"}
+									onClick={() => setIsConfirm(false)}
+								>
+									Chưa xử lý
+								</Button>
+								<Button
+									type="button"
+									variant={isConfirm ? "secondary" : "ghost"}
+									onClick={() => setIsConfirm(true)}
+								>
+									Đã xử lý
+								</Button>
+							</div>
+						)}
+					</CardContent>
 					<Table>
 						<TableHeader className="bg-gray-50">
 							<TableRow className="">
@@ -173,7 +206,7 @@ export function OrderListPage() {
 										<TableCell></TableCell>
 										<TableCell>{item.full_name}</TableCell>
 										<TableCell>{formatVND(item.total_amount)}</TableCell>
-										<TableCell></TableCell>
+										<TableCell>{getOrderStatus(item.status)}</TableCell>
 										<TableCell>
 											{new Date(item.created_at).toLocaleString()}
 										</TableCell>
@@ -198,6 +231,54 @@ export function OrderListPage() {
 														<InfoIcon />
 														Chi tiết
 													</DropdownMenuItem>
+													{item.status === "pending" && (
+														<DropdownMenuItem
+															onClick={() => {
+																updateOrderStatusMutation.mutate({
+																	id: item.id,
+																	status: "confirmed",
+																});
+															}}
+														>
+															Chuẩn bị hàng
+														</DropdownMenuItem>
+													)}
+													{item.status === "confirmed" && (
+														<DropdownMenuItem
+															onClick={() => {
+																updateOrderStatusMutation.mutate({
+																	id: item.id,
+																	status: "shipping",
+																});
+															}}
+														>
+															Giao hàng
+														</DropdownMenuItem>
+													)}
+													{item.status === "shipping" && (
+														<DropdownMenuItem
+															onClick={() => {
+																updateOrderStatusMutation.mutate({
+																	id: item.id,
+																	status: "shipped",
+																});
+															}}
+														>
+															Giao thành công
+														</DropdownMenuItem>
+													)}
+													{item.status !== "cancelled" && (
+														<DropdownMenuItem
+															onClick={() => {
+																updateOrderStatusMutation.mutate({
+																	id: item.id,
+																	status: "cancelled",
+																});
+															}}
+														>
+															Hủy đơn
+														</DropdownMenuItem>
+													)}
 													<DropdownMenuItem
 														onClick={() =>
 															deleteOrdersMutation.mutateAsync([item.id])

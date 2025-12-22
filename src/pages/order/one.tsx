@@ -4,6 +4,7 @@ import { ChevronLeftIcon, MailIcon, PhoneIcon } from "lucide-react";
 import TablePagination from "@/components/table/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -31,7 +32,6 @@ import {
 } from "@/components/ui/table";
 import { formatVND } from "@/lib/utils";
 import { getOrderQueryOptions } from "@/queries/order";
-import { Button } from "@/components/ui/button";
 
 export function OneOrderPage() {
 	const navigate = useNavigate();

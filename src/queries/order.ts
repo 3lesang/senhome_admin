@@ -1,6 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import axiosClient from "@/axios";
 import { ORDER_QUERY_KEY } from "@/constants";
+import type { OrderStatus } from "@/pages/order/list";
 
 type OrderData = {
 	id: number;
@@ -12,6 +13,7 @@ type OrderData = {
 	address_line: string;
 	email: string;
 	created_at: Date;
+	status: OrderStatus;
 	items: {
 		id: number;
 		sale_price: number;
@@ -35,11 +37,12 @@ type PaginationResponse<T> = {
 type Params = {
 	page: number;
 	limit: number;
+	status: string;
 };
 
 export function getOrdersQueryOptions(params: Params) {
 	return queryOptions({
-		queryKey: [ORDER_QUERY_KEY, params.page, params.limit],
+		queryKey: [ORDER_QUERY_KEY, params.page, params.limit, params.status],
 		queryFn: () => {
 			return axiosClient.get<PaginationResponse<OrderData>>("/orders", {
 				params,
