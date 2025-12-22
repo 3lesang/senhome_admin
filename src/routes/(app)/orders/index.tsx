@@ -13,7 +13,7 @@ export const Route = createFileRoute("/(app)/orders/")({
 	component: OrderListPage,
 	validateSearch: schema,
 	loaderDeps: ({ search }) => search,
-	loader({ context }) {
-		return context.queryClient?.ensureQueryData(getOrdersQueryOptions());
+	loader({ context, deps }) {
+		return context.queryClient?.ensureQueryData(getOrdersQueryOptions(deps));
 	},
 });

@@ -4,9 +4,24 @@ import { ORDER_QUERY_KEY } from "@/constants";
 
 type OrderData = {
 	id: number;
+	code: string;
 	total_amount: number;
 	discount_amount: number;
-	created: Date;
+	shipping_fee_amount: number;
+	full_name: string;
+	address_line: string;
+	email: string;
+	created_at: Date;
+	items: {
+		id: number;
+		sale_price: number;
+		product_id: number;
+		product_sku: string;
+		variant_sku: string;
+		name: string;
+		quantity: number;
+		options: { option: string; value: string }[];
+	}[];
 };
 
 type PaginationResponse<T> = {
@@ -17,28 +32,40 @@ type PaginationResponse<T> = {
 	total_pages: number;
 };
 
-export function getOrdersQueryOptions() {
+type Params = {
+	page: number;
+	limit: number;
+};
+
+export function getOrdersQueryOptions(params: Params) {
 	return queryOptions({
-		queryKey: [ORDER_QUERY_KEY],
+		queryKey: [ORDER_QUERY_KEY, params.page, params.limit],
 		queryFn: () => {
-			return axiosClient.get<PaginationResponse<OrderData>>("/orders");
+			return axiosClient.get<PaginationResponse<OrderData>>("/orders", {
+				params,
+			});
 		},
 	});
 }
 
 type OrderResponse = {
 	id: number;
+	code: string;
 	full_name: string;
 	phone: string;
+	email: string;
 	address_line: string;
 	total_amount: number;
 	discount_amount: number;
 	items: {
-		quantity: number;
-		name: string;
+		id: number;
 		sale_price: number;
 		product_id: number;
-		options: Record<string, string>;
+		product_sku: string;
+		variant_sku: string;
+		name: string;
+		quantity: number;
+		options: { option: string; value: string }[];
 	}[];
 };
 
