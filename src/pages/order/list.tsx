@@ -40,7 +40,6 @@ import {
 import { formatVND } from "@/lib/utils";
 import { getOrdersQueryOptions } from "@/queries/order";
 
-type PaymentStatus = "pending" | "paid" | "failed" | "cancelled";
 export type OrderStatus =
 	| "pending"
 	| "confirmed"
@@ -48,15 +47,16 @@ export type OrderStatus =
 	| "shipped"
 	| "cancelled";
 
-function getPaymentStatus(key: PaymentStatus) {
-	const PAYMENT_STATUS: Record<string, string> = {
-		pending: "Chờ thanh toán",
-		paid: "Đã thanh toán",
-		failed: "Thanh toán thất bại",
-		cancelled: "Đã hủy thanh toán",
-	};
-	return PAYMENT_STATUS[key];
-}
+// type PaymentStatus = "pending" | "paid" | "failed" | "cancelled";
+// function getPaymentStatus(key: PaymentStatus) {
+// 	const PAYMENT_STATUS: Record<string, string> = {
+// 		pending: "Chờ thanh toán",
+// 		paid: "Đã thanh toán",
+// 		failed: "Thanh toán thất bại",
+// 		cancelled: "Đã hủy thanh toán",
+// 	};
+// 	return PAYMENT_STATUS[key];
+// }
 
 function getOrderStatus(key: OrderStatus) {
 	const ORDER_STATUS: Record<string, string> = {

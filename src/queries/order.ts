@@ -37,7 +37,7 @@ type PaginationResponse<T> = {
 type Params = {
 	page: number;
 	limit: number;
-	status: string;
+	status?: string;
 };
 
 export function getOrdersQueryOptions(params: Params) {
