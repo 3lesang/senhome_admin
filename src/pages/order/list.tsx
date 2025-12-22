@@ -24,11 +24,22 @@ import {
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
+import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
 	Table,
 	TableBody,
@@ -46,6 +57,16 @@ export type OrderStatus =
 	| "shipping"
 	| "shipped"
 	| "cancelled";
+
+const CANCEL_REASON: Record<string, string> = {
+	1: "Khách yêu cầu hủy đơn",
+	2: "Shop hủy đơn: Không liên lạc được với khách hàng để xác nhận đơn",
+	3: "Giao thất bại: Khách từ chối nhận hàng",
+	4: "Giao thất bại: Giao sai mã/ thiếu link kiện/ bể vỡ",
+	5: "Giao thất bại: do thất lạc",
+	6: "Trả hàng: hàng nguyên vẹn nhưng không còn nhu cầu nữa",
+	7: "Trả hàng: sản phẩm lỗi không hoạt động được",
+};
 
 // type PaymentStatus = "pending" | "paid" | "failed" | "cancelled";
 // function getPaymentStatus(key: PaymentStatus) {
@@ -71,10 +92,13 @@ function getOrderStatus(key: OrderStatus) {
 
 export function OrderListPage() {
 	const navigate = useNavigate();
-	const [orderStatus, setOrderStatus] = useState<OrderStatus>();
+	const [openCancel, setOpenCancel] = useState(false);
+	const [cancelId, setCancelId] = useState<number>(0);
+	const [cancelReasonKey, setCancelReasonKey] = useState("1");
+	const [orderStatus, setOrderStatus] = useState<OrderStatus>("pending");
 	const [isConfirm, setIsConfirm] = useState(false);
 
-	const { page, limit, query } = useSearch({ from: "/(app)/orders/" });
+	const { page, limit } = useSearch({ from: "/(app)/orders/" });
 
 	const [pagination, setPagination] = useState({
 		page,
@@ -102,9 +126,14 @@ export function OrderListPage() {
 	});
 
 	const updateOrderStatusMutation = useMutation({
-		mutationFn: (value: { id: number; status: string }) => {
+		mutationFn: (value: {
+			id: number;
+			status: string;
+			cancel_reason?: string;
+		}) => {
 			return axiosClient.put(`/orders/${value.id}/status`, {
 				status: value.status,
+				cancel_reason: value.cancel_reason,
 			});
 		},
 		onSuccess: () => {
@@ -142,7 +171,7 @@ export function OrderListPage() {
 										value: "cancelled",
 									},
 								]}
-								value={query}
+								value={orderStatus}
 								onChange={(value) => setOrderStatus(value as OrderStatus)}
 							/>
 						</CardTitle>
@@ -180,6 +209,42 @@ export function OrderListPage() {
 							</div>
 						)}
 					</CardContent>
+					<Dialog open={openCancel} onOpenChange={setOpenCancel}>
+						<DialogContent>
+							<DialogHeader>
+								<DialogTitle>Lý do hủy đơn?</DialogTitle>
+								<DialogDescription></DialogDescription>
+							</DialogHeader>
+							<RadioGroup defaultValue="1" onValueChange={setCancelReasonKey}>
+								{Object.entries(CANCEL_REASON).map(([key, value]) => (
+									<div key={key} className="flex items-center space-x-2">
+										<RadioGroupItem value={key} id={key} />
+										<Label htmlFor={key}>{value}</Label>
+									</div>
+								))}
+							</RadioGroup>
+							<DialogFooter>
+								<DialogClose asChild>
+									<Button type="button" variant="outline">
+										Hủy
+									</Button>
+								</DialogClose>
+								<Button
+									type="button"
+									onClick={() => {
+										updateOrderStatusMutation.mutate({
+											id: cancelId,
+											status: "cancelled",
+											cancel_reason: CANCEL_REASON[cancelReasonKey],
+										});
+										setOpenCancel(false);
+									}}
+								>
+									Hủy đơn
+								</Button>
+							</DialogFooter>
+						</DialogContent>
+					</Dialog>
 					<Table>
 						<TableHeader className="bg-gray-50">
 							<TableRow className="">
@@ -270,10 +335,8 @@ export function OrderListPage() {
 													{item.status !== "cancelled" && (
 														<DropdownMenuItem
 															onClick={() => {
-																updateOrderStatusMutation.mutate({
-																	id: item.id,
-																	status: "cancelled",
-																});
+																setCancelId(item.id);
+																setOpenCancel(true);
 															}}
 														>
 															Hủy đơn
