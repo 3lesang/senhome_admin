@@ -38,6 +38,7 @@ export function OneOrderPage() {
 	const { id } = useParams({ from: "/(app)/orders/$id" });
 	const getOrderQuery = useSuspenseQuery(getOrderQueryOptions(id));
 
+	const shippingFee = getOrderQuery.data.data.shipping_fee_amount;
 	return (
 		<Card className="max-w-6xl mx-auto bg-transparent border-0 shadow-none">
 			<CardHeader>
@@ -168,7 +169,7 @@ export function OneOrderPage() {
 							</div>
 							<div className="flex justify-between">
 								<p>Phí giao hàng</p>
-								<p>Miễn phí</p>
+								<p>{shippingFee > 0 ? formatVND(shippingFee) : "Miễn phí"}</p>
 							</div>
 						</CardContent>
 						<Separator />

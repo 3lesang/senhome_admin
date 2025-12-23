@@ -60,6 +60,7 @@ type OrderResponse = {
 	address_line: string;
 	total_amount: number;
 	discount_amount: number;
+	shipping_fee_amount: number;
 	items: {
 		id: number;
 		sale_price: number;
