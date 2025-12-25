@@ -1,3 +1,4 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "@tanstack/react-router";
 import { ShoppingCartIcon } from "lucide-react";
 import {
@@ -12,9 +13,11 @@ import {
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { getCountOrderQueryOptions } from "@/queries/order";
 
 export default function OrderMenu() {
 	const location = useLocation();
+	const getCountOrdersQuery = useSuspenseQuery(getCountOrderQueryOptions());
 	return (
 		<Collapsible
 			asChild
@@ -27,6 +30,7 @@ export default function OrderMenu() {
 						<SidebarMenuButton>
 							<ShoppingCartIcon />
 							<span className="select-none">Đơn hàng</span>
+							<span>({getCountOrdersQuery.data.data.pending_count})</span>
 						</SidebarMenuButton>
 					</Link>
 				</CollapsibleTrigger>
