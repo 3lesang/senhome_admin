@@ -38,7 +38,7 @@ export function ProductDialog({
 	const [value, setValue] = useState<ProductDataType[]>(initialValue);
 	const [query, setQuery] = useState("");
 
-	const { data } = useQuery(getProductsQueryOptions({ page: 1, size: 10 }));
+	const { data } = useQuery(getProductsQueryOptions({ page: 1, limit: 10 }));
 
 	function handleToggle(item: ProductDataType) {
 		setValue((prev) => {

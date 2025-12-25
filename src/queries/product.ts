@@ -5,7 +5,7 @@ import { PRODUCT_QUERY_KEY } from "@/constants";
 
 type Params = {
 	page: number;
-	size: number;
+	limit: number;
 };
 
 type ProductData = {
@@ -60,12 +60,11 @@ type OneProduct = {
 };
 
 export function getProductsQueryOptions(params: Params) {
-	const { page, size } = params;
 	return queryOptions({
-		queryKey: [PRODUCT_QUERY_KEY, page, size],
+		queryKey: [PRODUCT_QUERY_KEY, params.page, params.limit],
 		queryFn: () => {
 			return axiosClient.get<PaginationResponse<ProductData>>("/products", {
-				params: { page, page_size: size },
+				params: { page: params.page, page_size: params.limit },
 			});
 		},
 	});

@@ -1,4 +1,4 @@
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import {
 	InfoIcon,
@@ -49,7 +49,10 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { formatVND } from "@/lib/utils";
-import { getOrdersQueryOptions } from "@/queries/order";
+import {
+	getCountOrderQueryOptions,
+	getOrdersQueryOptions,
+} from "@/queries/order";
 
 export type OrderStatus =
 	| "pending"
@@ -105,7 +108,7 @@ export function OrderListPage() {
 		limit,
 	});
 
-	const getOrdersQuery = useSuspenseQuery(
+	const getOrdersQuery = useQuery(
 		getOrdersQueryOptions({
 			page: pagination.page,
 			limit: pagination.limit,
@@ -116,12 +119,15 @@ export function OrderListPage() {
 		}),
 	);
 
+	const getCountOrdersQuery = useQuery(getCountOrderQueryOptions());
+
 	const deleteOrdersMutation = useMutation({
 		mutationFn: (ids: number[]) => {
 			return axiosClient.delete("/orders", { data: { ids } });
 		},
 		onSuccess: () => {
 			getOrdersQuery.refetch();
+			getCountOrdersQuery.refetch();
 		},
 	});
 
@@ -138,6 +144,7 @@ export function OrderListPage() {
 		},
 		onSuccess: () => {
 			getOrdersQuery.refetch();
+			getCountOrdersQuery.refetch();
 		},
 	});
 
@@ -159,15 +166,15 @@ export function OrderListPage() {
 								tabs={[
 									{ label: "Chờ lấy hàng", value: "pending" },
 									{
-										label: "Đang vận chuyển",
+										label: `Đang vận chuyển (${getCountOrdersQuery.data?.data.shipping_count})`,
 										value: "shipping",
 									},
 									{
-										label: "Giao hàng thành công",
+										label: `Giao hàng thành công (${getCountOrdersQuery.data?.data.shipped_count})`,
 										value: "shipped",
 									},
 									{
-										label: "Đơn hủy",
+										label: `Đơn hủy (${getCountOrdersQuery.data?.data.cancelled_count})`,
 										value: "cancelled",
 									},
 								]}
@@ -177,7 +184,7 @@ export function OrderListPage() {
 						</CardTitle>
 						<CardDescription>
 							<Badge variant="secondary">
-								{getOrdersQuery.data.data.total_items} đơn hàng
+								{getOrdersQuery.data?.data.total_items} đơn hàng
 							</Badge>
 						</CardDescription>
 						<CardAction className="flex items-center gap-2">
@@ -197,14 +204,14 @@ export function OrderListPage() {
 									variant={!isConfirm ? "secondary" : "ghost"}
 									onClick={() => setIsConfirm(false)}
 								>
-									Chưa xử lý
+									Chưa xử lý ({getCountOrdersQuery.data?.data.pending_count})
 								</Button>
 								<Button
 									type="button"
 									variant={isConfirm ? "secondary" : "ghost"}
 									onClick={() => setIsConfirm(true)}
 								>
-									Đã xử lý
+									Đã xử lý ({getCountOrdersQuery.data?.data.confirmed_count})
 								</Button>
 							</div>
 						)}
@@ -261,7 +268,7 @@ export function OrderListPage() {
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{getOrdersQuery.data.data.data?.map((item) => (
+							{getOrdersQuery.data?.data.data?.map((item) => (
 								<>
 									<TableRow className="group">
 										<TableCell className="text-center w-16">
@@ -389,7 +396,7 @@ export function OrderListPage() {
 						<TablePagination
 							page={page}
 							limit={limit}
-							total={getOrdersQuery.data.data.total_items}
+							total={getOrdersQuery.data?.data.total_items ?? 0}
 							onChange={setPagination}
 						/>
 					</CardFooter>

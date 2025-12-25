@@ -158,7 +158,7 @@ export function ProductCreatePage() {
 			await queryClient.refetchQueries({
 				queryKey: [PRODUCT_QUERY_KEY, 1, 10],
 			});
-			navigate({ to: "/products", search: { page: 1, size: 10 } });
+			navigate({ to: "/products", search: { page: 1, limit: 10 } });
 		},
 		onError: (err) => {
 			toast.error(err.message);

@@ -81,3 +81,20 @@ export function getOrderQueryOptions(orderId: string) {
 		},
 	});
 }
+
+type CountOrderData = {
+	pending_count: number;
+	confirmed_count: number;
+	shipping_count: number;
+	shipped_count: number;
+	cancelled_count: number;
+};
+
+export function getCountOrderQueryOptions() {
+	return queryOptions({
+		queryKey: [ORDER_QUERY_KEY],
+		queryFn: () => {
+			return axiosClient.get<CountOrderData>("/count-orders");
+		},
+	});
+}

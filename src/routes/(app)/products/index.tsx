@@ -5,7 +5,7 @@ import { getProductsQueryOptions } from "@/queries/product";
 
 const schema = z.object({
 	page: z.number().default(1),
-	size: z.number().default(10),
+	limit: z.number().default(10),
 });
 
 export const Route = createFileRoute("/(app)/products/")({
@@ -13,8 +13,6 @@ export const Route = createFileRoute("/(app)/products/")({
 	validateSearch: schema,
 	loaderDeps: ({ search }) => search,
 	loader({ context, deps }) {
-		return context.queryClient?.ensureQueryData(
-			getProductsQueryOptions(deps),
-		)
+		return context.queryClient?.ensureQueryData(getProductsQueryOptions(deps));
 	},
 });

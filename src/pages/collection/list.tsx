@@ -1,6 +1,13 @@
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useSearch } from "@tanstack/react-router";
-import { EditIcon, ListFilterIcon, SearchIcon, Trash2Icon } from "lucide-react";
+import {
+	EditIcon,
+	ListFilterIcon,
+	MoreVerticalIcon,
+	SearchIcon,
+	Trash2Icon,
+} from "lucide-react";
+import { useState } from "react";
 import axiosClient from "@/axios";
 import TablePagination from "@/components/table/pagination";
 import { TabsButton } from "@/components/table/tabs";
@@ -18,11 +25,11 @@ import {
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-	ContextMenu,
-	ContextMenuContent,
-	ContextMenuItem,
-	ContextMenuTrigger,
-} from "@/components/ui/context-menu";
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
 	Table,
 	TableBody,
@@ -39,8 +46,17 @@ export function CollectionListPage() {
 		from: "/(app)/products/collections/",
 	});
 
+	const [pagination, setPagination] = useState({
+		page,
+		limit,
+	});
+
 	const getCollectionsQuery = useSuspenseQuery(
-		getCollectionsQueryOptions({ page, limit, query }),
+		getCollectionsQueryOptions({
+			page: pagination.page,
+			limit: pagination.limit,
+			query,
+		}),
 	);
 
 	const deleteCollectionMutation = useMutation({
@@ -84,7 +100,9 @@ export function CollectionListPage() {
 							/>
 						</CardTitle>
 						<CardDescription>
-							<Badge variant="secondary">nhóm sản phẩm</Badge>
+							<Badge variant="secondary">
+								{getCollectionsQuery.data.data.total_items} nhóm sản phẩm
+							</Badge>
 						</CardDescription>
 						<CardAction className="flex items-center gap-2">
 							<Button variant="outline" size="icon">
@@ -104,58 +122,65 @@ export function CollectionListPage() {
 								<TableHead></TableHead>
 								<TableHead>Tên</TableHead>
 								<TableHead>Ngày tạo</TableHead>
+								<TableHead></TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
 							{getCollectionsQuery?.data?.data.data?.map((item) => (
-								<ContextMenu key={item.id}>
-									<ContextMenuTrigger asChild>
-										<TableRow>
-											<TableCell className="text-center">
-												<Checkbox />
-											</TableCell>
-											<TableCell className="w-8">
-												<Avatar className="rounded overflow-hidden bg-neutral-50">
-													<AvatarImage
-														src={convertToFileUrl(item.file)}
-														className="object-contain"
-													/>
-													<AvatarFallback className="rounded" />
-												</Avatar>
-											</TableCell>
-											<TableCell>
-												<Link
-													to="/products/collections/$id"
-													params={{ id: item?.id.toString() }}
-													className="hover:underline"
-												>
-													{item?.name}
-												</Link>
-											</TableCell>
-											<TableCell></TableCell>
-										</TableRow>
-									</ContextMenuTrigger>
-									<ContextMenuContent>
+								<TableRow key={item.id}>
+									<TableCell className="text-center">
+										<Checkbox />
+									</TableCell>
+									<TableCell className="w-8">
+										<Avatar className="rounded overflow-hidden bg-neutral-50">
+											<AvatarImage
+												src={convertToFileUrl(item.file)}
+												className="object-contain"
+											/>
+											<AvatarFallback className="rounded" />
+										</Avatar>
+									</TableCell>
+									<TableCell>
 										<Link
 											to="/products/collections/$id"
 											params={{ id: item?.id.toString() }}
+											className="hover:underline"
 										>
-											<ContextMenuItem>
-												<EditIcon />
-												Chỉnh sửa
-											</ContextMenuItem>
+											{item?.name}
 										</Link>
-
-										<ContextMenuItem
-											onClick={() =>
-												deleteCollectionMutation.mutateAsync([item.id])
-											}
-										>
-											<Trash2Icon />
-											Xóa
-										</ContextMenuItem>
-									</ContextMenuContent>
-								</ContextMenu>
+									</TableCell>
+									<TableCell>
+										{new Date(item.created_at).toLocaleString()}
+									</TableCell>
+									<TableCell>
+										<DropdownMenu>
+											<DropdownMenuTrigger asChild>
+												<Button type="button" variant="ghost">
+													<MoreVerticalIcon />
+												</Button>
+											</DropdownMenuTrigger>
+											<DropdownMenuContent>
+												<DropdownMenuItem asChild>
+													<Link
+														to="/products/collections/$id"
+														params={{ id: item?.id.toString() }}
+													>
+														<EditIcon />
+														Chỉnh sửa
+													</Link>
+												</DropdownMenuItem>
+												<DropdownMenuItem
+													onClick={() =>
+														deleteCollectionMutation.mutateAsync([item.id])
+													}
+												>
+													<Trash2Icon />
+													Xóa
+												</DropdownMenuItem>
+											</DropdownMenuContent>
+										</DropdownMenu>
+									</TableCell>
+								</TableRow>
 							))}
 						</TableBody>
 					</Table>
@@ -164,6 +189,7 @@ export function CollectionListPage() {
 							total={getCollectionsQuery.data?.data.total_items}
 							page={page}
 							limit={limit}
+							onChange={setPagination}
 						/>
 					</CardFooter>
 				</Card>

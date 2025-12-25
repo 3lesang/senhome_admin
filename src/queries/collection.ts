@@ -20,14 +20,18 @@ type CollectionData = {
 	id: number;
 	name: string;
 	file: string;
+	created_at: Date;
 };
 
-export function getCollectionsQueryOptions({ page, limit, query }: Params) {
+export function getCollectionsQueryOptions(params: Params) {
 	return queryOptions({
-		queryKey: [COLLECTION_QUERY_KEY, page, limit, query],
+		queryKey: [COLLECTION_QUERY_KEY, params.page, params.limit],
 		queryFn: () => {
 			return axiosClient.get<PaginationResponse<CollectionData>>(
 				"/collections",
+				{
+					params,
+				},
 			);
 		},
 	});
