@@ -216,8 +216,8 @@ export function ProductListPage() {
 					</Table>
 					<CardFooter>
 						<TablePagination
-							page={page}
-							limit={limit}
+							page={pagination.page}
+							limit={pagination.limit}
 							total={data?.data?.total_items}
 							onChange={handlePaginationChange}
 						/>

@@ -187,8 +187,8 @@ export function CollectionListPage() {
 					<CardFooter>
 						<TablePagination
 							total={getCollectionsQuery.data?.data.total_items}
-							page={page}
-							limit={limit}
+							page={pagination.page}
+							limit={pagination.limit}
 							onChange={setPagination}
 						/>
 					</CardFooter>

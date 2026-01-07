@@ -394,8 +394,8 @@ export function OrderListPage() {
 					</Table>
 					<CardFooter>
 						<TablePagination
-							page={page}
-							limit={limit}
+							page={pagination.page}
+							limit={pagination.limit}
 							total={getOrdersQuery.data?.data.total_items ?? 0}
 							onChange={setPagination}
 						/>
